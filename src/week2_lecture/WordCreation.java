@@ -16,9 +16,21 @@ public class WordCreation {
         Scanner sc = new Scanner (System.in);
         
         System.out.println("enter a letter");
-        char  c = sc.next().charAt(0);
+        char  letter1 = sc.next().charAt(0);
         
-        System.out.println ("this is the input"+ c );
+        System.out.println("enter a letter");
+        char  letter2 = sc.next().charAt(0);
+        
+        System.out.println("enter a letter");
+        char  letter3 = sc.next().charAt(0);
+        
+        System.out.println("enter a letter");
+        char  letter4 = sc.next().charAt(0);
+        
+        System.out.println("enter a letter");
+        char  letter5 = sc.next().charAt(0);
+        
+        System.out.println ("The word is: "+ letter1+letter2+letter3+letter4+letter5 );
         
     }
     
