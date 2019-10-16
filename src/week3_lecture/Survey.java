@@ -57,7 +57,7 @@ public class Survey {
         System.out.println("The user personal details are: \nname : "+name+"\nsurname: "+surname+"\ngender: "+gender+"\nweight: "+weight+"\nage"+age+"\nit is:"+married+" that you are married\nwe can keep your data for: "+numberOfDaysAsInt);
      
         
-        
+        System.out.println("We will keep your data  for the number of days + one week"+numberOfDaysAsInt + 7);
         
     }
     

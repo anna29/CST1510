@@ -1,14 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package week3_lecture;
 
 import java.util.Scanner;
 
 /**
- *
+ *Write a Java program which obtains minutes and remaining seconds from an amount of time in second. 
+ * For example, 500 seconds contains 8 minutes and 20 seconds. 
+ * Using Scanner to prompt the user for an inputs of seconds and calculate the remaining minutes and seconds.
+
  * @author Anna29
  */
 public class MinutesAndSeconds {
@@ -17,8 +16,8 @@ public class MinutesAndSeconds {
         System.out.println("Enter number of secounds");
         int inputSecounds = sc.nextInt();
         
-        int minutes = inputSecounds/60;
-        int secounds = inputSecounds%60;
+        int minutes = inputSecounds/60; // return the number of minutes from the giving number of secounds
+        int secounds = inputSecounds%60; //remaining number of secounds 
         
         
         System.out.println(inputSecounds+ " secounds, comprise of: "+ minutes+" minutes and "+secounds+" secounds");
