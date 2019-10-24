@@ -12,10 +12,7 @@ package week4_lecture;
 public class Score {
     public static void main(String[] args) {
         
-        int SOBsNumber = 17;
-        double test1 = 10 * 0.4;
-        
-        
+      
         
         int score =63;
         
