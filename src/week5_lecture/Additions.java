@@ -5,7 +5,7 @@
  */
 package week5_lecture;
 
-import java.util.Random;
+
 import java.util.Scanner;
 
 /**
@@ -14,8 +14,8 @@ import java.util.Scanner;
  */
 public class Additions {
     public static void main(String[] args) {
-        Random r = new Random();
-        int number1 = r.nextInt(10);
+       
+        int number1 = (int)(1+ Math.random()*10);
         int number2 = (int)(1+ Math.random()*10);
         
         Scanner sc = new Scanner (System.in);
@@ -28,7 +28,7 @@ public class Additions {
             System.out.println("Correct");
             System.out.println(number1 + " + "+number2+" = "+ answer);
         }else{
-            System.out.println("Sorry "+ answer + " is not a correct aswer");
+            System.out.println("Sorry "+ answer + " is not the correct aswer");
             System.out.println(number1 + " + "+number2+" = "+ (number1 +number2));
         }
         
