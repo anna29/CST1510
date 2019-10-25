@@ -18,9 +18,9 @@ public class SumGivingNumbers {
         Scanner sc = new Scanner (System.in);
                 
         do{
-            System.out.println("Enter an integer to sum (the input ends if it is 0):/nThe sum is: "+sum);
+            System.out.println("Enter an integer number (the input ends if it is 0):/nThe sum is: "+sum);
             data = sc.nextInt();
-            sum +=data;
+            sum += data;
             
         }while(data != 0);
         
