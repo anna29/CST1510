@@ -29,7 +29,7 @@ public class YesNoRepeat {
         
         // using do while loop
          do {
-             System.out.println("Welcome to Java ");
+            System.out.println("Welcome to Java ");
             
             System.out.println("Do you want to repeat ? (Y/N)");
             ans = sc.next().charAt(0);
