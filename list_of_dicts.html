@@ -1,0 +1,261 @@
+<meta charset="utf-8">
+<title>List of Dicts</title>
+<script>if (location.search.indexOf('embed=1') !== -1) document.documentElement.className += ' embed';</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E7ECF1;
+    --fg: #182430;
+    --fg-muted: #5B6B7A;
+    --border: #C9D3DC;
+    --accent-a: #D8425F;
+    --accent-a-soft: #F6DDE2;
+    --accent-b: #0E8F8B;
+    --accent-b-soft: #D9F0EE;
+    --code-bg: #10161F;
+    --code-fg: #E7EEF3;
+    --code-muted: #7C8CA0;
+    --shadow: 0 1px 2px rgba(20,30,40,.06), 0 10px 28px rgba(20,30,40,.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D131E; --surface: #161F2C; --surface-2: #1E2836; --fg: #E7EEF5;
+      --fg-muted: #8FA0B2; --border: #2B3A4C; --accent-a: #FF7A92; --accent-a-soft: #3A2028;
+      --accent-b: #35DCCF; --accent-b-soft: #123330; --code-bg: #090D14; --code-fg: #DCE6EE;
+      --code-muted: #5E7488; --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131E; --surface: #161F2C; --surface-2: #1E2836; --fg: #E7EEF5;
+    --fg-muted: #8FA0B2; --border: #2B3A4C; --accent-a: #FF7A92; --accent-a-soft: #3A2028;
+    --accent-b: #35DCCF; --accent-b-soft: #123330; --code-bg: #090D14; --code-fg: #DCE6EE;
+    --code-muted: #5E7488; --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+  .page { max-width: 1000px; margin: 0 auto; padding: 48px 24px 64px; display: flex; flex-direction: column; gap: 32px; }
+  header { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--fg-muted); }
+  h1 { margin: 0; font-size: clamp(1.5rem, 3vw, 2.05rem); font-weight: 700; text-wrap: balance; letter-spacing: -0.01em; }
+  header p { margin: 0; max-width: 64ch; color: var(--fg-muted); font-size: 1.02rem; line-height: 1.55; }
+  header p code { color: var(--fg); }
+  code, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  .stage-figure { margin: 0; display: flex; flex-direction: column; gap: 18px; }
+  .stage { display: grid; grid-template-columns: 1fr auto 1fr auto 1.2fr; gap: 0 10px; align-items: start; }
+
+  .col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .col-label { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--fg-muted); text-align: center; }
+
+  .arrow-col { display: flex; align-items: center; justify-content: center; padding-top: 60px; color: var(--border); font-size: 20px; transition: color .3s ease; }
+  .arrow-col.active { color: var(--accent-b); }
+
+  .panel { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 14px 16px 16px; box-shadow: var(--shadow); min-height: 300px; display: flex; flex-direction: column; gap: 8px; }
+
+  .file-line { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; padding: 7px 10px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--border); color: var(--fg-muted); transition: all .3s ease; }
+  .file-line.current { background: var(--accent-a-soft); border-color: var(--accent-a); color: var(--fg); font-weight: 600; }
+  .file-line.done { opacity: .45; text-decoration: line-through; }
+
+  .split-pieces { display: flex; flex-direction: column; gap: 6px; }
+  .piece-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .piece { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; padding: 5px 9px; border-radius: 7px; background: var(--surface-2); border: 1px dashed var(--border); color: var(--fg-muted); opacity: 0; transform: translateY(-4px); transition: opacity .3s ease, transform .3s ease, border-color .3s ease, color .3s ease; }
+  .piece.shown { opacity: 1; transform: translateY(0); border-color: var(--accent-a); color: var(--fg); }
+  .split-placeholder { font-size: 13px; color: var(--fg-muted); font-style: italic; }
+
+  .dict-list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; max-height: 300px; }
+  .dict-card { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; line-height: 1.6; padding: 8px 10px; border-radius: 8px; background: var(--accent-b-soft); border: 1px solid var(--accent-b); color: var(--fg); opacity: 0; transform: translateY(-6px) scale(.97); transition: opacity .35s ease, transform .35s ease; }
+  .dict-card.shown { opacity: 1; transform: translateY(0) scale(1); }
+  .dict-card .k { color: var(--fg-muted); }
+  .dict-placeholder { font-size: 13px; color: var(--fg-muted); font-style: italic; }
+
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  button { font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14.5px; font-weight: 600; border-radius: 10px; padding: 11px 18px; cursor: pointer; border: 1.5px solid var(--border); background: var(--surface); color: var(--fg); display: inline-flex; align-items: center; gap: 9px; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, opacity .15s ease; }
+  button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: var(--shadow); }
+  button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  button .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  button.btn-step .dot { background: var(--accent-b); }
+  button.btn-step:hover:not(:disabled) { border-color: var(--accent-b); }
+  button.btn-reset { color: var(--fg-muted); }
+  button.btn-reset .dot { background: var(--fg-muted); }
+
+  .status { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13.5px; color: var(--fg-muted); min-height: 1.4em; padding: 12px 14px; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--border); }
+  .status b { color: var(--fg); font-weight: 600; }
+
+  figcaption { font-size: 14px; color: var(--fg-muted); line-height: 1.6; max-width: 68ch; }
+
+  @media (max-width: 720px) {
+    .stage { grid-template-columns: 1fr; }
+    .arrow-col { padding-top: 0; transform: rotate(90deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; } }
+
+  html.embed .page { padding: 4px 4px 20px; }
+  html.embed header { display: none; }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">Week 4 · Putting It Together</span>
+    <h1>Three shapes, one pipeline</h1>
+    <p>Loading records from a file means turning many separate flat lines into one
+      list of structured dictionaries — a raw line becomes raw pieces, then one dict,
+      appended into a single growing list.</p>
+  </header>
+
+  <figure class="stage-figure" aria-label="Diagram showing file lines splitting into pieces and becoming dictionaries in a growing list">
+    <div class="stage">
+      <div class="col">
+        <div class="col-label">file (records.txt)</div>
+        <div class="panel" id="file-panel"></div>
+      </div>
+      <div class="arrow-col" id="arrow-1">→</div>
+      <div class="col">
+        <div class="col-label">line.split(",")</div>
+        <div class="panel" id="split-panel">
+          <div class="split-placeholder" id="split-placeholder">waiting for a line…</div>
+        </div>
+      </div>
+      <div class="arrow-col" id="arrow-2">→</div>
+      <div class="col">
+        <div class="col-label">list of dicts</div>
+        <div class="panel">
+          <div class="dict-list" id="dict-list">
+            <div class="dict-placeholder" id="dict-placeholder">records = []</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Press "Process next line" to walk one line through the pipeline. By the end,
+      <code>records</code> is a list of dicts, ready to loop over.</figcaption>
+  </figure>
+
+  <div class="controls">
+    <button class="btn-step" id="btn-step"><span class="dot"></span>Process next line</button>
+    <button class="btn-reset" id="btn-reset"><span class="dot"></span>Reset</button>
+  </div>
+
+  <div class="status mono" id="status" aria-live="polite">Nothing processed yet. 3 lines waiting.</div>
+</div>
+
+<script>
+(function () {
+  var lines = ['web1,120,100', 'web2,45,100', 'db1,93,100'];
+
+  var filePanel = document.getElementById('file-panel');
+  var splitPanel = document.getElementById('split-panel');
+  var splitPlaceholder = document.getElementById('split-placeholder');
+  var dictList = document.getElementById('dict-list');
+  var dictPlaceholder = document.getElementById('dict-placeholder');
+  var arrow1 = document.getElementById('arrow-1');
+  var arrow2 = document.getElementById('arrow-2');
+  var status = document.getElementById('status');
+  var btnStep = document.getElementById('btn-step');
+  var btnReset = document.getElementById('btn-reset');
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stagger = reduceMotion ? 0 : 140;
+
+  var fileLineEls = [];
+  var index = 0;
+
+  function buildFileLines() {
+    filePanel.innerHTML = '';
+    fileLineEls = lines.map(function (text) {
+      var row = document.createElement('div');
+      row.className = 'file-line';
+      row.textContent = text;
+      filePanel.appendChild(row);
+      return row;
+    });
+  }
+
+  function reset() {
+    index = 0;
+    buildFileLines();
+    splitPanel.innerHTML = '';
+    splitPanel.appendChild(makePlaceholder('split-placeholder', 'waiting for a line…'));
+    dictList.innerHTML = '';
+    dictList.appendChild(makePlaceholder('dict-placeholder', 'records = []'));
+    arrow1.classList.remove('active');
+    arrow2.classList.remove('active');
+    status.textContent = 'Nothing processed yet. ' + lines.length + ' lines waiting.';
+    btnStep.disabled = false;
+    btnStep.innerHTML = '<span class="dot"></span>Process next line';
+  }
+
+  function makePlaceholder(id, text) {
+    var el = document.createElement('div');
+    el.className = id.indexOf('split') === 0 ? 'split-placeholder' : 'dict-placeholder';
+    el.id = id;
+    el.textContent = text;
+    return el;
+  }
+
+  function processNext() {
+    if (index >= lines.length) return;
+    var raw = lines[index];
+    var parts = raw.split(',');
+    var label = parts[0], value = parts[1], limit = parts[2];
+
+    fileLineEls.forEach(function (el, i) {
+      el.classList.toggle('current', i === index);
+      if (i < index) el.classList.add('done');
+    });
+
+    arrow1.classList.add('active');
+    status.innerHTML = 'Reading line ' + (index + 1) + ': <b>"' + raw + '"</b>';
+
+    var ph = document.getElementById('split-placeholder');
+    if (ph) ph.remove();
+    splitPanel.innerHTML = '';
+    var row = document.createElement('div');
+    row.className = 'piece-row';
+    splitPanel.appendChild(row);
+    [label, value, limit].forEach(function (p, i) {
+      var el = document.createElement('div');
+      el.className = 'piece';
+      el.textContent = '"' + p + '"';
+      row.appendChild(el);
+      setTimeout(function () { el.classList.add('shown'); }, 60 + i * stagger);
+    });
+
+    setTimeout(function () {
+      arrow1.classList.remove('active');
+      arrow2.classList.add('active');
+      status.innerHTML = 'Split into 3 raw pieces — still text. Building <b>{"label": "' + label +
+        '", "value": ' + value + ', "limit": ' + limit + '}</b>…';
+
+      var dph = document.getElementById('dict-placeholder');
+      if (dph) dph.remove();
+      var card = document.createElement('div');
+      card.className = 'dict-card';
+      card.innerHTML = '{<br>&nbsp;&nbsp;<span class="k">"label"</span>: "' + label + '",<br>' +
+        '&nbsp;&nbsp;<span class="k">"value"</span>: ' + value + ',<br>' +
+        '&nbsp;&nbsp;<span class="k">"limit"</span>: ' + limit + '<br>}';
+      dictList.appendChild(card);
+      requestAnimationFrame(function () { card.classList.add('shown'); });
+
+      setTimeout(function () { arrow2.classList.remove('active'); }, 400);
+
+      index++;
+      if (index >= lines.length) {
+        status.innerHTML = 'All ' + lines.length + ' lines loaded. <b>records</b> is now a list of ' +
+          lines.length + ' dicts, ready to loop over.';
+        btnStep.disabled = true;
+        btnStep.innerHTML = '<span class="dot"></span>All lines processed';
+      } else {
+        status.innerHTML += ' Appended to records.';
+        btnStep.innerHTML = '<span class="dot"></span>Process next line (' + (index + 1) + ' of ' + lines.length + ')';
+      }
+    }, stagger * 3 + 150);
+  }
+
+  btnStep.addEventListener('click', processNext);
+  btnReset.addEventListener('click', reset);
+
+  reset();
+})();
+</script>

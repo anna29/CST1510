@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 4 — Lists, Dictionaries and Files</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
+    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif; font-size: 17px; }
+  code, .mono, pre { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  .shell { max-width: 1000px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; align-items: start; }
+  nav.toc { position: sticky; top: 32px; display: flex; flex-direction: column; gap: 1px; font-size: 13px; padding-top: 6px; max-height: calc(100vh - 64px); overflow-y: auto; }
+  nav.toc .toc-label { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); margin-bottom: 10px; font-size: 13px; }
+  nav.toc a { color: var(--ink-soft); text-decoration: none; padding: 3px 0; line-height: 1.4; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { color: var(--ink); }
+  nav.toc a.current { color: var(--accent); }
+  nav.toc a.toc-topic { color: var(--ink); font-weight: 700; margin-top: 16px; font-size: 13.5px; }
+  nav.toc a.toc-topic:first-of-type { margin-top: 0; }
+  nav.toc a.toc-sub { padding-left: 12px; font-size: 12.5px; }
+  nav.toc .toc-group { display: flex; flex-direction: column; max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  nav.toc .toc-group.open { max-height: 320px; }
+  article { min-width: 0; }
+  header.page-head { margin-bottom: 44px; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1.page-title { margin: 0 0 10px; font-size: 2.1rem; font-weight: 700; letter-spacing: -.01em; }
+  .lede { margin: 0; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
+  .lede em { font-style: normal; }
+  .lede code { font-style: normal; color: var(--ink); }
+  .box-note { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); }
+  .box-note b { color: var(--ink); font-weight: 600; }
+  section.topic { margin-bottom: 44px; scroll-margin-top: 24px; }
+  .topic-divider { margin: 8px 0 40px; padding-top: 36px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
+  #t1-top { margin-top: 0; padding-top: 0; border-top: none; }
+  .topic-divider-n { font-variant: small-caps; letter-spacing: .06em; color: var(--ink-soft); font-size: 15.5px; }
+  .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
+  h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
+  h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
+  p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
+  p.muted { color: var(--ink-soft); }
+  p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
+  .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
+  .callout p { margin: 0; font-size: .98rem; }
+  .callout p + p { margin-top: 8px; }
+  .cell { margin: 20px 0; max-width: 74ch; }
+  .cell pre.code { margin: 0; background: var(--code-bg); color: var(--code-ink); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 14px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.62; }
+  .cell pre.code .kw { font-weight: 600; }
+  .cell pre.code .fn { font-weight: 600; }
+  .cell pre.code .str { color: var(--accent); }
+  .cell pre.code .cm { color: var(--ink-soft); font-style: italic; }
+  .cell .output { padding: 8px 18px 4px; font-size: 13px; color: var(--ink-soft); }
+  .cell .output .out-label { font-variant: small-caps; margin-right: 10px; }
+  .cell .output .val { color: var(--ink); }
+  .cell .output pre.out-block { margin: 4px 0 0; font-size: 13px; color: var(--ink); white-space: pre; }
+  .diagram { margin: 16px 0; max-width: 74ch; border: 1px solid var(--rule); background: var(--code-bg); padding: 14px 18px; overflow-x: auto; }
+  .diagram pre { margin: 0; font-size: 13px; line-height: 1.6; color: var(--code-ink); }
+  figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
+  figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
+  figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
+  table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
+  table.booktabs { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  table.booktabs th { border-bottom: 1px solid var(--ink-soft); }
+  th, td { text-align: left; padding: 7px 14px 7px 0; vertical-align: top; }
+  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; }
+  td code { white-space: nowrap; }
+  ul.tight { margin: 8px 0 16px; padding-left: 20px; }
+  ul.tight li { line-height: 1.6; margin-bottom: 4px; }
+  .practice-embed { max-width: 74ch; margin: 10px 0 8px; }
+  .practice-embed .practice-label { font-variant: small-caps; font-size: 13.5px; font-style: italic; color: var(--ink-soft); margin-bottom: 6px; }
+  .practice-embed .frame { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; }
+  .practice-embed iframe { display: block; width: 100%; border: none; background: var(--paper); }
+  footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
+  @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="toc" id="toc">
+    <span class="toc-label">Contents</span>
+    <a href="#t1-top" class="toc-topic">Topic 1 — Lists</a>
+    <div class="toc-group" data-group="t1">
+    <a href="#t1-s1" class="toc-sub">1. Creating a list, and indexing</a>
+    <a href="#t1-s2" class="toc-sub">2. Negative indexing</a>
+    <a href="#t1-s3" class="toc-sub">3. Slicing</a>
+    <a href="#t1-s4" class="toc-sub">4. Mutating and looping</a>
+    <a href="#t1-s5" class="toc-sub">5. Tuples — locked lists</a>
+    <a href="#t1-s6" class="toc-sub">6. Strings slice the same way</a>
+    <a href="#t1-s7" class="toc-sub">Challenge</a>
+    <a href="#t1-s8" class="toc-sub">Common mistakes</a>
+    <a href="#t1-s9" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t2-top" class="toc-topic">Topic 2 — Dictionaries</a>
+    <div class="toc-group" data-group="t2">
+    <a href="#t2-s1" class="toc-sub">1. Creating and accessing</a>
+    <a href="#t2-s2" class="toc-sub">2. Adding and updating</a>
+    <a href="#t2-s3" class="toc-sub">3. Missing keys, and .get()</a>
+    <a href="#t2-s4" class="toc-sub">4. Iterating</a>
+    <a href="#t2-s5" class="toc-sub">5. Sets — unique values</a>
+    <a href="#t2-s6" class="toc-sub">Challenge</a>
+    <a href="#t2-s7" class="toc-sub">Common mistakes</a>
+    <a href="#t2-s8" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t3-top" class="toc-topic">Topic 3 — Files</a>
+    <div class="toc-group" data-group="t3">
+    <a href="#t3-s1" class="toc-sub">1. Writing, with with</a>
+    <a href="#t3-s2" class="toc-sub">2. Reading</a>
+    <a href="#t3-s3" class="toc-sub">3. Reading line by line</a>
+    <a href="#t3-s4" class="toc-sub">4. Splitting a line into fields</a>
+    <a href="#t3-s5" class="toc-sub">Challenge</a>
+    <a href="#t3-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t3-s7" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t4-top" class="toc-topic">Topic 4 — Putting It Together</a>
+    <div class="toc-group" data-group="t4">
+    <a href="#t4-s1" class="toc-sub">1. The shape</a>
+    <a href="#t4-s2" class="toc-sub">2. Loading it from a file</a>
+    <a href="#t4-s3" class="toc-sub">3. Processing each record</a>
+    <a href="#t4-s4" class="toc-sub">4. Why this shape</a>
+    <a href="#t4-s5" class="toc-sub">Challenge</a>
+    <a href="#t4-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t4-s7" class="toc-sub">Recap</a>
+    </div>
+  </nav>
+
+  <article>
+    <header class="page-head">
+      <div class="breadcrumb">CST1510</div>
+      <h1 class="page-title">Week 4 — Lists, Dictionaries and Files</h1>
+      <p class="lede">By the end of this week you can hold many values in order in a <code>list</code>, find
+        values by name instead of position in a <code>dict</code>, keep storage that outlives the
+        program in a <code>file</code>, and combine all three into the shape almost every real
+        dataset already comes in.</p>
+      <p class="box-note">Box we build this week: <b>STORE</b>. Each <em>Practice</em> is followed by a
+        small live notebook — real Python, running in the browser, no install.</p>
+    </header>
+
+    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Lists</h2></div>
+
+    <section class="topic" id="t1-s1">
+      <h2><span class="num">1.</span>Creating a list, and indexing</h2>
+      <p>One variable holds one value. A list holds many, <b>in order</b>. Indexing counts from
+        <code>0</code> — the same rule as <code>range()</code>.</p>
+
+      <figure class="anim-figure">
+        <iframe src="list_slicing.html?embed=1" title="Indices and slices animation" loading="lazy" style="height:620px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> Every slot has two addresses — a positive index counting from
+          the front, and a negative one counting from the back. Section 3 below revisits this same
+          row for slicing.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code">labels = [<span class="str">"R-001"</span>, <span class="str">"R-002"</span>, <span class="str">"R-003"</span>]
+
+<span class="fn">print</span>(labels[0])
+<span class="fn">print</span>(labels[1])
+<span class="fn">print</span>(labels[2])</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-001<br>R-002<br>R-003</span></div>
+      </div>
+
+      <div class="diagram"><pre>index:     0        1        2
+labels:  ["R-001", "R-002", "R-003"]
+            ▲                  ▲
+        labels[0]          labels[-1]</pre></div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Create a list called <code>tools</code> with 4 values of your choice. Print the first and
+          the last using indexing.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice1.ipynb" title="Practice — create and index a list" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s2">
+      <h2><span class="num">2.</span>Negative indexing</h2>
+      <p>Counts from the end. <code>labels[-1]</code> is the last item, whatever the length turns
+        out to be — no need to know how many items there are.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(labels[-1])   <span class="cm"># R-003</span>
+<span class="fn">print</span>(labels[-2])   <span class="cm"># R-002</span>
+<span class="fn">print</span>(<span class="fn">len</span>(labels))   <span class="cm"># 3</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-003<br>R-002<br>3</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Predict, then check: create a list called <code>queue</code> with exactly one item,
+          <code>"job-1"</code>. What does <code>queue[-1]</code> give you?</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice2.ipynb" title="Practice — negative indexing on a single item" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s3">
+      <h2><span class="num">3.</span>Slicing</h2>
+      <p>Same rule as <code>range(start, stop)</code> — <code>stop</code> is never included.</p>
+
+      <div class="cell">
+        <pre class="code">values = [10, 20, 30, 40, 50]
+
+<span class="fn">print</span>(values[1:3])   <span class="cm"># [20, 30]</span>
+<span class="fn">print</span>(values[:2])     <span class="cm"># [10, 20]</span>
+<span class="fn">print</span>(values[2:])     <span class="cm"># [30, 40, 50]</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">[20, 30]<br>[10, 20]<br>[30, 40, 50]</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>readings = [5, 10, 15, 20, 25]</code>, slice out just the middle three.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice3.ipynb" title="Practice — slice the middle three" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s4">
+      <h2><span class="num">4.</span>Mutating and looping</h2>
+      <p>Lists can be changed in place — strings cannot. <code>for</code> loops directly over the
+        values, no counting needed.</p>
+
+      <div class="cell">
+        <pre class="code">values[0] = 99
+values.append(60)
+values.remove(20)
+<span class="fn">print</span>(values)
+
+<span class="kw">for</span> v <span class="kw">in</span> values:
+    <span class="fn">print</span>(v)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">[99, 30, 40, 50, 60]<br>99<br>30<br>40<br>50<br>60</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>hosts = ["srv-01", "srv-02", "srv-03"]</code>: append <code>"srv-04"</code>,
+          remove <code>"srv-02"</code>, then loop over what is left and print each value.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice4.ipynb" title="Practice — append, remove and loop" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s5">
+      <h2><span class="num">5.</span>Tuples — like a list, but locked</h2>
+      <p>Same idea, <code>()</code> instead of <code>[]</code>. Indexing and slicing work exactly the
+        same way — but a tuple cannot be changed after it is created. No <code>.append()</code>, no
+        changing an item.</p>
+      <p class="muted">You have already used one. Week 3's <code>return difference, percent, status</code>
+        sent back a tuple — three values as one — and <code>difference, percent, status =
+        check_record(...)</code> unpacked it into three names.</p>
+
+      <div class="cell">
+        <pre class="code">point = (3, 7)
+<span class="fn">print</span>(point[0])   <span class="cm"># 3 - indexing works the same as a list</span>
+
+<span class="cm"># point[0] = 5     # TypeError: 'tuple' object does not support item assignment</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">3</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Create a tuple <code>(label, value, limit)</code> for one record of your own. Try to
+          change one item and read the error.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice5.ipynb" title="Practice — create a tuple and read the TypeError" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s6">
+      <h2><span class="num">6.</span>Strings slice the same way too</h2>
+      <p>You have been indexing and slicing without knowing it since Week 1. A string follows the
+        exact same rules as a list — and like a tuple, it is locked.</p>
+
+      <div class="cell">
+        <pre class="code">record_id = <span class="str">"R-001"</span>
+
+<span class="fn">print</span>(record_id[0])       <span class="cm"># 'R' - same indexing rule</span>
+<span class="fn">print</span>(record_id[-1])      <span class="cm"># '1' - same negative indexing</span>
+<span class="fn">print</span>(record_id[0:2])     <span class="cm"># 'R-' - same slicing rule, stop excluded</span>
+<span class="fn">print</span>(record_id[-3:])     <span class="cm"># '001'</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R<br>1<br>R-<br>001</span></div>
+      </div>
+      <p class="muted">Same lock as a tuple — you can read a character, not change one in place. The
+        full toolbox of string methods (<code>.upper()</code>, <code>.strip()</code>,
+        <code>.replace()</code> and more) is coming properly in Week 7. For now: the shape you
+        already know for lists and tuples works on text too.</p>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>hostname = "srv-01"</code>, print the first 3 characters and the last 2,
+          using slicing.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice6.ipynb" title="Practice — slice a string" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s7">
+      <h2>Topic 1 Challenge</h2>
+      <div class="callout">
+        <p>Given <code>readings = [87, 120, 45, 93, 101]</code> and a fixed <code>limit = 100</code>,
+          loop over the list and print <code>OVER LIMIT</code> or <code>OK</code> for each value.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_challenge.ipynb" title="Practice — Topic 1 challenge" style="height:312px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>Many values, in order — the exact same shape whichever field it turns up in.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td>a list of readings from one sensor over a day</td></tr>
+        <tr><td>Cyber Security</td><td>a list of failed-login IPs from one hour</td></tr>
+        <tr><td>IT</td><td>a list of hostnames due for a check tonight</td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s8">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td><code>labels[3]</code> when there are only 3 items</td><td><code>IndexError: list index out of range</code></td><td>the last valid index is <code>len(labels) - 1</code></td></tr>
+        <tr><td><code>values[1:3]</code> expecting 3 items</td><td>gives 2</td><td><code>stop</code> is never included, same as <code>range()</code></td></tr>
+        <tr><td>trying <code>name[0] = "z"</code> on a string</td><td><code>TypeError</code></td><td>strings cannot be changed this way — lists can</td></tr>
+        <tr><td><code>.remove(x)</code> when <code>x</code> is not in the list</td><td><code>ValueError</code></td><td>check with <code>in</code> first, or catch the error</td></tr>
+        <tr><td><code>point[0] = 5</code> on a tuple</td><td><code>TypeError: 'tuple' object does not support item assignment</code></td><td>tuples cannot be changed — use a list if you need to</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_lists_and_indexing.py</code> — indexing, negative indexing, len()</li>
+        <li><code>examples/02_slicing_and_mutating.py</code> — slicing, append, remove, in</li>
+        <li><code>examples/03_tuples.py</code> — creating, indexing, and why they cannot change</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t1-s9">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>create a list</td><td><code>[a, b, c]</code></td></tr>
+        <tr><td>access by position</td><td><code>labels[0]</code>, <code>labels[-1]</code></td></tr>
+        <tr><td>take a piece</td><td><code>labels[1:3]</code></td></tr>
+        <tr><td>change it in place</td><td><code>labels[0] = x</code>, <code>.append()</code>, <code>.remove()</code></td></tr>
+        <tr><td>loop over it directly</td><td><code>for item in labels:</code></td></tr>
+        <tr><td>create a fixed, unchangeable collection</td><td><code>(a, b, c)</code></td></tr>
+        <tr><td>index/slice a string</td><td>same rules as a list, but locked like a tuple</td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t2-s1" style="color:var(--accent); text-decoration:none;">Topic 2 — finding things by name instead of position.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Dictionaries</h2></div>
+
+    <section class="topic" id="t2-s1">
+      <h2><span class="num">1.</span>Creating and accessing</h2>
+      <p>A list finds things by position. A dictionary finds things by name.</p>
+
+      <figure class="anim-figure">
+        <iframe src="dict_lookup.html?embed=1" title="Dict lookup animation" loading="lazy" style="height:600px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> A list has to check each slot in order until one matches. A
+          dict jumps straight to the key it was asked for — it does not care where that key sits.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code">record = {
+    <span class="str">"label"</span>: <span class="str">"R-001"</span>,
+    <span class="str">"value"</span>: 87.0,
+    <span class="str">"limit"</span>: 100.0,
+}
+
+<span class="fn">print</span>(record[<span class="str">"label"</span>])
+<span class="fn">print</span>(record[<span class="str">"value"</span>])</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-001<br>87.0</span></div>
+      </div>
+
+      <div class="diagram"><pre>record = { "label": "R-001",  "value": 87.0,  "limit": 100.0 }
+
+record["value"]    ──▶  87.0
+record["missing"]  ──▶  KeyError</pre></div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Create a dict called <code>host</code> for one server with <code>name</code>,
+          <code>used_gb</code> and <code>total_gb</code>. Print two of its values.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice1.ipynb" title="Practice — create and access a dict" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s2">
+      <h2><span class="num">2.</span>Adding and updating</h2>
+      <p>The same line does both — if the key exists, it updates; if not, it adds.</p>
+
+      <div class="cell">
+        <pre class="code">record[<span class="str">"status"</span>] = <span class="str">"OK"</span>     <span class="cm"># new key</span>
+record[<span class="str">"value"</span>] = 90.0        <span class="cm"># existing key, updated</span>
+<span class="fn">print</span>(record)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">{'label': 'R-001', 'value': 90.0, 'limit': 100.0, 'status': 'OK'}</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Add a new key to your <code>host</code> dict, then update one of the original ones.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice2.ipynb" title="Practice — add and update dict keys" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s3">
+      <h2><span class="num">3.</span>Missing keys, and <code>.get()</code></h2>
+      <p><code>record["missing"]</code> raises <code>KeyError</code>. <code>.get()</code> does
+        not — it gives you <code>None</code>, or a default of your choosing.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(record.get(<span class="str">"status"</span>))            <span class="cm"># OK</span>
+<span class="fn">print</span>(record.get(<span class="str">"missing"</span>))           <span class="cm"># None</span>
+<span class="fn">print</span>(record.get(<span class="str">"missing"</span>, <span class="str">"n/a"</span>))    <span class="cm"># n/a</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">OK<br>None<br>n/a</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Use <code>.get()</code> on <code>host</code> to safely check for a key you know does not
+          exist, with a default of your choosing.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice3.ipynb" title="Practice — .get() with a default" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s4">
+      <h2><span class="num">4.</span>Iterating</h2>
+      <p><code>.items()</code> gives you both the key and the value together — the one you will use
+        most.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">for</span> key, value <span class="kw">in</span> record.items():
+    <span class="fn">print</span>(f<span class="str">"{key}: {value}"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">label: R-001<br>value: 90.0<br>limit: 100.0<br>status: OK</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Loop over <code>host</code> using <code>.items()</code> and print <code>key: value</code>
+          for each pair.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice4.ipynb" title="Practice — iterate with .items()" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s5">
+      <h2><span class="num">5.</span>Sets — only unique values, in curly braces too</h2>
+      <p>Created with <code>{"{a, b, c}"}</code> — or <code>set()</code> for an empty one.
+        <b>Not</b> <code>{"{}"}</code>: that makes an empty <em>dict</em>, not an empty set. No
+        order, no indexing, and duplicates are dropped automatically.</p>
+
+      <div class="cell">
+        <pre class="code">labels = [<span class="str">"R-001"</span>, <span class="str">"R-002"</span>, <span class="str">"R-001"</span>, <span class="str">"R-003"</span>]
+unique_labels = <span class="fn">set</span>(labels)
+
+<span class="fn">print</span>(unique_labels)             <span class="cm"># duplicates gone</span>
+<span class="fn">print</span>(<span class="fn">len</span>(unique_labels))       <span class="cm"># 3, not 4</span>
+<span class="fn">print</span>(<span class="str">"R-001"</span> <span class="kw">in</span> unique_labels)   <span class="cm"># True - fast membership check</span>
+
+empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is an empty dict</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">{'R-001', 'R-002', 'R-003'}<br>3<br>True</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>visited_hosts = ["srv-01", "srv-02", "srv-01", "srv-03", "srv-02"]</code>, use
+          a set to find out how many unique values it contains.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice5.ipynb" title="Practice — count unique values with a set" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s6">
+      <h2>Topic 2 Challenge</h2>
+      <div class="callout">
+        <p>Given <code>disk = {"used": 87.0, "total": 120.0, "free": 33.0}</code>, print a
+          formatted report line for each key-value pair, right-aligning the values, using
+          <code>.items()</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_challenge.ipynb" title="Practice — Topic 2 challenge" style="height:312px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>One shape, three different pieces of information stored by name.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td><code>{"rows": 1200, "missing": 13, "source": "survey_2026"}</code></td></tr>
+        <tr><td>Cyber Security</td><td><code>{"ip": "10.0.0.5", "failed": 12, "locked": True}</code></td></tr>
+        <tr><td>IT</td><td><code>{"hostname": "srv-01", "used_gb": 87, "total_gb": 120}</code></td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s7">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td><code>record["missing"]</code></td><td><code>KeyError: 'missing'</code></td><td>check with <code>.get()</code> or <code>in</code> first</td></tr>
+        <tr><td><code>record[value]</code> when you meant <code>record["value"]</code></td><td><code>NameError</code> (or wrong result)</td><td>keys are strings — quote them</td></tr>
+        <tr><td>assuming key order matters for lookup</td><td>it doesn't — lookup is by name, not position</td><td>that is the entire point of a dict</td></tr>
+        <tr><td><code>for value in record:</code> expecting key AND value</td><td>only gives you the keys</td><td>use <code>.items()</code> for both</td></tr>
+        <tr><td><code>{"{}"}</code> expecting an empty set</td><td>it is an empty <b>dict</b></td><td>use <code>set()</code> for an empty set</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_creating_and_accessing.py</code> — creating, accessing, updating, .get()</li>
+        <li><code>examples/02_iterating.py</code> — .keys(), .values(), .items()</li>
+        <li><code>examples/03_sets.py</code> — unique values, membership, the <code>{"{}"}</code> gotcha</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t2-s8">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>create a dict</td><td><code>{"key": value, ...}</code></td></tr>
+        <tr><td>access by name</td><td><code>record["key"]</code></td></tr>
+        <tr><td>add or update</td><td><code>record["key"] = value</code></td></tr>
+        <tr><td>avoid <code>KeyError</code></td><td><code>.get("key", default)</code></td></tr>
+        <tr><td>loop over both at once</td><td><code>.items()</code></td></tr>
+        <tr><td>keep only unique values</td><td><code>set(a_list)</code></td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t3-s1" style="color:var(--accent); text-decoration:none;">Topic 3 — storage that outlives the program.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Files</h2></div>
+
+    <section class="topic" id="t3-s1">
+      <h2><span class="num">1.</span>Writing, with <code>with</code></h2>
+      <p>Everything so far disappears the moment the program ends. A file does not.
+        <code>with ... as f:</code> opens the file, hands you <code>f</code> to work with, and
+        closes it automatically when the indented block ends — even if something goes wrong
+        partway through.</p>
+
+      <figure class="anim-figure">
+        <iframe src="file_modes.html?embed=1" title="File modes animation" loading="lazy" style="height:560px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> <code>"w"</code> truncates the file before writing —
+          <code>"a"</code> leaves what's already there untouched. Section 2 below covers the mode
+          argument itself.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
+    f.write(<span class="str">"R-001\n"</span>)
+    f.write(<span class="str">"R-002\n"</span>)</pre>
+      </div>
+
+      <div class="diagram"><pre>with open("output.txt", "w") as f:
+       │
+       ▼
+  file is open, f is your handle
+       │
+       ▼
+  ... f.write(...) ...
+       │
+       ▼
+  block ends  ──▶  file closes automatically, even if an error happened</pre></div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write 3 lines of your own to a new file called <code>my_notes.txt</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_practice1.ipynb" title="Practice — write to a file" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s2">
+      <h2><span class="num">2.</span>Reading</h2>
+      <p>No mode given defaults to <code>"r"</code> (read). <code>"w"</code> overwrites the whole
+        file every time you open it that way — <code>"a"</code> appends instead.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>) <span class="kw">as</span> f:
+    text = f.read()
+
+<span class="fn">print</span>(text)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-001<br>R-002</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>This cell writes <code>my_notes.txt</code> for you. Read it back and print it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_practice2.ipynb" title="Practice — read a file back" style="height:409px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s3">
+      <h2><span class="num">3.</span>Reading line by line</h2>
+      <p>Looping over an open file gives you one line at a time — the natural way to process many
+        records. Each line keeps its trailing <code>\n</code> — <code>.strip()</code> removes it.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>) <span class="kw">as</span> f:
+    <span class="kw">for</span> line <span class="kw">in</span> f:
+        <span class="fn">print</span>(line.strip())</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-001<br>R-002</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>This cell writes <code>my_notes.txt</code> for you again. Read it line by line and print
+          each line, stripped.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_practice3.ipynb" title="Practice — read a file line by line" style="height:409px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s4">
+      <h2><span class="num">4.</span>Splitting a line into fields</h2>
+      <p><code>.split(",")</code> turns one line of text into a list of values — still text, so
+        convert what needs converting.</p>
+
+      <div class="cell">
+        <pre class="code">line = <span class="str">"R-001,87,100"</span>
+label, value, limit = line.split(<span class="str">","</span>)
+value = <span class="fn">float</span>(value)
+limit = <span class="fn">float</span>(limit)
+<span class="fn">print</span>(label, value, limit)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-001 87.0 100.0</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given the line <code>"R-004,93,100"</code>, split it and print the three parts, converted
+          where needed.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_practice4.ipynb" title="Practice — split a line into fields" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s5">
+      <h2>Topic 3 Challenge</h2>
+      <div class="callout">
+        <p>Write a function <code>load_records(path)</code> that reads a file of
+          <code>label,value,limit</code> lines and returns a list of dicts — one dict per line,
+          shaped like <code>{"label": ..., "value": ..., "limit": ...}</code>. Write a small
+          file of your own to test it on.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_challenge.ipynb" title="Practice — Topic 3 challenge" style="height:289px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>Storage that outlives the program, read back a line at a time.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td>loading a CSV of readings before doing anything with it</td></tr>
+        <tr><td>Cyber Security</td><td>reading a log file line by line, checking each entry</td></tr>
+        <tr><td>IT</td><td>reading a list of hostnames from a config file</td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td>opening a file that does not exist</td><td><code>FileNotFoundError</code></td><td>check the path — is it relative to where you are running from?</td></tr>
+        <tr><td>forgetting <code>.strip()</code> before comparing or splitting a line</td><td>odd, hard-to-spot mismatches</td><td>every line from a file carries a trailing <code>\n</code></td></tr>
+        <tr><td>using <code>"w"</code> when you meant <code>"a"</code></td><td>your previous content is gone</td><td><code>"w"</code> overwrites, <code>"a"</code> appends — pick deliberately</td></tr>
+        <tr><td>forgetting to convert after <code>.split()</code></td><td><code>TypeError</code> when you try to calculate</td><td>everything from <code>.split()</code> is still text</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_writing_and_reading.py</code> — write, read, append, the with pattern</li>
+        <li><code>examples/02_line_by_line_and_split.py</code> — looping over a file, splitting each line</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t3-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>write to a file safely</td><td><code>with open(path, "w") as f:</code></td></tr>
+        <tr><td>read a whole file</td><td><code>f.read()</code></td></tr>
+        <tr><td>read it line by line</td><td><code>for line in f:</code></td></tr>
+        <tr><td>turn a line into values</td><td><code>line.strip().split(",")</code></td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t4-s1" style="color:var(--accent); text-decoration:none;">Topic 4 — combining lists, dicts and files into one shape.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Putting It Together</h2></div>
+
+    <section class="topic" id="t4-s1">
+      <h2><span class="num">1.</span>The shape</h2>
+      <p>This week's three tools combine into the shape almost every real program uses. Build one by
+        hand first, before loading anything from a file.</p>
+
+      <figure class="anim-figure">
+        <iframe src="list_of_dicts.html?embed=1" title="List of dicts animation" loading="lazy" style="height:620px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> A raw line splits into raw pieces, which become one dict,
+          appended into a single growing list — the destination shape the rest of the program uses.</figcaption>
+      </figure>
+
+      <div class="diagram"><pre>file (records.txt)                    a list of dicts
+  R-001,87,100                          [ {"label": "R-001", "value": 87,  "limit": 100},
+  R-002,120,100      ── load_records() →  {"label": "R-002", "value": 120, "limit": 100} ]
+                                            └──────────────────┬──────────────────┘
+                                                        one dict per record</pre></div>
+
+      <div class="cell">
+        <pre class="code">records = [
+    {<span class="str">"label"</span>: <span class="str">"R-001"</span>, <span class="str">"value"</span>: 87.0, <span class="str">"limit"</span>: 100.0},
+    {<span class="str">"label"</span>: <span class="str">"R-002"</span>, <span class="str">"value"</span>: 120.0, <span class="str">"limit"</span>: 100.0},
+]
+
+<span class="fn">print</span>(records[0][<span class="str">"label"</span>])   <span class="cm"># index into the list, then key into the dict</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-001</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Build a list of 2 dicts by hand called <code>hosts</code>, each with <code>label</code>,
+          <code>value</code> and <code>limit</code>. Loop over it and print just the label from
+          each.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_practice1.ipynb" title="Practice — build a list of dicts by hand" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s2">
+      <h2><span class="num">2.</span>Loading it from a file</h2>
+      <p>Topic 3's <code>load_records</code> — the line-reading and splitting you already wrote, now
+        building the list up one dict at a time.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">load_records</span>(path):
+    <span class="str">"""Read label,value,limit lines from a file and return a list of dicts."""</span>
+    records = []
+    <span class="kw">with</span> <span class="fn">open</span>(path) <span class="kw">as</span> f:
+        <span class="kw">for</span> line <span class="kw">in</span> f:
+            label, value, limit = line.strip().split(<span class="str">","</span>)
+            records.append({<span class="str">"label"</span>: label, <span class="str">"value"</span>: <span class="fn">float</span>(value), <span class="str">"limit"</span>: <span class="fn">float</span>(limit)})
+    <span class="kw">return</span> records</pre>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Save 3 <code>label,value,limit</code> lines of your own to a file, then load them with
+          <code>load_records</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_practice2.ipynb" title="Practice — load records from a file" style="height:500px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s3">
+      <h2><span class="num">3.</span>Processing each record</h2>
+      <p>The loop looks the same whether the list came from Topic 1's by-hand version or Topic 3's
+        file — that consistency is the point.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">for</span> record <span class="kw">in</span> records:
+    percent = (record[<span class="str">"value"</span>] / record[<span class="str">"limit"</span>]) * 100
+    status = <span class="str">"OVER LIMIT"</span> <span class="kw">if</span> percent >= 100 <span class="kw">else</span> <span class="str">"OK"</span>
+    <span class="fn">print</span>(f<span class="str">"{record['label']}: {status}"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-001: OK<br>R-002: OVER LIMIT</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>entries = [{"label": "E-01", "value": 95.0, "limit": 90.0},
+          {"label": "E-02", "value": 40.0, "limit": 90.0}]</code>, loop through it and print
+          <code>OVER LIMIT</code> or <code>OK</code> for each.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_practice3.ipynb" title="Practice — process each record" style="height:362px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s4">
+      <h2><span class="num">4.</span>Why this shape</h2>
+      <p>This is the shape most real datasets already come in: rows, each with named fields. Week
+        6's <code>pandas</code> reads a whole file into exactly this shape in one line — what you
+        just built by hand, <code>pandas</code> will hand you ready-made. Knowing the shape first is
+        what makes that useful instead of magic.</p>
+    </section>
+
+    <section class="topic" id="t4-s5">
+      <h2>Topic 4 Challenge</h2>
+      <div class="callout">
+        <p>Write <code>load_records(path)</code>, load records from a file of your own, process each
+          one (<code>OVER LIMIT</code> / <code>WARNING</code> / <code>OK</code>), and print a summary
+          line: <code>"N of M were over limit"</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_challenge.ipynb" title="Practice — Topic 4 challenge" style="height:289px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>The same list-of-dicts shape, wherever the rows come from.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td>a CSV of survey rows, each row a dict of answers</td></tr>
+        <tr><td>Cyber Security</td><td>a log file, each line a dict of <code>{ip, time, result}</code></td></tr>
+        <tr><td>IT</td><td>a server list, each line a dict of <code>{hostname, used, total}</code></td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td><code>records["label"]</code> instead of <code>records[0]["label"]</code></td><td><code>TypeError</code> — <code>records</code> is a list, not a dict</td><td>index into the list first, then key into the dict</td></tr>
+        <tr><td>building the dict with the wrong keys each time</td><td><code>KeyError</code> later, inconsistently</td><td>keep every record's dict the same shape</td></tr>
+        <tr><td>forgetting <code>load_records</code> needs to <code>return</code> the list</td><td><code>None</code> where you expected records</td><td>check every function actually returns what it builds</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_list_of_dicts.py</code> — building the shape by hand</li>
+        <li><code>examples/02_load_and_process.py</code> — the full pipeline, load then process</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t4-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>build the shape by hand</td><td>a list of dicts</td></tr>
+        <tr><td>load it from a file</td><td><code>load_records(path)</code></td></tr>
+        <tr><td>process it consistently</td><td><code>for record in records:</code></td></tr>
+        <tr><td>see why the shape matters</td><td>it is what real datasets already look like</td></tr>
+      </table>
+      <p class="muted">You now have all of Week 4's STORE. Go and build your own in the lab.</p>
+    </section>
+
+    <footer class="page-foot">CST1510 · Week 04 · Lists, Dictionaries and Files</footer>
+  </article>
+</div>
+
+<script>
+  var links = Array.from(document.querySelectorAll('nav.toc a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var groups = Array.from(document.querySelectorAll('nav.toc .toc-group'));
+  function onScroll() {
+    var y = window.scrollY + 80;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s && s.offsetTop <= y) current = s; });
+    links.forEach(function (a) { a.classList.remove('current'); });
+    var idx = sections.indexOf(current);
+    if (idx >= 0) links[idx].classList.add('current');
+
+    var activePrefix = current && current.id ? current.id.split('-')[0] : null;
+    groups.forEach(function (g) {
+      g.classList.toggle('open', g.getAttribute('data-group') === activePrefix);
+    });
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Notebook iframes share one JupyterLite IndexedDB-backed contents store.
+  // Booting several at once races on that shared connection ("Cannot read
+  // properties of null (reading/setting 'db')"), so load them strictly one
+  // at a time, and confirm each one actually rendered (same-origin poll of
+  // its own DOM) before starting the next, rather than trusting the
+  // iframe's load event alone (it fires before JupyterLite's own async
+  // IndexedDB-backed init has necessarily finished).
+  (function () {
+    var queue = [];
+    var loading = false;
+    function pollReady(iframe, deadline, cb) {
+      var doc;
+      try { doc = iframe.contentDocument; } catch (e) { doc = null; }
+      var ready = doc && (doc.querySelector('.jp-Cell') || doc.querySelector('.jp-mod-error') || doc.querySelector('.jp-Dialog'));
+      if (ready || Date.now() > deadline) { cb(); return; }
+      setTimeout(function () { pollReady(iframe, deadline, cb); }, 200);
+    }
+    function next() {
+      if (loading || queue.length === 0) return;
+      loading = true;
+      var iframe = queue.shift();
+      iframe.src = iframe.getAttribute('data-src');
+      iframe.addEventListener('load', function onLoad() {
+        iframe.removeEventListener('load', onLoad);
+        pollReady(iframe, Date.now() + 9000, function () {
+          setTimeout(function () { loading = false; next(); }, 900);
+        });
+      });
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var iframe = entry.target;
+          observer.unobserve(iframe);
+          queue.push(iframe);
+          next();
+        }
+      });
+    }, { rootMargin: '250px 0px' });
+    document.querySelectorAll('iframe.lazy-frame').forEach(function (f) { observer.observe(f); });
+  })();
+
+</script>
+</body>
+</html>

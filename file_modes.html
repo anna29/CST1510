@@ -1,0 +1,240 @@
+<meta charset="utf-8">
+<title>File Modes</title>
+<script>if (location.search.indexOf('embed=1') !== -1) document.documentElement.className += ' embed';</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E7ECF1;
+    --fg: #182430;
+    --fg-muted: #5B6B7A;
+    --border: #C9D3DC;
+    --accent-a: #D8425F;
+    --accent-a-soft: #F6DDE2;
+    --accent-b: #0E8F8B;
+    --accent-b-soft: #D9F0EE;
+    --code-bg: #10161F;
+    --code-fg: #E7EEF3;
+    --code-muted: #7C8CA0;
+    --shadow: 0 1px 2px rgba(20,30,40,.06), 0 10px 28px rgba(20,30,40,.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D131E; --surface: #161F2C; --surface-2: #1E2836; --fg: #E7EEF5;
+      --fg-muted: #8FA0B2; --border: #2B3A4C; --accent-a: #FF7A92; --accent-a-soft: #3A2028;
+      --accent-b: #35DCCF; --accent-b-soft: #123330; --code-bg: #090D14; --code-fg: #DCE6EE;
+      --code-muted: #5E7488; --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131E; --surface: #161F2C; --surface-2: #1E2836; --fg: #E7EEF5;
+    --fg-muted: #8FA0B2; --border: #2B3A4C; --accent-a: #FF7A92; --accent-a-soft: #3A2028;
+    --accent-b: #35DCCF; --accent-b-soft: #123330; --code-bg: #090D14; --code-fg: #DCE6EE;
+    --code-muted: #5E7488; --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+  .page { max-width: 980px; margin: 0 auto; padding: 48px 24px 64px; display: flex; flex-direction: column; gap: 32px; }
+  header { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--fg-muted); }
+  h1 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.15rem); font-weight: 700; text-wrap: balance; letter-spacing: -0.01em; }
+  header p { margin: 0; max-width: 62ch; color: var(--fg-muted); font-size: 1.02rem; line-height: 1.55; }
+  header p code { color: var(--fg); }
+  code, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  .stage-figure { margin: 0; display: flex; flex-direction: column; gap: 18px; }
+  .stage { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 28px; align-items: start; }
+
+  .code-panel { background: var(--code-bg); color: var(--code-fg); border-radius: 14px; padding: 20px 22px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,.06); }
+  .code-panel .tag { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--code-muted); margin-bottom: 10px; display: block; }
+  .code-panel pre { margin: 0; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px; line-height: 1.75; white-space: pre-wrap; min-height: 148px; }
+  .code-panel .kw { color: var(--accent-b); }
+  .code-panel .mode-w { padding: 1px 5px; border-radius: 4px; background: var(--accent-a); color: #2a0e14; font-weight: 600; }
+  .code-panel .mode-a { padding: 1px 5px; border-radius: 4px; background: var(--accent-b); color: #06201d; font-weight: 600; }
+  .code-panel .str { color: #E8C97A; }
+
+  .file-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px 18px 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px; min-height: 220px; }
+  .file-card .file-name { font-size: 13px; color: var(--fg-muted); display: flex; align-items: center; gap: 8px; }
+  .file-card .file-name .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex: none; transition: background .3s ease; }
+  .file-card.state-w .file-name .dot { background: var(--accent-a); }
+  .file-card.state-a .file-name .dot { background: var(--accent-b); }
+  .file-lines { display: flex; flex-direction: column; gap: 6px; min-height: 150px; }
+  .file-line { display: flex; align-items: center; gap: 10px; font-size: 13.5px; padding: 7px 10px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--border); font-family: 'IBM Plex Mono', ui-monospace, monospace; opacity: 0; transform: translateY(-6px); transition: opacity .3s ease, transform .3s ease, background .3s ease, border-color .3s ease; }
+  .file-line.shown { opacity: 1; transform: translateY(0); }
+  .file-line.fresh { background: var(--accent-b-soft); border-color: var(--accent-b); }
+  .file-line .n { color: var(--fg-muted); min-width: 1.4em; text-align: right; }
+  .file-empty { font-size: 13.5px; color: var(--fg-muted); font-style: italic; padding: 8px 10px; }
+
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  button { font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14.5px; font-weight: 600; border-radius: 10px; padding: 11px 18px; cursor: pointer; border: 1.5px solid var(--border); background: var(--surface); color: var(--fg); display: inline-flex; align-items: center; gap: 9px; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, opacity .15s ease; }
+  button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: var(--shadow); }
+  button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  button .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  button.btn-step .dot { background: var(--accent-b); }
+  button.btn-step:hover:not(:disabled) { border-color: var(--accent-b); }
+  button.btn-reset { color: var(--fg-muted); }
+  button.btn-reset .dot { background: var(--fg-muted); }
+
+  .status { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13.5px; color: var(--fg-muted); min-height: 1.4em; padding: 12px 14px; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--border); }
+  .status b { color: var(--fg); font-weight: 600; }
+  .status .w-word { color: var(--accent-a); font-weight: 600; }
+  .status .a-word { color: var(--accent-b); font-weight: 600; }
+
+  figcaption { font-size: 14px; color: var(--fg-muted); line-height: 1.6; max-width: 68ch; }
+
+  @media (max-width: 620px) { .stage { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; } }
+
+  html.embed .page { padding: 4px 4px 20px; }
+  html.embed header { display: none; }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">Week 4 · Files</span>
+    <h1>Mode decides what happens to what's already there</h1>
+    <p><code>"w"</code> wipes the file before writing anything new. <code>"a"</code> appends after
+      whatever is already there. Same <code>open()</code> call, opposite result.</p>
+  </header>
+
+  <figure class="stage-figure" aria-label="Diagram showing write mode truncating a file and append mode preserving it">
+    <div class="stage">
+      <div class="code-panel">
+        <span class="tag">code for this step</span>
+        <pre id="code-view"><span class="mono" style="color:var(--code-muted);">— press "Run next step" to begin —</span></pre>
+      </div>
+      <div class="file-card" id="file-card">
+        <div class="file-name"><span class="dot"></span><span class="mono">output.txt</span></div>
+        <div class="file-lines" id="file-lines">
+          <div class="file-empty" id="file-empty">file does not exist yet</div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Step through: write 3 lines with <code>"w"</code>, run the exact same <code>"w"</code>
+      code again, then switch to <code>"a"</code> and write 2 more.</figcaption>
+  </figure>
+
+  <div class="controls">
+    <button class="btn-step" id="btn-step"><span class="dot"></span>Run next step</button>
+    <button class="btn-reset" id="btn-reset"><span class="dot"></span>Reset</button>
+  </div>
+
+  <div class="status mono" id="status" aria-live="polite">Nothing has run yet. There are 3 steps.</div>
+</div>
+
+<script>
+(function () {
+  var fileLinesEl = document.getElementById('file-lines');
+  var fileEmptyEl = document.getElementById('file-empty');
+  var fileCard = document.getElementById('file-card');
+  var codeView = document.getElementById('code-view');
+  var status = document.getElementById('status');
+  var btnStep = document.getElementById('btn-step');
+  var btnReset = document.getElementById('btn-reset');
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var wipeDelay = reduceMotion ? 0 : 380;
+  var lineStagger = reduceMotion ? 0 : 160;
+
+  var codeW = '<span class="tag" style="display:none;"></span><span class="kw">with</span> <span class="mono">open</span>(<span class="str">"output.txt"</span>, <span class="mode-w">"w"</span>) <span class="kw">as</span> f:\n    f.write(<span class="str">"first note\\n"</span>)\n    f.write(<span class="str">"second note\\n"</span>)\n    f.write(<span class="str">"third note\\n"</span>)';
+  var codeA = '<span class="kw">with</span> <span class="mono">open</span>(<span class="str">"output.txt"</span>, <span class="mode-a">"a"</span>) <span class="kw">as</span> f:\n    f.write(<span class="str">"fourth note\\n"</span>)\n    f.write(<span class="str">"fifth note\\n"</span>)';
+
+  var steps = [
+    {
+      code: codeW,
+      cardState: 'state-w',
+      before: [],
+      after: ['first note', 'second note', 'third note'],
+      status: '<span class="w-word">"w"</span> mode: <b>output.txt</b> created and 3 lines written.'
+    },
+    {
+      code: codeW,
+      cardState: 'state-w',
+      before: ['first note', 'second note', 'third note'],
+      after: ['first note', 'second note', 'third note'],
+      wipeFirst: true,
+      status: '<span class="w-word">"w"</span> truncates first — the previous 3 lines vanished — then the same 3 lines were written back. Still 3, not 6.'
+    },
+    {
+      code: codeA,
+      cardState: 'state-a',
+      before: ['first note', 'second note', 'third note'],
+      after: ['first note', 'second note', 'third note', 'fourth note', 'fifth note'],
+      status: '<span class="a-word">"a"</span> appends — the existing 3 lines were untouched. 5 lines total.'
+    }
+  ];
+
+  var stepIndex = 0;
+
+  function renderLines(lines, freshFrom) {
+    fileLinesEl.innerHTML = '';
+    if (lines.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'file-empty';
+      empty.textContent = 'file is empty';
+      fileLinesEl.appendChild(empty);
+      return;
+    }
+    lines.forEach(function (text, i) {
+      var row = document.createElement('div');
+      row.className = 'file-line';
+      if (freshFrom !== undefined && i >= freshFrom) row.classList.add('fresh');
+      row.innerHTML = '<span class="n">' + (i + 1) + '</span><span>' + text + '</span>';
+      fileLinesEl.appendChild(row);
+      setTimeout(function () { row.classList.add('shown'); }, 20 + (i - (freshFrom || 0)) * lineStagger + (freshFrom ? 0 : i * lineStagger));
+    });
+  }
+
+  function runStep(step) {
+    fileCard.className = 'file-card ' + step.cardState;
+    codeView.innerHTML = step.code;
+
+    if (step.wipeFirst) {
+      status.innerHTML = '<span class="w-word">"w"</span> opened — truncating the existing 3 lines…';
+      renderLines(step.before);
+      requestAnimationFrame(function () {
+        fileLinesEl.querySelectorAll('.file-line').forEach(function (r) { r.classList.add('shown'); });
+      });
+      setTimeout(function () {
+        renderLines([]);
+        setTimeout(function () {
+          renderLines(step.after, 0);
+          status.innerHTML = step.status;
+        }, wipeDelay);
+      }, wipeDelay);
+    } else {
+      var freshFrom = step.before.length;
+      renderLines(step.after, freshFrom === step.after.length ? 0 : freshFrom);
+      status.innerHTML = step.status;
+    }
+  }
+
+  btnStep.addEventListener('click', function () {
+    if (stepIndex >= steps.length) return;
+    runStep(steps[stepIndex]);
+    stepIndex++;
+    if (stepIndex >= steps.length) {
+      btnStep.disabled = true;
+      btnStep.textContent = '';
+      var dot = document.createElement('span'); dot.className = 'dot';
+      btnStep.appendChild(dot);
+      btnStep.appendChild(document.createTextNode('All 3 steps run'));
+    } else {
+      btnStep.lastChild.textContent = 'Run next step (' + (stepIndex + 1) + ' of ' + steps.length + ')';
+    }
+  });
+
+  btnReset.addEventListener('click', function () {
+    stepIndex = 0;
+    fileCard.className = 'file-card';
+    codeView.innerHTML = '<span class="mono" style="color:var(--code-muted);">— press "Run next step" to begin —</span>';
+    renderLines([]);
+    fileLinesEl.innerHTML = '<div class="file-empty" id="file-empty">file does not exist yet</div>';
+    status.textContent = 'Nothing has run yet. There are 3 steps.';
+    btnStep.disabled = false;
+    btnStep.innerHTML = '<span class="dot"></span>Run next step';
+  });
+})();
+</script>

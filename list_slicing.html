@@ -1,0 +1,549 @@
+<meta charset="utf-8">
+<title>Indices and Slices</title>
+<script>if (location.search.indexOf('embed=1') !== -1) document.documentElement.className += ' embed';</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E7ECF1;
+    --fg: #182430;
+    --fg-muted: #5B6B7A;
+    --border: #C9D3DC;
+    --accent-a: #D8425F;
+    --accent-a-soft: #F6DDE2;
+    --accent-b: #0E8F8B;
+    --accent-b-soft: #D9F0EE;
+    --code-bg: #10161F;
+    --code-fg: #E7EEF3;
+    --code-muted: #7C8CA0;
+    --shadow: 0 1px 2px rgba(20,30,40,.06), 0 10px 28px rgba(20,30,40,.07);
+    --idle-line: var(--border);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D131E;
+      --surface: #161F2C;
+      --surface-2: #1E2836;
+      --fg: #E7EEF5;
+      --fg-muted: #8FA0B2;
+      --border: #2B3A4C;
+      --accent-a: #FF7A92;
+      --accent-a-soft: #3A2028;
+      --accent-b: #35DCCF;
+      --accent-b-soft: #123330;
+      --code-bg: #090D14;
+      --code-fg: #DCE6EE;
+      --code-muted: #5E7488;
+      --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131E;
+    --surface: #161F2C;
+    --surface-2: #1E2836;
+    --fg: #E7EEF5;
+    --fg-muted: #8FA0B2;
+    --border: #2B3A4C;
+    --accent-a: #FF7A92;
+    --accent-a-soft: #3A2028;
+    --accent-b: #35DCCF;
+    --accent-b-soft: #123330;
+    --code-bg: #090D14;
+    --code-fg: #DCE6EE;
+    --code-muted: #5E7488;
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  header { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 3vw, 2.15rem);
+    font-weight: 700;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  header p {
+    margin: 0;
+    max-width: 60ch;
+    color: var(--fg-muted);
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+  header p code { color: var(--fg); }
+
+  code, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  .stage-figure { margin: 0; display: flex; flex-direction: column; gap: 18px; }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 8px;
+  }
+
+  .repl-panel {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,.06);
+  }
+  .repl-panel .tag {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--code-muted);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .repl-panel pre {
+    margin: 0;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 14.5px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+  .repl-line { color: var(--code-muted); }
+  .repl-expr { color: var(--code-fg); transition: color .3s ease; }
+  .repl-expr.a { color: var(--accent-a); }
+  .repl-expr.b { color: var(--accent-b); }
+  .repl-output {
+    display: block;
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .repl-output.shown { opacity: 1; transform: translateY(0); }
+
+  .list-figure {
+    position: relative;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 40px 24px 44px;
+    box-shadow: var(--shadow);
+  }
+
+  .list-row {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .slot {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .idx-pos, .idx-neg {
+    font-size: 12.5px;
+    color: var(--fg-muted);
+    transition: color .3s ease, font-weight .3s ease;
+    min-height: 1.3em;
+  }
+  .slot.active-a .idx-pos.used, .slot.active-a .idx-neg.used { color: var(--accent-a); font-weight: 600; }
+  .slot.active-b .idx-pos.used, .slot.active-b .idx-neg.used { color: var(--accent-b); font-weight: 600; }
+
+  .slot-box {
+    min-width: 78px;
+    text-align: center;
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 14px;
+    font-size: 14.5px;
+    font-weight: 600;
+    transition: border-color .3s ease, box-shadow .3s ease, background .3s ease;
+  }
+  .slot.active-a .slot-box {
+    border-color: var(--accent-a);
+    background: var(--accent-a-soft);
+    box-shadow: 0 0 0 3px var(--accent-a-soft);
+  }
+  .slot.active-b .slot-box {
+    border-color: var(--accent-b);
+    background: var(--accent-b-soft);
+    box-shadow: 0 0 0 3px var(--accent-b-soft);
+  }
+
+  .bracket {
+    position: absolute;
+    z-index: 1;
+    border-left: 3px solid var(--accent-b);
+    border-right: 3px solid var(--accent-b);
+    border-bottom: 3px solid var(--accent-b);
+    border-radius: 0 0 12px 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease, left .35s ease, width .35s ease, top .35s ease, height .35s ease;
+  }
+  .bracket.shown { opacity: 1; }
+  .bracket-label {
+    position: absolute;
+    left: 50%;
+    bottom: -24px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 12.5px;
+    color: var(--accent-b);
+    font-weight: 600;
+  }
+
+  .result-panel {
+    border-top: 1px dashed var(--border);
+    padding-top: 14px;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14.5px;
+  }
+  .result-panel .label { color: var(--fg-muted); }
+  .result-panel .placeholder { color: var(--fg-muted); font-style: italic; }
+  .result-panel .result {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .35s ease, transform .35s ease;
+    font-weight: 600;
+  }
+  .result-panel .result.shown { opacity: 1; transform: translateY(0); }
+  .result-panel .result.a { color: var(--accent-a); }
+  .result-panel .result.b { color: var(--accent-b); }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  button {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 11px 18px;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--fg);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  button .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  button.btn-a .dot { background: var(--accent-a); }
+  button.btn-b .dot { background: var(--accent-b); }
+  button.btn-a:hover { border-color: var(--accent-a); }
+  button.btn-b:hover { border-color: var(--accent-b); }
+  button.btn-reset { color: var(--fg-muted); }
+  button.btn-reset .dot { background: var(--fg-muted); }
+
+  .status {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    min-height: 1.4em;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .status b { color: var(--fg); font-weight: 600; }
+
+  figcaption {
+    font-size: 14px;
+    color: var(--fg-muted);
+    line-height: 1.6;
+    max-width: 68ch;
+  }
+
+  @media (max-width: 620px) {
+    .list-row { gap: 8px; }
+    .slot-box { min-width: 64px; padding: 10px 8px; font-size: 13px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: .01ms !important; }
+  }
+
+  /* ?embed=1 — used when a page's own prose already carries the title/intro */
+  html.embed .page { padding: 4px 4px 20px; }
+  html.embed header { display: none; }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">Week · Lists</span>
+    <h1>Every slot has two addresses</h1>
+    <p>A list is an ordered row of slots. Each slot can be reached by counting up from
+      <code>0</code> at the front, or down from <code>-1</code> at the back — same slot, two labels.</p>
+  </header>
+
+  <figure class="stage-figure" aria-label="Diagram of a five-item list showing positive and negative indices, with buttons that animate index lookups and slices">
+    <div class="stage" id="stage">
+      <div class="repl-panel">
+        <span class="tag">python</span>
+        <pre><span class="repl-line">servers = ["web1", "web2", "db1", "cache1", "web3"]</span>
+&gt;&gt;&gt; <span class="repl-expr" id="repl-expr">…</span>
+<span class="repl-output mono" id="repl-output"></span></pre>
+      </div>
+
+      <div class="list-figure">
+        <div class="list-row" id="list-row">
+          <div class="bracket" id="bracket"><span class="bracket-label" id="bracket-label"></span></div>
+
+          <div class="slot" id="slot-0">
+            <span class="idx-pos mono" id="pos-0">0</span>
+            <span class="slot-box mono">"web1"</span>
+            <span class="idx-neg mono" id="neg-0">-5</span>
+          </div>
+          <div class="slot" id="slot-1">
+            <span class="idx-pos mono" id="pos-1">1</span>
+            <span class="slot-box mono">"web2"</span>
+            <span class="idx-neg mono" id="neg-1">-4</span>
+          </div>
+          <div class="slot" id="slot-2">
+            <span class="idx-pos mono" id="pos-2">2</span>
+            <span class="slot-box mono">"db1"</span>
+            <span class="idx-neg mono" id="neg-2">-3</span>
+          </div>
+          <div class="slot" id="slot-3">
+            <span class="idx-pos mono" id="pos-3">3</span>
+            <span class="slot-box mono">"cache1"</span>
+            <span class="idx-neg mono" id="neg-3">-2</span>
+          </div>
+          <div class="slot" id="slot-4">
+            <span class="idx-pos mono" id="pos-4">4</span>
+            <span class="slot-box mono">"web3"</span>
+            <span class="idx-neg mono" id="neg-4">-1</span>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <span class="label mono">result:</span>
+          <span class="placeholder mono" id="result-placeholder">pick an example below…</span>
+          <span class="result mono" id="result-value"></span>
+        </div>
+      </div>
+    </div>
+
+    <figcaption>The top row counts from the front starting at <code>0</code>; the bottom row counts from the
+      back starting at <code>-1</code>. A slice like <code>[1:3]</code> stops <em>before</em> its second index.</figcaption>
+  </figure>
+
+  <div class="controls">
+    <button class="btn-a" id="btn-idx0"><span class="dot"></span>servers[0]</button>
+    <button class="btn-a" id="btn-idxneg1"><span class="dot"></span>servers[-1]</button>
+    <button class="btn-b" id="btn-slice13"><span class="dot"></span>servers[1:3]</button>
+    <button class="btn-b" id="btn-sliceneg2"><span class="dot"></span>servers[-2:]</button>
+    <button class="btn-reset" id="btn-reset"><span class="dot"></span>Reset to idle</button>
+  </div>
+
+  <div class="status mono" id="status" aria-live="polite">Idle — pick an example above to see how the index counts.</div>
+</div>
+
+<script>
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var listRow = document.getElementById('list-row');
+  var bracket = document.getElementById('bracket');
+  var bracketLabel = document.getElementById('bracket-label');
+  var replExpr = document.getElementById('repl-expr');
+  var replOutput = document.getElementById('repl-output');
+  var status = document.getElementById('status');
+  var resultPlaceholder = document.getElementById('result-placeholder');
+  var resultValue = document.getElementById('result-value');
+
+  var slots = [0, 1, 2, 3, 4].map(function (i) { return document.getElementById('slot-' + i); });
+
+  var examples = {
+    idx0: {
+      expr: 'servers[0]',
+      type: 'index',
+      indices: [0],
+      accent: 'a',
+      useNeg: false,
+      resultText: '"web1"',
+      stepMsg: 'Python counts from the front: index <b>0</b> is the very first slot.',
+      doneMsg: 'Resolved: <b>servers[0]</b> → <b>"web1"</b> — the first item.'
+    },
+    idxneg1: {
+      expr: 'servers[-1]',
+      type: 'index',
+      indices: [4],
+      accent: 'a',
+      useNeg: true,
+      resultText: '"web3"',
+      stepMsg: 'Python counts from the back: index <b>-1</b> is the very last slot.',
+      doneMsg: 'Resolved: <b>servers[-1]</b> → <b>"web3"</b> — the last item, no need to know the length.'
+    },
+    slice13: {
+      expr: 'servers[1:3]',
+      type: 'slice',
+      indices: [1, 2],
+      accent: 'b',
+      useNeg: false,
+      resultText: '["web2", "db1"]',
+      bracketText: '[1:3]',
+      stepMsg: 'Python walks from index <b>1</b> up to, but not including, index <b>3</b>.',
+      doneMsg: 'Resolved: <b>servers[1:3]</b> → <b>["web2", "db1"]</b> — a new sub-list, index 3 excluded.'
+    },
+    sliceneg2: {
+      expr: 'servers[-2:]',
+      type: 'slice',
+      indices: [3, 4],
+      accent: 'b',
+      useNeg: true,
+      resultText: '["cache1", "web3"]',
+      bracketText: '[-2:]',
+      stepMsg: 'Python starts at index <b>-2</b> and takes every slot through the end of the list.',
+      doneMsg: 'Resolved: <b>servers[-2:]</b> → <b>["cache1", "web3"]</b> — the last two items.'
+    }
+  };
+
+  function rectRelativeTo(el, container) {
+    var r = el.getBoundingClientRect();
+    var c = container.getBoundingClientRect();
+    return { top: r.top - c.top, left: r.left - c.left, width: r.width, height: r.height };
+  }
+
+  function clearAll() {
+    slots.forEach(function (s) {
+      s.classList.remove('active-a', 'active-b');
+      s.querySelector('.idx-pos').classList.remove('used');
+      s.querySelector('.idx-neg').classList.remove('used');
+    });
+    bracket.classList.remove('shown');
+    bracketLabel.textContent = '';
+    replExpr.classList.remove('a', 'b');
+    replOutput.classList.remove('shown');
+  }
+
+  function showResult(text, accent) {
+    resultPlaceholder.style.display = 'none';
+    resultValue.textContent = text;
+    resultValue.classList.remove('a', 'b');
+    resultValue.classList.add(accent, 'shown');
+    replOutput.textContent = text;
+    replOutput.classList.add('shown');
+  }
+
+  function hideResult() {
+    resultPlaceholder.style.display = '';
+    resultValue.classList.remove('shown');
+    resultValue.textContent = '';
+  }
+
+  function drawBracket(fromIdx, toIdx) {
+    var a = rectRelativeTo(slots[fromIdx], listRow);
+    var b = rectRelativeTo(slots[toIdx], listRow);
+    var left = a.left - 6;
+    var width = (b.left + b.width) - a.left + 12;
+    var top = Math.min(a.top, b.top) - 8;
+    var height = Math.max(a.top + a.height, b.top + b.height) - top + 8;
+    bracket.style.left = left + 'px';
+    bracket.style.width = width + 'px';
+    bracket.style.top = top + 'px';
+    bracket.style.height = height + 'px';
+  }
+
+  function play(key) {
+    var ex = examples[key];
+    if (!ex) return;
+
+    clearAll();
+    hideResult();
+
+    var accentClass = ex.accent === 'a' ? 'active-a' : 'active-b';
+    var stepDelay = reduceMotion ? 0 : 320;
+
+    replExpr.textContent = ex.expr;
+    replExpr.classList.add(ex.accent);
+    status.innerHTML = '<b>' + ex.expr + '</b> — reading the index' + (ex.type === 'slice' ? ' range' : '') + '…';
+
+    setTimeout(function () {
+      ex.indices.forEach(function (i) {
+        var s = slots[i];
+        var labelEl = ex.useNeg ? s.querySelector('.idx-neg') : s.querySelector('.idx-pos');
+        labelEl.classList.add('used');
+      });
+      status.innerHTML = ex.stepMsg;
+    }, stepDelay);
+
+    setTimeout(function () {
+      ex.indices.forEach(function (i) {
+        slots[i].classList.add(accentClass);
+      });
+      if (ex.type === 'slice') {
+        drawBracket(ex.indices[0], ex.indices[ex.indices.length - 1]);
+        bracket.classList.add('shown');
+        bracketLabel.textContent = ex.bracketText;
+      }
+    }, stepDelay * 2);
+
+    setTimeout(function () {
+      showResult(ex.resultText, ex.accent);
+      status.innerHTML = ex.doneMsg;
+    }, stepDelay * 3);
+  }
+
+  document.getElementById('btn-idx0').addEventListener('click', function () { play('idx0'); });
+  document.getElementById('btn-idxneg1').addEventListener('click', function () { play('idxneg1'); });
+  document.getElementById('btn-slice13').addEventListener('click', function () { play('slice13'); });
+  document.getElementById('btn-sliceneg2').addEventListener('click', function () { play('sliceneg2'); });
+  document.getElementById('btn-reset').addEventListener('click', function () {
+    clearAll();
+    hideResult();
+    replExpr.textContent = '…';
+    status.textContent = 'Idle — pick an example above to see how the index counts.';
+  });
+
+  window.addEventListener('resize', function () {
+    if (bracket.classList.contains('shown')) {
+      var activeKey = null;
+      Object.keys(examples).forEach(function (k) {
+        if (examples[k].type === 'slice' && replExpr.textContent === examples[k].expr) activeKey = k;
+      });
+      if (activeKey) {
+        var ex = examples[activeKey];
+        drawBracket(ex.indices[0], ex.indices[ex.indices.length - 1]);
+      }
+    }
+  });
+})();
+</script>

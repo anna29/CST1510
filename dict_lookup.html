@@ -1,0 +1,422 @@
+<meta charset="utf-8">
+<title>Dict Lookup</title>
+<script>if (location.search.indexOf('embed=1') !== -1) document.documentElement.className += ' embed';</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E7ECF1;
+    --fg: #182430;
+    --fg-muted: #5B6B7A;
+    --border: #C9D3DC;
+    --accent-a: #D8425F;
+    --accent-a-soft: #F6DDE2;
+    --accent-b: #0E8F8B;
+    --accent-b-soft: #D9F0EE;
+    --code-bg: #10161F;
+    --code-fg: #E7EEF3;
+    --code-muted: #7C8CA0;
+    --shadow: 0 1px 2px rgba(20,30,40,.06), 0 10px 28px rgba(20,30,40,.07);
+    --idle-line: var(--border);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D131E;
+      --surface: #161F2C;
+      --surface-2: #1E2836;
+      --fg: #E7EEF5;
+      --fg-muted: #8FA0B2;
+      --border: #2B3A4C;
+      --accent-a: #FF7A92;
+      --accent-a-soft: #3A2028;
+      --accent-b: #35DCCF;
+      --accent-b-soft: #123330;
+      --code-bg: #090D14;
+      --code-fg: #DCE6EE;
+      --code-muted: #5E7488;
+      --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131E;
+    --surface: #161F2C;
+    --surface-2: #1E2836;
+    --fg: #E7EEF5;
+    --fg-muted: #8FA0B2;
+    --border: #2B3A4C;
+    --accent-a: #FF7A92;
+    --accent-a-soft: #3A2028;
+    --accent-b: #35DCCF;
+    --accent-b-soft: #123330;
+    --code-bg: #090D14;
+    --code-fg: #DCE6EE;
+    --code-muted: #5E7488;
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  header { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 3vw, 2.15rem);
+    font-weight: 700;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  header p {
+    margin: 0;
+    max-width: 60ch;
+    color: var(--fg-muted);
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+  header p code { color: var(--fg); }
+
+  code, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  .stage-figure { margin: 0; display: flex; flex-direction: column; gap: 18px; }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 28px;
+    padding: 8px;
+  }
+
+  .object-card {
+    position: relative;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px 20px;
+    box-shadow: var(--shadow);
+    transition: border-color .35s ease, box-shadow .35s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+  .object-card.active-a { border-color: var(--accent-a); box-shadow: 0 0 0 3px var(--accent-a-soft), var(--shadow); }
+  .object-card.active-b { border-color: var(--accent-b); box-shadow: 0 0 0 3px var(--accent-b-soft), var(--shadow); }
+
+  .card-tag {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    display: block;
+  }
+
+  .instance-tag {
+    font-size: 13px;
+    color: var(--fg-muted);
+  }
+  .instance-tag b { color: var(--fg); font-weight: 600; }
+
+  .attrs { display: flex; flex-direction: column; gap: 6px; }
+  .attr-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 14px;
+    padding: 3px 6px;
+    border-radius: 6px;
+    transition: background .25s ease;
+  }
+  .attr-row .lead { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .attr-row .ptr {
+    width: 14px;
+    flex: none;
+    text-align: center;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .attr-row .k { color: var(--fg-muted); }
+  .attr-row .v { font-variant-numeric: tabular-nums; }
+  .attr-row.flash-a { background: var(--accent-a-soft); }
+  .attr-row.flash-a .ptr { opacity: 1; color: var(--accent-a); }
+  .attr-row.flash-b { background: var(--accent-b-soft); }
+  .attr-row.flash-b .ptr { opacity: 1; color: var(--accent-b); }
+
+  .output-slot {
+    border-top: 1px dashed var(--border);
+    padding-top: 12px;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    font-size: 14.5px;
+  }
+  .output-slot .result {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .output-slot .result.shown { opacity: 1; transform: translateY(0); }
+  .output-slot .result.a { color: var(--accent-a); font-weight: 600; }
+  .output-slot .result.b { color: var(--accent-b); font-weight: 600; }
+  .output-slot .placeholder { color: var(--fg-muted); font-style: italic; }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  button {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 11px 18px;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--fg);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  button .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  button.btn-go .dot { background: linear-gradient(90deg, var(--accent-a), var(--accent-b)); }
+  button.btn-go:hover { border-color: var(--fg-muted); }
+  button.btn-reset { color: var(--fg-muted); }
+  button.btn-reset .dot { background: var(--fg-muted); }
+
+  .status {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    min-height: 1.4em;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .status b { color: var(--fg); font-weight: 600; }
+  .status #status-list b { color: var(--accent-a); }
+  .status #status-dict b { color: var(--accent-b); }
+
+  figcaption {
+    font-size: 14px;
+    color: var(--fg-muted);
+    line-height: 1.6;
+    max-width: 68ch;
+  }
+
+  @media (max-width: 620px) {
+    .stage { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: .01ms !important; }
+  }
+
+  /* ?embed=1 — used when a page's own prose already carries the title/intro */
+  html.embed .page { padding: 4px 4px 20px; }
+  html.embed header { display: none; }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">Dictionaries · Lookup</span>
+    <h1>A dict finds by key, not by counting</h1>
+    <p>A list finds things by position — check index 0, then 1, then 2, one at a time, until something
+      matches. A dict finds things by key — it goes straight there. Same data, two shapes.</p>
+  </header>
+
+  <figure class="stage-figure" aria-label="Diagram comparing a list search that steps through each index against a dict lookup that jumps straight to a key">
+    <div class="stage" id="stage">
+      <div class="object-card" id="card-list">
+        <span class="card-tag">list — search by position</span>
+        <div class="instance-tag"><b>servers</b> = ["web1", "web2", "db1"]</div>
+        <div class="attrs" id="list-rows">
+          <div class="attr-row" id="row-list-0">
+            <span class="lead"><span class="ptr"></span><span class="k mono">[0]</span></span>
+            <span class="v mono">"web1"</span>
+          </div>
+          <div class="attr-row" id="row-list-1">
+            <span class="lead"><span class="ptr"></span><span class="k mono">[1]</span></span>
+            <span class="v mono">"web2"</span>
+          </div>
+          <div class="attr-row" id="row-list-2">
+            <span class="lead"><span class="ptr"></span><span class="k mono">[2]</span></span>
+            <span class="v mono">"db1"</span>
+          </div>
+        </div>
+        <div class="output-slot">
+          <span class="placeholder" id="placeholder-list">servers.index("db1") → …</span>
+          <span class="result a mono" id="result-list"></span>
+        </div>
+      </div>
+
+      <div class="object-card" id="card-dict">
+        <span class="card-tag">dict — lookup by key</span>
+        <div class="instance-tag"><b>servers</b> = {"web1": 12, "web2": 45, "db1": 88}</div>
+        <div class="attrs" id="dict-rows">
+          <div class="attr-row" id="row-dict-0">
+            <span class="lead"><span class="ptr"></span><span class="k mono">"web1"</span></span>
+            <span class="v mono">12</span>
+          </div>
+          <div class="attr-row" id="row-dict-1">
+            <span class="lead"><span class="ptr"></span><span class="k mono">"web2"</span></span>
+            <span class="v mono">45</span>
+          </div>
+          <div class="attr-row" id="row-dict-2">
+            <span class="lead"><span class="ptr"></span><span class="k mono">"db1"</span></span>
+            <span class="v mono">88</span>
+          </div>
+        </div>
+        <div class="output-slot">
+          <span class="placeholder" id="placeholder-dict">servers["db1"] → …</span>
+          <span class="result b mono" id="result-dict"></span>
+        </div>
+      </div>
+    </div>
+
+    <figcaption>The dict lookup doesn't care where <code>"db1"</code> sits inside <code>{ }</code> — it's found by
+      name, not position. The list has to check each slot in order until one matches.</figcaption>
+  </figure>
+
+  <div class="controls">
+    <button class="btn-go" id="btn-lookup"><span class="dot"></span>Look up db1</button>
+    <button class="btn-reset" id="btn-reset"><span class="dot"></span>Reset to idle</button>
+  </div>
+
+  <div class="status mono" id="status" aria-live="polite">
+    <div id="status-list">list: idle — press "Look up db1" to search.</div>
+    <div id="status-dict">dict: idle — press "Look up db1" to search.</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stepDelay = reduceMotion ? 0 : 550;
+  var jumpDelay = reduceMotion ? 0 : 260;
+
+  var cardList = document.getElementById('card-list');
+  var cardDict = document.getElementById('card-dict');
+  var statusList = document.getElementById('status-list');
+  var statusDict = document.getElementById('status-dict');
+  var btnLookup = document.getElementById('btn-lookup');
+  var btnReset = document.getElementById('btn-reset');
+
+  var listRows = ['row-list-0', 'row-list-1', 'row-list-2'];
+  var listVals = ['web1', 'web2', 'db1'];
+  var dictRows = ['row-dict-0', 'row-dict-1', 'row-dict-2'];
+  var targetIdx = 2; // "db1" sits at position 2 in both shapes — the dict never cares
+
+  var timers = [];
+  function schedule(fn, delay) { timers.push(setTimeout(fn, delay)); }
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+  function clearRow(id) {
+    var el = document.getElementById(id);
+    el.classList.remove('flash-a', 'flash-b');
+    var ptr = el.querySelector('.ptr');
+    if (ptr) ptr.textContent = '';
+  }
+
+  function setResult(which, shown) {
+    var placeholder = document.getElementById('placeholder-' + which);
+    var result = document.getElementById('result-' + which);
+    placeholder.style.display = shown ? 'none' : '';
+    result.classList.toggle('shown', shown);
+  }
+
+  function clearAll() {
+    clearTimers();
+    listRows.forEach(clearRow);
+    dictRows.forEach(clearRow);
+    cardList.classList.remove('active-a');
+    cardDict.classList.remove('active-b');
+    setResult('list', false);
+    setResult('dict', false);
+    document.getElementById('result-list').textContent = '';
+    document.getElementById('result-dict').textContent = '';
+  }
+
+  function runList() {
+    cardList.classList.add('active-a');
+    var parts = [];
+    listRows.forEach(function (id, i) {
+      schedule(function () {
+        if (i > 0) clearRow(listRows[i - 1]);
+        var el = document.getElementById(id);
+        el.classList.add('flash-a');
+        var ptr = el.querySelector('.ptr');
+        if (ptr) ptr.textContent = '▸';
+
+        var found = i === targetIdx;
+        var label = 'checking index ' + i + ' (' + listVals[i] + ')';
+        if (found) label += ' — found, ' + (i + 1) + ' steps';
+        parts.push(label);
+        statusList.innerHTML = 'list: ' + parts.join('… ') + (found ? '' : '…');
+
+        if (found) {
+          setResult('list', true);
+          document.getElementById('result-list').textContent = 'found at index ' + i + ' — ' + (i + 1) + ' steps';
+        }
+      }, stepDelay * i);
+    });
+  }
+
+  function runDict() {
+    statusDict.textContent = 'dict: jumping straight to "db1"…';
+    schedule(function () {
+      cardDict.classList.add('active-b');
+      var el = document.getElementById('row-dict-' + targetIdx);
+      el.classList.add('flash-b');
+      var ptr = el.querySelector('.ptr');
+      if (ptr) ptr.textContent = '→';
+      statusDict.innerHTML = 'dict: found <b>db1</b> directly — 1 step';
+      setResult('dict', true);
+      document.getElementById('result-dict').textContent = 'found "db1" — 1 step';
+    }, jumpDelay);
+  }
+
+  btnLookup.addEventListener('click', function () {
+    clearAll();
+    runList();
+    runDict();
+  });
+
+  btnReset.addEventListener('click', function () {
+    clearAll();
+    statusList.textContent = 'list: idle — press "Look up db1" to search.';
+    statusDict.textContent = 'dict: idle — press "Look up db1" to search.';
+  });
+})();
+</script>
