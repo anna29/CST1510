@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 2 — Decisions and Loops</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
+    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif; font-size: 17px; }
+  code, .mono, pre { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  .shell { max-width: 1000px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; align-items: start; }
+  nav.toc { position: sticky; top: 32px; display: flex; flex-direction: column; gap: 1px; font-size: 13px; padding-top: 6px; max-height: calc(100vh - 64px); overflow-y: auto; }
+  nav.toc .toc-label { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); margin-bottom: 10px; font-size: 13px; }
+  nav.toc a { color: var(--ink-soft); text-decoration: none; padding: 3px 0; line-height: 1.4; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { color: var(--ink); }
+  nav.toc a.current { color: var(--accent); }
+  nav.toc a.toc-topic { color: var(--ink); font-weight: 700; margin-top: 16px; font-size: 13.5px; }
+  nav.toc a.toc-topic:first-of-type { margin-top: 0; }
+  nav.toc a.toc-sub { padding-left: 12px; font-size: 12.5px; }
+  nav.toc .toc-group { display: flex; flex-direction: column; max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  nav.toc .toc-group.open { max-height: 320px; }
+  article { min-width: 0; }
+  header.page-head { margin-bottom: 44px; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1.page-title { margin: 0 0 10px; font-size: 2.1rem; font-weight: 700; letter-spacing: -.01em; }
+  .lede { margin: 0; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
+  .lede em { font-style: normal; }
+  .lede code { font-style: normal; color: var(--ink); }
+  .box-note { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); }
+  .box-note b { color: var(--ink); font-weight: 600; }
+  section.topic { margin-bottom: 44px; scroll-margin-top: 24px; }
+  .topic-divider { margin: 8px 0 40px; padding-top: 36px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
+  #t1-top { margin-top: 0; padding-top: 0; border-top: none; }
+  .topic-divider-n { font-variant: small-caps; letter-spacing: .06em; color: var(--ink-soft); font-size: 15.5px; }
+  .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
+  h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
+  h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
+  p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
+  p.muted { color: var(--ink-soft); }
+  p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
+  .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
+  .callout p { margin: 0; font-size: .98rem; }
+  .callout p + p { margin-top: 8px; }
+  .cell { margin: 20px 0; max-width: 74ch; }
+  .cell pre.code { margin: 0; background: var(--code-bg); color: var(--code-ink); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 14px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.62; }
+  .cell pre.code .kw { font-weight: 600; }
+  .cell pre.code .fn { font-weight: 600; }
+  .cell pre.code .str { color: var(--accent); }
+  .cell pre.code .cm { color: var(--ink-soft); font-style: italic; }
+  .cell .output { padding: 8px 18px 4px; font-size: 13px; color: var(--ink-soft); }
+  .cell .output .out-label { font-variant: small-caps; margin-right: 10px; }
+  .cell .output .val { color: var(--ink); }
+  .cell .output pre.out-block { margin: 4px 0 0; font-size: 13px; color: var(--ink); white-space: pre; }
+  .diagram { margin: 16px 0; max-width: 74ch; border: 1px solid var(--rule); background: var(--code-bg); padding: 14px 18px; overflow-x: auto; }
+  .diagram pre { margin: 0; font-size: 13px; line-height: 1.6; color: var(--code-ink); }
+  figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
+  figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
+  figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
+  table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
+  table.booktabs { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  table.booktabs th { border-bottom: 1px solid var(--ink-soft); }
+  th, td { text-align: left; padding: 7px 14px 7px 0; vertical-align: top; }
+  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; }
+  td code { white-space: nowrap; }
+  ul.tight { margin: 8px 0 16px; padding-left: 20px; }
+  ul.tight li { line-height: 1.6; margin-bottom: 4px; }
+  .practice-embed { max-width: 74ch; margin: 10px 0 8px; }
+  .practice-embed .practice-label { font-variant: small-caps; font-size: 13.5px; font-style: italic; color: var(--ink-soft); margin-bottom: 6px; }
+  .practice-embed .frame { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; }
+  .practice-embed iframe { display: block; width: 100%; border: none; background: var(--paper); }
+  footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
+  @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="toc" id="toc">
+    <span class="toc-label">Contents</span>
+    <a href="#t1-top" class="toc-topic">Topic 1 — Comparisons and Boolean Logic</a>
+    <div class="toc-group" data-group="t1">
+    <a href="#t1-s1" class="toc-sub">1. The six operators</a>
+    <a href="#t1-s2" class="toc-sub">2. = stores, == asks</a>
+    <a href="#t1-s3" class="toc-sub">3. A comparison is a value</a>
+    <a href="#t1-s4" class="toc-sub">4. Combining conditions</a>
+    <a href="#t1-s5" class="toc-sub">Challenge</a>
+    <a href="#t1-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t1-s7" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t2-top" class="toc-topic">Topic 2 — if, elif, else</a>
+    <div class="toc-group" data-group="t2">
+    <a href="#t2-s1" class="toc-sub">1. if</a>
+    <a href="#t2-s2" class="toc-sub">2. else</a>
+    <a href="#t2-s3" class="toc-sub">3. elif</a>
+    <a href="#t2-s4" class="toc-sub">4. Indentation</a>
+    <a href="#t2-s5" class="toc-sub">Challenge</a>
+    <a href="#t2-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t2-s7" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t3-top" class="toc-topic">Topic 3 — while Loops</a>
+    <div class="toc-group" data-group="t3">
+    <a href="#t3-s1" class="toc-sub">1. while</a>
+    <a href="#t3-s2" class="toc-sub">2. The condition must change</a>
+    <a href="#t3-s3" class="toc-sub">3. while True + break</a>
+    <a href="#t3-s4" class="toc-sub">4. break and continue</a>
+    <a href="#t3-s5" class="toc-sub">Challenge</a>
+    <a href="#t3-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t3-s7" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t4-top" class="toc-topic">Topic 4 — for Loops and range</a>
+    <div class="toc-group" data-group="t4">
+    <a href="#t4-s1" class="toc-sub">1. for i in range(n)</a>
+    <a href="#t4-s2" class="toc-sub">2. range(start, stop)</a>
+    <a href="#t4-s3" class="toc-sub">3. range with a step</a>
+    <a href="#t4-s4" class="toc-sub">4. for vs while</a>
+    <a href="#t4-s5" class="toc-sub">Challenge</a>
+    <a href="#t4-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t4-s7" class="toc-sub">Recap</a>
+    </div>
+  </nav>
+
+  <article>
+    <header class="page-head">
+      <div class="breadcrumb">CST1510</div>
+      <h1 class="page-title">Week 2 — Decisions and Loops</h1>
+      <p class="lede">By the end of this week you can compare values and combine conditions, write a
+        program that takes a different path depending on what it finds, and repeat something either
+        while a condition holds or a known number of times.</p>
+      <p class="box-note">Box we build this week: <b>PROCESS</b>. Each <em>Practice</em> is followed
+        by a small live notebook — real Python, running in the browser, no install.</p>
+    </header>
+
+    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Comparisons and Boolean Logic</h2></div>
+
+    <section class="topic" id="t1-s1">
+      <h2><span class="num">1.</span>The six comparison operators</h2>
+      <p>Each one asks a question and answers with <code>True</code> or <code>False</code>:
+        <code>==</code> equal to, <code>!=</code> not equal to, <code>&gt;</code> greater than,
+        <code>&lt;</code> less than, <code>&gt;=</code> at least, <code>&lt;=</code> at most.</p>
+
+      <div class="cell">
+        <pre class="code">value = 23.7
+limit = 20
+
+<span class="fn">print</span>(value == limit)
+<span class="fn">print</span>(value &gt; limit)
+<span class="fn">print</span>(value &lt;= limit)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">False<br>True<br>False</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Set <code>attempts = 4</code> and <code>max_attempts = 3</code>. Print whether
+          <code>attempts</code> is greater than <code>max_attempts</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_practice1.ipynb" title="Practice — attempts over max" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s2">
+      <h2><span class="num">2.</span><code style="background:none;padding:0;">=</code> stores, <code style="background:none;padding:0;">==</code> asks</h2>
+      <p>This is the single most common slip this week. <code>=</code> puts a value in.
+        <code>==</code> checks one. They read almost the same and do completely different
+        things.</p>
+
+      <div class="cell">
+        <pre class="code">limit = 20          <span class="cm"># gets: "limit now holds 20"</span>
+<span class="fn">print</span>(limit == 20)  <span class="cm"># asks: "does limit hold 20?"</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">True</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>checks_done = 10</code>, write the line that <b>asks</b> whether
+          <code>checks_done</code> is 10 — not the one that changes it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_practice2.ipynb" title="Practice — = vs ==" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s3">
+      <h2><span class="num">3.</span>A comparison is a value too</h2>
+      <p>The result has a type of its own: <code>bool</code>. You can store it, just like
+        anything else.</p>
+
+      <div class="cell">
+        <pre class="code">is_over = value &gt; limit
+
+<span class="fn">print</span>(is_over)
+<span class="fn">print</span>(<span class="fn">type</span>(is_over))</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">True<br>&lt;class 'bool'&gt;</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Store the result of <code>87 &lt;= 90</code> in a variable called
+          <code>within_limit</code> and print it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_practice3.ipynb" title="Practice — store a comparison" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s4">
+      <h2><span class="num">4.</span>Combining conditions</h2>
+      <p><code>and</code> — both sides must be True. <code>or</code> — at least one side.
+        <code>not</code> — flips it. Bracket each comparison when you combine them: it costs
+        nothing and removes all doubt.</p>
+
+      <figure class="anim-figure">
+        <iframe src="comparisons_and_booleans.html?embed=1" title="Comparisons and Boolean Logic animation" loading="lazy" style="height:806px;"></iframe>
+        <figcaption><b>Figure 4.1.</b> <code>value &gt; limit and value &lt; 200</code> — each
+          comparison resolves to its own True/False bubble first; <code>and</code> only combines
+          those bubbles. Step through the second run to see one False collapse the whole thing.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code">percent = 95.0
+
+<span class="fn">print</span>((percent &gt;= 90) and (percent &lt; 100))
+<span class="fn">print</span>(not (percent &lt; 90))</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">True<br>True</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>A server's <code>disk_used_pct</code> is 72. Write one line that checks whether it is
+          between 70 and 90, inclusive, using <code>and</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_practice4.ipynb" title="Practice — combined condition" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s5">
+      <h2>Topic 1 Challenge</h2>
+      <div class="callout">
+        <p>Given <code>attempts = 4</code> and <code>max_attempts = 3</code>, store whether the
+          account should be locked in a variable called <code>locked</code> (<code>attempts</code>
+          at or over <code>max_attempts</code>), then print:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">Locked: True</pre>
+        <p style="margin-top:8px;">using an f-string.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_challenge.ipynb" title="Practice — Topic 1 challenge" style="height:409px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>A comparison is the universal <em>"does this cross a line?"</em> check — different job,
+        same tool.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td><code>missing_pct &gt; 5</code></td></tr>
+        <tr><td>Cyber Security</td><td><code>failed_logins &gt;= 3</code></td></tr>
+        <tr><td>IT</td><td><code>disk_used_pct &gt;= 90</code></td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td><code>value = 20</code> when you meant to ask</td><td>nothing — it silently reassigns</td><td>use <code>==</code> to ask, <code>=</code> to store</td></tr>
+        <tr><td><code>"20" == 20</code></td><td><code>False</code></td><td>text and number are never equal — check the type</td></tr>
+        <tr><td>forgetting brackets in a combined condition</td><td>wrong answer, no error</td><td>bracket each comparison</td></tr>
+        <tr><td><code>if 90 &lt;= percent &lt;= 100</code> before you're confident</td><td>works, but confusing this early</td><td>write <code>percent &gt;= 90 and percent &lt;= 100</code> until sure</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_comparisons.py</code> — all six operators, <code>=</code> vs <code>==</code>, comparing types</li>
+        <li><code>examples/02_boolean_logic.py</code> — <code>and</code>, <code>or</code>, <code>not</code>, short-circuiting</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t1-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>compare two values</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td></tr>
+        <tr><td>store a comparison</td><td><code>is_over = value &gt; limit</code></td></tr>
+        <tr><td>check the type</td><td><code>type(is_over)</code> → <code>bool</code></td></tr>
+        <tr><td>combine conditions</td><td><code>and</code>, <code>or</code>, <code>not</code></td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t2-s1" style="color:var(--accent); text-decoration:none;">Topic 2 — making the program actually choose what to do.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">if, elif, else</h2></div>
+
+    <section class="topic" id="t2-s1">
+      <h2><span class="num">1.</span>if</h2>
+      <p>The indented block only runs when the condition is <code>True</code>. Nothing special
+        happens when it is <code>False</code> — Python just moves on.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">if</span> value &gt; limit:
+    <span class="fn">print</span>(<span class="str">"OVER"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">OVER</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>attempts = 3</code>, write an <code>if</code> that prints
+          <code>LOCKED</code> when <code>attempts &gt;= 3</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_practice1.ipynb" title="Practice — if" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s2">
+      <h2><span class="num">2.</span>else</h2>
+      <p>Runs when the <code>if</code> condition was <code>False</code>. Exactly one of the two
+        branches runs — never both, never neither.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">if</span> value &gt; limit:
+    <span class="fn">print</span>(<span class="str">"OVER"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"OK"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">OVER</span></div>
+      </div>
+
+      <div class="diagram"><pre>check: value &gt; limit ?
+   │
+   ├── True  ──▶ print("OVER")
+   │
+   └── False ──▶ print("OK")</pre></div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>attempts = 2</code>, write an <code>if</code> / <code>else</code> that
+          prints <code>LOCKED</code> when <code>attempts &gt;= 3</code>, otherwise
+          <code>OK</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_practice2.ipynb" title="Practice — if/else" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s3">
+      <h2><span class="num">3.</span>elif</h2>
+      <p>Checked top to bottom. The <b>first</b> <code>True</code> one runs, and the rest are
+        skipped — even if they are also <code>True</code>. Put the most specific condition
+        first.</p>
+
+      <figure class="anim-figure">
+        <iframe src="if_elif_else.html?embed=1" title="if, elif, else animation" loading="lazy" style="height:636px;"></iframe>
+        <figcaption><b>Figure 3.1.</b> Once a branch matches, everything after it is skipped
+          without even being checked — step through both runs to see the same chain take a
+          different path.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code">percent = 105.0
+
+<span class="kw">if</span> percent &gt;= 100:
+    status = <span class="str">"OVER LIMIT"</span>
+<span class="kw">elif</span> percent &gt;= 90:
+    status = <span class="str">"WARNING"</span>
+<span class="kw">else</span>:
+    status = <span class="str">"OK"</span>
+
+<span class="fn">print</span>(status)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">OVER LIMIT</span></div>
+      </div>
+
+      <div class="diagram"><pre>check: percent &gt;= 100 ?
+   │
+   ├── True  ──▶ status = "OVER LIMIT"        (done - the rest is skipped)
+   │
+   └── False ──▶ check: percent &gt;= 90 ?
+                    │
+                    ├── True  ──▶ status = "WARNING"   (done)
+                    │
+                    └── False ──▶ status = "OK"</pre></div>
+      <p class="muted">Each <code>elif</code> only runs if every check above it was False. The
+        moment one branch fires, the rest are skipped — that is why order matters.</p>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>A server's <code>disk_used_pct</code> is 72. Print <code>CRITICAL</code> if at or above
+          90, <code>WARNING</code> if at or above 75, otherwise <code>OK</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_practice3.ipynb" title="Practice — elif" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s4">
+      <h2><span class="num">4.</span>Indentation is syntax, not style</h2>
+      <p>Python has no <code>{ }</code>. The indented lines <b>are</b> the block. Miss it, and
+        Python does not guess what you meant — it stops.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">if</span> value &gt; limit:
+    <span class="fn">print</span>(<span class="str">"checking..."</span>)   <span class="cm"># part of the if</span>
+    <span class="fn">print</span>(<span class="str">"OVER"</span>)           <span class="cm"># part of the if</span>
+<span class="fn">print</span>(<span class="str">"done"</span>)                <span class="cm"># NOT indented - runs either way</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">checking...<br>OVER<br>done</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write an <code>if</code> / <code>elif</code> / <code>else</code> where every keyword
+          lines up in the same column, each with two indented lines inside it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_practice4.ipynb" title="Practice — indentation" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s5">
+      <h2>Topic 2 Challenge</h2>
+      <div class="callout">
+        <p>A login has <code>failed_attempts</code> and a limit of 3. Print <code>LOCKED</code>
+          if at or over the limit, <code>WARNING</code> if exactly one below it, otherwise
+          <code>OK</code>. Test it with <code>failed_attempts</code> set to 1, 2 and 3.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_challenge.ipynb" title="Practice — Topic 2 challenge" style="height:409px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>Booleans decide something is true — this is where the program acts on it.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td><code>if missing_pct &gt; 5: print("check pipeline")</code></td></tr>
+        <tr><td>Cyber Security</td><td><code>if failed_logins &gt;= 3: print("LOCKED")</code></td></tr>
+        <tr><td>IT</td><td><code>if disk_used_pct &gt;= 90: print("ALERT")</code></td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td>missing <code>:</code></td><td><code>SyntaxError</code></td><td>every <code>if</code> / <code>elif</code> / <code>else</code> line ends with <code>:</code></td></tr>
+        <tr><td>next line not indented</td><td><code>IndentationError</code></td><td>indent consistently — 4 spaces</td></tr>
+        <tr><td><code>if x = 5:</code></td><td><code>SyntaxError</code></td><td>you meant <code>==</code></td></tr>
+        <tr><td>broad condition checked before the specific one</td><td>wrong branch runs, no error</td><td>order <code>elif</code> chains most-specific first</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_if_elif_else.py</code> — if / else / elif, and getting the order wrong</li>
+        <li><code>examples/02_indentation.py</code> — what breaks, and what the error actually says</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t2-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>choose a path</td><td><code>if</code></td></tr>
+        <tr><td>the alternative</td><td><code>else</code></td></tr>
+        <tr><td>more than two paths</td><td><code>elif</code></td></tr>
+        <tr><td>Python's blocks</td><td>indentation, not braces</td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t3-s1" style="color:var(--accent); text-decoration:none;">Topic 3 — repeating something until a condition changes.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">while Loops</h2></div>
+
+    <section class="topic" id="t3-s1">
+      <h2><span class="num">1.</span>while</h2>
+      <p>Repeats the block while the condition is <code>True</code>. Same indentation rule as
+        <code>if</code>.</p>
+
+      <figure class="anim-figure">
+        <iframe src="while_loop.html?embed=1" title="while loop animation" loading="lazy" style="height:695px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> One full cycle at a time — check, run the body, back to
+          check. Switch to the second run to see what happens when the update is left out.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code">count = 1
+
+<span class="kw">while</span> count &lt;= 3:
+    <span class="fn">print</span>(count)
+    count += 1
+
+<span class="fn">print</span>(<span class="str">"done"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">1<br>2<br>3<br>done</span></div>
+      </div>
+
+      <div class="diagram"><pre>check: count &lt;= 3 ?
+   │
+   ├── True  ──▶ print(count)  ──▶  count += 1  ──▶  back to check
+   │
+   └── False ──▶ done</pre></div>
+      <p class="muted">Follow the arrows. The loop only ends when the path reaches
+        <b>False</b> — which is exactly why <code>count += 1</code> has to be inside the loop.
+        Leave it out and every lap takes the True branch, forever.</p>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Print <code>hello</code> 5 times using a counter and <code>while</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_practice1.ipynb" title="Practice — while counter" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s2">
+      <h2><span class="num">2.</span>The condition must change, or it never stops</h2>
+      <p>Every error so far has printed a message and stopped. An infinite loop does neither —
+        the program is just still running. If it happens to you: interrupt the kernel, do not
+        wait it out.</p>
+
+      <div class="diagram"><pre>count = 1
+while count &lt;= 3:
+    print(count)
+# count is never updated, so the condition is True forever</pre></div>
+      <p class="muted">Read this — do not run it. Say out loud what line is missing, and what it
+        should do, before moving on.</p>
+    </section>
+
+    <section class="topic" id="t3-s3">
+      <h2><span class="num">3.</span>while True: + break</h2>
+      <p>Loop until something inside the loop decides to stop, instead of counting in advance.
+        This is what you use when you do not know how many times you will repeat.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">while</span> <span class="kw">True</span>:
+    answer = <span class="fn">input</span>(<span class="str">"Another? (y/n): "</span>)
+    <span class="kw">if</span> answer == <span class="str">"n"</span>:
+        <span class="kw">break</span>
+    <span class="fn">print</span>(<span class="str">"okay, again"</span>)</pre>
+        <div class="output"><span class="out-label">Interactive</span><span class="val">prompts at the keyboard — try it in the live notebook below.</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write a loop that keeps asking <code>Password: </code> and stops when it equals
+          <code>python123</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_practice2.ipynb" title="Practice — while True + break" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s4">
+      <h2><span class="num">4.</span>break and continue</h2>
+      <p><code>break</code> exits the loop immediately. <code>continue</code> skips the rest of
+        this pass and goes straight back to checking the condition.</p>
+
+      <div class="cell">
+        <pre class="code">n = 0
+<span class="kw">while</span> n &lt; 5:
+    n += 1
+    <span class="kw">if</span> n == 3:
+        <span class="kw">continue</span>     <span class="cm"># skip printing 3</span>
+    <span class="fn">print</span>(n)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">1<br>2<br>4<br>5</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write a loop that asks for numbers until the user types <code>done</code>, but uses
+          <code>continue</code> to skip adding anything when they enter a blank line.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_practice3.ipynb" title="Practice — break and continue" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s5">
+      <h2>Topic 3 Challenge</h2>
+      <div class="callout">
+        <p>Keep a running total of numbers entered by the user. Stop when they type
+          <code>done</code>. Print the total once the loop ends.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_challenge.ipynb" title="Practice — Topic 3 challenge" style="height:289px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>A <code>while</code> loop is for repeating until a signal, not a fixed count.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td>keep pulling batches while more data is available</td></tr>
+        <tr><td>Cyber Security</td><td>keep checking log lines until a sentinel or end of file</td></tr>
+        <tr><td>IT</td><td>keep checking a server's status until it responds healthy</td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What happens</th><th>Fix</th></tr>
+        <tr><td>forgetting to update what the condition checks</td><td>runs forever</td><td>make sure something inside the loop changes it</td></tr>
+        <tr><td><code>while count = 5:</code></td><td><code>SyntaxError</code></td><td>you meant <code>==</code>, or <code>while count &lt; 5:</code></td></tr>
+        <tr><td><code>while True:</code> with no <code>break</code> anywhere</td><td>runs forever</td><td>every <code>while True:</code> needs an exit</td></tr>
+        <tr><td>condition checks the wrong variable</td><td>runs the wrong number of times, or never stops</td><td>trace it by hand with real numbers first</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_while_basics.py</code> — the basic shape, and the infinite loop explained</li>
+        <li><code>examples/02_sentinel_and_running_total.py</code> — stopping on a signal, running totals, counting</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t3-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>repeat while true</td><td><code>while condition:</code></td></tr>
+        <tr><td>avoid running forever</td><td>update what the condition checks</td></tr>
+        <tr><td>loop until a signal</td><td><code>while True:</code> + <code>if ...: break</code></td></tr>
+        <tr><td>skip an iteration</td><td><code>continue</code></td></tr>
+        <tr><td>stop immediately</td><td><code>break</code></td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t4-s1" style="color:var(--accent); text-decoration:none;">Topic 4 — repeating a fixed number of times, the tidy way.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">for Loops and range</h2></div>
+
+    <section class="topic" id="t4-s1">
+      <h2><span class="num">1.</span>for i in range(n)</h2>
+      <p>Repeats exactly <code>n</code> times. <code>i</code> takes <code>0, 1, 2, ...</code> up
+        to but <b>not including</b> <code>n</code>.</p>
+
+      <figure class="anim-figure">
+        <iframe src="for_loop_and_range.html?embed=1" title="for loop and range animation" loading="lazy" style="height:968px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> <code>range(3)</code> produces its tiles one at a time and
+          the loop takes each in turn — no counter variable to write or update yourself.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(5):
+    <span class="fn">print</span>(i)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">0<br>1<br>2<br>3<br>4</span></div>
+      </div>
+
+      <div class="diagram"><pre>for i in range(5):
+      i takes, in order:   0 ──▶ 1 ──▶ 2 ──▶ 3 ──▶ 4
+      the indented block runs once for each value, then the loop just ends
+      - no condition to check, no risk of it running forever</pre></div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Print <code>Record 1</code> through <code>Record 5</code> — not
+          <code>Record 0</code> through <code>Record 4</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_practice1.ipynb" title="Practice — range basics" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s2">
+      <h2><span class="num">2.</span>range(start, stop)</h2>
+      <p><code>stop</code> is never included. This is where most <code>for</code> mistakes
+        happen.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(1, 6):
+    <span class="fn">print</span>(i)   <span class="cm"># 1 2 3 4 5</span>
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(1, 5):
+    <span class="fn">print</span>(i)   <span class="cm"># 1 2 3 4 - not 5</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">1<br>2<br>3<br>4<br>5<br>1<br>2<br>3<br>4</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Print the numbers 1 to 10, inclusive.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_practice2.ipynb" title="Practice — range(start, stop)" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s3">
+      <h2><span class="num">3.</span>range(start, stop, step)</h2>
+      <p>Counting by more than one at a time — or counting down, with a negative step.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(10, 0, -1):
+    <span class="fn">print</span>(i)   <span class="cm"># 10 9 8 ... 1</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">10<br>9<br>8<br>7<br>6<br>5<br>4<br>3<br>2<br>1</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Print every even number from 2 to 10.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_practice3.ipynb" title="Practice — range with a step" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s4">
+      <h2><span class="num">4.</span>for vs while</h2>
+      <p>Know the count in advance → <code>for</code>. Waiting on a condition or a signal →
+        <code>while</code> (Topic 3). <code>for</code> can loop a fixed number of records even
+        before you have a real list of them to loop over — Week 4 will replace
+        <code>range(n)</code> with the real data.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(3):
+    value = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Value: "</span>))
+    <span class="fn">print</span>(value)</pre>
+        <div class="output"><span class="out-label">Interactive</span><span class="val">try it in the live notebook below.</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Use a <code>for</code> loop to ask for 3 values and print their total.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_practice4.ipynb" title="Practice — for vs while" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s5">
+      <h2>Topic 4 Challenge</h2>
+      <div class="callout">
+        <p>Ask for and check exactly 5 records in one run, using a <code>for</code> loop. For
+          each one, print whether it is <code>OVER LIMIT</code> or <code>OK</code> — reuse your
+          <code>if</code> / <code>else</code> from Topic 2. Use a fixed <code>limit = 100</code>
+          for every record.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_challenge.ipynb" title="Practice — Topic 4 challenge" style="height:312px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>Know the count in advance? That is what <code>for</code> is for.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td>process a fixed batch of <code>n</code> rows</td></tr>
+        <tr><td>Cyber Security</td><td>check a fixed list of <code>n</code> known IPs</td></tr>
+        <tr><td>IT</td><td>ping a fixed set of <code>n</code> servers</td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_three_fields.ipynb" title="Worked examples — three lanes" style="height:693px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td><code>range(5)</code> expecting 1–5</td><td>gives 0–4</td><td>starts at 0 unless you say otherwise</td></tr>
+        <tr><td><code>range(1, 5)</code> expecting 1–5</td><td>gives 1–4</td><td><code>stop</code> is never included — use <code>range(1, 6)</code></td></tr>
+        <tr><td>using <code>for</code> when you do not know the count in advance</td><td>only works if you guess right</td><td>that is what <code>while</code> is for</td></tr>
+        <tr><td>changing <code>i</code> inside the loop, expecting it to affect the count</td><td>no effect</td><td><code>range()</code> already decided every value in advance</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_for_and_range.py</code> — start, stop, step, and what does not change <code>i</code></li>
+        <li><code>examples/02_for_vs_while.py</code> — the same job written both ways, and how to choose</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t4-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>repeat n times</td><td><code>for i in range(n):</code></td></tr>
+        <tr><td>choose the range</td><td><code>range(start, stop)</code> — <code>stop</code> excluded</td></tr>
+        <tr><td>count by steps</td><td><code>range(start, stop, step)</code></td></tr>
+        <tr><td>pick the right tool</td><td>known count → <code>for</code>, unknown → <code>while</code></td></tr>
+      </table>
+      <p class="muted">You now have both PROCESS tools for Week 2. Go and build your own in the lab.</p>
+    </section>
+
+    <footer class="page-foot">CST1510 · Week 02 · Decisions and Loops</footer>
+  </article>
+</div>
+
+<script>
+  var links = Array.from(document.querySelectorAll('nav.toc a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var groups = Array.from(document.querySelectorAll('nav.toc .toc-group'));
+  function onScroll() {
+    var y = window.scrollY + 80;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s && s.offsetTop <= y) current = s; });
+    links.forEach(function (a) { a.classList.remove('current'); });
+    var idx = sections.indexOf(current);
+    if (idx >= 0) links[idx].classList.add('current');
+
+    var activePrefix = current && current.id ? current.id.split('-')[0] : null;
+    groups.forEach(function (g) {
+      g.classList.toggle('open', g.getAttribute('data-group') === activePrefix);
+    });
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Notebook iframes share one JupyterLite IndexedDB-backed contents store.
+  // Booting several at once races on that shared connection ("Cannot read
+  // properties of null (reading/setting 'db')"), so load them strictly one
+  // at a time, and confirm each one actually rendered (same-origin poll of
+  // its own DOM) before starting the next, rather than trusting the
+  // iframe's load event alone (it fires before JupyterLite's own async
+  // IndexedDB-backed init has necessarily finished).
+  (function () {
+    var queue = [];
+    var loading = false;
+    function pollReady(iframe, deadline, cb) {
+      var doc;
+      try { doc = iframe.contentDocument; } catch (e) { doc = null; }
+      var ready = doc && (doc.querySelector('.jp-Cell') || doc.querySelector('.jp-mod-error') || doc.querySelector('.jp-Dialog'));
+      if (ready || Date.now() > deadline) { cb(); return; }
+      setTimeout(function () { pollReady(iframe, deadline, cb); }, 200);
+    }
+    function next() {
+      if (loading || queue.length === 0) return;
+      loading = true;
+      var iframe = queue.shift();
+      iframe.src = iframe.getAttribute('data-src');
+      iframe.addEventListener('load', function onLoad() {
+        iframe.removeEventListener('load', onLoad);
+        pollReady(iframe, Date.now() + 9000, function () {
+          setTimeout(function () { loading = false; next(); }, 900);
+        });
+      });
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var iframe = entry.target;
+          observer.unobserve(iframe);
+          queue.push(iframe);
+          next();
+        }
+      });
+    }, { rootMargin: '250px 0px' });
+    document.querySelectorAll('iframe.lazy-frame').forEach(function (f) { observer.observe(f); });
+  })();
+
+</script>
+</body>
+</html>

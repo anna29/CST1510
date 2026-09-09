@@ -1,0 +1,565 @@
+<meta charset="utf-8">
+<title>If / Elif / Else</title>
+<script>if (location.search.indexOf('embed=1') !== -1) document.documentElement.className += ' embed';</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E7ECF1;
+    --fg: #182430;
+    --fg-muted: #5B6B7A;
+    --border: #C9D3DC;
+    --accent-a: #D8425F;
+    --accent-a-soft: #F6DDE2;
+    --accent-b: #0E8F8B;
+    --accent-b-soft: #D9F0EE;
+    --code-bg: #10161F;
+    --code-fg: #E7EEF3;
+    --code-muted: #7C8CA0;
+    --shadow: 0 1px 2px rgba(20,30,40,.06), 0 10px 28px rgba(20,30,40,.07);
+    --idle-line: var(--border);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D131E;
+      --surface: #161F2C;
+      --surface-2: #1E2836;
+      --fg: #E7EEF5;
+      --fg-muted: #8FA0B2;
+      --border: #2B3A4C;
+      --accent-a: #FF7A92;
+      --accent-a-soft: #3A2028;
+      --accent-b: #35DCCF;
+      --accent-b-soft: #123330;
+      --code-bg: #090D14;
+      --code-fg: #DCE6EE;
+      --code-muted: #5E7488;
+      --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131E;
+    --surface: #161F2C;
+    --surface-2: #1E2836;
+    --fg: #E7EEF5;
+    --fg-muted: #8FA0B2;
+    --border: #2B3A4C;
+    --accent-a: #FF7A92;
+    --accent-a-soft: #3A2028;
+    --accent-b: #35DCCF;
+    --accent-b-soft: #123330;
+    --code-bg: #090D14;
+    --code-fg: #DCE6EE;
+    --code-muted: #5E7488;
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  header { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 3vw, 2.15rem);
+    font-weight: 700;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  header p {
+    margin: 0;
+    max-width: 60ch;
+    color: var(--fg-muted);
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+  header p code { color: var(--fg); }
+
+  code, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  .stage-figure { margin: 0; display: flex; flex-direction: column; gap: 18px; }
+
+  .stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 24px;
+    align-items: start;
+  }
+
+  .method-panel {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,.06);
+  }
+  .method-panel .tag {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--code-muted);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .branch-row {
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 2px -10px;
+    border-left: 3px solid transparent;
+    transition: opacity .3s ease, background .3s ease, border-color .3s ease;
+  }
+  .branch-row .code-line {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .branch-row .body-line {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 14.5px;
+    line-height: 1.6;
+    padding-left: 22px;
+    color: var(--code-muted);
+    transition: color .3s ease, opacity .3s ease;
+  }
+  .branch-row .badge {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 12px;
+    margin-top: 4px;
+    min-height: 1.3em;
+    color: var(--code-muted);
+    transition: color .3s ease, opacity .3s ease;
+  }
+
+  .branch-row.state-current { border-left-color: var(--fg-muted); background: rgba(255,255,255,.05); }
+
+  .branch-row.state-false { opacity: .6; border-left-color: var(--accent-a); }
+  .branch-row.state-false .badge { color: var(--accent-a); }
+  .branch-row.state-false .body-line { text-decoration: line-through; opacity: .7; }
+
+  .branch-row.state-true {
+    opacity: 1;
+    border-left-color: var(--accent-b);
+    background: color-mix(in srgb, var(--accent-b) 14%, transparent);
+  }
+  .branch-row.state-true .badge { color: var(--accent-b); font-weight: 600; }
+  .branch-row.state-true .body-line { color: var(--code-fg); font-weight: 600; }
+
+  .branch-row.state-skipped { opacity: .32; }
+  .branch-row.state-skipped .badge { color: var(--code-muted); font-style: italic; }
+  .branch-row.state-skipped .body-line { text-decoration: line-through; }
+
+  .cond-token {
+    padding: 1px 4px;
+    border-radius: 4px;
+    transition: background .3s ease, color .3s ease;
+  }
+  .cond-token.tok-false { background: var(--accent-a); color: #1a0c10; }
+  .cond-token.tok-true { background: var(--accent-b); color: #08201d; }
+
+  .right-col { display: flex; flex-direction: column; gap: 16px; }
+
+  .object-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px 20px;
+    box-shadow: var(--shadow);
+    transition: border-color .35s ease, box-shadow .35s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .object-card.active-a { border-color: var(--accent-a); box-shadow: 0 0 0 3px var(--accent-a-soft), var(--shadow); }
+  .object-card.active-b { border-color: var(--accent-b); box-shadow: 0 0 0 3px var(--accent-b-soft), var(--shadow); }
+
+  .instance-tag { font-size: 13px; color: var(--fg-muted); }
+  .instance-tag b { color: var(--fg); font-weight: 600; }
+
+  .attrs { display: flex; flex-direction: column; gap: 6px; }
+  .attr-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 14px;
+    padding: 3px 6px;
+    border-radius: 6px;
+    transition: background .25s ease;
+  }
+  .attr-row .k { color: var(--fg-muted); }
+  .attr-row .v { font-variant-numeric: tabular-nums; }
+
+  .output-slot {
+    border-top: 1px dashed var(--border);
+    padding-top: 12px;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    font-size: 14.5px;
+  }
+  .output-slot .result {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .output-slot .result.shown { opacity: 1; transform: translateY(0); }
+  .output-slot .result.a { color: var(--accent-a); font-weight: 600; }
+  .output-slot .result.b { color: var(--accent-b); font-weight: 600; }
+  .output-slot .placeholder { color: var(--fg-muted); font-style: italic; }
+  .output-slot .placeholder.hidden { display: none; }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  button {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 11px 18px;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--fg);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  button .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  button.btn-a .dot { background: var(--accent-a); }
+  button.btn-b .dot { background: var(--accent-b); }
+  button.btn-a:hover { border-color: var(--accent-a); }
+  button.btn-b:hover { border-color: var(--accent-b); }
+  button.btn-step .dot { background: var(--fg); }
+  button.btn-reset { color: var(--fg-muted); }
+  button.btn-reset .dot { background: var(--fg-muted); }
+  button:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .status {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    min-height: 1.4em;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .status b { color: var(--fg); font-weight: 600; }
+
+  figcaption {
+    font-size: 14px;
+    color: var(--fg-muted);
+    line-height: 1.6;
+    max-width: 68ch;
+  }
+
+  @media (max-width: 640px) {
+    .stage { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: .01ms !important; }
+  }
+
+  /* ?embed=1 — used when a page's own prose already carries the title/intro */
+  html.embed .page { padding: 4px 4px 20px; }
+  html.embed header { display: none; }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">Week 2 · Decisions</span>
+    <h1>First match wins — everything after it is skipped</h1>
+    <p>Python checks <code>if</code> / <code>elif</code> / <code>else</code> in order and stops at the
+      first branch that is <code>True</code>. The branches below it aren't "also false" —
+      they are never evaluated at all.</p>
+  </header>
+
+  <figure class="stage-figure" aria-label="Diagram stepping through an if/elif/else chain for two different values, showing which branch runs and which are skipped without being checked">
+    <div class="stage">
+      <div class="method-panel">
+        <span class="tag">checked top to bottom — one pass, in order</span>
+
+        <div class="branch-row" id="branch-if">
+          <div class="code-line">if <span class="cond-token" id="tok-if">value &gt;= limit</span>:</div>
+          <div class="body-line" id="body-if">status = "OVER LIMIT"</div>
+          <div class="badge" id="badge-if"></div>
+        </div>
+
+        <div class="branch-row" id="branch-elif">
+          <div class="code-line">elif <span class="cond-token" id="tok-elif">value &gt;= limit * 0.8</span>:</div>
+          <div class="body-line" id="body-elif">status = "WARNING"</div>
+          <div class="badge" id="badge-elif"></div>
+        </div>
+
+        <div class="branch-row" id="branch-else">
+          <div class="code-line">else:</div>
+          <div class="body-line" id="body-else">status = "OK"</div>
+          <div class="badge" id="badge-else"></div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="object-card" id="trace-card">
+          <div class="instance-tag" id="pass-tag"><b>No pass loaded</b></div>
+          <div class="attrs">
+            <div class="attr-row"><span class="k">value</span><span class="v mono" id="var-value">—</span></div>
+            <div class="attr-row"><span class="k">limit</span><span class="v mono" id="var-limit">—</span></div>
+            <div class="attr-row"><span class="k">limit * 0.8</span><span class="v mono" id="var-threshold">—</span></div>
+          </div>
+          <div class="output-slot">
+            <span class="placeholder" id="placeholder-status">status → …</span>
+            <span class="result mono" id="result-status"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <figcaption>Load a pass, then press <b>Step →</b> to check one branch at a time. Watch what happens
+      to the branches <em>after</em> the one that matches — they turn faint and are marked
+      "never evaluated", not "also false".</figcaption>
+  </figure>
+
+  <div class="controls">
+    <button class="btn-a" id="btn-a"><span class="dot"></span>Load Pass 1 — value = 85</button>
+    <button class="btn-b" id="btn-b"><span class="dot"></span>Load Pass 2 — value = 120</button>
+    <button class="btn-step" id="btn-step" disabled><span class="dot"></span>Step →</button>
+    <button class="btn-reset" id="btn-reset"><span class="dot"></span>Reset to idle</button>
+  </div>
+
+  <div class="status mono" id="status" aria-live="polite">Idle — load Pass 1 or Pass 2 to begin.</div>
+</div>
+
+<script>
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stepDelay = reduceMotion ? 0 : 300;
+
+  var branchIf = document.getElementById('branch-if');
+  var branchElif = document.getElementById('branch-elif');
+  var branchElse = document.getElementById('branch-else');
+  var tokIf = document.getElementById('tok-if');
+  var tokElif = document.getElementById('tok-elif');
+  var badgeIf = document.getElementById('badge-if');
+  var badgeElif = document.getElementById('badge-elif');
+  var badgeElse = document.getElementById('badge-else');
+  var bodyIf = document.getElementById('body-if');
+  var bodyElif = document.getElementById('body-elif');
+  var bodyElse = document.getElementById('body-else');
+
+  var traceCard = document.getElementById('trace-card');
+  var passTag = document.getElementById('pass-tag');
+  var varValue = document.getElementById('var-value');
+  var varLimit = document.getElementById('var-limit');
+  var varThreshold = document.getElementById('var-threshold');
+  var placeholderStatus = document.getElementById('placeholder-status');
+  var resultStatus = document.getElementById('result-status');
+
+  var status = document.getElementById('status');
+  var btnA = document.getElementById('btn-a');
+  var btnB = document.getElementById('btn-b');
+  var btnStep = document.getElementById('btn-step');
+  var btnReset = document.getElementById('btn-reset');
+
+  var PASSES = {
+    p1: {
+      label: 'Pass 1',
+      value: 85,
+      limit: 100,
+      accent: 'a',
+      ifTrue: false,
+      elifTrue: true
+    },
+    p2: {
+      label: 'Pass 2',
+      value: 120,
+      limit: 100,
+      accent: 'b',
+      ifTrue: true,
+      elifTrue: null
+    }
+  };
+
+  var currentPassKey = null;
+  var currentStep = 0; // 0 = loaded/idle, 1 = if checked, 2 = elif checked, 3 = else checked, 4 = done
+
+  function fmt(n) { return n.toFixed ? (Number.isInteger(n) ? n.toFixed(0) : n.toString()) : n; }
+
+  function resetBranches() {
+    [branchIf, branchElif, branchElse].forEach(function (row) {
+      row.classList.remove('state-current', 'state-false', 'state-true', 'state-skipped');
+    });
+    tokIf.classList.remove('tok-false', 'tok-true');
+    tokElif.classList.remove('tok-false', 'tok-true');
+    badgeIf.textContent = '';
+    badgeElif.textContent = '';
+    badgeElse.textContent = '';
+  }
+
+  function resetTrace() {
+    traceCard.classList.remove('active-a', 'active-b');
+    placeholderStatus.classList.remove('hidden');
+    resultStatus.classList.remove('shown', 'a', 'b');
+    resultStatus.textContent = '';
+  }
+
+  function loadPass(key) {
+    currentPassKey = key;
+    currentStep = 0;
+    var p = PASSES[key];
+
+    resetBranches();
+    resetTrace();
+
+    passTag.innerHTML = '<b>' + p.label + '</b> — checking <code class="mono">value, limit</code> in order';
+    varValue.textContent = fmt(p.value);
+    varLimit.textContent = fmt(p.limit);
+    varThreshold.textContent = (p.limit * 0.8).toFixed(1);
+    placeholderStatus.textContent = 'status → …';
+
+    btnStep.disabled = false;
+    status.innerHTML = '<b>' + p.label + '</b> loaded — value = <b>' + p.value + '</b>, limit = <b>' +
+      p.limit + '</b>. Press "Step →" to check the first branch.';
+  }
+
+  function settle(row, tok, badge, state, badgeText) {
+    row.classList.add('state-current');
+    setTimeout(function () {
+      row.classList.remove('state-current');
+      row.classList.add('state-' + state);
+      if (tok && (state === 'true' || state === 'false')) {
+        tok.classList.add(state === 'true' ? 'tok-true' : 'tok-false');
+      }
+      badge.textContent = badgeText;
+    }, stepDelay);
+  }
+
+  function finish(p) {
+    setTimeout(function () {
+      var matched = p.ifTrue ? 'if' : (p.elifTrue ? 'elif' : 'else');
+      var finalStatus = p.ifTrue ? 'OVER LIMIT' : (p.elifTrue ? 'WARNING' : 'OK');
+      var cls = p.accent === 'a' ? 'a' : 'b';
+
+      resultStatus.textContent = 'status = "' + finalStatus + '"';
+      resultStatus.classList.add('shown', cls);
+      placeholderStatus.classList.add('hidden');
+      traceCard.classList.add(p.accent === 'a' ? 'active-a' : 'active-b');
+
+      status.innerHTML = 'Done. <b>status = "' + finalStatus + '"</b> — set by the <b>' + matched +
+        '</b> branch, the only one that ran. Everything after it was skipped, not evaluated.';
+      btnStep.disabled = true;
+    }, stepDelay);
+  }
+
+  function step() {
+    if (!currentPassKey) return;
+    var p = PASSES[currentPassKey];
+    currentStep += 1;
+
+    if (currentStep === 1) {
+      if (p.ifTrue) {
+        settle(branchIf, tokIf, badgeIf, 'true', p.value + ' ≥ ' + p.limit + ' → True — runs, rest skipped');
+        setTimeout(function () {
+          status.innerHTML = '<b>if value >= limit</b> → <b>' + p.value + ' ≥ ' + p.limit +
+            ' → True</b>. This branch runs immediately — elif and else are skipped, not just "also false".';
+        }, stepDelay);
+      } else {
+        settle(branchIf, tokIf, badgeIf, 'false', p.value + ' ≥ ' + p.limit + ' → False — check next branch');
+        setTimeout(function () {
+          status.innerHTML = '<b>if value >= limit</b> → <b>' + p.value + ' ≥ ' + p.limit +
+            ' → False</b>. Python moves on to check <b>elif</b>.';
+        }, stepDelay);
+      }
+    } else if (currentStep === 2) {
+      var threshold = (p.limit * 0.8).toFixed(1);
+      if (p.ifTrue) {
+        settle(branchElif, tokElif, badgeElif, 'skipped', 'never evaluated — the if already matched');
+        setTimeout(function () {
+          status.innerHTML = '<b>elif</b> is skipped — never evaluated. Once <b>if</b> matched, Python ' +
+            'does not even look at the condition below it.';
+        }, stepDelay);
+      } else if (p.elifTrue) {
+        settle(branchElif, tokElif, badgeElif, 'true', p.value + ' ≥ ' + threshold + ' → True — runs');
+        setTimeout(function () {
+          status.innerHTML = '<b>elif value >= limit * 0.8</b> → <b>' + p.value + ' ≥ ' + threshold +
+            ' → True</b>. This branch runs: <b>status = "WARNING"</b>.';
+        }, stepDelay);
+      } else {
+        settle(branchElif, tokElif, badgeElif, 'false', p.value + ' ≥ ' + threshold + ' → False — check next branch');
+        setTimeout(function () {
+          status.innerHTML = '<b>elif value >= limit * 0.8</b> → <b>' + p.value + ' ≥ ' + threshold +
+            ' → False</b>. Python moves on to check <b>else</b>.';
+        }, stepDelay);
+      }
+    } else if (currentStep === 3) {
+      var alreadyMatched = p.ifTrue || p.elifTrue;
+      if (alreadyMatched) {
+        settle(branchElse, null, badgeElse, 'skipped', 'never evaluated — a branch above already matched');
+        setTimeout(function () {
+          status.innerHTML = '<b>else</b> is skipped — never evaluated. It does not matter what it ' +
+            'would have set <code>status</code> to; it never runs.';
+        }, stepDelay);
+      } else {
+        settle(branchElse, null, badgeElse, 'true', 'reached — if and elif were both False, so else runs');
+        setTimeout(function () {
+          status.innerHTML = '<b>else</b> has no condition — since nothing above matched, it runs: ' +
+            '<b>status = "OK"</b>.';
+        }, stepDelay);
+      }
+      finish(p);
+    }
+
+    if (currentStep >= 3) {
+      btnStep.disabled = true;
+    }
+  }
+
+  function reset() {
+    currentPassKey = null;
+    currentStep = 0;
+    resetBranches();
+    resetTrace();
+    passTag.innerHTML = '<b>No pass loaded</b>';
+    varValue.textContent = '—';
+    varLimit.textContent = '—';
+    varThreshold.textContent = '—';
+    placeholderStatus.textContent = 'status → …';
+    btnStep.disabled = true;
+    status.textContent = 'Idle — load Pass 1 or Pass 2 to begin.';
+  }
+
+  btnA.addEventListener('click', function () { loadPass('p1'); });
+  btnB.addEventListener('click', function () { loadPass('p2'); });
+  btnStep.addEventListener('click', step);
+  btnReset.addEventListener('click', reset);
+})();
+</script>

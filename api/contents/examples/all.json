@@ -2,11 +2,11 @@
   "content": [
     {
       "content": null,
-      "created": "2026-09-09T09:28:03.055587Z",
+      "created": "2026-09-09T13:24:10.241202Z",
       "format": null,
       "hash": null,
       "hash_algorithm": null,
-      "last_modified": "2026-09-09T09:28:03.055587Z",
+      "last_modified": "2026-09-09T13:24:10.241202Z",
       "mimetype": "text/x-python",
       "name": "01_defining_methods.py",
       "path": "examples/01_defining_methods.py",
@@ -16,11 +16,11 @@
     },
     {
       "content": null,
-      "created": "2026-09-09T09:28:03.057212Z",
+      "created": "2026-09-09T13:24:10.242848Z",
       "format": null,
       "hash": null,
       "hash_algorithm": null,
-      "last_modified": "2026-09-09T09:28:03.057212Z",
+      "last_modified": "2026-09-09T13:24:10.242848Z",
       "mimetype": "text/x-python",
       "name": "02_methods_that_change_state.py",
       "path": "examples/02_methods_that_change_state.py",
@@ -29,11 +29,11 @@
       "writable": true
     }
   ],
-  "created": "2026-09-09T09:28:22.665630Z",
+  "created": "2026-09-09T15:07:15.453704Z",
   "format": "json",
   "hash": null,
   "hash_algorithm": null,
-  "last_modified": "2026-09-09T09:28:22.685706Z",
+  "last_modified": "2026-09-09T15:07:15.456813Z",
   "mimetype": null,
   "name": "examples",
   "path": "examples",
