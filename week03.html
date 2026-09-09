@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 3 — Functions and Modules</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
+    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif; font-size: 17px; }
+  code, .mono, pre { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  .shell { max-width: 1000px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; align-items: start; }
+  nav.toc { position: sticky; top: 32px; display: flex; flex-direction: column; gap: 1px; font-size: 13px; padding-top: 6px; max-height: calc(100vh - 64px); overflow-y: auto; }
+  nav.toc .toc-label { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); margin-bottom: 10px; font-size: 13px; }
+  nav.toc a { color: var(--ink-soft); text-decoration: none; padding: 3px 0; line-height: 1.4; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { color: var(--ink); }
+  nav.toc a.current { color: var(--accent); }
+  nav.toc a.toc-topic { color: var(--ink); font-weight: 700; margin-top: 16px; font-size: 13.5px; }
+  nav.toc a.toc-topic:first-of-type { margin-top: 0; }
+  nav.toc a.toc-sub { padding-left: 12px; font-size: 12.5px; }
+  nav.toc .toc-group { display: flex; flex-direction: column; max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  nav.toc .toc-group.open { max-height: 320px; }
+  article { min-width: 0; }
+  header.page-head { margin-bottom: 44px; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1.page-title { margin: 0 0 10px; font-size: 2.1rem; font-weight: 700; letter-spacing: -.01em; }
+  .lede { margin: 0; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
+  .lede em { font-style: normal; }
+  .lede code { font-style: normal; color: var(--ink); }
+  .box-note { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); }
+  .box-note b { color: var(--ink); font-weight: 600; }
+  section.topic { margin-bottom: 44px; scroll-margin-top: 24px; }
+  .topic-divider { margin: 8px 0 40px; padding-top: 36px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
+  #t1-top { margin-top: 0; padding-top: 0; border-top: none; }
+  .topic-divider-n { font-variant: small-caps; letter-spacing: .06em; color: var(--ink-soft); font-size: 15.5px; }
+  .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
+  h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
+  h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
+  p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
+  p.muted { color: var(--ink-soft); }
+  p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
+  .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
+  .callout p { margin: 0; font-size: .98rem; }
+  .callout p + p { margin-top: 8px; }
+  .cell { margin: 20px 0; max-width: 74ch; }
+  .cell pre.code { margin: 0; background: var(--code-bg); color: var(--code-ink); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 14px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.62; }
+  .cell pre.code .kw { font-weight: 600; }
+  .cell pre.code .fn { font-weight: 600; }
+  .cell pre.code .str { color: var(--accent); }
+  .cell pre.code .cm { color: var(--ink-soft); font-style: italic; }
+  .cell .output { padding: 8px 18px 4px; font-size: 13px; color: var(--ink-soft); }
+  .cell .output .out-label { font-variant: small-caps; margin-right: 10px; }
+  .cell .output .val { color: var(--ink); }
+  .cell .output pre.out-block { margin: 4px 0 0; font-size: 13px; color: var(--ink); white-space: pre; }
+  .diagram { margin: 16px 0; max-width: 74ch; border: 1px solid var(--rule); background: var(--code-bg); padding: 14px 18px; overflow-x: auto; }
+  .diagram pre { margin: 0; font-size: 13px; line-height: 1.6; color: var(--code-ink); }
+  figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
+  figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
+  figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
+  table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
+  table.booktabs { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  table.booktabs th { border-bottom: 1px solid var(--ink-soft); }
+  th, td { text-align: left; padding: 7px 14px 7px 0; vertical-align: top; }
+  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; }
+  td code { white-space: nowrap; }
+  ul.tight { margin: 8px 0 16px; padding-left: 20px; }
+  ul.tight li { line-height: 1.6; margin-bottom: 4px; }
+  .practice-embed { max-width: 74ch; margin: 10px 0 8px; }
+  .practice-embed .practice-label { font-variant: small-caps; font-size: 13.5px; font-style: italic; color: var(--ink-soft); margin-bottom: 6px; }
+  .practice-embed .frame { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; }
+  .practice-embed iframe { display: block; width: 100%; border: none; background: var(--paper); }
+  footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
+  @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="toc" id="toc">
+    <span class="toc-label">Contents</span>
+    <a href="#t1-top" class="toc-topic">Topic 1 — Defining and Calling Functions</a>
+    <div class="toc-group" data-group="t1">
+    <a href="#t1-s1" class="toc-sub">1. def creates it, calling runs it</a>
+    <a href="#t1-s2" class="toc-sub">2. A parameter passes something in</a>
+    <a href="#t1-s3" class="toc-sub">3. return sends a value back out</a>
+    <a href="#t1-s4" class="toc-sub">4. Why functions</a>
+    <a href="#t1-s5" class="toc-sub">Challenge</a>
+    <a href="#t1-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t1-s7" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t2-top" class="toc-topic">Topic 2 — Parameters and Arguments</a>
+    <div class="toc-group" data-group="t2">
+    <a href="#t2-s1" class="toc-sub">1. Matched by position</a>
+    <a href="#t2-s2" class="toc-sub">2. A default value</a>
+    <a href="#t2-s3" class="toc-sub">3. Keyword arguments</a>
+    <a href="#t2-s4" class="toc-sub">4. Mixing positional and keyword</a>
+    <a href="#t2-s5" class="toc-sub">Challenge</a>
+    <a href="#t2-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t2-s7" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t3-top" class="toc-topic">Topic 3 — Scope</a>
+    <div class="toc-group" data-group="t3">
+    <a href="#t3-s1" class="toc-sub">1. Local means local</a>
+    <a href="#t3-s2" class="toc-sub">2. Parameters are local too</a>
+    <a href="#t3-s3" class="toc-sub">3. Reading vs changing</a>
+    <a href="#t3-s4" class="toc-sub">4. The wall is the point</a>
+    <a href="#t3-s5" class="toc-sub">Challenge</a>
+    <a href="#t3-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t3-s7" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t4-top" class="toc-topic">Topic 4 — Modules</a>
+    <div class="toc-group" data-group="t4">
+    <a href="#t4-s1" class="toc-sub">1. import brings in a module</a>
+    <a href="#t4-s2" class="toc-sub">2. random</a>
+    <a href="#t4-s3" class="toc-sub">3. from module import name</a>
+    <a href="#t4-s4" class="toc-sub">4. Standard library vs installed</a>
+    <a href="#t4-s5" class="toc-sub">Challenge</a>
+    <a href="#t4-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t4-s7" class="toc-sub">Recap</a>
+    </div>
+  </nav>
+
+  <article>
+    <header class="page-head">
+      <div class="breadcrumb">CST1510</div>
+      <h1 class="page-title">Week 3 — Functions and Modules</h1>
+      <p class="lede">By the end of this week you can package repeated work into a function with
+        its own inputs and output, explain why a function's own variables stay contained inside
+        it, and reuse a function someone else already wrote via <code>import</code>.</p>
+      <p class="box-note">Box we build this week: the <b>wiring</b> that connects INPUT, PROCESS
+        and OUTPUT together. Each <em>Practice</em> is followed by a small live notebook — real
+        Python, running in the browser, no install.</p>
+    </header>
+
+    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Defining and Calling Functions</h2></div>
+
+    <section class="topic" id="t1-s1">
+      <h2><span class="num">1.</span>def creates it, calling runs it</h2>
+      <p>Defining a function does <b>not</b> run it. Nothing happens until you call it — and you
+        can call it as many times as you like.</p>
+
+      <figure class="anim-figure">
+        <iframe src="defining_and_calling.html?embed=1" title="Defining and calling animation" loading="lazy" style="height:762px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> The same function body runs twice, once per call — not two
+          separate copies of it.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">greet</span>():
+    <span class="fn">print</span>(<span class="str">"Record check starting"</span>)
+
+<span class="fn">greet</span>()
+<span class="fn">greet</span>()</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Record check starting<br>Record check starting</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write a function called <code>divider</code> that prints a line of 34 <code>=</code>
+          characters. Call it twice.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_practice1.ipynb" title="Practice — divider function" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s2">
+      <h2><span class="num">2.</span>A parameter lets you pass something in</h2>
+      <p>Names inside the brackets on the <code>def</code> line are placeholders for whatever a
+        caller sends in — the function's body runs the same each time, only the value changes.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">greet_record</span>(record_id):
+    <span class="fn">print</span>(f<span class="str">"Checking {record_id}"</span>)
+
+<span class="fn">greet_record</span>(<span class="str">"srv-01"</span>)
+<span class="fn">greet_record</span>(<span class="str">"srv-02"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Checking srv-01<br>Checking srv-02</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write a function <code>shout(word)</code> that prints the word in capitals followed by
+          <code>!!!</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_practice2.ipynb" title="Practice — shout function" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s3">
+      <h2><span class="num">3.</span>return sends a value back out</h2>
+      <p><code>print()</code> <b>shows</b> something. <code>return</code> <b>gives</b> something
+        back to use.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">add_tax</span>(price):
+    <span class="kw">return</span> price * 1.2
+
+total = <span class="fn">add_tax</span>(100)
+<span class="fn">print</span>(total)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">120.0</span></div>
+      </div>
+
+      <div class="diagram"><pre>       add_tax(100)
+              │
+      ┌───────┴───────┐
+      │  price = 100   │   &lt;- the parameter is just a local name
+      └───────┬───────┘
+              │
+      return price * 1.2
+              │
+              ▼
+            120.0            &lt;- comes back out here, to wherever you put it</pre></div>
+      <p class="muted">Call it without catching the result and the value still comes back — it
+        is simply thrown away: <code>add_tax(100)</code> alone does nothing visible.</p>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write a function <code>percent_of(part, total)</code> that <b>returns</b> the
+          percentage. Store the result in a variable and print it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_practice3.ipynb" title="Practice — percent_of function" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s4">
+      <h2><span class="num">4.</span>Why functions</h2>
+      <p>One job each. Fix the calculation in one place, and every call is fixed — instead of
+        hunting down every copy you pasted it into.</p>
+      <p>A one-line string right after <code>def</code>, before any code, documents what the
+        function does. Python treats it specially — this is called a <b>docstring</b>.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">percent_of</span>(part, total):
+    <span class="str">"""Return part as a percentage of total."""</span>
+    <span class="kw">return</span> (part / total) * 100
+
+<span class="fn">help</span>(percent_of)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Help on function percent_of in module __main__:<br><br>percent_of(part, total)<br>&nbsp;&nbsp;&nbsp;&nbsp;Return part as a percentage of total.</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>This function works but has no docstring:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">def double(n):
+    return n * 2</pre>
+        <p style="margin-top:8px;">Add a one-line docstring describing what it does, then run
+          <code>help(double)</code> to see it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_practice4.ipynb" title="Practice — add a docstring" style="height:362px;"></iframe></div>
+      </div>
+
+      <p class="muted">You will have two functions by the end of the lab — one that calculates,
+        one that decides a status. Say out loud why those should be two functions and not one.</p>
+    </section>
+
+    <section class="topic" id="t1-s5">
+      <h2>Topic 1 Challenge</h2>
+      <div class="callout">
+        <p>Write a function <code>report_line(label, value)</code> that <b>returns</b> a string
+          shaped like:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">  Used       :      87.00</pre>
+        <p style="margin-top:8px;">(right-aligned, 2 decimal places). Use it three times to print
+          three lines of a report.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_challenge.ipynb" title="Practice — Topic 1 challenge" style="height:312px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>One job, reused wherever it is needed — different job, same shape.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td><code>clean(row)</code> — one job, reused for every row</td></tr>
+        <tr><td>Cyber Security</td><td><code>is_suspicious(ip)</code> — one check, reused for every log line</td></tr>
+        <tr><td>IT</td><td><code>ping(host)</code> — one action, reused for every server</td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td>forgetting <code>()</code> when calling — <code>greet</code> not <code>greet()</code></td><td>nothing happens, or <code>&lt;function greet at ...&gt;</code></td><td>add the brackets</td></tr>
+        <tr><td><code>print</code>ing inside a function instead of <code>return</code>ing</td><td>works once, breaks the moment you need the value again</td><td>decide: does this function show, or give back?</td></tr>
+        <tr><td>expecting a value without catching it — <code>add_tax(100)</code> on its own</td><td>the returned value is thrown away</td><td><code>total = add_tax(100)</code></td></tr>
+        <tr><td>defining a function but never calling it</td><td>nothing happens, no error</td><td><code>def</code> alone does nothing — you must call it</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_defining_and_calling.py</code> — def, calling, parameters, return vs print</li>
+        <li><code>examples/02_why_functions.py</code> — the same job with and without one</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t1-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>define a function</td><td><code>def name():</code></td></tr>
+        <tr><td>pass a value in</td><td>a parameter</td></tr>
+        <tr><td>send a value out</td><td><code>return</code></td></tr>
+        <tr><td>tell <code>print</code> and <code>return</code> apart</td><td>one shows, one gives back</td></tr>
+        <tr><td>document what a function does</td><td>a <code>"""docstring"""</code> right after <code>def</code></td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t2-s1" style="color:var(--accent); text-decoration:none;">Topic 2 — functions that take more than one input.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Parameters and Arguments</h2></div>
+
+    <section class="topic" id="t2-s1">
+      <h2><span class="num">1.</span>Multiple parameters, matched by position</h2>
+      <p>List more than one name in the <code>def</code> line, separated by commas. Arguments at
+        the call site fill them in <b>order</b>.</p>
+
+      <figure class="anim-figure">
+        <iframe src="parameters_and_arguments.html?embed=1" title="Parameters and arguments animation" loading="lazy" style="height:559px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> The same three slots — <code>label</code>,
+          <code>value</code>, <code>limit</code> — filled three different ways: by position, by
+          name, and with a default overridden. Sections 2 and 3 below cover the second and third
+          runs.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">within_limit</span>(value, limit):
+    <span class="kw">return</span> value &lt;= limit
+
+<span class="fn">print</span>(<span class="fn">within_limit</span>(87, 100))
+<span class="fn">print</span>(<span class="fn">within_limit</span>(100, 87))   <span class="cm"># swapped - a different answer</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">True<br>False</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write a function <code>bigger_of(a, b)</code> that returns whichever of the two is
+          bigger. Call it with your own two numbers, swapped both ways.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_practice1.ipynb" title="Practice — bigger_of function" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s2">
+      <h2><span class="num">2.</span>A default value is a fallback</h2>
+      <p>Give a parameter <code>= something</code> in the <code>def</code> line, and callers can
+        leave it out entirely.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">status_of</span>(percent, warning_at=90):
+    <span class="kw">if</span> percent &gt;= 100:
+        <span class="kw">return</span> <span class="str">"OVER LIMIT"</span>
+    <span class="kw">elif</span> percent &gt;= warning_at:
+        <span class="kw">return</span> <span class="str">"WARNING"</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="str">"OK"</span>
+
+<span class="fn">print</span>(<span class="fn">status_of</span>(95))       <span class="cm"># uses the default, 90</span>
+<span class="fn">print</span>(<span class="fn">status_of</span>(95, 96))   <span class="cm"># overrides it</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">WARNING<br>OK</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>This function has no default value:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">def greeting(name, punctuation):
+    return f"Hello, {name}{punctuation}"</pre>
+        <p style="margin-top:8px;">Give <code>punctuation</code> a default value of
+          <code>"!"</code>, then call it once leaving <code>punctuation</code> out and once
+          overriding it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_practice2.ipynb" title="Practice — add a default value" style="height:409px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s3">
+      <h2><span class="num">3.</span>Keyword arguments</h2>
+      <p>Name which parameter you are filling in. Order stops mattering, and the call site
+        becomes readable on its own.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="fn">status_of</span>(percent=95, warning_at=90))
+<span class="fn">print</span>(<span class="fn">status_of</span>(warning_at=90, percent=95))   <span class="cm"># same result, reordered</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">WARNING<br>WARNING</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given this function:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">def describe(host, port):
+    return f"{host}:{port}"</pre>
+        <p style="margin-top:8px;">call it using keyword arguments, in the opposite order to how
+          it was defined.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_practice3.ipynb" title="Practice — keyword arguments" style="height:362px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s4">
+      <h2><span class="num">4.</span>Mixing positional and keyword</h2>
+      <p>Positional arguments must come first. Once you use a keyword, everything after it must
+        be a keyword too.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="fn">status_of</span>(95, warning_at=90))    <span class="cm"># fine</span>
+<span class="cm"># print(status_of(percent=95, 90))    # SyntaxError</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">WARNING</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write <code>connect(host, port=443, timeout=30)</code> (it can just <code>return</code>
+          a description string) and call it three ways: all positional, all keyword, and
+          mixed.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_practice4.ipynb" title="Practice — mixing positional and keyword" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s5">
+      <h2>Topic 2 Challenge</h2>
+      <div class="callout">
+        <p>Write <code>status_of(value, limit, warning_at=90)</code> — note the change from
+          Topic 1: it now takes <code>value</code> and <code>limit</code> directly and works out
+          the percentage itself, instead of being handed a percentage. Test it with
+          <code>warning_at</code> left at its default, and again overridden to <code>95</code>.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_challenge.ipynb" title="Practice — Topic 2 challenge" style="height:289px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>More than one input, and not every input needs to be given every time.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td><code>load(path, header=True)</code></td></tr>
+        <tr><td>Cyber Security</td><td><code>scan(target, timeout=5)</code></td></tr>
+        <tr><td>IT</td><td><code>backup(source, destination="/backups")</code></td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td>a required parameter after a default one</td><td><code>SyntaxError</code></td><td>defaults must come last in the <code>def</code> line</td></tr>
+        <tr><td>a positional argument after a keyword one</td><td><code>SyntaxError</code></td><td>positional first, keyword after</td></tr>
+        <tr><td>relying on position with many parameters</td><td>wrong value in the wrong place, no error</td><td>use keywords once you have three or more</td></tr>
+        <tr><td>passing too few arguments</td><td><code>TypeError: missing ... required positional argument</code></td><td>check the <code>def</code> line for what it actually needs</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_multiple_and_default.py</code> — several parameters, defaults, and the rule that orders them</li>
+        <li><code>examples/02_keyword_arguments.py</code> — naming arguments, and why it becomes worth it</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t2-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>take more than one input</td><td>multiple parameters</td></tr>
+        <tr><td>make one optional</td><td><code>param=default</code></td></tr>
+        <tr><td>name an argument at the call site</td><td><code>status_of(percent=95)</code></td></tr>
+        <tr><td>combine both</td><td>positional first, keyword after</td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t3-s1" style="color:var(--accent); text-decoration:none;">Topic 3 — what a function can and cannot see.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Scope</h2></div>
+
+    <section class="topic" id="t3-s1">
+      <h2><span class="num">1.</span>Local means local</h2>
+      <p>A variable created inside a function only exists inside it.</p>
+
+      <figure class="anim-figure">
+        <iframe src="scope_and_call_stack.html?embed=1" title="Scope and call stack animation" loading="lazy" style="height:715px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> Calling a function pushes a new frame onto the call stack
+          with its own locals; returning pops it away completely. The function's <code>limit</code>
+          and <code>main</code>'s <code>limit</code> are two different names that happen to hold
+          equal values — never the same variable.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">check</span>():
+    result = <span class="str">"OK"</span>
+    <span class="fn">print</span>(result)
+
+<span class="fn">check</span>()
+
+<span class="cm"># print(result)   # NameError: name 'result' is not defined</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">OK</span></div>
+      </div>
+
+      <div class="diagram"><pre>outside
+   │
+   ├── calls check()
+   │        │
+   │        ▼
+   │   result = "OK"    (created here, local only)
+   │        │
+   │        ▼
+   │   check() ends — result stops existing
+   │
+   └── print(result) ──▶  NameError. It never existed out here.</pre></div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Uncomment the last line below and run it to see the error.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_practice1.ipynb" title="Practice — see the NameError" style="height:362px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s2">
+      <h2><span class="num">2.</span>Parameters are local too</h2>
+      <p>A parameter is just a local variable that starts out holding whatever was passed in.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">double</span>(n):
+    n = n * 2
+    <span class="kw">return</span> n
+
+number = 21
+<span class="fn">print</span>(<span class="fn">double</span>(number))   <span class="cm"># 42</span>
+<span class="fn">print</span>(number)             <span class="cm"># still 21 - the n inside double is its own copy</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">42<br>21</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>def triple(n): n = n * 3; return n</code> and <code>total = 10</code>,
+          predict then check: after <code>triple(total)</code> runs, is <code>total</code>
+          <code>30</code> or still <code>10</code>?</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_practice2.ipynb" title="Practice — predict scope" style="height:362px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s3">
+      <h2><span class="num">3.</span>Reading an outer variable is fine. Changing it is not.</h2>
+      <p>A function can <b>read</b> a variable defined outside it. It cannot change your copy of
+        it — only give you back a new value, which you choose whether to keep.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">def</span> <span class="fn">add_tax</span>(price):
+    price = price * 1.2   <span class="cm"># only changes the LOCAL copy</span>
+    <span class="kw">return</span> price            <span class="cm"># this is what actually gets it out</span>
+
+total = 100
+total = <span class="fn">add_tax</span>(total)   <span class="cm"># catch it and reassign</span>
+<span class="fn">print</span>(total)               <span class="cm"># 120.0</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">120.0</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Write <code>increment(count)</code> that returns <code>count + 1</code>. Use it to
+          increase a variable called <code>total_checked</code> by 1, three times in a row.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_practice3.ipynb" title="Practice — increment function" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s4">
+      <h2><span class="num">4.</span>The wall is the point, not a limitation</h2>
+      <p>Because a function cannot reach outside itself, calling it can never accidentally break
+        something unrelated elsewhere in the program. Everything it needs comes in as a
+        parameter. Everything it produces goes out via <code>return</code>. That is the whole
+        contract — and it is what makes a function safe to call from anywhere.</p>
+    </section>
+
+    <section class="topic" id="t3-s5">
+      <h2>Topic 3 Challenge</h2>
+      <div class="callout">
+        <p>This is broken — it expects <code>status</code> to update outside the function:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">def check(value, limit):
+    status = "OVER LIMIT" if value > limit else "OK"
+
+check(87, 100)
+print(status)</pre>
+        <p style="margin-top:8px;">Fix it using <code>return</code>, without using anything you
+          have not been taught yet.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_challenge.ipynb" title="Practice — Topic 3 challenge" style="height:362px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>A cleaning/scanning/status-check function cannot silently corrupt whatever it was
+        given — reading is safe, only <code>return</code> gets a change out.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td>a cleaning function cannot silently corrupt the original dataset</td></tr>
+        <tr><td>Cyber Security</td><td>a scanning function cannot silently alter the system it is checking</td></tr>
+        <tr><td>IT</td><td>a status-check function cannot silently change the server it is reporting on</td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td>using a variable created inside a function, outside it</td><td><code>NameError</code></td><td><code>return</code> it, and catch the result outside</td></tr>
+        <tr><td>expecting a function to change a variable you passed in</td><td>the outside variable is unchanged</td><td><code>return</code> the new value and reassign it yourself</td></tr>
+        <tr><td>assuming an error will warn you when a change is silently lost</td><td>no error at all — the bug is quiet</td><td>this is exactly why you <code>return</code> and reassign explicitly</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_local_variables.py</code> — what is local, what can be read, what cannot</li>
+        <li><code>examples/02_return_it_out.py</code> — getting a change out properly, and multiple return values</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t3-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>explain why a local variable disappears after the call</td><td>scope</td></tr>
+        <tr><td>get a value out safely</td><td><code>return</code>, then catch it</td></tr>
+        <tr><td>explain why this is a safety feature</td><td>a function cannot reach outside itself</td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t4-s1" style="color:var(--accent); text-decoration:none;">Topic 4 — using a function someone else already wrote.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Modules</h2></div>
+
+    <section class="topic" id="t4-s1">
+      <h2><span class="num">1.</span>import brings in a whole module</h2>
+      <p>Access what is inside it with a dot.</p>
+
+      <figure class="anim-figure">
+        <iframe src="modules_and_imports.html?embed=1" title="Modules and imports animation" loading="lazy" style="height:1087px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> <code>import math</code> gives you <code>math</code> as a
+          box you reach into. Switch tracks to see section 3's <code>from math import sqrt</code>
+          pull a name out of that box directly.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">import</span> math
+
+<span class="fn">print</span>(math.sqrt(16))
+<span class="fn">print</span>(math.pi)
+<span class="fn">print</span>(math.ceil(4.2))
+<span class="fn">print</span>(math.floor(4.8))</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">4.0<br>3.141592653589793<br>5<br>4</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Use <code>math</code> to calculate the area of a circle with radius 5
+          (<code>area = pi * r ** 2</code>).</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_practice1.ipynb" title="Practice — area of a circle" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s2">
+      <h2><span class="num">2.</span>random — another module in the standard library</h2>
+      <p>Same <code>import</code>, same dotted access, different job.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">import</span> random
+
+<span class="fn">print</span>(random.randint(1, 6))
+<span class="fn">print</span>(random.choice([<span class="str">"OK"</span>, <span class="str">"WARNING"</span>, <span class="str">"OVER LIMIT"</span>]))</pre>
+        <div class="output"><span class="out-label">Interactive</span><span class="val">a different random result each run — try it in the live notebook below.</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Use <code>random.randint</code> to simulate rolling two dice and print their total.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_practice2.ipynb" title="Practice — roll two dice" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s3">
+      <h2><span class="num">3.</span>from module import name</h2>
+      <p>Brings in one specific name directly — no dot needed afterwards. Convenient, but a
+        reader can no longer tell at a glance which module it came from.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="kw">from</span> math <span class="kw">import</span> sqrt
+
+<span class="fn">print</span>(sqrt(16))   <span class="cm"># not math.sqrt(16)</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">4.0</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Rewrite this using <code>from math import sqrt, pow</code> instead of
+          <code>import math</code>:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">import math
+print(math.sqrt(81))
+print(math.pow(2, 5))</pre>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_practice3.ipynb" title="Practice — from import" style="height:409px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s4">
+      <h2><span class="num">4.</span>Standard library vs installed</h2>
+      <p><code>math</code> and <code>random</code> ship with Python — nothing to install.
+        <code>pandas</code>, which you will meet soon, does not — that needs
+        <code>pip install pandas</code> first. The <code>import</code> keyword is the same
+        either way; only where the module came from differs.</p>
+      <p class="muted">A module is really just a file of functions someone already wrote. You are
+        already writing the wiring yourself — a module is wiring somebody else built, that you
+        get to reuse. (Discuss: name one module you have already used without calling it a
+        module — hint: every <code>print</code> and <code>input</code> call so far has come from
+        one, automatically, without ever writing <code>import</code>.)</p>
+    </section>
+
+    <section class="topic" id="t4-s5">
+      <h2>Topic 4 Challenge</h2>
+      <div class="callout">
+        <p>Using <code>random</code>, simulate checking 5 records against a fixed
+          <code>limit = 100</code>. For each one, generate a random <code>value</code> with
+          <code>random.randint(50, 150)</code>, then print whether it is <code>OVER LIMIT</code>
+          or <code>OK</code>. Reuse the <code>status_of</code> function given below — do not
+          write the decision logic twice.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_challenge.ipynb" title="Practice — Topic 4 challenge" style="height:409px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>A module is wiring someone else already built, that you get to reuse.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td><code>import statistics</code> for <code>mean</code>, <code>median</code></td></tr>
+        <tr><td>Cyber Security</td><td><code>import hashlib</code> for hashing a password</td></tr>
+        <tr><td>IT</td><td><code>import datetime</code> for timestamping a log entry</td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td>misspelling the module name — <code>import maths</code></td><td><code>ModuleNotFoundError: No module named 'maths'</code></td><td>it is <code>math</code>, no <code>s</code></td></tr>
+        <tr><td>calling <code>sqrt(16)</code> after <code>import math</code> (not <code>from</code>)</td><td><code>NameError</code></td><td>either <code>math.sqrt(16)</code> or <code>from math import sqrt</code></td></tr>
+        <tr><td>a <code>from import</code> overwriting your own variable of the same name</td><td>wrong value, no error</td><td>check your variable names against what you are importing</td></tr>
+        <tr><td>forgetting the module needs installing</td><td><code>ModuleNotFoundError</code> for a real package name</td><td><code>pip install &lt;package&gt;</code> first, then <code>import</code></td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_import.py</code> — import, dotted access, standard library modules</li>
+        <li><code>examples/02_from_import.py</code> — from ... import, the trade-off, naming collisions</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t4-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>use a whole module</td><td><code>import module</code> then <code>module.name</code></td></tr>
+        <tr><td>use one name from it</td><td><code>from module import name</code></td></tr>
+        <tr><td>tell standard library from installed</td><td>ships with Python vs <code>pip install</code> first</td></tr>
+        <tr><td>see a module as more wiring</td><td>functions someone else already built</td></tr>
+      </table>
+      <p class="muted">You now have all of Week 3's wiring. Go and build your own in the lab.</p>
+    </section>
+
+    <footer class="page-foot">CST1510 · Week 03 · Functions and Modules</footer>
+  </article>
+</div>
+
+<script>
+  var links = Array.from(document.querySelectorAll('nav.toc a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var groups = Array.from(document.querySelectorAll('nav.toc .toc-group'));
+  function onScroll() {
+    var y = window.scrollY + 80;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s && s.offsetTop <= y) current = s; });
+    links.forEach(function (a) { a.classList.remove('current'); });
+    var idx = sections.indexOf(current);
+    if (idx >= 0) links[idx].classList.add('current');
+
+    var activePrefix = current && current.id ? current.id.split('-')[0] : null;
+    groups.forEach(function (g) {
+      g.classList.toggle('open', g.getAttribute('data-group') === activePrefix);
+    });
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Notebook iframes share one JupyterLite IndexedDB-backed contents store.
+  // Booting several at once races on that shared connection ("Cannot read
+  // properties of null (reading/setting 'db')"), so load them strictly one
+  // at a time, and confirm each one actually rendered (same-origin poll of
+  // its own DOM) before starting the next, rather than trusting the
+  // iframe's load event alone (it fires before JupyterLite's own async
+  // IndexedDB-backed init has necessarily finished).
+  (function () {
+    var queue = [];
+    var loading = false;
+    function pollReady(iframe, deadline, cb) {
+      var doc;
+      try { doc = iframe.contentDocument; } catch (e) { doc = null; }
+      var ready = doc && (doc.querySelector('.jp-Cell') || doc.querySelector('.jp-mod-error') || doc.querySelector('.jp-Dialog'));
+      if (ready || Date.now() > deadline) { cb(); return; }
+      setTimeout(function () { pollReady(iframe, deadline, cb); }, 200);
+    }
+    function next() {
+      if (loading || queue.length === 0) return;
+      loading = true;
+      var iframe = queue.shift();
+      iframe.src = iframe.getAttribute('data-src');
+      iframe.addEventListener('load', function onLoad() {
+        iframe.removeEventListener('load', onLoad);
+        pollReady(iframe, Date.now() + 9000, function () {
+          setTimeout(function () { loading = false; next(); }, 900);
+        });
+      });
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var iframe = entry.target;
+          observer.unobserve(iframe);
+          queue.push(iframe);
+          next();
+        }
+      });
+    }, { rootMargin: '250px 0px' });
+    document.querySelectorAll('iframe.lazy-frame').forEach(function (f) { observer.observe(f); });
+  })();
+
+</script>
+</body>
+</html>
