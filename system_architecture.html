@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The System We Are Building</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
+    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif; font-size: 17px; }
+  code, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  .page { max-width: 800px; margin: 0 auto; padding: 56px 28px 120px; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1.page-title { margin: 0 0 10px; font-size: 2rem; font-weight: 700; letter-spacing: -.01em; }
+  .lede { margin: 0 0 32px; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
+
+  h2 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.005em; margin: 44px 0 16px; }
+  h3 { font-size: 1.02rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
+  p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; }
+  p.muted { color: var(--ink-soft); }
+  p code, td code, li code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+
+  .tabs { display: flex; gap: 8px; margin-bottom: 28px; border-bottom: 1px solid var(--rule); }
+  .tabs button {
+    font-family: 'Source Serif 4', Georgia, serif; font-size: 15px; font-weight: 600;
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--ink-soft); padding: 8px 4px 10px; margin-right: 20px; cursor: pointer;
+  }
+  .tabs button.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+  .tabpanel { display: none; }
+  .tabpanel.active { display: block; }
+
+  /* --- diagram --- */
+  .diagram { display: flex; align-items: stretch; gap: 0; margin: 8px 0 12px; overflow-x: auto; }
+  .box {
+    flex: 1; min-width: 130px; border: 1.5px solid var(--rule-strong); border-radius: 4px;
+    padding: 16px 12px; text-align: center; background: var(--paper);
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .box.lit { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent); background: var(--code-bg); }
+  .box .name { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-weight: 600; font-size: 15px; letter-spacing: .04em; margin-bottom: 8px; }
+  .box .desc { font-size: 13.5px; color: var(--ink-soft); font-style: italic; line-height: 1.4; min-height: 34px; }
+  .box .weeks { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+  .box .weeks span {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: var(--ink-soft);
+    border: 1px solid var(--rule); border-radius: 999px; padding: 1px 7px;
+  }
+  .box .weeks span.current { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+  .arrow { flex: none; display: flex; align-items: center; justify-content: center; width: 34px; color: var(--ink-soft); font-size: 18px; }
+
+  @media (max-width: 620px) {
+    .diagram { flex-direction: column; }
+    .arrow { width: auto; height: 20px; transform: rotate(90deg); }
+  }
+
+  table { border-collapse: collapse; margin: 8px 0 18px; max-width: 66ch; width: 100%; font-size: 14.5px; }
+  table.booktabs { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  table.booktabs th { border-bottom: 1px solid var(--ink-soft); }
+  th, td { text-align: left; padding: 7px 14px 7px 0; vertical-align: top; }
+  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; }
+  tr.clickable { cursor: pointer; }
+  tr.clickable:hover td { color: var(--accent); }
+  tr.row-active td { color: var(--accent); font-weight: 600; }
+
+  footer { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 36px; border-top: 1px solid var(--rule); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="breadcrumb">CST1510</div>
+  <h1 class="page-title">The System We Are Building</h1>
+  <p class="lede">This diagram does not change. Four boxes — one becomes real each week. Click a
+    week below to see which box it belongs to.</p>
+
+  <div class="tabs">
+    <button class="active" data-tab="early">Weeks 1–7</button>
+    <button data-tab="late">Weeks 8–12 — real tools</button>
+  </div>
+
+  <div class="tabpanel active" id="tab-early">
+    <div class="diagram" id="diagram-early">
+      <div class="box" data-box="input" data-weeks="1">
+        <div class="name">INPUT</div>
+        <div class="desc">getting data</div>
+        <div class="weeks"><span data-week="1">1</span></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box" data-box="store" data-weeks="4">
+        <div class="name">STORE</div>
+        <div class="desc">keeping data</div>
+        <div class="weeks"><span data-week="4">4</span></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box" data-box="process" data-weeks="2,3,7">
+        <div class="name">PROCESS</div>
+        <div class="desc">working it out</div>
+        <div class="weeks"><span data-week="2">2</span><span data-week="3">3</span><span data-week="7">7</span></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box" data-box="output" data-weeks="1">
+        <div class="name">OUTPUT</div>
+        <div class="desc">showing results</div>
+        <div class="weeks"><span data-week="1">1</span></div>
+      </div>
+    </div>
+
+    <p class="muted" style="font-size: 14px; margin-top: 4px;">The demo, <code>record_check.py</code>,
+      is one program revisited every week, getting better as new tools arrive. Everything between
+      the <code>INPUT</code> line and the <code>STORE</code> line, and everything under
+      <code>OUTPUT</code>, is Week 1 material.</p>
+
+    <h3>Where we are</h3>
+    <table class="booktabs" id="table-early">
+      <tr><th>Week</th><th>Box we build</th><th>Tools</th></tr>
+      <tr class="clickable" data-week="1"><td><b>1</b></td><td><b>INPUT + OUTPUT</b></td><td><code>input()</code>, <code>print()</code>, f-strings, types</td></tr>
+      <tr class="clickable" data-week="2"><td>2</td><td>PROCESS</td><td><code>if</code> / <code>else</code>, loops</td></tr>
+      <tr class="clickable" data-week="3"><td>3</td><td>the wiring</td><td>functions, modules</td></tr>
+      <tr class="clickable" data-week="4"><td>4</td><td>STORE</td><td>lists, dictionaries, files</td></tr>
+      <tr class="clickable" data-week="5"><td>5</td><td>one box becomes a component</td><td>objects</td></tr>
+      <tr class="clickable" data-week="6"><td>6</td><td>STORE + PROCESS, upgraded</td><td>pandas</td></tr>
+      <tr class="clickable" data-week="7"><td>7</td><td>INPUT, deepened</td><td>string methods — cleaning real, messy text</td></tr>
+    </table>
+  </div>
+
+  <div class="tabpanel" id="tab-late">
+    <div class="diagram" id="diagram-late">
+      <div class="box" data-box="input" data-weeks="8">
+        <div class="name">INPUT</div>
+        <div class="desc">a real API, Kaggle or GitHub</div>
+        <div class="weeks"><span data-week="8">8</span></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box" data-box="store" data-weeks="10">
+        <div class="name">STORE</div>
+        <div class="desc">SQLite database</div>
+        <div class="weeks"><span data-week="10">10</span></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box" data-box="process" data-weeks="9,12">
+        <div class="name">PROCESS</div>
+        <div class="desc">hashing, auth, an LLM (optional)</div>
+        <div class="weeks"><span data-week="9">9</span><span data-week="12">12</span></div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box" data-box="output" data-weeks="11">
+        <div class="name">OUTPUT</div>
+        <div class="desc">Streamlit — a real UI</div>
+        <div class="weeks"><span data-week="11">11</span></div>
+      </div>
+    </div>
+
+    <p class="muted" style="font-size: 14px; margin-top: 4px;">The four boxes do not change. What
+      fills them does — <code>record_check.py</code> was always a stand-in for a real system, and
+      from here each box is upgraded to the tool a real version of it would actually use. See
+      <code>RESOURCES/cw2-project-brief.md</code> for what you are actually building.</p>
+
+    <h3>Where we are</h3>
+    <table class="booktabs" id="table-late">
+      <tr><th>Week</th><th>Box upgraded</th><th>Real tool</th></tr>
+      <tr class="clickable" data-week="8"><td><b>8</b></td><td>INPUT, from outside</td><td>a real API, a Kaggle dataset, or your own GitHub repo — plus light regex, where the data actually needs it</td></tr>
+      <tr class="clickable" data-week="9"><td>9</td><td>PROCESS, made safe</td><td>hashing, salting, authentication — against a plain file for now</td></tr>
+      <tr class="clickable" data-week="10"><td>10</td><td>STORE, for real</td><td>SQLite — migrating both your data and your users into a real database</td></tr>
+      <tr class="clickable" data-week="11"><td>11</td><td>OUTPUT, for someone else</td><td>Streamlit — a real interface, not a <code>print()</code></td></tr>
+      <tr class="clickable" data-week="12"><td>12</td><td>PROCESS, intelligent (optional) — and shipped</td><td>an LLM, if you choose to; deployment either way</td></tr>
+    </table>
+  </div>
+
+  <h2>Two different things — do not mix them up</h2>
+  <table class="booktabs">
+    <tr><th></th><th>What it is</th><th>Who builds it</th></tr>
+    <tr><td><b>The demo</b></td><td><code>record_check.py</code> — one program, revisited every week, getting better as new tools arrive</td><td>your lecturer, in the workshop</td></tr>
+    <tr><td><b>Your project</b></td><td>Weeks 1–7: your own small version of that week's box, finished in the lab, nothing carries over. From Week 8: one project in your own lane, growing every week, that never resets.</td><td>you</td></tr>
+  </table>
+  <p class="muted">Nothing resets from Week 8 onward. Whatever you build in Week 8's lab is what
+    Week 9 opens and extends.</p>
+
+  <footer>CST1510 · The System We Are Building</footer>
+</div>
+
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.tabs button');
+  var panels = { early: document.getElementById('tab-early'), late: document.getElementById('tab-late') };
+  tabs.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      tabs.forEach(function (b) { b.classList.remove('active'); });
+      Object.values(panels).forEach(function (p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      panels[btn.dataset.tab].classList.add('active');
+    });
+  });
+
+  function wireScope(scopeId) {
+    var scope = document.getElementById(scopeId);
+    if (!scope) return;
+    var boxes = scope.querySelectorAll('.box');
+    var rows = scope.parentElement.querySelectorAll('tr.clickable');
+
+    function highlight(week) {
+      boxes.forEach(function (box) {
+        var weeks = box.dataset.weeks.split(',');
+        box.classList.toggle('lit', weeks.indexOf(String(week)) !== -1);
+        box.querySelectorAll('.weeks span').forEach(function (s) {
+          s.classList.toggle('current', s.dataset.week === String(week));
+        });
+      });
+      rows.forEach(function (r) { r.classList.toggle('row-active', r.dataset.week === String(week)); });
+    }
+
+    rows.forEach(function (row) {
+      row.addEventListener('click', function () { highlight(row.dataset.week); });
+    });
+    boxes.forEach(function (box) {
+      box.addEventListener('click', function () {
+        var weeks = box.dataset.weeks.split(',');
+        highlight(weeks[0]);
+      });
+    });
+  }
+
+  wireScope('diagram-early');
+  wireScope('diagram-late');
+})();
+</script>
+</body>
+</html>

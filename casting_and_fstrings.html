@@ -1,0 +1,166 @@
+<meta charset="utf-8">
+<title>Casting and f-strings</title>
+<script>if (location.search.indexOf('embed=1') !== -1) document.documentElement.className += ' embed';</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F8; --surface: #FFFFFF; --surface-2: #E7ECF1; --fg: #182430; --fg-muted: #5B6B7A;
+    --border: #C9D3DC; --accent-a: #D8425F; --accent-a-soft: #F6DDE2; --accent-b: #0E8F8B;
+    --accent-b-soft: #D9F0EE; --code-bg: #10161F; --code-fg: #E7EEF3; --code-muted: #7C8CA0;
+    --shadow: 0 1px 2px rgba(20,30,40,.06), 0 10px 28px rgba(20,30,40,.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D131E; --surface: #161F2C; --surface-2: #1E2836; --fg: #E7EEF5; --fg-muted: #8FA0B2;
+      --border: #2B3A4C; --accent-a: #FF7A92; --accent-a-soft: #3A2028; --accent-b: #35DCCF;
+      --accent-b-soft: #123330; --code-bg: #090D14; --code-fg: #DCE6EE; --code-muted: #5E7488;
+      --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131E; --surface: #161F2C; --surface-2: #1E2836; --fg: #E7EEF5; --fg-muted: #8FA0B2;
+    --border: #2B3A4C; --accent-a: #FF7A92; --accent-a-soft: #3A2028; --accent-b: #35DCCF;
+    --accent-b-soft: #123330; --code-bg: #090D14; --code-fg: #DCE6EE; --code-muted: #5E7488;
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+  .page { max-width: 900px; margin: 0 auto; padding: 48px 24px 64px; display: flex; flex-direction: column; gap: 24px; }
+  header { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--fg-muted); }
+  h1 { margin: 0; font-size: clamp(1.5rem, 3vw, 2.05rem); font-weight: 700; letter-spacing: -0.01em; }
+  header p { margin: 0; max-width: 60ch; color: var(--fg-muted); font-size: 1.02rem; line-height: 1.55; }
+  header p code { color: var(--fg); }
+  code, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  html.embed .page { padding: 4px 4px 20px; }
+  html.embed header { display: none; }
+
+  .tabs { display: flex; gap: 8px; }
+  .tabs button { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; font-weight: 600; border-radius: 999px; padding: 8px 16px; cursor: pointer; border: 1.5px solid var(--border); background: var(--surface); color: var(--fg-muted); }
+  .tabs button.active { color: var(--fg); border-color: var(--accent-b); background: var(--accent-b-soft); }
+
+  .expr-panel { background: var(--code-bg); color: var(--code-fg); border-radius: 14px; padding: 26px 24px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,.06); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; min-height: 130px; }
+  .expr-panel .expr { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 19px; text-align: center; }
+  .expr-panel .badge-row { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .type-badge { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .04em; padding: 3px 10px; border-radius: 999px; background: var(--surface-2); color: var(--code-muted); border: 1px solid rgba(255,255,255,.08); }
+  .type-badge.str { color: var(--accent-a); border-color: var(--accent-a); }
+  .type-badge.int { color: var(--accent-b); border-color: var(--accent-b); }
+  .type-badge.error { color: var(--accent-a); border-color: var(--accent-a); background: rgba(216,66,95,.12); }
+
+  .tok { padding: 2px 6px; border-radius: 6px; }
+  .tok.highlight-a { background: var(--accent-a); color: #1a0c10; }
+  .tok.highlight-b { background: var(--accent-b); color: #08201d; }
+  .tok.blocked { text-decoration: line-through; color: var(--accent-a); }
+
+  .caption-box { min-height: 60px; font-size: 15px; color: var(--fg-muted); line-height: 1.55; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--border); }
+  .caption-box b { color: var(--fg); font-weight: 600; }
+  .caption-box code { color: var(--fg); }
+
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  button.ctrl { font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14.5px; font-weight: 600; border-radius: 10px; padding: 11px 18px; cursor: pointer; border: 1.5px solid var(--border); background: var(--surface); color: var(--fg); display: inline-flex; align-items: center; gap: 9px; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+  button.ctrl:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  button.ctrl .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  button.btn-step .dot { background: var(--accent-b); }
+  button.btn-step:hover { border-color: var(--accent-b); }
+  button.btn-reset { color: var(--fg-muted); }
+  button.btn-reset .dot { background: var(--fg-muted); }
+  button.ctrl:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; } }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">Week 1 · Input, Casting and f-strings</span>
+    <h1><code>input()</code> always hands back text</h1>
+    <p>Even when the person types digits, Python receives characters, not a number — arithmetic
+      on it fails until it is explicitly converted.</p>
+  </header>
+
+  <div class="tabs">
+    <button id="tab-cast" class="active">Casting</button>
+    <button id="tab-fstring">f-strings</button>
+  </div>
+
+  <div class="expr-panel">
+    <div class="expr" id="expr"></div>
+    <div class="badge-row" id="badge-row"></div>
+  </div>
+
+  <div class="caption-box mono" id="caption" aria-live="polite"></div>
+
+  <div class="controls">
+    <button class="ctrl btn-step" id="btn-step"><span class="dot"></span>Step forward</button>
+    <button class="ctrl btn-reset" id="btn-reset"><span class="dot"></span>Reset</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var exprEl = document.getElementById('expr');
+  var badgeRow = document.getElementById('badge-row');
+  var caption = document.getElementById('caption');
+  var btnStep = document.getElementById('btn-step');
+  var btnReset = document.getElementById('btn-reset');
+  var tabCast = document.getElementById('tab-cast');
+  var tabF = document.getElementById('tab-fstring');
+
+  var mode = 'cast';
+  var step = 0;
+
+  var sequences = {
+    cast: {
+      steps: [
+        { expr: 'age = input("Enter your age: ")<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok highlight-a">"23"</span>', badges: ['<span class="type-badge str">age → str "23"</span>'] },
+        { expr: '<span class="tok blocked">age + 1</span>', badges: ['<span class="type-badge error">TypeError: can only concatenate str (not &quot;int&quot;) to str</span>'] },
+        { expr: 'int(<span class="tok highlight-a">age</span>) &nbsp;→&nbsp; <span class="tok highlight-b">23</span>', badges: ['<span class="type-badge str">str "23"</span>', '→', '<span class="type-badge int">int 23</span>'] },
+        { expr: 'int(age) + 1 &nbsp;→&nbsp; <span class="tok highlight-b">24</span>', badges: ['<span class="type-badge int">int 24</span>'] }
+      ],
+      captions: [
+        'The user typed <code>23</code>, but <code>input()</code> handed back the text <code>"23"</code> — type <b>str</b>, not a number.',
+        'Attempting <code>age + 1</code> fails: Python cannot add a whole number to text. This is not a rare edge case — it is what <code>input()</code> always does.',
+        '<code>int(age)</code> converts the string <b>"23"</b> into the actual number <b>23</b> — a new value, a different type.',
+        'Now <code>int(age) + 1</code> succeeds, because both sides are numbers: <b>24</b>.'
+      ]
+    },
+    fstring: {
+      steps: [
+        { expr: 'age = 23<br>f<span class="tok highlight-a">"Age: {age}"</span>', badges: ['<span class="type-badge int">→ "Age: 23"</span>'] },
+        { expr: 'f<span class="tok highlight-b">"{3.14159:.2f}"</span>', badges: ['<span class="type-badge int">→ "3.14"</span>'] }
+      ],
+      captions: [
+        'An f-string drops a variable straight into text: whatever is between <code>{ }</code> is evaluated and inserted.',
+        'Adding <code>:.2f</code> inside the braces formats the number to exactly 2 decimal places — <b>3.14159</b> becomes <b>"3.14"</b>, rounded.'
+      ]
+    }
+  };
+
+  function render() {
+    var seq = sequences[mode];
+    var s = seq.steps[step];
+    exprEl.innerHTML = s.expr;
+    badgeRow.innerHTML = s.badges.join(' ');
+    caption.innerHTML = seq.captions[step];
+    btnStep.disabled = step >= seq.steps.length - 1;
+  }
+
+  btnStep.addEventListener('click', function () {
+    var seq = sequences[mode];
+    if (step < seq.steps.length - 1) { step += 1; render(); }
+  });
+  btnReset.addEventListener('click', function () { step = 0; render(); });
+
+  tabCast.addEventListener('click', function () {
+    mode = 'cast'; step = 0;
+    tabCast.classList.add('active'); tabF.classList.remove('active');
+    render();
+  });
+  tabF.addEventListener('click', function () {
+    mode = 'fstring'; step = 0;
+    tabF.classList.add('active'); tabCast.classList.remove('active');
+    render();
+  });
+
+  render();
+})();
+</script>

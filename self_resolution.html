@@ -1,0 +1,478 @@
+<meta charset="utf-8">
+<title>Self Resolution</title>
+<script>if (location.search.indexOf('embed=1') !== -1) document.documentElement.className += ' embed';</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E7ECF1;
+    --fg: #182430;
+    --fg-muted: #5B6B7A;
+    --border: #C9D3DC;
+    --accent-a: #D8425F;
+    --accent-a-soft: #F6DDE2;
+    --accent-b: #0E8F8B;
+    --accent-b-soft: #D9F0EE;
+    --code-bg: #10161F;
+    --code-fg: #E7EEF3;
+    --code-muted: #7C8CA0;
+    --shadow: 0 1px 2px rgba(20,30,40,.06), 0 10px 28px rgba(20,30,40,.07);
+    --idle-line: var(--border);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D131E;
+      --surface: #161F2C;
+      --surface-2: #1E2836;
+      --fg: #E7EEF5;
+      --fg-muted: #8FA0B2;
+      --border: #2B3A4C;
+      --accent-a: #FF7A92;
+      --accent-a-soft: #3A2028;
+      --accent-b: #35DCCF;
+      --accent-b-soft: #123330;
+      --code-bg: #090D14;
+      --code-fg: #DCE6EE;
+      --code-muted: #5E7488;
+      --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131E;
+    --surface: #161F2C;
+    --surface-2: #1E2836;
+    --fg: #E7EEF5;
+    --fg-muted: #8FA0B2;
+    --border: #2B3A4C;
+    --accent-a: #FF7A92;
+    --accent-a-soft: #3A2028;
+    --accent-b: #35DCCF;
+    --accent-b-soft: #123330;
+    --code-bg: #090D14;
+    --code-fg: #DCE6EE;
+    --code-muted: #5E7488;
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  header { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 3vw, 2.15rem);
+    font-weight: 700;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  header p {
+    margin: 0;
+    max-width: 60ch;
+    color: var(--fg-muted);
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+  header p code { color: var(--fg); }
+
+  code, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  .stage-figure { margin: 0; display: flex; flex-direction: column; gap: 18px; }
+
+  .stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "method method"
+      "cardA  cardB";
+    gap: 20px 28px;
+    padding: 8px;
+  }
+  .connectors {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .connectors path {
+    fill: none;
+    stroke: var(--idle-line);
+    stroke-width: 2;
+    stroke-linecap: round;
+    transition: stroke .35s ease;
+  }
+  .connectors path.active-a { stroke: var(--accent-a); }
+  .connectors path.active-b { stroke: var(--accent-b); }
+  .connectors path.flow {
+    stroke-dasharray: 7 7;
+    animation: flow 0.6s linear infinite;
+  }
+  @keyframes flow { to { stroke-dashoffset: -28; } }
+
+  .method-panel {
+    grid-area: method;
+    position: relative;
+    z-index: 2;
+    justify-self: center;
+    width: min(100%, 460px);
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,.06);
+  }
+  .method-panel .tag {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--code-muted);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .method-panel pre {
+    margin: 0;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 14.5px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+  .self-token {
+    padding: 1px 4px;
+    border-radius: 4px;
+    transition: background .3s ease, color .3s ease;
+    color: var(--code-fg);
+  }
+  .self-token.bound-a { background: var(--accent-a); color: #1a0c10; }
+  .self-token.bound-b { background: var(--accent-b); color: #08201d; }
+  .attr-token {
+    padding: 1px 3px;
+    border-radius: 4px;
+    transition: background .25s ease, color .25s ease;
+  }
+  .attr-token.flash-a { background: var(--accent-a); color: #1a0c10; }
+  .attr-token.flash-b { background: var(--accent-b); color: #08201d; }
+
+  .object-card {
+    position: relative;
+    z-index: 2;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px 20px;
+    box-shadow: var(--shadow);
+    transition: border-color .35s ease, box-shadow .35s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+  .object-card.cardA { grid-area: cardA; }
+  .object-card.cardB { grid-area: cardB; }
+  .object-card.active-a { border-color: var(--accent-a); box-shadow: 0 0 0 3px var(--accent-a-soft), var(--shadow); }
+  .object-card.active-b { border-color: var(--accent-b); box-shadow: 0 0 0 3px var(--accent-b-soft), var(--shadow); }
+
+  .instance-tag {
+    font-size: 13px;
+    color: var(--fg-muted);
+  }
+  .instance-tag b { color: var(--fg); font-weight: 600; }
+
+  .attrs { display: flex; flex-direction: column; gap: 6px; }
+  .attr-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 14px;
+    padding: 3px 6px;
+    border-radius: 6px;
+    transition: background .25s ease;
+  }
+  .attr-row .k { color: var(--fg-muted); }
+  .attr-row .v { font-variant-numeric: tabular-nums; }
+  .attr-row.flash-a { background: var(--accent-a-soft); }
+  .attr-row.flash-b { background: var(--accent-b-soft); }
+
+  .output-slot {
+    border-top: 1px dashed var(--border);
+    padding-top: 12px;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    font-size: 14.5px;
+  }
+  .output-slot .result {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .output-slot .result.shown { opacity: 1; transform: translateY(0); }
+  .output-slot .result.a { color: var(--accent-a); font-weight: 600; }
+  .output-slot .result.b { color: var(--accent-b); font-weight: 600; }
+  .output-slot .placeholder { color: var(--fg-muted); font-style: italic; }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  button {
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 11px 18px;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--fg);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  button .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  button.btn-a .dot { background: var(--accent-a); }
+  button.btn-b .dot { background: var(--accent-b); }
+  button.btn-a:hover { border-color: var(--accent-a); }
+  button.btn-b:hover { border-color: var(--accent-b); }
+  button.btn-reset { color: var(--fg-muted); }
+  button.btn-reset .dot { background: var(--fg-muted); }
+
+  .status {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    min-height: 1.4em;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .status b { color: var(--fg); font-weight: 600; }
+
+  figcaption {
+    font-size: 14px;
+    color: var(--fg-muted);
+    line-height: 1.6;
+    max-width: 68ch;
+  }
+
+  @media (max-width: 620px) {
+    .stage { grid-template-columns: 1fr; grid-template-areas: "method" "cardA" "cardB"; }
+    .method-panel { width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .connectors path.flow { animation: none; }
+    * { transition-duration: .01ms !important; }
+  }
+
+  /* ?embed=1 — used when a page's own prose already carries the title/intro */
+  html.embed .page { padding: 4px 4px 20px; }
+  html.embed header { display: none; }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">Week 5 · Methods</span>
+    <h1>Self resolves to whoever is calling</h1>
+    <p>One method, written once. <code>self</code> is not a keyword and not a fixed value —
+      it becomes whichever object sits before the dot at the moment of the call.</p>
+  </header>
+
+  <figure class="stage-figure" aria-label="Diagram showing one summary method resolving self to either r_a or r_b depending on which object calls it">
+    <div class="stage" id="stage">
+      <svg class="connectors" id="connectors" aria-hidden="true">
+        <path id="path-a" d=""></path>
+        <path id="path-b" d=""></path>
+      </svg>
+
+      <div class="method-panel" id="method-panel">
+        <span class="tag">shared method — defined once</span>
+        <pre>def summary(<span class="self-token" id="self-token">self</span>):
+    return f"{<span class="attr-token" id="tok-label">self.label</span>}: {<span class="attr-token" id="tok-value">self.value</span>}/{<span class="attr-token" id="tok-limit">self.limit</span>}"</pre>
+      </div>
+
+      <div class="object-card cardA" id="card-a">
+        <div class="instance-tag"><b>r_a</b> = Record("R-001", 87.0, 100.0)</div>
+        <div class="attrs">
+          <div class="attr-row" id="row-a-label"><span class="k">label</span><span class="v mono">"R-001"</span></div>
+          <div class="attr-row" id="row-a-value"><span class="k">value</span><span class="v mono">87.0</span></div>
+          <div class="attr-row" id="row-a-limit"><span class="k">limit</span><span class="v mono">100.0</span></div>
+        </div>
+        <div class="output-slot">
+          <span class="placeholder" id="placeholder-a">r_a.summary() → …</span>
+          <span class="result a mono" id="result-a">"R-001: 87.0/100.0"</span>
+        </div>
+      </div>
+
+      <div class="object-card cardB" id="card-b">
+        <div class="instance-tag"><b>r_b</b> = Record("R-002", 120.0, 100.0)</div>
+        <div class="attrs">
+          <div class="attr-row" id="row-b-label"><span class="k">label</span><span class="v mono">"R-002"</span></div>
+          <div class="attr-row" id="row-b-value"><span class="k">value</span><span class="v mono">120.0</span></div>
+          <div class="attr-row" id="row-b-limit"><span class="k">limit</span><span class="v mono">100.0</span></div>
+        </div>
+        <div class="output-slot">
+          <span class="placeholder" id="placeholder-b">r_b.summary() → …</span>
+          <span class="result b mono" id="result-b">"R-002: 120.0/100.0"</span>
+        </div>
+      </div>
+    </div>
+
+    <figcaption>Both calls already resolved above. Press replay to watch <code>self</code> bind step by step —
+      the code never changes; only which object <code>self</code> points at changes.</figcaption>
+  </figure>
+
+  <div class="controls">
+    <button class="btn-a" id="btn-a"><span class="dot"></span>Replay r_a.summary()</button>
+    <button class="btn-b" id="btn-b"><span class="dot"></span>Replay r_b.summary()</button>
+    <button class="btn-reset" id="btn-reset"><span class="dot"></span>Reset to idle</button>
+  </div>
+
+  <div class="status mono" id="status" aria-live="polite">Both calls resolved. self was r_a, then r_b — same code, two different bindings.</div>
+</div>
+
+<script>
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var pathA = document.getElementById('path-a');
+  var pathB = document.getElementById('path-b');
+  var cardA = document.getElementById('card-a');
+  var cardB = document.getElementById('card-b');
+  var methodPanel = document.getElementById('method-panel');
+  var selfToken = document.getElementById('self-token');
+  var status = document.getElementById('status');
+  var stage = document.getElementById('stage');
+
+  function rectRelativeTo(el, container) {
+    var r = el.getBoundingClientRect();
+    var c = container.getBoundingClientRect();
+    return { top: r.top - c.top, left: r.left - c.left, width: r.width, height: r.height };
+  }
+
+  function drawConnectors() {
+    var m = rectRelativeTo(methodPanel, stage);
+    var a = rectRelativeTo(cardA, stage);
+    var b = rectRelativeTo(cardB, stage);
+
+    var mx = m.left + m.width * 0.28, my = m.top + m.height;
+    var mx2 = m.left + m.width * 0.72;
+    var ax = a.left + a.width * 0.5, ay = a.top;
+    var bx = b.left + b.width * 0.5, by = b.top;
+
+    var midYA = (my + ay) / 2;
+    var midYB = (my + by) / 2;
+
+    pathA.setAttribute('d', 'M ' + mx + ' ' + my + ' C ' + mx + ' ' + midYA + ', ' + ax + ' ' + midYA + ', ' + ax + ' ' + ay);
+    pathB.setAttribute('d', 'M ' + mx2 + ' ' + my + ' C ' + mx2 + ' ' + midYB + ', ' + bx + ' ' + midYB + ', ' + bx + ' ' + by);
+  }
+
+  window.addEventListener('resize', drawConnectors);
+  drawConnectors();
+
+  var attrIdsA = ['row-a-label', 'row-a-value', 'row-a-limit'];
+  var attrIdsB = ['row-b-label', 'row-b-value', 'row-b-limit'];
+  var tokIds = ['tok-label', 'tok-value', 'tok-limit'];
+
+  function clearAll() {
+    [pathA, pathB].forEach(function (p) { p.classList.remove('active-a', 'active-b', 'flow'); });
+    cardA.classList.remove('active-a');
+    cardB.classList.remove('active-b');
+    selfToken.classList.remove('bound-a', 'bound-b');
+    tokIds.forEach(function (id) {
+      document.getElementById(id).classList.remove('flash-a', 'flash-b');
+    });
+    attrIdsA.concat(attrIdsB).forEach(function (id) {
+      document.getElementById(id).classList.remove('flash-a', 'flash-b');
+    });
+  }
+
+  function setResult(which, shown) {
+    var placeholder = document.getElementById('placeholder-' + which);
+    var result = document.getElementById('result-' + which);
+    placeholder.style.display = shown ? 'none' : '';
+    result.classList.toggle('shown', shown);
+  }
+
+  function play(which) {
+    clearAll();
+    var isA = which === 'a';
+    var path = isA ? pathA : pathB;
+    var card = isA ? cardA : cardB;
+    var accentClass = isA ? 'active-a' : 'active-b';
+    var flashClass = isA ? 'flash-a' : 'flash-b';
+    var attrIds = isA ? attrIdsA : attrIdsB;
+    var label = isA ? 'r_a' : 'r_b';
+    var record = isA ? 'R-001' : 'R-002';
+
+    setResult('a', false);
+    setResult('b', false);
+
+    var step = 0;
+    var delay = reduceMotion ? 0 : 1;
+    var stepDelay = reduceMotion ? 0 : 260;
+
+    status.innerHTML = '<b>' + label + '.summary()</b> called — routing to the shared method…';
+    path.classList.add(accentClass, 'flow');
+    card.classList.add(accentClass);
+
+    setTimeout(function () {
+      selfToken.classList.add(isA ? 'bound-a' : 'bound-b');
+      status.innerHTML = '<b>self</b> is now bound to <b>' + label + '</b> for this call.';
+    }, stepDelay);
+
+    tokIds.forEach(function (tokId, i) {
+      setTimeout(function () {
+        document.getElementById(tokId).classList.add(flashClass);
+        document.getElementById(attrIds[i]).classList.add(flashClass);
+      }, stepDelay * (2 + i));
+    });
+
+    setTimeout(function () {
+      setResult(which, true);
+      path.classList.remove('flow');
+      status.innerHTML = 'Resolved: <b>self.label, self.value, self.limit</b> all came from <b>' + label + '</b> → <b>' + record + '</b>.';
+    }, stepDelay * (2 + tokIds.length));
+  }
+
+  document.getElementById('btn-a').addEventListener('click', function () { play('a'); });
+  document.getElementById('btn-b').addEventListener('click', function () { play('b'); });
+  document.getElementById('btn-reset').addEventListener('click', function () {
+    clearAll();
+    setResult('a', false);
+    setResult('b', false);
+    status.textContent = 'Idle — self is not bound to anything until a call happens.';
+  });
+})();
+</script>

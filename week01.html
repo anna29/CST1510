@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 1 — Values, Types and Input-Output</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
+    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif; font-size: 17px; }
+  code, .mono, pre { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  .shell { max-width: 1000px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; align-items: start; }
+  nav.toc { position: sticky; top: 32px; display: flex; flex-direction: column; gap: 1px; font-size: 13px; padding-top: 6px; max-height: calc(100vh - 64px); overflow-y: auto; }
+  nav.toc .toc-label { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); margin-bottom: 10px; font-size: 13px; }
+  nav.toc a { color: var(--ink-soft); text-decoration: none; padding: 3px 0; line-height: 1.4; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { color: var(--ink); }
+  nav.toc a.current { color: var(--accent); }
+  nav.toc a.toc-topic { color: var(--ink); font-weight: 700; margin-top: 16px; font-size: 13.5px; }
+  nav.toc a.toc-topic:first-of-type { margin-top: 0; }
+  nav.toc a.toc-sub { padding-left: 12px; font-size: 12.5px; }
+  nav.toc .toc-group { display: flex; flex-direction: column; max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  nav.toc .toc-group.open { max-height: 320px; }
+  article { min-width: 0; }
+  header.page-head { margin-bottom: 44px; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1.page-title { margin: 0 0 10px; font-size: 2.1rem; font-weight: 700; letter-spacing: -.01em; }
+  .lede { margin: 0; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
+  .lede em { font-style: normal; }
+  .lede code { font-style: normal; color: var(--ink); }
+  .box-note { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); }
+  .box-note b { color: var(--ink); font-weight: 600; }
+  section.topic { margin-bottom: 44px; scroll-margin-top: 24px; }
+  .topic-divider { margin: 8px 0 40px; padding-top: 36px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
+  #t1-top { margin-top: 0; padding-top: 0; border-top: none; }
+  .topic-divider-n { font-variant: small-caps; letter-spacing: .06em; color: var(--ink-soft); font-size: 15.5px; }
+  .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
+  h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
+  h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
+  p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
+  p.muted { color: var(--ink-soft); }
+  p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
+  .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
+  .callout p { margin: 0; font-size: .98rem; }
+  .cell { margin: 20px 0; max-width: 74ch; }
+  .cell pre.code { margin: 0; background: var(--code-bg); color: var(--code-ink); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 14px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.62; }
+  .cell pre.code .kw { font-weight: 600; }
+  .cell pre.code .fn { font-weight: 600; }
+  .cell pre.code .str { color: var(--accent); }
+  .cell pre.code .cm { color: var(--ink-soft); font-style: italic; }
+  .cell .output { padding: 8px 18px 4px; font-size: 13px; color: var(--ink-soft); }
+  .cell .output .out-label { font-variant: small-caps; margin-right: 10px; }
+  .cell .output .val { color: var(--ink); }
+  .cell .output pre.out-block { margin: 4px 0 0; font-size: 13px; color: var(--ink); white-space: pre; }
+  figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
+  figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
+  figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
+  table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
+  table.booktabs { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  table.booktabs th { border-bottom: 1px solid var(--ink-soft); }
+  th, td { text-align: left; padding: 7px 14px 7px 0; vertical-align: top; }
+  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; }
+  td code { white-space: nowrap; }
+  ul.tight { margin: 8px 0 16px; padding-left: 20px; }
+  ul.tight li { line-height: 1.6; margin-bottom: 4px; }
+  .practice-embed { max-width: 74ch; margin: 10px 0 8px; }
+  .practice-embed .practice-label { font-variant: small-caps; font-size: 13.5px; font-style: italic; color: var(--ink-soft); margin-bottom: 6px; }
+  .practice-embed .frame { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; }
+  .practice-embed iframe { display: block; width: 100%; border: none; background: var(--paper); }
+  footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
+  @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="toc" id="toc">
+    <span class="toc-label">Contents</span>
+    <a href="#t1-top" class="toc-topic">Topic 1 — Your First Program</a>
+    <div class="toc-group" data-group="t1">
+    <a href="#t1-s1" class="toc-sub">1. print()</a>
+    <a href="#t1-s2" class="toc-sub">2. Several things at once</a>
+    <a href="#t1-s3" class="toc-sub">3. Blank lines and separators</a>
+    <a href="#t1-s4" class="toc-sub">4. Escape sequences</a>
+    <a href="#t1-s5" class="toc-sub">5. Comments</a>
+    <a href="#t1-s6" class="toc-sub">Challenge</a>
+    <a href="#t1-s7" class="toc-sub">Common mistakes</a>
+    <a href="#t1-s8" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t2-top" class="toc-topic">Topic 2 — Variables and Types</a>
+    <div class="toc-group" data-group="t2">
+    <a href="#t2-s1" class="toc-sub">1. A variable is a name</a>
+    <a href="#t2-s2" class="toc-sub">2. Types</a>
+    <a href="#t2-s3" class="toc-sub">3. Naming</a>
+    <a href="#t2-s4" class="toc-sub">4. Reassigning</a>
+    <a href="#t2-s5" class="toc-sub">Challenge</a>
+    <a href="#t2-s6" class="toc-sub">Common mistakes</a>
+    <a href="#t2-s7" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t3-top" class="toc-topic">Topic 3 — Numbers and Arithmetic</a>
+    <div class="toc-group" data-group="t3">
+    <a href="#t3-s1" class="toc-sub">1. The operators</a>
+    <a href="#t3-s2" class="toc-sub">2. Division and float</a>
+    <a href="#t3-s3" class="toc-sub">3. Order of operations</a>
+    <a href="#t3-s4" class="toc-sub">4. Share of the whole</a>
+    <a href="#t3-s5" class="toc-sub">5. Shorthand</a>
+    <a href="#t3-s6" class="toc-sub">Challenge</a>
+    <a href="#t3-s7" class="toc-sub">Common mistakes</a>
+    <a href="#t3-s8" class="toc-sub">Recap</a>
+        </div>
+    <a href="#t4-top" class="toc-topic">Topic 4 — Input, Casting and f-strings</a>
+    <div class="toc-group" data-group="t4">
+    <a href="#t4-s1" class="toc-sub">1. Asking for input</a>
+    <a href="#t4-s2" class="toc-sub">2. The one rule</a>
+    <a href="#t4-s3" class="toc-sub">3. Casting</a>
+    <a href="#t4-s4" class="toc-sub">4. f-strings</a>
+    <a href="#t4-s5" class="toc-sub">5. Formatting</a>
+    <a href="#t4-s6" class="toc-sub">Challenge</a>
+    <a href="#t4-s7" class="toc-sub">Common mistakes</a>
+    <a href="#t4-s8" class="toc-sub">Recap</a>
+    </div>
+  </nav>
+
+  <article>
+    <header class="page-head">
+      <div class="breadcrumb">CST1510</div>
+      <h1 class="page-title">Week 1 — Values, Types and Input-Output</h1>
+      <p class="lede">By the end of this week you can write and run a Python file that prints
+        formatted output, store values in well-named variables, calculate a difference and a
+        percentage, and ask the user for input and report results back cleanly.</p>
+      <p class="box-note">Box we build this week: <b>INPUT</b> and <b>OUTPUT</b>. Each
+        <em>Practice</em> is followed by a small live notebook — real Python, running in the
+        browser, no install.</p>
+    </header>
+
+    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Your First Program</h2></div>
+
+    <section class="topic" id="t1-s1">
+      <h2><span class="num">1.</span>print()</h2>
+      <p><code>print()</code> is how a program puts something on the screen. A program runs top
+        to bottom, one statement at a time — the next line does not begin until the one before it
+        has entirely finished. Nothing a later line would produce exists until that line has
+        actually run.</p>
+
+      <figure class="anim-figure">
+        <iframe src="sequential_execution.html?embed=1" title="Sequential execution animation" loading="lazy" style="height:430px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> Three <code>print()</code> lines, stepped through one at a
+          time. Line 3's text does not appear in the terminal until line 2 has completely
+          finished.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="str">"Record check starting"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Record check starting</span></div>
+      </div>
+
+      <p>Text inside quotes is a <b>string</b>. Single or double quotes both work — this module
+        uses double quotes throughout.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="str">'single quotes'</span>)
+<span class="fn">print</span>(<span class="str">"double quotes"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">single quotes<br>double quotes</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Make the next cell print your own name.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_practice1.ipynb" title="Practice — print your name" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s2">
+      <h2><span class="num">2.</span>Printing several things</h2>
+      <p>A comma inside <code>print()</code> lets more than one value ride on the same line —
+        Python puts exactly one space between each pair.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="str">"Record"</span>, <span class="str">"R-004"</span>, <span class="str">"checked"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Record R-004 checked</span></div>
+      </div>
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="str">"Value"</span>, 23.7)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Value 23.7</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Print <code>Module CST1510 starts now</code> using <b>three</b> separate values and
+          commas.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_practice2.ipynb" title="Practice — three values" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s3">
+      <h2><span class="num">3.</span>Blank lines and separators</h2>
+      <p><code>print()</code> called with nothing inside it prints an empty line. Multiplying a
+        string by a number repeats it — the tidy way to draw a separator without typing it out
+        character by character.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="str">"="</span> * 34)
+<span class="fn">print</span>(<span class="str">"  RECORD CHECK"</span>)
+<span class="fn">print</span>(<span class="str">"="</span> * 34)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">==================================<br>&nbsp;&nbsp;RECORD CHECK<br>==================================</span></div>
+      </div>
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="str">"top"</span>)
+<span class="fn">print</span>()
+<span class="fn">print</span>(<span class="str">"bottom"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">top<br><br>bottom</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Print a line of <b>50 dashes</b>, then your name, then another 50 dashes.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_practice3.ipynb" title="Practice — dashes" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s4">
+      <h2><span class="num">4.</span>Escape sequences</h2>
+      <p><code>\n</code> starts a new line inside a string; <code>\t</code> inserts a tab. Both
+        count as a single character each, even though they are typed as two.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="str">"line one\nline two"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">line one<br>line two</span></div>
+      </div>
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="str">"ID\tVALUE"</span>)
+<span class="fn">print</span>(<span class="str">"R-004\t23.7"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">ID&nbsp;&nbsp;&nbsp;&nbsp;VALUE<br>R-004&nbsp;&nbsp;&nbsp;23.7</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Using <b>one</b> <code>print()</code>, produce exactly:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">ID	STATUS
+R-004	OK</pre>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_practice4.ipynb" title="Practice — tab-separated report" style="height:361px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s5">
+      <h2><span class="num">5.</span>Comments</h2>
+      <p>Anything after <code>#</code> is ignored by Python entirely. Comments exist for the
+        human reading the code afterwards — including the person who wrote it, three weeks later,
+        having forgotten why.</p>
+
+      <div class="cell">
+        <pre class="code"><span class="cm"># Show the report header</span>
+<span class="fn">print</span>(<span class="str">"="</span> * 20)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">====================</span></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s6">
+      <h2>Topic 1 Challenge</h2>
+      <div class="callout">
+        <p>Reproduce this exactly, using only what is in this page:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">==============================
+        RECORD CHECK
+==============================</pre>
+        <p style="margin-top:8px;">The title should be centred by eye — count your spaces.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_challenge.ipynb" title="Practice — Topic 1 challenge" style="height:409px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p><code>print()</code> is how a program reports what it found — the mechanism never
+        changes, only what is worth reporting.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td><code>Rows loaded: 1200</code></td></tr>
+        <tr><td>Cyber Security</td><td><code>[ALERT] failed login from 10.0.0.5</code></td></tr>
+        <tr><td>IT</td><td><code>Backup complete - 4 of 4 servers</code></td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s7">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td><code>print("hello)</code></td><td><code>SyntaxError</code></td><td>quotes must come in pairs</td></tr>
+        <tr><td><code>Print("hello")</code></td><td><code>NameError</code></td><td>lowercase <code>print</code> — Python is case sensitive</td></tr>
+        <tr><td><code>print "hello"</code></td><td><code>SyntaxError</code></td><td>the brackets are required</td></tr>
+        <tr><td><code>'it's fine'</code></td><td><code>SyntaxError</code></td><td>the apostrophe ends the string — use double quotes</td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_print_basics.py</code> — <code>sep=</code>, <code>end=</code>, <code>+</code> vs f-strings</li>
+        <li><code>examples/02_quotes_and_lines.py</code> — escaping, triple quotes, <code>\n</code>, <code>\t</code>, repetition</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t1-s8">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>put text on screen</td><td><code>print("...")</code></td></tr>
+        <tr><td>print several values</td><td>commas</td></tr>
+        <tr><td>draw a separator</td><td><code>"=" * 30</code></td></tr>
+        <tr><td>control lines and tabs</td><td><code>\n</code>, <code>\t</code></td></tr>
+        <tr><td>leave a note</td><td><code>#</code></td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t2-s1" style="color:var(--accent); text-decoration:none;">Topic 2 — storing values so you can use them again.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Variables and Types</h2></div>
+
+    <section class="topic" id="t2-s1">
+      <h2><span class="num">1.</span>A variable is a name for a value</h2>
+      <p>Read <code>=</code> as <b>"gets"</b>, not "equals". <code>value = 23.7</code> means put
+        23.7 into value — or more precisely, as the figure below makes concrete: point the name
+        <code>value</code> at the value 23.7. A variable is not a box that holds a copy; it is a
+        label attached to a value that exists independently of it.</p>
+
+      <figure class="anim-figure">
+        <iframe src="variable_assignment.html?embed=1" title="Variable assignment animation" loading="lazy" style="height:486px;"></iframe>
+        <figcaption><b>Figure 1.1.</b> <code>x = 5</code>, then <code>y = x</code>, then
+          <code>x = 8</code>. Step through to see why reassigning <code>x</code> never touches
+          <code>y</code>.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code">record_id = <span class="str">"R-004"</span>
+value = 23.7
+limit = 20
+
+<span class="fn">print</span>(record_id)
+<span class="fn">print</span>(value)
+<span class="fn">print</span>(limit)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-004<br>23.7<br>20</span></div>
+      </div>
+      <p>Once stored, use the <b>name</b> wherever you would otherwise use the value.</p>
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(record_id, <span class="str">"has value"</span>, value)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">R-004 has value 23.7</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Store your own name in <code>student_name</code> and your course in <code>course</code>,
+          then print both in one line.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_practice1.ipynb" title="Practice — store your name" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s2">
+      <h2><span class="num">2.</span>Types</h2>
+      <p>Every value has a type. Ask Python directly with <code>type()</code>. Three matter this
+        week: <code>str</code> (text), <code>int</code> (whole number), and <code>float</code>
+        (a number with a decimal point).</p>
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="fn">type</span>(record_id))
+<span class="fn">print</span>(<span class="fn">type</span>(value))
+<span class="fn">print</span>(<span class="fn">type</span>(limit))</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">&lt;class 'str'&gt;<br>&lt;class 'float'&gt;<br>&lt;class 'int'&gt;</span></div>
+      </div>
+
+      <h3>The thing that catches everyone</h3>
+      <p>These two print identically. They are <b>not</b> the same.</p>
+      <div class="cell">
+        <pre class="code">text_twenty = <span class="str">"20"</span>
+number_twenty = 20
+
+<span class="fn">print</span>(text_twenty)
+<span class="fn">print</span>(number_twenty)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">20<br>20</span></div>
+      </div>
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="fn">type</span>(text_twenty))
+<span class="fn">print</span>(<span class="fn">type</span>(number_twenty))</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">&lt;class 'str'&gt;<br>&lt;class 'int'&gt;</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Run the next cell. <b>Before you run it</b>, write down what you expect. Then explain
+          the result to the person next to you.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_practice2.ipynb" title="Practice — string vs number concatenation" style="height:330px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s3">
+      <h2><span class="num">3.</span>Naming</h2>
+      <p>Names should say what the value <em>is</em>. Rules: lowercase, underscores between
+        words, no spaces, cannot start with a digit, cannot be a Python word such as
+        <code>print</code>, <code>if</code> or <code>class</code>.</p>
+      <div class="cell">
+        <pre class="code"><span class="cm"># hard to read later</span>
+v = 23.7
+l = 20
+
+<span class="cm"># easy to read later</span>
+sensor_value = 23.7
+sensor_limit = 20
+
+<span class="fn">print</span>(v - l)
+<span class="fn">print</span>(sensor_value - sensor_limit)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">3.6999999999999993<br>3.6999999999999993</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>The next cell has three bad names. Rewrite it with good ones. The output should not
+          change.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_practice3.ipynb" title="Practice — rename badly-named variables" style="height:434px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s4">
+      <h2><span class="num">4.</span>Reassigning</h2>
+      <p>A variable can be given a new value at any point. The old value is simply gone — nothing
+        remembers it, and nothing that already read it is retroactively changed.</p>
+      <div class="cell">
+        <pre class="code">checks_done = 0
+<span class="fn">print</span>(checks_done)
+
+checks_done = 1
+<span class="fn">print</span>(checks_done)
+
+checks_done = 2
+<span class="fn">print</span>(checks_done)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">0<br>1<br>2</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Without running it, what does this print? Write your answer down, then run it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_practice4.ipynb" title="Practice — predict reassignment" style="height:362px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s5">
+      <h2>Topic 2 Challenge</h2>
+      <div class="callout">
+        <p>Store these four facts about one server in sensibly named variables, then print a
+          single line reading:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">srv-01 in London is 87% full</pre>
+        <ul class="tight" style="margin-top:10px;">
+          <li>hostname: <code>srv-01</code></li>
+          <li>location: <code>London</code></li>
+          <li>disk used: <code>87</code></li>
+          <li>(you decide what to call the <code>%</code> sign)</li>
+        </ul>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_challenge.ipynb" title="Practice — Topic 2 challenge" style="height:462px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>A variable holds one fact about one thing — the name changes, the mechanism does not.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td><code>reading = 23.7</code>, <code>units = "celsius"</code></td></tr>
+        <tr><td>Cyber Security</td><td><code>source_ip = "10.0.0.5"</code>, <code>port = 443</code></td></tr>
+        <tr><td>IT</td><td><code>hostname = "srv-01"</code>, <code>disk_used = 87</code></td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_three_fields.ipynb" title="Worked examples — three lanes" style="height:693px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t2-s6">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td><code>23.7 = value</code></td><td><code>SyntaxError</code></td><td>the name goes on the <b>left</b></td></tr>
+        <tr><td><code>my value = 3</code></td><td><code>SyntaxError</code></td><td>no spaces — <code>my_value</code></td></tr>
+        <tr><td>using a name you never set</td><td><code>NameError</code></td><td>assign it before you use it</td></tr>
+        <tr><td><code>"20" + 5</code></td><td><code>TypeError</code></td><td>text and number — convert first (Topic 4)</td></tr>
+      </table>
+      <p class="muted">When something behaves oddly, <b>print the type</b>. It is almost always
+        this.</p>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_variables.py</code> — naming rules, reassignment, order of assignment</li>
+        <li><code>examples/02_types.py</code> — why the type decides what an operator <em>does</em></li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t2-s7">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>store a value</td><td><code>name = value</code></td></tr>
+        <tr><td>check a type</td><td><code>type(x)</code></td></tr>
+        <tr><td>tell text from numbers</td><td><code>"20"</code> vs <code>20</code></td></tr>
+        <tr><td>name things well</td><td><code>sensor_value</code>, not <code>v</code></td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t3-s1" style="color:var(--accent); text-decoration:none;">Topic 3 — doing arithmetic with what you stored.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Numbers and Arithmetic</h2></div>
+
+    <section class="topic" id="t3-s1">
+      <h2><span class="num">1.</span>The operators</h2>
+      <p>Python has seven arithmetic operators. Run all seven on the same two numbers to compare
+        them side by side.</p>
+      <div class="cell">
+        <pre class="code">a = 17
+b = 5
+
+<span class="fn">print</span>(<span class="str">"a + b  ="</span>, a + b)
+<span class="fn">print</span>(<span class="str">"a - b  ="</span>, a - b)
+<span class="fn">print</span>(<span class="str">"a * b  ="</span>, a * b)
+<span class="fn">print</span>(<span class="str">"a / b  ="</span>, a / b)
+<span class="fn">print</span>(<span class="str">"a // b ="</span>, a // b)
+<span class="fn">print</span>(<span class="str">"a % b  ="</span>, a % b)
+<span class="fn">print</span>(<span class="str">"a ** b ="</span>, a ** b)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">a + b&nbsp;&nbsp;= 22<br>a - b&nbsp;&nbsp;= 12<br>a * b&nbsp;&nbsp;= 85<br>a / b&nbsp;&nbsp;= 3.4<br>a // b = 3<br>a % b&nbsp;&nbsp;= 2<br>a ** b = 1419857</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Set <code>a = 23</code> and <code>b = 4</code> and predict all seven answers
+          <b>before</b> running it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice1.ipynb" title="Practice — seven operators" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s2">
+      <h2><span class="num">2.</span><code style="background:none;padding:0;">/</code> always gives a float</h2>
+      <p>Even when the division is exact, <code>/</code> always produces a <code>float</code> —
+        note the <code>.0</code>, which is not a display quirk.</p>
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(10 / 2)
+<span class="fn">print</span>(<span class="fn">type</span>(10 / 2))</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">5.0<br>&lt;class 'float'&gt;</span></div>
+      </div>
+      <p><code>//</code> throws away the fractional part; <code>%</code> gives what is left over.
+        Together they split a number into parts — more useful than it first appears.</p>
+      <div class="cell">
+        <pre class="code">total_minutes = 137
+
+hours = total_minutes // 60
+minutes = total_minutes % 60
+
+<span class="fn">print</span>(total_minutes, <span class="str">"minutes is"</span>, hours, <span class="str">"hours and"</span>, minutes, <span class="str">"minutes"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">137 minutes is 2 hours and 17 minutes</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>500 seconds is how many whole minutes, and how many seconds left over?</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice2.ipynb" title="Practice — minutes and seconds" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s3">
+      <h2><span class="num">3.</span>Order of operations</h2>
+      <p>Python follows normal maths rules: <code>**</code> first, then <code>*</code>
+        <code>/</code> <code>//</code> <code>%</code>, then <code>+</code> <code>-</code>. Among
+        operators of equal precedence, evaluation runs strictly left to right — never right to
+        left, and never by visual proximity.</p>
+
+      <figure class="anim-figure">
+        <iframe src="order_of_operations.html?embed=1" title="Order of operations animation" loading="lazy" style="height:362px;"></iframe>
+        <figcaption><b>Figure 3.1.</b> <code>value / limit * 100</code> — division runs before
+          the multiplication, purely because it is leftmost. Switch to the second tab to see
+          parentheses override that order entirely.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(2 + 3 * 4)
+<span class="fn">print</span>((2 + 3) * 4)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">14<br>20</span></div>
+      </div>
+      <p class="muted">Habit worth forming: use brackets even when you do not strictly need them.
+        They cost nothing and remove all doubt.</p>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>The next cell gives the wrong answer. The intention was <em>(10 plus 6) divided by
+          2</em>. Fix it.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice3.ipynb" title="Practice — fix the bracketing" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s4">
+      <h2><span class="num">4.</span>The calculation you will write most often</h2>
+      <p><em>What share of the whole is this?</em> — this single pattern,
+        <code>(part / total) * 100</code>, is the calculation year one leans on more than any
+        other.</p>
+      <div class="cell">
+        <pre class="code">value = 23.7
+limit = 20
+
+difference = value - limit
+percent = (value / limit) * 100
+
+<span class="fn">print</span>(<span class="str">"Difference:"</span>, difference)
+<span class="fn">print</span>(<span class="str">"Percent of limit:"</span>, percent)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Difference: 3.6999999999999993<br>Percent of limit: 118.5</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>A server has 87 GB used out of 120 GB. Calculate and print the percentage used, and
+          how many GB are free.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice4.ipynb" title="Practice — disk percentage" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s5">
+      <h2><span class="num">5.</span>Shorthand</h2>
+      <p>Changing a variable using its own current value is common enough to have earned a short
+        form.</p>
+      <div class="cell">
+        <pre class="code">count = 0
+
+count = count + 1     <span class="cm"># the long way</span>
+<span class="fn">print</span>(count)
+
+count += 1            <span class="cm"># exactly the same thing</span>
+<span class="fn">print</span>(count)
+
+count += 5
+<span class="fn">print</span>(count)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">1<br>2<br>7</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Start <code>total</code> at 100. Subtract 30, then double it, using the short forms.
+          Print the result.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice5.ipynb" title="Practice — shorthand operators" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s6">
+      <h2>Topic 3 Challenge</h2>
+      <div class="callout">
+        <p>A batch of 250 records was checked. 38 of them failed.</p>
+        <p>Calculate and print, each on its own line:</p>
+        <ul class="tight">
+          <li>how many passed</li>
+          <li>the percentage that failed</li>
+          <li>the percentage that passed</li>
+        </ul>
+        <p>Use well-named variables. Do not type any answer you could calculate.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_challenge.ipynb" title="Practice — Topic 3 challenge" style="height:443px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>Almost every calculation you write in year one is <em>"what share of the whole is
+        this?"</em> — all three below reduce to <code>(part / total) * 100</code>.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Question</th></tr>
+        <tr><td>AI / Data Science</td><td>what percentage of rows are missing a value</td></tr>
+        <tr><td>Cyber Security</td><td>what percentage of login attempts failed</td></tr>
+        <tr><td>IT</td><td>what percentage of disk space is used</td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t3-s7">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What happens</th><th>Fix</th></tr>
+        <tr><td><code>2 + 3 * 4</code> when you meant <code>(2 + 3) * 4</code></td><td>wrong answer, <b>no error</b></td><td>use brackets</td></tr>
+        <tr><td>dividing by zero</td><td><code>ZeroDivisionError</code> — program stops</td><td>check the total is not 0</td></tr>
+        <tr><td>expecting <code>10 / 2</code> to be <code>5</code></td><td>it is <code>5.0</code></td><td><code>/</code> always gives a float</td></tr>
+        <tr><td><code>3.6999999999999993</code></td><td>not a bug</td><td>format it: <code>f"{x:.2f}"</code></td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_operators.py</code> — all seven operators, <code>//</code> and <code>%</code>, precedence</li>
+        <li><code>examples/02_calculations.py</code> — the percentage pattern in all three fields</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t3-s8">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>do arithmetic</td><td><code>+ - * / // % **</code></td></tr>
+        <tr><td>split a number into parts</td><td><code>//</code> and <code>%</code></td></tr>
+        <tr><td>control the order</td><td>brackets</td></tr>
+        <tr><td>find a percentage</td><td><code>(part / total) * 100</code></td></tr>
+        <tr><td>update a variable</td><td><code>+=</code></td></tr>
+      </table>
+      <p class="muted">Next: <a href="#t4-s1" style="color:var(--accent); text-decoration:none;">Topic 4 — getting values from the user and reporting back.</a></p>
+    </section>
+
+    <div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Input, Casting and f-strings</h2></div>
+
+    <section class="topic" id="t4-s1">
+      <h2><span class="num">1.</span>Asking for input</h2>
+      <p><code>input()</code> pauses the program and shows whatever is in its brackets as a
+        prompt. Whatever the person types back becomes the value of the expression.</p>
+      <div class="cell">
+        <pre class="code">record_id = <span class="fn">input</span>(<span class="str">"Record ID : "</span>)
+<span class="fn">print</span>(<span class="str">"You entered:"</span>, record_id)</pre>
+        <div class="output"><span class="out-label">Interactive</span><span class="val">prompts for text at the keyboard — try it in the live notebook below.</span></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s2">
+      <h2><span class="num">2.</span>The one rule that catches everyone</h2>
+      <p><b><code>input()</code> always gives you text. Always. Even when the person types a
+        number.</b></p>
+      <div class="cell">
+        <pre class="code">value = <span class="fn">input</span>(<span class="str">"Value : "</span>)
+
+<span class="fn">print</span>(<span class="str">"You typed:"</span>, value)
+<span class="fn">print</span>(<span class="str">"Its type is:"</span>, <span class="fn">type</span>(value))</pre>
+        <div class="output"><span class="out-label">If you type</span><span class="val">23.7</span></div>
+        <div class="output"><span class="out-label">Output</span><span class="val">You typed: 23.7<br>Its type is: &lt;class 'str'&gt;</span></div>
+      </div>
+      <p>So <code>value + 1</code> would fail with a <code>TypeError</code> — Python received the
+        <em>characters</em> <code>2</code>, <code>3</code>, <code>.</code>, <code>7</code>, not a
+        number.</p>
+    </section>
+
+    <section class="topic" id="t4-s3">
+      <h2><span class="num">3.</span>Casting — converting a type</h2>
+      <table class="booktabs">
+        <tr><th>Function</th><th>Turns something into</th></tr>
+        <tr><td><code>int()</code></td><td>whole number</td></tr>
+        <tr><td><code>float()</code></td><td>decimal number</td></tr>
+        <tr><td><code>str()</code></td><td>text</td></tr>
+      </table>
+
+      <figure class="anim-figure">
+        <iframe src="casting_and_fstrings.html?embed=1" title="Casting and f-strings animation" loading="lazy" style="height:384px;"></iframe>
+        <figcaption><b>Figure 3.1.</b> A string cannot be added to a number until it is cast.
+          Switch to the second tab afterwards to see the f-strings half of this page in
+          action.</figcaption>
+      </figure>
+
+      <div class="cell">
+        <pre class="code">text = <span class="str">"20"</span>
+<span class="fn">print</span>(text, <span class="fn">type</span>(text))
+
+as_number = <span class="fn">int</span>(text)
+<span class="fn">print</span>(as_number, <span class="fn">type</span>(as_number))</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">20 &lt;class 'str'&gt;<br>20 &lt;class 'int'&gt;</span></div>
+      </div>
+      <p>Usually done on the same line as the input. Read it inside out: ask → get text →
+        convert → store.</p>
+      <div class="cell">
+        <pre class="code">value = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Value : "</span>))
+
+<span class="fn">print</span>(value + 1)
+<span class="fn">print</span>(<span class="fn">type</span>(value))</pre>
+        <div class="output"><span class="out-label">Interactive</span><span class="val">try it in the live notebook below.</span></div>
+      </div>
+      <p class="muted">Use <code>float()</code> unless certain the number is whole —
+        <code>int("23.7")</code> fails with a <code>ValueError</code>.</p>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Ask for a number of GB used and a total GB, convert both, and print how many GB are
+          free.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_practice1.ipynb" title="Practice — GB free" style="height:312px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s4">
+      <h2><span class="num">4.</span>f-strings</h2>
+      <p>Put <code>f</code> before the quotes, then any variable inside <code>{ }</code>.</p>
+      <div class="cell">
+        <pre class="code">record_id = <span class="str">"R-004"</span>
+value = 23.7
+
+<span class="fn">print</span>(f<span class="str">"Record {record_id} has value {value}"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Record R-004 has value 23.7</span></div>
+      </div>
+      <p>Calculations can happen inside the braces too.</p>
+      <div class="cell">
+        <pre class="code">limit = 20
+<span class="fn">print</span>(f<span class="str">"Over the limit by {value - limit}"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Over the limit by 3.6999999999999993</span></div>
+      </div>
+      <p class="muted">Forgetting the <code>f</code> is the most common slip — it prints the
+        braces themselves, literally:</p>
+      <div class="cell">
+        <pre class="code"><span class="fn">print</span>(<span class="str">"Record {record_id}"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">Record {record_id}</span></div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Using an f-string, print <code>srv-01 is 87% full</code> from two variables.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_practice2.ipynb" title="Practice — f-string" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s5">
+      <h2><span class="num">5.</span>Formatting — making it look like a report</h2>
+      <table class="booktabs">
+        <tr><th>Written</th><th>Shows</th><th>Means</th></tr>
+        <tr><td><code>{value}</code></td><td><code>23.7</code></td><td>as is</td></tr>
+        <tr><td><code>{value:.2f}</code></td><td><code>23.70</code></td><td>2 decimal places</td></tr>
+        <tr><td><code>{value:&gt;10}</code></td><td><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;23.7</code></td><td>right-aligned in 10 spaces</td></tr>
+        <tr><td><code>{value:&gt;10.2f}</code></td><td><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;23.70</code></td><td>both</td></tr>
+        <tr><td><code>{diff:+.1f}</code></td><td><code>+3.7</code></td><td>always show the sign</td></tr>
+      </table>
+
+      <div class="cell">
+        <pre class="code">percent = (value / limit) * 100
+
+<span class="fn">print</span>(f<span class="str">"{percent}"</span>)
+<span class="fn">print</span>(f<span class="str">"{percent:.2f}"</span>)
+<span class="fn">print</span>(f<span class="str">"{percent:>12.2f}"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span>
+          <pre class="out-block">118.5
+118.50
+      118.50</pre>
+        </div>
+      </div>
+
+      <p>Right-alignment is what makes a report line up instead of looking like a mess. Compare
+        these two.</p>
+      <div class="cell">
+        <pre class="code">difference = value - limit
+
+<span class="fn">print</span>(<span class="str">"--- without alignment ---"</span>)
+<span class="fn">print</span>(f<span class="str">"Value : {value}"</span>)
+<span class="fn">print</span>(f<span class="str">"Limit : {limit}"</span>)
+<span class="fn">print</span>(f<span class="str">"Diff  : {difference}"</span>)
+
+<span class="fn">print</span>()
+<span class="fn">print</span>(<span class="str">"--- with alignment ---"</span>)
+<span class="fn">print</span>(f<span class="str">"Value : {value:>10.2f}"</span>)
+<span class="fn">print</span>(f<span class="str">"Limit : {limit:>10.2f}"</span>)
+<span class="fn">print</span>(f<span class="str">"Diff  : {difference:>+10.2f}"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span>
+          <pre class="out-block">--- without alignment ---
+Value : 23.7
+Limit : 20
+Diff  : 3.6999999999999993
+
+--- with alignment ---
+Value :      23.70
+Limit :      20.00
+Diff  :      +3.70</pre>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Print <code>7 / 3</code> to exactly <b>three</b> decimal places.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_practice3.ipynb" title="Practice — three decimal places" style="height:289px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s6">
+      <h2>Topic 4 Challenge</h2>
+      <div class="callout">
+        <p>Ask the user for a hostname, GB used and GB total. Then print exactly this shape,
+          aligned:</p>
+        <pre class="code" style="margin-top:8px; border:1px solid var(--rule); white-space:pre;">==============================
+  DISK REPORT  -  srv-01
+==============================
+  Used        :      87.00 GB
+  Total       :     120.00 GB
+  Free        :      33.00 GB
+  Percent used:      72.5 %
+==============================</pre>
+        <p style="margin-top:8px;">This is a rehearsal for the mini-project. Get it working now
+          and the lab is straightforward.</p>
+      </div>
+      <div class="practice-embed">
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_challenge.ipynb" title="Practice — Topic 4 challenge" style="height:500px;"></iframe></div>
+      </div>
+
+      <h3>Same idea, three fields</h3>
+      <p>Ask for something, convert it, report it back cleanly — the same three-step shape every
+        time.</p>
+      <table class="booktabs">
+        <tr><th>Field</th><th>Looks like</th></tr>
+        <tr><td>AI / Data Science</td><td><code>f"Mean: {mean:.2f} over {n} rows"</code></td></tr>
+        <tr><td>Cyber Security</td><td><code>f"[{level}] {failed} failed logins from {ip}"</code></td></tr>
+        <tr><td>IT</td><td><code>f"{hostname:&lt;12} disk {used:&gt;3} %"</code></td></tr>
+      </table>
+      <div class="practice-embed" style="max-width:900px;">
+        <div class="practice-label">Worked example — all three lanes</div>
+        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_three_fields.ipynb" title="Worked examples — three lanes" style="height:711px;"></iframe></div>
+      </div>
+    </section>
+
+    <section class="topic" id="t4-s7">
+      <h2>Common mistakes</h2>
+      <table class="booktabs">
+        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+        <tr><td><code>input("n: ") + 1</code></td><td><code>TypeError</code></td><td><code>float(input("n: ")) + 1</code></td></tr>
+        <tr><td><code>int(input())</code> when they type <code>23.7</code></td><td><code>ValueError</code></td><td>use <code>float()</code></td></tr>
+        <tr><td><code>print("Value {v}")</code></td><td>prints the braces</td><td>you forgot the <code>f</code></td></tr>
+        <tr><td><code>f"{value:.2}"</code></td><td>odd result</td><td>you meant <code>.2f</code></td></tr>
+      </table>
+
+      <h3>Go deeper</h3>
+      <ul class="tight">
+        <li><code>examples/01_input_and_casting.py</code> — when to use <code>int()</code>, <code>float()</code>, or neither</li>
+        <li><code>examples/02_fstrings.py</code> — decimal places, alignment, a finished report</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="t4-s8">
+      <h2>Recap</h2>
+      <table class="booktabs">
+        <tr><th>You can now</th><th>Using</th></tr>
+        <tr><td>ask for a value</td><td><code>input("...")</code></td></tr>
+        <tr><td>convert it</td><td><code>int()</code>, <code>float()</code>, <code>str()</code></td></tr>
+        <tr><td>put values in text</td><td><code>f"...{x}..."</code></td></tr>
+        <tr><td>set decimal places</td><td><code>{x:.2f}</code></td></tr>
+        <tr><td>line a report up</td><td><code>{x:&gt;10.2f}</code></td></tr>
+      </table>
+      <p class="muted">You now have both boxes for Week 1. Go and build your own in the lab.</p>
+    </section>
+
+    <footer class="page-foot">CST1510 · Week 01 · Values, Types and Input-Output</footer>
+  </article>
+</div>
+
+<script>
+  var links = Array.from(document.querySelectorAll('nav.toc a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var groups = Array.from(document.querySelectorAll('nav.toc .toc-group'));
+  function onScroll() {
+    var y = window.scrollY + 80;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s && s.offsetTop <= y) current = s; });
+    links.forEach(function (a) { a.classList.remove('current'); });
+    var idx = sections.indexOf(current);
+    if (idx >= 0) links[idx].classList.add('current');
+
+    var activePrefix = current && current.id ? current.id.split('-')[0] : null;
+    groups.forEach(function (g) {
+      g.classList.toggle('open', g.getAttribute('data-group') === activePrefix);
+    });
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Notebook iframes share one JupyterLite IndexedDB-backed contents store.
+  // Booting several at once races on that shared connection ("Cannot read
+  // properties of null (reading/setting 'db')"), so load them strictly one
+  // at a time, and confirm each one actually rendered (same-origin poll of
+  // its own DOM) before starting the next, rather than trusting the
+  // iframe's load event alone (it fires before JupyterLite's own async
+  // IndexedDB-backed init has necessarily finished).
+  (function () {
+    var queue = [];
+    var loading = false;
+    function pollReady(iframe, deadline, cb) {
+      var doc;
+      try { doc = iframe.contentDocument; } catch (e) { doc = null; }
+      var ready = doc && (doc.querySelector('.jp-Cell') || doc.querySelector('.jp-mod-error') || doc.querySelector('.jp-Dialog'));
+      if (ready || Date.now() > deadline) { cb(); return; }
+      setTimeout(function () { pollReady(iframe, deadline, cb); }, 200);
+    }
+    function next() {
+      if (loading || queue.length === 0) return;
+      loading = true;
+      var iframe = queue.shift();
+      iframe.src = iframe.getAttribute('data-src');
+      iframe.addEventListener('load', function onLoad() {
+        iframe.removeEventListener('load', onLoad);
+        pollReady(iframe, Date.now() + 9000, function () {
+          setTimeout(function () { loading = false; next(); }, 900);
+        });
+      });
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var iframe = entry.target;
+          observer.unobserve(iframe);
+          queue.push(iframe);
+          next();
+        }
+      });
+    }, { rootMargin: '250px 0px' });
+    document.querySelectorAll('iframe.lazy-frame').forEach(function (f) { observer.observe(f); });
+  })();
+
+</script>
+</body>
+</html>

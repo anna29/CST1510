@@ -1,0 +1,43 @@
+{
+  "content": [
+    {
+      "content": null,
+      "created": "2026-09-09T09:28:03.055587Z",
+      "format": null,
+      "hash": null,
+      "hash_algorithm": null,
+      "last_modified": "2026-09-09T09:28:03.055587Z",
+      "mimetype": "text/x-python",
+      "name": "01_defining_methods.py",
+      "path": "examples/01_defining_methods.py",
+      "size": 2288,
+      "type": "file",
+      "writable": true
+    },
+    {
+      "content": null,
+      "created": "2026-09-09T09:28:03.057212Z",
+      "format": null,
+      "hash": null,
+      "hash_algorithm": null,
+      "last_modified": "2026-09-09T09:28:03.057212Z",
+      "mimetype": "text/x-python",
+      "name": "02_methods_that_change_state.py",
+      "path": "examples/02_methods_that_change_state.py",
+      "size": 2394,
+      "type": "file",
+      "writable": true
+    }
+  ],
+  "created": "2026-09-09T09:28:22.665630Z",
+  "format": "json",
+  "hash": null,
+  "hash_algorithm": null,
+  "last_modified": "2026-09-09T09:28:22.685706Z",
+  "mimetype": null,
+  "name": "examples",
+  "path": "examples",
+  "size": null,
+  "type": "directory",
+  "writable": true
+}
