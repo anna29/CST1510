@@ -54,6 +54,10 @@
   .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
   .topic-intro { margin-bottom: 10px; }
   .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  p.topic-docs { margin: 10px 0 18px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
   h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
   h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
@@ -139,7 +143,7 @@
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
 </blockquote>
-</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A class defines the shape, <code>__init__</code> fills it in</h2><div class="cell"><pre class="code"><code>class Record:
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://docs.python.org/3/reference/datamodel.html">Data model</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A class defines the shape, <code>__init__</code> fills it in</h2><div class="cell"><pre class="code"><code>class Record:
     def __init__(self, label, value, limit):
         self.label = label
         self.value = value
@@ -276,7 +280,7 @@ to it.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>A method is a function that lives inside a class</h2><p><code>self</code> gives it access to that object's own attributes — no need to pass them in
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://docs.python.org/3/reference/datamodel.html">Data model</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>A method is a function that lives inside a class</h2><p><code>self</code> gives it access to that object's own attributes — no need to pass them in
 again.</p>
 <div class="cell"><pre class="code"><code>class Record:
     def __init__(self, label, value, limit):
@@ -438,7 +442,7 @@ item can also <em>do</em> something.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>A list of objects</h2><div class="cell"><pre class="code"><code>class Record:
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">Lists</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>A list of objects</h2><div class="cell"><pre class="code"><code>class Record:
     def __init__(self, label, value, limit):
         self.label = label
         self.value = value

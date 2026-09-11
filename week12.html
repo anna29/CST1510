@@ -54,6 +54,10 @@
   .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
   .topic-intro { margin-bottom: 10px; }
   .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  p.topic-docs { margin: 10px 0 18px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
   h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
   h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
@@ -150,7 +154,7 @@ around — and the pattern that makes a feature genuinely optional.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
 </blockquote>
-</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Loading the key — the same habit as Week 9</h2><div class="cell"><pre class="code"><code>import os
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a> · <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Loading the key — the same habit as Week 9</h2><div class="cell"><pre class="code"><code>import os
 
 api_key = os.environ.get("OPENAI_API_KEY")
 print("set" if api_key else "not set")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Check whether <code>OPENAI_API_KEY</code> is set in your own terminal, without printing the value itself.</p>
@@ -268,7 +272,7 @@ current either way, and every cell here can be read and understood without one.<
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>The client, and one call</h2><p><code>messages</code> is a list of <code>{&quot;role&quot;: ..., &quot;content&quot;: ...}</code> dicts. <code>&quot;system&quot;</code>
+<p class="topic-docs"><b>Official docs:</b> <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a> · <a href="https://platform.openai.com/docs/api-reference/responses">Responses API</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>The client, and one call</h2><p><code>messages</code> is a list of <code>{&quot;role&quot;: ..., &quot;content&quot;: ...}</code> dicts. <code>&quot;system&quot;</code>
 sets the assistant's behaviour, <code>&quot;user&quot;</code> is the actual question.</p>
 <div class="cell"><pre class="code"><code># from openai import OpenAI
 # client = OpenAI(api_key=api_key)
@@ -366,7 +370,7 @@ for real.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_the_chat_completions_api.py</code> — the client, messages, roles, the reply's shape
 <code>examples/02_conversation_history.py</code> — why and how history is resent every call
-Docs: <a href="%7BOPENAI_DOCS%7D">OpenAI Chat Completions API</a></p>
+Docs: <a href="https://platform.openai.com/docs/quickstart">OpenAI Chat Completions API</a></p>
 </section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
@@ -400,7 +404,7 @@ that touch a network can be tested too — without actually touching it.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>A pytest test is a function starting with <code>test_</code></h2><p><code>assert</code> checks something is true — if not, the test fails and tells you
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.pytest.org/en/stable/getting-started.html">pytest getting started</a> · <a href="https://docs.python.org/3/library/unittest.mock.html">unittest.mock</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>A pytest test is a function starting with <code>test_</code></h2><p><code>assert</code> checks something is true — if not, the test fails and tells you
 exactly what happened.</p>
 <div class="cell"><pre class="code"><code>def status_of(open_issues, warning_at=50, limit=100):
     if open_issues &gt;= limit:
@@ -504,7 +508,7 @@ project (Week 7/8), including at least one edge case.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_pytest_basics.py</code> — test functions, edges, a tiny runner without pytest
 <code>examples/02_testing_without_the_real_network.py</code> — mocking an external call properly
-Docs: <a href="%7BPYTEST_DOCS%7D">pytest documentation</a></p>
+Docs: <a href="https://docs.pytest.org/en/stable/getting-started.html">pytest documentation</a></p>
 </section><section class="topic" id="t3-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
@@ -538,7 +542,7 @@ working app someone else can open.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t4-s1"><h2><span class="num">1.</span><code>requirements.txt</code> — what the cloud needs to install</h2><p>Without this, the deployed app fails to even start.</p>
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app">Deploy your app</a> · <a href="https://pip.pypa.io/en/stable/reference/requirements-file-format/">Requirements file format</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span><code>requirements.txt</code> — what the cloud needs to install</h2><p>Without this, the deployed app fails to even start.</p>
 <div class="cell"><pre class="code"><code>REQUIREMENTS = ["streamlit", "pandas", "requests", "bcrypt", "openai"]
 for lib in REQUIREMENTS:
     print(lib)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write <code>requirements.txt</code> for your own project, listing every library you actually import.</p>

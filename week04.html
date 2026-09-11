@@ -54,6 +54,10 @@
   p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
   p.muted { color: var(--ink-soft); }
   p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  p.topic-docs { margin: 10px 0 22px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
   .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
   .callout p { margin: 0; font-size: .98rem; }
@@ -82,10 +86,6 @@
   td code { white-space: nowrap; }
   ul.tight { margin: 8px 0 16px; padding-left: 20px; }
   ul.tight li { line-height: 1.6; margin-bottom: 4px; }
-  .practice-embed { max-width: 74ch; margin: 10px 0 8px; }
-  .practice-embed .practice-label { font-variant: small-caps; font-size: 13.5px; font-style: italic; color: var(--ink-soft); margin-bottom: 6px; }
-  .practice-embed .frame { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; }
-  .practice-embed iframe { display: block; width: 100%; border: none; background: var(--paper); }
   footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
   @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
 </style>
@@ -99,12 +99,14 @@
     <a href="#t1-s1" class="toc-sub">1. Creating a list, and indexing</a>
     <a href="#t1-s2" class="toc-sub">2. Negative indexing</a>
     <a href="#t1-s3" class="toc-sub">3. Slicing</a>
-    <a href="#t1-s4" class="toc-sub">4. Mutating and looping</a>
-    <a href="#t1-s5" class="toc-sub">5. Tuples — locked lists</a>
-    <a href="#t1-s6" class="toc-sub">6. Strings slice the same way</a>
-    <a href="#t1-s7" class="toc-sub">Challenge</a>
-    <a href="#t1-s8" class="toc-sub">Common mistakes</a>
-    <a href="#t1-s9" class="toc-sub">Recap</a>
+    <a href="#t1-s4" class="toc-sub">4. Changing, adding and removing</a>
+    <a href="#t1-s5" class="toc-sub">5. Membership — in and not in</a>
+    <a href="#t1-s6" class="toc-sub">6. Aliasing — two names, one list</a>
+    <a href="#t1-s7" class="toc-sub">7. Tuples — locked lists</a>
+    <a href="#t1-s8" class="toc-sub">8. Strings slice the same way</a>
+    <a href="#t1-s9" class="toc-sub">Challenge</a>
+    <a href="#t1-s10" class="toc-sub">Common mistakes</a>
+    <a href="#t1-s11" class="toc-sub">Recap</a>
         </div>
     <a href="#t2-top" class="toc-topic">Topic 2 — Dictionaries</a>
     <div class="toc-group" data-group="t2">
@@ -147,16 +149,30 @@
         values by name instead of position in a <code>dict</code>, keep storage that outlives the
         program in a <code>file</code>, and combine all three into the shape almost every real
         dataset already comes in.</p>
-      <p class="box-note">Box we build this week: <b>STORE</b>. Each <em>Practice</em> is followed by a
-        small live notebook — real Python, running in the browser, no install.</p>
+      <p class="box-note">Box we build this week: <b>STORE</b>. Each <em>Practice</em> below sets a short
+        task — work it through in your own notebook.</p>
     </header>
 
+    <figure class="anim-figure" style="margin: 26px 0 0;">
+      <iframe src="architecture_map.html?embed=1&amp;week=4" title="System architecture — Week 4" loading="lazy" style="height:340px;"></iframe>
+      <figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>STORE</b>.</figcaption>
+    </figure>
+
     <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Lists</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/introduction.html#lists">Lists</a> · <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">More on lists</a></p>
 
     <section class="topic" id="t1-s1">
       <h2><span class="num">1.</span>Creating a list, and indexing</h2>
-      <p>One variable holds one value. A list holds many, <b>in order</b>. Indexing counts from
-        <code>0</code> — the same rule as <code>range()</code>.</p>
+      <p>Every value you have stored so far has gone into one variable holding one value. A
+        <b>list</b> holds many values in a single variable, <b>in order</b>. Formally, a list is
+        Python's built-in <b>sequence type</b>: an <b>ordered</b>, <b>mutable</b> collection of
+        items, written between square brackets and separated by commas. It is also a
+        <b>compound data type</b> — a type whose whole purpose is to hold other values (including
+        other lists), as opposed to a <b>scalar type</b> like <code>int</code> or <code>float</code>,
+        which holds exactly one value.</p>
+      <p>"Ordered" has a precise meaning here: it is not that the items are sorted, but that each
+        one has a fixed <b>position</b>, counted from <code>0</code> — the same rule
+        <code>range()</code> already taught you. That position is what indexing reads.</p>
 
       <figure class="anim-figure">
         <iframe src="list_slicing.html?embed=1" title="Indices and slices animation" loading="lazy" style="height:620px;"></iframe>
@@ -167,32 +183,38 @@
 
       <div class="cell">
         <pre class="code">labels = [<span class="str">"R-001"</span>, <span class="str">"R-002"</span>, <span class="str">"R-003"</span>]
+<span class="fn">print</span>(<span class="fn">type</span>(labels))   <span class="cm"># &lt;class 'list'&gt;</span>
 
 <span class="fn">print</span>(labels[0])
 <span class="fn">print</span>(labels[1])
 <span class="fn">print</span>(labels[2])</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">R-001<br>R-002<br>R-003</span></div>
+        <div class="output"><span class="out-label">Output</span><span class="val">&lt;class 'list'&gt;<br>R-001<br>R-002<br>R-003</span></div>
       </div>
 
       <div class="diagram"><pre>index:     0        1        2
 labels:  ["R-001", "R-002", "R-003"]
             ▲                  ▲
         labels[0]          labels[-1]</pre></div>
+      <p class="muted">Indexing past the end is not silently ignored: <code>labels[3]</code> raises
+        <code>IndexError</code> immediately — the last valid index is always
+        <code>len(labels) - 1</code>. A list may also hold a mix of types
+        (<code>["R-001", 87.0, True]</code> is legal), but in practice you keep one list's items
+        the same type — the code that later loops over it stays predictable that way.</p>
 
       <div class="callout">
         <span class="callout-label">Practice</span>
         <p>Create a list called <code>tools</code> with 4 values of your choice. Print the first and
           the last using indexing.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice1.ipynb" title="Practice — create and index a list" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s2">
       <h2><span class="num">2.</span>Negative indexing</h2>
       <p>Counts from the end. <code>labels[-1]</code> is the last item, whatever the length turns
-        out to be — no need to know how many items there are.</p>
+        out to be — no need to know how many items there are. For a list of length <code>n</code>,
+        valid indices run from <code>0</code> to <code>n - 1</code> counting forward, and from
+        <code>-1</code> to <code>-n</code> counting backward — <code>labels[0]</code> and
+        <code>labels[-n]</code> always name the same item.</p>
 
       <div class="cell">
         <pre class="code"><span class="fn">print</span>(labels[-1])   <span class="cm"># R-003</span>
@@ -205,9 +227,6 @@ labels:  ["R-001", "R-002", "R-003"]
         <span class="callout-label">Practice</span>
         <p>Predict, then check: create a list called <code>queue</code> with exactly one item,
           <code>"job-1"</code>. What does <code>queue[-1]</code> give you?</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice2.ipynb" title="Practice — negative indexing on a single item" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -228,42 +247,132 @@ labels:  ["R-001", "R-002", "R-003"]
         <span class="callout-label">Practice</span>
         <p>Given <code>readings = [5, 10, 15, 20, 25]</code>, slice out just the middle three.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice3.ipynb" title="Practice — slice the middle three" style="height:312px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s4">
-      <h2><span class="num">4.</span>Mutating and looping</h2>
-      <p>Lists can be changed in place — strings cannot. <code>for</code> loops directly over the
-        values, no counting needed.</p>
+      <h2><span class="num">4.</span>Changing, adding and removing</h2>
+      <p>Because a list is <b>mutable</b>, all three of these change the same list object in
+        place — no new list is created, and no reassignment is needed.</p>
+      <p><b>Changing</b> an item uses the same index syntax as reading one, on the left of
+        <code>=</code>. <b>Adding</b> one item to the end uses <code>.append()</code>.
+        <b>Removing</b> uses <code>.remove(value)</code>, which deletes the first match <em>by
+        value</em> and raises <code>ValueError</code> if that value is not present.</p>
 
       <div class="cell">
-        <pre class="code">values[0] = 99
-values.append(60)
-values.remove(20)
+        <pre class="code">values[0] = 99          <span class="cm"># change, by index</span>
+values.append(60)      <span class="cm"># add, to the end</span>
+values.remove(20)      <span class="cm"># remove, by value - first match only</span>
 <span class="fn">print</span>(values)
 
-<span class="kw">for</span> v <span class="kw">in</span> values:
+<span class="kw">for</span> v <span class="kw">in</span> values:   <span class="cm"># for loops directly over the values, no counting needed</span>
     <span class="fn">print</span>(v)</pre>
         <div class="output"><span class="out-label">Output</span><span class="val">[99, 30, 40, 50, 60]<br>99<br>30<br>40<br>50<br>60</span></div>
       </div>
+      <p class="muted">Python also has <code>.pop()</code>, which removes <em>by position</em>
+        instead of by value: <code>values.pop(0)</code> removes and <b>returns</b> the first item,
+        and plain <code>values.pop()</code> removes the last one. Reach for <code>.remove()</code>
+        when you know the value; reach for <code>.pop()</code> when you know the position and want
+        it back.</p>
 
       <div class="callout">
         <span class="callout-label">Practice</span>
         <p>Given <code>hosts = ["srv-01", "srv-02", "srv-03"]</code>: append <code>"srv-04"</code>,
           remove <code>"srv-02"</code>, then loop over what is left and print each value.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice4.ipynb" title="Practice — append, remove and loop" style="height:312px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s5">
-      <h2><span class="num">5.</span>Tuples — like a list, but locked</h2>
+      <h2><span class="num">5.</span>Membership — <code>in</code> and <code>not in</code></h2>
+      <p>Before searching a list by hand with a loop, check whether Python already has an
+        operator for the job — for a yes/no question like "is this value present", it does.
+        <code>in</code> and <code>not in</code> are <b>membership operators</b>: they test whether a
+        value occurs in a sequence and return a <code>bool</code>, without you writing the search
+        yourself.</p>
+
+      <table class="booktabs">
+        <tr><th>Operator</th><th>Returns</th></tr>
+        <tr><td><code>value in sequence</code></td><td><code>True</code> if <code>value</code> is found</td></tr>
+        <tr><td><code>value not in sequence</code></td><td><code>True</code> if <code>value</code> is <b>not</b> found</td></tr>
+      </table>
+
+      <div class="cell">
+        <pre class="code">due_tonight = [<span class="str">"srv-01"</span>, <span class="str">"srv-02"</span>, <span class="str">"srv-03"</span>]
+
+<span class="fn">print</span>(<span class="str">"srv-02"</span> <span class="kw">in</span> due_tonight)        <span class="cm"># True</span>
+<span class="fn">print</span>(<span class="str">"srv-09"</span> <span class="kw">not in</span> due_tonight)    <span class="cm"># True</span>
+
+<span class="kw">if</span> <span class="str">"srv-09"</span> <span class="kw">in</span> due_tonight:
+    <span class="fn">print</span>(<span class="str">"already scheduled"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"srv-09 not scheduled yet"</span>)</pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">True<br>True<br>srv-09 not scheduled yet</span></div>
+      </div>
+      <p class="muted">This is also the safe way to guard <code>.remove()</code>: check
+        <code>if value in a_list:</code> before removing it, and the <code>ValueError</code> from
+        section 4 never happens.</p>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Given <code>hosts = ["srv-01", "srv-02", "srv-03"]</code>, use <code>in</code> to check
+          whether <code>"srv-02"</code> is present, and <code>not in</code> to check whether
+          <code>"srv-09"</code> is absent. Print both results.</p>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s6">
+      <h2><span class="num">6.</span>Aliasing — two names, one list</h2>
+      <p>A list variable does not hold the list itself — it holds a <b>reference</b> to it,
+        wherever in memory it actually lives. Assigning one list variable to another
+        (<code>backup = hosts</code>) copies the <em>reference</em>, not the data: both names now
+        point at the exact same list object. This is called <b>aliasing</b>, and because lists are
+        mutable, it has a real consequence — a change made through either name is visible through
+        both.</p>
+
+      <div class="cell">
+        <pre class="code">hosts = [<span class="str">"srv-01"</span>, <span class="str">"srv-02"</span>]
+backup = hosts          <span class="cm"># backup is another name for the SAME list</span>
+
+backup.append(<span class="str">"srv-03"</span>)
+<span class="fn">print</span>(hosts)              <span class="cm"># ['srv-01', 'srv-02', 'srv-03'] - changed too!</span>
+<span class="fn">print</span>(hosts <span class="kw">is</span> backup)     <span class="cm"># True - literally the same object</span></pre>
+        <div class="output"><span class="out-label">Output</span><span class="val">['srv-01', 'srv-02', 'srv-03']<br>True</span></div>
+      </div>
+
+      <div class="diagram"><pre>hosts  ──┐
+         ├──▶  ["srv-01", "srv-02", "srv-03"]   &lt;- one list object
+backup ──┘
+
+hosts = ["srv-01", "srv-02"]      <- reassigning hosts instead
+backup = hosts                    <-   makes a NEW list; backup still
+hosts = ["srv-09"]                <-   points at the old one - the link
+                                        breaks the moment you reassign,
+                                        not when you mutate</pre></div>
+      <p class="muted">Contrast this with <code>hosts = ["srv-09"]</code> (reassignment, not
+        mutation): that makes <code>hosts</code> point at a brand-new list, leaving
+        <code>backup</code> pointing at the old one — the alias only matters while both names keep
+        pointing at the same object. This is also exactly why a tuple or a string being
+        <b>immutable</b> is a genuine safety feature, not just a restriction: aliasing two names
+        to the same tuple can never surprise you, because neither name can change what it points
+        to. Topic 2 leans on this same idea from the other direction — it is precisely because
+        tuples and strings cannot change that Python is willing to use them as dictionary keys.</p>
+      <p class="muted">If you need an independent copy rather than another name for the same list,
+        use <code>backup = hosts.copy()</code> (or <code>hosts[:]</code>) instead of plain
+        <code>=</code>.</p>
+
+      <div class="callout">
+        <span class="callout-label">Practice</span>
+        <p>Predict, then check: given <code>a = [1, 2, 3]</code> and <code>b = a</code>, what does
+          <code>a</code> print after running <code>b.append(4)</code>? Then try it again using
+          <code>b = a.copy()</code> instead, and compare.</p>
+      </div>
+    </section>
+
+    <section class="topic" id="t1-s7">
+      <h2><span class="num">7.</span>Tuples — like a list, but locked</h2>
       <p>Same idea, <code>()</code> instead of <code>[]</code>. Indexing and slicing work exactly the
-        same way — but a tuple cannot be changed after it is created. No <code>.append()</code>, no
-        changing an item.</p>
+        same way — but a tuple is <b>immutable</b>: it cannot be changed after it is created. No
+        <code>.append()</code>, no changing an item, and — as section 6 just showed — no risk of an
+        alias surprising you either.</p>
       <p class="muted">You have already used one. Week 3's <code>return difference, percent, status</code>
         sent back a tuple — three values as one — and <code>difference, percent, status =
         check_record(...)</code> unpacked it into three names.</p>
@@ -281,13 +390,10 @@ values.remove(20)
         <p>Create a tuple <code>(label, value, limit)</code> for one record of your own. Try to
           change one item and read the error.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice5.ipynb" title="Practice — create a tuple and read the TypeError" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
-    <section class="topic" id="t1-s6">
-      <h2><span class="num">6.</span>Strings slice the same way too</h2>
+    <section class="topic" id="t1-s8">
+      <h2><span class="num">8.</span>Strings slice the same way too</h2>
       <p>You have been indexing and slicing without knowing it since Week 1. A string follows the
         exact same rules as a list — and like a tuple, it is locked.</p>
 
@@ -310,19 +416,14 @@ values.remove(20)
         <p>Given <code>hostname = "srv-01"</code>, print the first 3 characters and the last 2,
           using slicing.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_practice6.ipynb" title="Practice — slice a string" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
-    <section class="topic" id="t1-s7">
+    <section class="topic" id="t1-s9">
       <h2>Topic 1 Challenge</h2>
       <div class="callout">
         <p>Given <code>readings = [87, 120, 45, 93, 101]</code> and a fixed <code>limit = 100</code>,
-          loop over the list and print <code>OVER LIMIT</code> or <code>OK</code> for each value.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_challenge.ipynb" title="Practice — Topic 1 challenge" style="height:312px;"></iframe></div>
+          loop over the list and print <code>OVER LIMIT</code> or <code>OK</code> for each value.
+          Then, using <code>in</code>, print whether <code>101</code> is one of the readings.</p>
       </div>
 
       <h3>Same idea, three fields</h3>
@@ -333,13 +434,9 @@ values.remove(20)
         <tr><td>Cyber Security</td><td>a list of failed-login IPs from one hour</td></tr>
         <tr><td>IT</td><td>a list of hostnames due for a check tonight</td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T01_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
-      </div>
     </section>
 
-    <section class="topic" id="t1-s8">
+    <section class="topic" id="t1-s10">
       <h2>Common mistakes</h2>
       <table class="booktabs">
         <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
@@ -347,6 +444,8 @@ values.remove(20)
         <tr><td><code>values[1:3]</code> expecting 3 items</td><td>gives 2</td><td><code>stop</code> is never included, same as <code>range()</code></td></tr>
         <tr><td>trying <code>name[0] = "z"</code> on a string</td><td><code>TypeError</code></td><td>strings cannot be changed this way — lists can</td></tr>
         <tr><td><code>.remove(x)</code> when <code>x</code> is not in the list</td><td><code>ValueError</code></td><td>check with <code>in</code> first, or catch the error</td></tr>
+        <tr><td><code>.pop()</code> on an empty list</td><td><code>IndexError: pop from empty list</code></td><td>check <code>if a_list:</code> (or <code>len(a_list) &gt; 0</code>) first</td></tr>
+        <tr><td>assuming <code>backup = hosts</code> makes an independent copy</td><td>changing one changes the other — they are the same list (aliasing)</td><td>use <code>hosts.copy()</code> or <code>hosts[:]</code> for a real copy</td></tr>
         <tr><td><code>point[0] = 5</code> on a tuple</td><td><code>TypeError: 'tuple' object does not support item assignment</code></td><td>tuples cannot be changed — use a list if you need to</td></tr>
       </table>
 
@@ -355,17 +454,20 @@ values.remove(20)
         <li><code>examples/01_lists_and_indexing.py</code> — indexing, negative indexing, len()</li>
         <li><code>examples/02_slicing_and_mutating.py</code> — slicing, append, remove, in</li>
         <li><code>examples/03_tuples.py</code> — creating, indexing, and why they cannot change</li>
+        <li><a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists" target="_blank" rel="noopener">docs.python.org — More on Lists</a>, the official Python tutorial's full method reference (<code>.pop()</code>, <code>.insert()</code>, <code>.sort()</code> and more, beyond what this week covers)</li>
       </ul>
     </section>
 
-    <section class="topic" id="t1-s9">
+    <section class="topic" id="t1-s11">
       <h2>Recap</h2>
       <table class="booktabs">
         <tr><th>You can now</th><th>Using</th></tr>
-        <tr><td>create a list</td><td><code>[a, b, c]</code></td></tr>
+        <tr><td>create a list, and name what kind of type it is</td><td><code>[a, b, c]</code> — an ordered, mutable, compound sequence type</td></tr>
         <tr><td>access by position</td><td><code>labels[0]</code>, <code>labels[-1]</code></td></tr>
         <tr><td>take a piece</td><td><code>labels[1:3]</code></td></tr>
-        <tr><td>change it in place</td><td><code>labels[0] = x</code>, <code>.append()</code>, <code>.remove()</code></td></tr>
+        <tr><td>change, add and remove in place</td><td><code>labels[0] = x</code>, <code>.append()</code>, <code>.remove()</code></td></tr>
+        <tr><td>test whether a value is present</td><td><code>in</code> / <code>not in</code></td></tr>
+        <tr><td>explain why two names can alias one list</td><td>a variable holds a reference, not the data itself</td></tr>
         <tr><td>loop over it directly</td><td><code>for item in labels:</code></td></tr>
         <tr><td>create a fixed, unchangeable collection</td><td><code>(a, b, c)</code></td></tr>
         <tr><td>index/slice a string</td><td>same rules as a list, but locked like a tuple</td></tr>
@@ -374,6 +476,7 @@ values.remove(20)
     </section>
 
     <div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Dictionaries</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Dictionaries</a> · <a href="https://docs.python.org/3/tutorial/datastructures.html#sets">Sets</a></p>
 
     <section class="topic" id="t2-s1">
       <h2><span class="num">1.</span>Creating and accessing</h2>
@@ -407,9 +510,6 @@ record["missing"]  ──▶  KeyError</pre></div>
         <p>Create a dict called <code>host</code> for one server with <code>name</code>,
           <code>used_gb</code> and <code>total_gb</code>. Print two of its values.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice1.ipynb" title="Practice — create and access a dict" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s2">
@@ -426,9 +526,6 @@ record[<span class="str">"value"</span>] = 90.0        <span class="cm"># existi
       <div class="callout">
         <span class="callout-label">Practice</span>
         <p>Add a new key to your <code>host</code> dict, then update one of the original ones.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice2.ipynb" title="Practice — add and update dict keys" style="height:312px;"></iframe></div>
       </div>
     </section>
 
@@ -449,9 +546,6 @@ record[<span class="str">"value"</span>] = 90.0        <span class="cm"># existi
         <p>Use <code>.get()</code> on <code>host</code> to safely check for a key you know does not
           exist, with a default of your choosing.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice3.ipynb" title="Practice — .get() with a default" style="height:312px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s4">
@@ -469,9 +563,6 @@ record[<span class="str">"value"</span>] = 90.0        <span class="cm"># existi
         <span class="callout-label">Practice</span>
         <p>Loop over <code>host</code> using <code>.items()</code> and print <code>key: value</code>
           for each pair.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice4.ipynb" title="Practice — iterate with .items()" style="height:312px;"></iframe></div>
       </div>
     </section>
 
@@ -498,9 +589,6 @@ empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is 
         <p>Given <code>visited_hosts = ["srv-01", "srv-02", "srv-01", "srv-03", "srv-02"]</code>, use
           a set to find out how many unique values it contains.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_practice5.ipynb" title="Practice — count unique values with a set" style="height:312px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s6">
@@ -509,9 +597,6 @@ empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is 
         <p>Given <code>disk = {"used": 87.0, "total": 120.0, "free": 33.0}</code>, print a
           formatted report line for each key-value pair, right-aligning the values, using
           <code>.items()</code>.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_challenge.ipynb" title="Practice — Topic 2 challenge" style="height:312px;"></iframe></div>
       </div>
 
       <h3>Same idea, three fields</h3>
@@ -522,10 +607,6 @@ empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is 
         <tr><td>Cyber Security</td><td><code>{"ip": "10.0.0.5", "failed": 12, "locked": True}</code></td></tr>
         <tr><td>IT</td><td><code>{"hostname": "srv-01", "used_gb": 87, "total_gb": 120}</code></td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T02_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s7">
@@ -562,6 +643,7 @@ empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is 
     </section>
 
     <div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Files</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a> · <a href="https://docs.python.org/3/library/functions.html#open">open()</a></p>
 
     <section class="topic" id="t3-s1">
       <h2><span class="num">1.</span>Writing, with <code>with</code></h2>
@@ -598,9 +680,6 @@ empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is 
         <span class="callout-label">Practice</span>
         <p>Write 3 lines of your own to a new file called <code>my_notes.txt</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_practice1.ipynb" title="Practice — write to a file" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s2">
@@ -620,9 +699,6 @@ empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is 
         <span class="callout-label">Practice</span>
         <p>This cell writes <code>my_notes.txt</code> for you. Read it back and print it.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_practice2.ipynb" title="Practice — read a file back" style="height:409px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s3">
@@ -641,9 +717,6 @@ empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is 
         <span class="callout-label">Practice</span>
         <p>This cell writes <code>my_notes.txt</code> for you again. Read it line by line and print
           each line, stripped.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_practice3.ipynb" title="Practice — read a file line by line" style="height:409px;"></iframe></div>
       </div>
     </section>
 
@@ -666,9 +739,6 @@ limit = <span class="fn">float</span>(limit)
         <p>Given the line <code>"R-004,93,100"</code>, split it and print the three parts, converted
           where needed.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_practice4.ipynb" title="Practice — split a line into fields" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s5">
@@ -679,9 +749,6 @@ limit = <span class="fn">float</span>(limit)
           shaped like <code>{"label": ..., "value": ..., "limit": ...}</code>. Write a small
           file of your own to test it on.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_challenge.ipynb" title="Practice — Topic 3 challenge" style="height:289px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>Storage that outlives the program, read back a line at a time.</p>
@@ -691,10 +758,6 @@ limit = <span class="fn">float</span>(limit)
         <tr><td>Cyber Security</td><td>reading a log file line by line, checking each entry</td></tr>
         <tr><td>IT</td><td>reading a list of hostnames from a config file</td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T03_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s6">
@@ -727,6 +790,7 @@ limit = <span class="fn">float</span>(limit)
     </section>
 
     <div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Putting It Together</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Dictionaries</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p>
 
     <section class="topic" id="t4-s1">
       <h2><span class="num">1.</span>The shape</h2>
@@ -761,9 +825,6 @@ limit = <span class="fn">float</span>(limit)
           <code>value</code> and <code>limit</code>. Loop over it and print just the label from
           each.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_practice1.ipynb" title="Practice — build a list of dicts by hand" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s2">
@@ -787,9 +848,6 @@ limit = <span class="fn">float</span>(limit)
         <p>Save 3 <code>label,value,limit</code> lines of your own to a file, then load them with
           <code>load_records</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_practice2.ipynb" title="Practice — load records from a file" style="height:500px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s3">
@@ -811,9 +869,6 @@ limit = <span class="fn">float</span>(limit)
           {"label": "E-02", "value": 40.0, "limit": 90.0}]</code>, loop through it and print
           <code>OVER LIMIT</code> or <code>OK</code> for each.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_practice3.ipynb" title="Practice — process each record" style="height:362px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s4">
@@ -831,9 +886,6 @@ limit = <span class="fn">float</span>(limit)
           one (<code>OVER LIMIT</code> / <code>WARNING</code> / <code>OK</code>), and print a summary
           line: <code>"N of M were over limit"</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_challenge.ipynb" title="Practice — Topic 4 challenge" style="height:289px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>The same list-of-dicts shape, wherever the rows come from.</p>
@@ -843,10 +895,6 @@ limit = <span class="fn">float</span>(limit)
         <tr><td>Cyber Security</td><td>a log file, each line a dict of <code>{ip, time, result}</code></td></tr>
         <tr><td>IT</td><td>a server list, each line a dict of <code>{hostname, used, total}</code></td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W04T04_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s6">
@@ -900,49 +948,6 @@ limit = <span class="fn">float</span>(limit)
   }
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
-
-  // Notebook iframes share one JupyterLite IndexedDB-backed contents store.
-  // Booting several at once races on that shared connection ("Cannot read
-  // properties of null (reading/setting 'db')"), so load them strictly one
-  // at a time, and confirm each one actually rendered (same-origin poll of
-  // its own DOM) before starting the next, rather than trusting the
-  // iframe's load event alone (it fires before JupyterLite's own async
-  // IndexedDB-backed init has necessarily finished).
-  (function () {
-    var queue = [];
-    var loading = false;
-    function pollReady(iframe, deadline, cb) {
-      var doc;
-      try { doc = iframe.contentDocument; } catch (e) { doc = null; }
-      var ready = doc && (doc.querySelector('.jp-Cell') || doc.querySelector('.jp-mod-error') || doc.querySelector('.jp-Dialog'));
-      if (ready || Date.now() > deadline) { cb(); return; }
-      setTimeout(function () { pollReady(iframe, deadline, cb); }, 200);
-    }
-    function next() {
-      if (loading || queue.length === 0) return;
-      loading = true;
-      var iframe = queue.shift();
-      iframe.src = iframe.getAttribute('data-src');
-      iframe.addEventListener('load', function onLoad() {
-        iframe.removeEventListener('load', onLoad);
-        pollReady(iframe, Date.now() + 9000, function () {
-          setTimeout(function () { loading = false; next(); }, 900);
-        });
-      });
-    }
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          var iframe = entry.target;
-          observer.unobserve(iframe);
-          queue.push(iframe);
-          next();
-        }
-      });
-    }, { rootMargin: '250px 0px' });
-    document.querySelectorAll('iframe.lazy-frame').forEach(function (f) { observer.observe(f); });
-  })();
-
 </script>
 </body>
 </html>

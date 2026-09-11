@@ -54,6 +54,10 @@
   p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
   p.muted { color: var(--ink-soft); }
   p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  p.topic-docs { margin: 10px 0 22px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
   .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
   .callout p { margin: 0; font-size: .98rem; }
@@ -79,10 +83,6 @@
   td code { white-space: nowrap; }
   ul.tight { margin: 8px 0 16px; padding-left: 20px; }
   ul.tight li { line-height: 1.6; margin-bottom: 4px; }
-  .practice-embed { max-width: 74ch; margin: 10px 0 8px; }
-  .practice-embed .practice-label { font-variant: small-caps; font-size: 13.5px; font-style: italic; color: var(--ink-soft); margin-bottom: 6px; }
-  .practice-embed .frame { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; }
-  .practice-embed iframe { display: block; width: 100%; border: none; background: var(--paper); }
   footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
   @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
 </style>
@@ -144,11 +144,16 @@
         formatted output, store values in well-named variables, calculate a difference and a
         percentage, and ask the user for input and report results back cleanly.</p>
       <p class="box-note">Box we build this week: <b>INPUT</b> and <b>OUTPUT</b>. Each
-        <em>Practice</em> is followed by a small live notebook — real Python, running in the
-        browser, no install.</p>
+        <em>Practice</em> below sets a short task — work it through in your own notebook.</p>
     </header>
 
+    <figure class="anim-figure" style="margin: 26px 0 0;">
+      <iframe src="architecture_map.html?embed=1&amp;week=1" title="System architecture — Week 1" loading="lazy" style="height:340px;"></iframe>
+      <figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>INPUT</b> and <b>OUTPUT</b>.</figcaption>
+    </figure>
+
     <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Your First Program</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/introduction.html">Python tutorial: introduction</a> · <a href="https://docs.python.org/3/library/functions.html#print">print()</a></p>
 
     <section class="topic" id="t1-s1">
       <h2><span class="num">1.</span>print()</h2>
@@ -182,9 +187,6 @@
         <span class="callout-label">Practice</span>
         <p>Make the next cell print your own name.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_practice1.ipynb" title="Practice — print your name" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s2">
@@ -205,9 +207,6 @@
         <span class="callout-label">Practice</span>
         <p>Print <code>Module CST1510 starts now</code> using <b>three</b> separate values and
           commas.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_practice2.ipynb" title="Practice — three values" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -234,9 +233,6 @@
         <span class="callout-label">Practice</span>
         <p>Print a line of <b>50 dashes</b>, then your name, then another 50 dashes.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_practice3.ipynb" title="Practice — dashes" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s4">
@@ -259,9 +255,6 @@
         <p>Using <b>one</b> <code>print()</code>, produce exactly:</p>
         <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">ID	STATUS
 R-004	OK</pre>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_practice4.ipynb" title="Practice — tab-separated report" style="height:361px;"></iframe></div>
       </div>
     </section>
 
@@ -287,9 +280,6 @@ R-004	OK</pre>
 ==============================</pre>
         <p style="margin-top:8px;">The title should be centred by eye — count your spaces.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_challenge.ipynb" title="Practice — Topic 1 challenge" style="height:409px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p><code>print()</code> is how a program reports what it found — the mechanism never
@@ -300,10 +290,6 @@ R-004	OK</pre>
         <tr><td>Cyber Security</td><td><code>[ALERT] failed login from 10.0.0.5</code></td></tr>
         <tr><td>IT</td><td><code>Backup complete - 4 of 4 servers</code></td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T01_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s7">
@@ -337,6 +323,7 @@ R-004	OK</pre>
     </section>
 
     <div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Variables and Types</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/introduction.html#first-steps-towards-programming">First steps towards programming</a> · <a href="https://docs.python.org/3/library/functions.html#type">type()</a></p>
 
     <section class="topic" id="t2-s1">
       <h2><span class="num">1.</span>A variable is a name for a value</h2>
@@ -373,9 +360,6 @@ limit = 20
         <p>Store your own name in <code>student_name</code> and your course in <code>course</code>,
           then print both in one line.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_practice1.ipynb" title="Practice — store your name" style="height:312px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s2">
@@ -411,9 +395,6 @@ number_twenty = 20
         <p>Run the next cell. <b>Before you run it</b>, write down what you expect. Then explain
           the result to the person next to you.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_practice2.ipynb" title="Practice — string vs number concatenation" style="height:330px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s3">
@@ -440,9 +421,6 @@ sensor_limit = 20
         <p>The next cell has three bad names. Rewrite it with good ones. The output should not
           change.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_practice3.ipynb" title="Practice — rename badly-named variables" style="height:434px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s4">
@@ -465,9 +443,6 @@ checks_done = 2
         <span class="callout-label">Practice</span>
         <p>Without running it, what does this print? Write your answer down, then run it.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_practice4.ipynb" title="Practice — predict reassignment" style="height:362px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s5">
@@ -483,9 +458,6 @@ checks_done = 2
           <li>(you decide what to call the <code>%</code> sign)</li>
         </ul>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_challenge.ipynb" title="Practice — Topic 2 challenge" style="height:462px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>A variable holds one fact about one thing — the name changes, the mechanism does not.</p>
@@ -495,10 +467,6 @@ checks_done = 2
         <tr><td>Cyber Security</td><td><code>source_ip = "10.0.0.5"</code>, <code>port = 443</code></td></tr>
         <tr><td>IT</td><td><code>hostname = "srv-01"</code>, <code>disk_used = 87</code></td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T02_three_fields.ipynb" title="Worked examples — three lanes" style="height:693px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s6">
@@ -533,6 +501,7 @@ checks_done = 2
     </section>
 
     <div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Numbers and Arithmetic</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/introduction.html#numbers">Numbers</a> · <a href="https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex">Numeric types</a></p>
 
     <section class="topic" id="t3-s1">
       <h2><span class="num">1.</span>The operators</h2>
@@ -556,9 +525,6 @@ b = 5
         <span class="callout-label">Practice</span>
         <p>Set <code>a = 23</code> and <code>b = 4</code> and predict all seven answers
           <b>before</b> running it.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice1.ipynb" title="Practice — seven operators" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -586,9 +552,6 @@ minutes = total_minutes % 60
       <div class="callout">
         <span class="callout-label">Practice</span>
         <p>500 seconds is how many whole minutes, and how many seconds left over?</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice2.ipynb" title="Practice — minutes and seconds" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -619,9 +582,6 @@ minutes = total_minutes % 60
         <p>The next cell gives the wrong answer. The intention was <em>(10 plus 6) divided by
           2</em>. Fix it.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice3.ipynb" title="Practice — fix the bracketing" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s4">
@@ -645,9 +605,6 @@ percent = (value / limit) * 100
         <span class="callout-label">Practice</span>
         <p>A server has 87 GB used out of 120 GB. Calculate and print the percentage used, and
           how many GB are free.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice4.ipynb" title="Practice — disk percentage" style="height:312px;"></iframe></div>
       </div>
     </section>
 
@@ -674,9 +631,6 @@ count += 5
         <p>Start <code>total</code> at 100. Subtract 30, then double it, using the short forms.
           Print the result.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_practice5.ipynb" title="Practice — shorthand operators" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s6">
@@ -691,9 +645,6 @@ count += 5
         </ul>
         <p>Use well-named variables. Do not type any answer you could calculate.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_challenge.ipynb" title="Practice — Topic 3 challenge" style="height:443px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>Almost every calculation you write in year one is <em>"what share of the whole is
@@ -704,10 +655,6 @@ count += 5
         <tr><td>Cyber Security</td><td>what percentage of login attempts failed</td></tr>
         <tr><td>IT</td><td>what percentage of disk space is used</td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T03_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s7">
@@ -741,6 +688,7 @@ count += 5
     </section>
 
     <div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Input, Casting and f-strings</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/functions.html#input">input()</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals">Formatted string literals</a></p>
 
     <section class="topic" id="t4-s1">
       <h2><span class="num">1.</span>Asking for input</h2>
@@ -811,9 +759,6 @@ as_number = <span class="fn">int</span>(text)
         <p>Ask for a number of GB used and a total GB, convert both, and print how many GB are
           free.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_practice1.ipynb" title="Practice — GB free" style="height:312px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s4">
@@ -842,9 +787,6 @@ value = 23.7
       <div class="callout">
         <span class="callout-label">Practice</span>
         <p>Using an f-string, print <code>srv-01 is 87% full</code> from two variables.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_practice2.ipynb" title="Practice — f-string" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -904,9 +846,6 @@ Diff  :      +3.70</pre>
         <span class="callout-label">Practice</span>
         <p>Print <code>7 / 3</code> to exactly <b>three</b> decimal places.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_practice3.ipynb" title="Practice — three decimal places" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s6">
@@ -925,9 +864,6 @@ Diff  :      +3.70</pre>
         <p style="margin-top:8px;">This is a rehearsal for the mini-project. Get it working now
           and the lab is straightforward.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_challenge.ipynb" title="Practice — Topic 4 challenge" style="height:500px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>Ask for something, convert it, report it back cleanly — the same three-step shape every
@@ -938,10 +874,6 @@ Diff  :      +3.70</pre>
         <tr><td>Cyber Security</td><td><code>f"[{level}] {failed} failed logins from {ip}"</code></td></tr>
         <tr><td>IT</td><td><code>f"{hostname:&lt;12} disk {used:&gt;3} %"</code></td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W01T04_three_fields.ipynb" title="Worked examples — three lanes" style="height:711px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s7">
@@ -997,49 +929,6 @@ Diff  :      +3.70</pre>
   }
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
-
-  // Notebook iframes share one JupyterLite IndexedDB-backed contents store.
-  // Booting several at once races on that shared connection ("Cannot read
-  // properties of null (reading/setting 'db')"), so load them strictly one
-  // at a time, and confirm each one actually rendered (same-origin poll of
-  // its own DOM) before starting the next, rather than trusting the
-  // iframe's load event alone (it fires before JupyterLite's own async
-  // IndexedDB-backed init has necessarily finished).
-  (function () {
-    var queue = [];
-    var loading = false;
-    function pollReady(iframe, deadline, cb) {
-      var doc;
-      try { doc = iframe.contentDocument; } catch (e) { doc = null; }
-      var ready = doc && (doc.querySelector('.jp-Cell') || doc.querySelector('.jp-mod-error') || doc.querySelector('.jp-Dialog'));
-      if (ready || Date.now() > deadline) { cb(); return; }
-      setTimeout(function () { pollReady(iframe, deadline, cb); }, 200);
-    }
-    function next() {
-      if (loading || queue.length === 0) return;
-      loading = true;
-      var iframe = queue.shift();
-      iframe.src = iframe.getAttribute('data-src');
-      iframe.addEventListener('load', function onLoad() {
-        iframe.removeEventListener('load', onLoad);
-        pollReady(iframe, Date.now() + 9000, function () {
-          setTimeout(function () { loading = false; next(); }, 900);
-        });
-      });
-    }
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          var iframe = entry.target;
-          observer.unobserve(iframe);
-          queue.push(iframe);
-          next();
-        }
-      });
-    }, { rootMargin: '250px 0px' });
-    document.querySelectorAll('iframe.lazy-frame').forEach(function (f) { observer.observe(f); });
-  })();
-
 </script>
 </body>
 </html>

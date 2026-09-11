@@ -54,6 +54,10 @@
   p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
   p.muted { color: var(--ink-soft); }
   p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  p.topic-docs { margin: 10px 0 22px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
   .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
   .callout p { margin: 0; font-size: .98rem; }
@@ -82,10 +86,6 @@
   td code { white-space: nowrap; }
   ul.tight { margin: 8px 0 16px; padding-left: 20px; }
   ul.tight li { line-height: 1.6; margin-bottom: 4px; }
-  .practice-embed { max-width: 74ch; margin: 10px 0 8px; }
-  .practice-embed .practice-label { font-variant: small-caps; font-size: 13.5px; font-style: italic; color: var(--ink-soft); margin-bottom: 6px; }
-  .practice-embed .frame { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; }
-  .practice-embed iframe { display: block; width: 100%; border: none; background: var(--paper); }
   footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
   @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
 </style>
@@ -144,11 +144,17 @@
         its own inputs and output, explain why a function's own variables stay contained inside
         it, and reuse a function someone else already wrote via <code>import</code>.</p>
       <p class="box-note">Box we build this week: the <b>wiring</b> that connects INPUT, PROCESS
-        and OUTPUT together. Each <em>Practice</em> is followed by a small live notebook — real
-        Python, running in the browser, no install.</p>
+        and OUTPUT together. Each <em>Practice</em> below sets a short task — work it through in
+        your own notebook.</p>
     </header>
 
+    <figure class="anim-figure" style="margin: 26px 0 0;">
+      <iframe src="architecture_map.html?embed=1&amp;week=3" title="System architecture — Week 3" loading="lazy" style="height:340px;"></iframe>
+      <figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build the <b>wiring</b> that connects them.</figcaption>
+    </figure>
+
     <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Defining and Calling Functions</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/controlflow.html#defining-functions">Defining functions</a></p>
 
     <section class="topic" id="t1-s1">
       <h2><span class="num">1.</span>def creates it, calling runs it</h2>
@@ -175,9 +181,6 @@
         <p>Write a function called <code>divider</code> that prints a line of 34 <code>=</code>
           characters. Call it twice.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_practice1.ipynb" title="Practice — divider function" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s2">
@@ -198,9 +201,6 @@
         <span class="callout-label">Practice</span>
         <p>Write a function <code>shout(word)</code> that prints the word in capitals followed by
           <code>!!!</code>.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_practice2.ipynb" title="Practice — shout function" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -236,9 +236,6 @@ total = <span class="fn">add_tax</span>(100)
         <p>Write a function <code>percent_of(part, total)</code> that <b>returns</b> the
           percentage. Store the result in a variable and print it.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_practice3.ipynb" title="Practice — percent_of function" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s4">
@@ -265,9 +262,6 @@ total = <span class="fn">add_tax</span>(100)
         <p style="margin-top:8px;">Add a one-line docstring describing what it does, then run
           <code>help(double)</code> to see it.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_practice4.ipynb" title="Practice — add a docstring" style="height:362px;"></iframe></div>
-      </div>
 
       <p class="muted">You will have two functions by the end of the lab — one that calculates,
         one that decides a status. Say out loud why those should be two functions and not one.</p>
@@ -282,9 +276,6 @@ total = <span class="fn">add_tax</span>(100)
         <p style="margin-top:8px;">(right-aligned, 2 decimal places). Use it three times to print
           three lines of a report.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_challenge.ipynb" title="Practice — Topic 1 challenge" style="height:312px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>One job, reused wherever it is needed — different job, same shape.</p>
@@ -294,10 +285,6 @@ total = <span class="fn">add_tax</span>(100)
         <tr><td>Cyber Security</td><td><code>is_suspicious(ip)</code> — one check, reused for every log line</td></tr>
         <tr><td>IT</td><td><code>ping(host)</code> — one action, reused for every server</td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T01_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s6">
@@ -331,6 +318,7 @@ total = <span class="fn">add_tax</span>(100)
     </section>
 
     <div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Parameters and Arguments</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/controlflow.html#more-on-defining-functions">More on defining functions</a></p>
 
     <section class="topic" id="t2-s1">
       <h2><span class="num">1.</span>Multiple parameters, matched by position</h2>
@@ -358,9 +346,6 @@ total = <span class="fn">add_tax</span>(100)
         <span class="callout-label">Practice</span>
         <p>Write a function <code>bigger_of(a, b)</code> that returns whichever of the two is
           bigger. Call it with your own two numbers, swapped both ways.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_practice1.ipynb" title="Practice — bigger_of function" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -392,9 +377,6 @@ total = <span class="fn">add_tax</span>(100)
           <code>"!"</code>, then call it once leaving <code>punctuation</code> out and once
           overriding it.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_practice2.ipynb" title="Practice — add a default value" style="height:409px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s3">
@@ -416,9 +398,6 @@ total = <span class="fn">add_tax</span>(100)
         <p style="margin-top:8px;">call it using keyword arguments, in the opposite order to how
           it was defined.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_practice3.ipynb" title="Practice — keyword arguments" style="height:362px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s4">
@@ -438,9 +417,6 @@ total = <span class="fn">add_tax</span>(100)
           a description string) and call it three ways: all positional, all keyword, and
           mixed.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_practice4.ipynb" title="Practice — mixing positional and keyword" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s5">
@@ -451,9 +427,6 @@ total = <span class="fn">add_tax</span>(100)
           the percentage itself, instead of being handed a percentage. Test it with
           <code>warning_at</code> left at its default, and again overridden to <code>95</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_challenge.ipynb" title="Practice — Topic 2 challenge" style="height:289px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>More than one input, and not every input needs to be given every time.</p>
@@ -463,10 +436,6 @@ total = <span class="fn">add_tax</span>(100)
         <tr><td>Cyber Security</td><td><code>scan(target, timeout=5)</code></td></tr>
         <tr><td>IT</td><td><code>backup(source, destination="/backups")</code></td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T02_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s6">
@@ -499,6 +468,7 @@ total = <span class="fn">add_tax</span>(100)
     </section>
 
     <div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Scope</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html#python-scopes-and-namespaces">Python scopes and namespaces</a></p>
 
     <section class="topic" id="t3-s1">
       <h2><span class="num">1.</span>Local means local</h2>
@@ -539,9 +509,6 @@ total = <span class="fn">add_tax</span>(100)
         <span class="callout-label">Practice</span>
         <p>Uncomment the last line below and run it to see the error.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_practice1.ipynb" title="Practice — see the NameError" style="height:362px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s2">
@@ -564,9 +531,6 @@ number = 21
         <p>Given <code>def triple(n): n = n * 3; return n</code> and <code>total = 10</code>,
           predict then check: after <code>triple(total)</code> runs, is <code>total</code>
           <code>30</code> or still <code>10</code>?</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_practice2.ipynb" title="Practice — predict scope" style="height:362px;"></iframe></div>
       </div>
     </section>
 
@@ -591,9 +555,6 @@ total = <span class="fn">add_tax</span>(total)   <span class="cm"># catch it and
         <p>Write <code>increment(count)</code> that returns <code>count + 1</code>. Use it to
           increase a variable called <code>total_checked</code> by 1, three times in a row.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_practice3.ipynb" title="Practice — increment function" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s4">
@@ -616,9 +577,6 @@ print(status)</pre>
         <p style="margin-top:8px;">Fix it using <code>return</code>, without using anything you
           have not been taught yet.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_challenge.ipynb" title="Practice — Topic 3 challenge" style="height:362px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>A cleaning/scanning/status-check function cannot silently corrupt whatever it was
@@ -629,10 +587,6 @@ print(status)</pre>
         <tr><td>Cyber Security</td><td>a scanning function cannot silently alter the system it is checking</td></tr>
         <tr><td>IT</td><td>a status-check function cannot silently change the server it is reporting on</td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T03_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s6">
@@ -663,6 +617,7 @@ print(status)</pre>
     </section>
 
     <div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Modules</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/modules.html">Modules</a></p>
 
     <section class="topic" id="t4-s1">
       <h2><span class="num">1.</span>import brings in a whole module</h2>
@@ -690,9 +645,6 @@ print(status)</pre>
         <p>Use <code>math</code> to calculate the area of a circle with radius 5
           (<code>area = pi * r ** 2</code>).</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_practice1.ipynb" title="Practice — area of a circle" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s2">
@@ -710,9 +662,6 @@ print(status)</pre>
       <div class="callout">
         <span class="callout-label">Practice</span>
         <p>Use <code>random.randint</code> to simulate rolling two dice and print their total.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_practice2.ipynb" title="Practice — roll two dice" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -735,9 +684,6 @@ print(status)</pre>
         <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">import math
 print(math.sqrt(81))
 print(math.pow(2, 5))</pre>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_practice3.ipynb" title="Practice — from import" style="height:409px;"></iframe></div>
       </div>
     </section>
 
@@ -763,9 +709,6 @@ print(math.pow(2, 5))</pre>
           or <code>OK</code>. Reuse the <code>status_of</code> function given below — do not
           write the decision logic twice.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_challenge.ipynb" title="Practice — Topic 4 challenge" style="height:409px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>A module is wiring someone else already built, that you get to reuse.</p>
@@ -775,10 +718,6 @@ print(math.pow(2, 5))</pre>
         <tr><td>Cyber Security</td><td><code>import hashlib</code> for hashing a password</td></tr>
         <tr><td>IT</td><td><code>import datetime</code> for timestamping a log entry</td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W03T04_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s6">
@@ -833,49 +772,6 @@ print(math.pow(2, 5))</pre>
   }
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
-
-  // Notebook iframes share one JupyterLite IndexedDB-backed contents store.
-  // Booting several at once races on that shared connection ("Cannot read
-  // properties of null (reading/setting 'db')"), so load them strictly one
-  // at a time, and confirm each one actually rendered (same-origin poll of
-  // its own DOM) before starting the next, rather than trusting the
-  // iframe's load event alone (it fires before JupyterLite's own async
-  // IndexedDB-backed init has necessarily finished).
-  (function () {
-    var queue = [];
-    var loading = false;
-    function pollReady(iframe, deadline, cb) {
-      var doc;
-      try { doc = iframe.contentDocument; } catch (e) { doc = null; }
-      var ready = doc && (doc.querySelector('.jp-Cell') || doc.querySelector('.jp-mod-error') || doc.querySelector('.jp-Dialog'));
-      if (ready || Date.now() > deadline) { cb(); return; }
-      setTimeout(function () { pollReady(iframe, deadline, cb); }, 200);
-    }
-    function next() {
-      if (loading || queue.length === 0) return;
-      loading = true;
-      var iframe = queue.shift();
-      iframe.src = iframe.getAttribute('data-src');
-      iframe.addEventListener('load', function onLoad() {
-        iframe.removeEventListener('load', onLoad);
-        pollReady(iframe, Date.now() + 9000, function () {
-          setTimeout(function () { loading = false; next(); }, 900);
-        });
-      });
-    }
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          var iframe = entry.target;
-          observer.unobserve(iframe);
-          queue.push(iframe);
-          next();
-        }
-      });
-    }, { rootMargin: '250px 0px' });
-    document.querySelectorAll('iframe.lazy-frame').forEach(function (f) { observer.observe(f); });
-  })();
-
 </script>
 </body>
 </html>

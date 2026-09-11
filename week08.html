@@ -54,6 +54,10 @@
   .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
   .topic-intro { margin-bottom: 10px; }
   .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  p.topic-docs { margin: 10px 0 18px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
   h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
   h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
@@ -153,7 +157,7 @@ it is a real service, somewhere else, that you ask for data.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
 </blockquote>
-</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A GET request asks a URL for something</h2><div class="cell"><pre class="code"><code>import requests
+<p class="topic-docs"><b>Official docs:</b> <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a> · <a href="https://docs.python.org/3/library/json.html">json module</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A GET request asks a URL for something</h2><div class="cell"><pre class="code"><code>import requests
 
 response = requests.get("https://api.github.com/orgs/python")
 print(response.status_code)</code></pre></div><div class="diagram"><pre>your code                the API
@@ -290,7 +294,7 @@ waiting to be downloaded.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>A "raw" GitHub URL serves the real file</h2><p><code>github.com/user/repo/blob/...</code> shows a formatted web page.
+<p class="topic-docs"><b>Official docs:</b> <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html">pandas.read_csv</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>A "raw" GitHub URL serves the real file</h2><p><code>github.com/user/repo/blob/...</code> shows a formatted web page.
 <code>raw.githubusercontent.com/user/repo/branch/...</code> gives you the actual file.</p>
 <div class="cell"><pre class="code"><code>import requests
 
@@ -377,7 +381,7 @@ mechanism, nothing special about who owns it.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_downloading_a_csv.py</code> — raw URLs, requests + StringIO, the SSL gotcha
 <code>examples/02_kaggle_and_your_own_data.py</code> — Kaggle's flow, your own hosted data, the checklist
-Docs: <a href="%7BREQ_DOCS%7D">requests documentation</a></p>
+Docs: <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">requests documentation</a></p>
 </section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
@@ -411,7 +415,7 @@ something by its <em>shape</em> instead.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>Why Week 7's tools are not enough here</h2><p>&quot;Does this contain an IP address&quot; is not &quot;does this contain one exact
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/re.html">re module</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>Why Week 7's tools are not enough here</h2><p>&quot;Does this contain an IP address&quot; is not &quot;does this contain one exact
 substring&quot; — the IP is different every time.</p>
 <div class="cell"><pre class="code"><code>import re
 
@@ -563,7 +567,7 @@ to your own code.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>Before: loose functions and a stray variable</h2><div class="cell"><pre class="code"><code>def parse_line(raw_line):
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>Before: loose functions and a stray variable</h2><div class="cell"><pre class="code"><code>def parse_line(raw_line):
     """Turn one messy raw line into a dict."""
     label, value = raw_line.strip().split(",")
     return {"label": label.strip().lower(), "value": float(value)}

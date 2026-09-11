@@ -54,6 +54,10 @@
   .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
   .topic-intro { margin-bottom: 10px; }
   .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  p.topic-docs { margin: 10px 0 18px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
   h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
   h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
@@ -159,7 +163,7 @@ has — but Streamlit pages only really come alive with <code>streamlit run</cod
 Try each idea by running the matching <code>examples/</code> file that way, not by
 executing these cells directly.</p>
 </blockquote>
-</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span><code>st.title</code>, <code>st.write</code> — the basics</h2><p>Run with <code>streamlit run</code>, not <code>python</code> — a plain Python run will not show
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/get-started">Streamlit get started</a> · <a href="https://docs.streamlit.io/develop/api-reference/write-magic/st.write">st.write</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span><code>st.title</code>, <code>st.write</code> — the basics</h2><p>Run with <code>streamlit run</code>, not <code>python</code> — a plain Python run will not show
 you a page.</p>
 <div class="cell"><pre class="code"><code>import streamlit as st
 
@@ -295,7 +299,7 @@ into a live filter.</p>
 <blockquote>
 <p>executing these cells directly.</p>
 </blockquote>
-</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>st.dataframe</code>, <code>st.table</code>, <code>st.metric</code></h2><div class="cell"><pre class="code"><code>st.dataframe(df)              # interactive, sortable
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/develop/api-reference/data/st.dataframe">st.dataframe</a> · <a href="https://docs.streamlit.io/develop/api-reference/widgets">Widgets API</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>st.dataframe</code>, <code>st.table</code>, <code>st.metric</code></h2><div class="cell"><pre class="code"><code>st.dataframe(df)              # interactive, sortable
 st.table(df.head(2))            # static, simpler
 st.metric("Devices online", 11, delta=-1)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Build a small DataFrame of your own and display it with <code>st.dataframe()</code>.</p>
 </div></section><section class="topic" id="t2-s2"><h2><span class="num">2.</span>Status messages — colour-coded, instantly readable</h2><div class="cell"><pre class="code"><code>st.success("All systems normal")
@@ -414,7 +418,7 @@ will not show its contents to anyone who has not logged in.</p>
 <blockquote>
 <p>executing these cells directly.</p>
 </blockquote>
-</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>st.form()</code> — batch inputs, nothing reruns until submit</h2><p>Without a form, every keystroke reruns the whole script. Inside a form,
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/develop/api-reference/execution-flow/st.form">st.form</a> · <a href="https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state">st.session_state</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>st.form()</code> — batch inputs, nothing reruns until submit</h2><p>Without a form, every keystroke reruns the whole script. Inside a form,
 nothing happens until the submit button is pressed.</p>
 <div class="cell"><pre class="code"><code>with st.form("register_form"):
     username = st.text_input("Username")
@@ -551,7 +555,7 @@ locally, someone else needs to be able to open it.</p>
 <blockquote>
 <p>executing these cells directly.</p>
 </blockquote>
-</div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>Columns, sidebar, tabs, expander</h2><div class="cell"><pre class="code"><code>left, right = st.columns(2)
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/develop/api-reference/layout">Layout API</a> · <a href="https://docs.streamlit.io/develop/api-reference/caching-and-state/st.cache_data">st.cache_data</a> · <a href="https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app">Deploy your app</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>Columns, sidebar, tabs, expander</h2><div class="cell"><pre class="code"><code>left, right = st.columns(2)
 left.metric("Online", 11)
 right.metric("Offline", 1)
 

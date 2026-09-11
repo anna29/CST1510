@@ -54,6 +54,10 @@
   .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
   .topic-intro { margin-bottom: 10px; }
   .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  p.topic-docs { margin: 10px 0 18px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
   h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
   h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
@@ -147,7 +151,7 @@
 
     <figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="The database lifecycle" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">STORE, for real</text><line x1="166.0" y1="164" x2="236.7" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Connecting and</tspan><tspan x="0.0" dy="19">Creating Tables</tspan></text><line x1="424.7" y1="164" x2="495.3" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="244.7" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="258.7" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="258.7" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="258.7" dy="0">Inserting and</tspan><tspan x="258.7" dy="19">Querying</tspan></text><line x1="683.3" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="503.3" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="517.3" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="517.3" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="517.3" dy="0">Updating, Deleting</tspan><tspan x="517.3" dy="19">and the Safe Pattern</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">Migrating Real Data</tspan><tspan x="776.0" dy="19">In</tspan></text></svg><figcaption><b>The database lifecycle</b>. Week 10 walks from schema creation to safe querying, updates, deletes, and importing real data.</figcaption></figure>
 
-    <div class="topic-divider" id="prelude-top"><span class="topic-divider-n">Primer</span><h2 class="topic-divider-title">Before Topic 1 — What SQL Is</h2></div><section class="topic" id="prelude-s1"><p>SQL is the language we use to talk to a relational database. Python is not replacing SQL this week; Python is simply the program that sends SQL commands to SQLite and receives the results back.</p>
+    <div class="topic-divider" id="prelude-top"><span class="topic-divider-n">Primer</span><h2 class="topic-divider-title">Before Topic 1 — What SQL Is</h2></div><section class="topic" id="prelude-s1"><p class="topic-docs"><b>Official docs:</b> <a href="https://www.sqlite.org/lang.html">SQLite SQL language</a> · <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a></p><p>SQL is the language we use to talk to a relational database. Python is not replacing SQL this week; Python is simply the program that sends SQL commands to SQLite and receives the results back.</p>
 <p>Think of the database as a set of <strong>tables</strong>:</p>
 <table class="booktabs">
 <thead>
@@ -227,7 +231,7 @@ is already in Python.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
 </blockquote>
-</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Connecting opens the file, or creates it</h2><div class="cell"><pre class="code"><code>import sqlite3
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a> · <a href="https://www.sqlite.org/lang_createtable.html">SQLite CREATE TABLE</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Connecting opens the file, or creates it</h2><div class="cell"><pre class="code"><code>import sqlite3
 
 conn = sqlite3.connect("network.db")
 cursor = conn.cursor()
@@ -355,7 +359,7 @@ SQL injection.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>?</code> placeholders — never build SQL by joining strings</h2><div class="cell"><pre class="code"><code>cursor.execute(
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a> · <a href="https://www.sqlite.org/lang_select.html">SQLite SELECT</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>?</code> placeholders — never build SQL by joining strings</h2><div class="cell"><pre class="code"><code>cursor.execute(
     "INSERT INTO devices (name, ip, type) VALUES (?, ?, ?)",
     ("Router-A", "10.0.0.1", "router"),
 )
@@ -434,7 +438,7 @@ print(safe)    # empty - treated as data, not code</code></pre></div><div class=
 <h3>Go deeper</h3>
 <p><code>examples/01_insert_and_select.py</code> — INSERT, executemany, fetchall, fetchone
 <code>examples/02_injection_filtering_sorting.py</code> — a real injection, WHERE, AND, ORDER BY, LIMIT
-Docs: <a href="%7BSQLITE_DOCS%7D">sqlite3 — Python docs</a></p>
+Docs: <a href="https://docs.python.org/3/library/sqlite3.html">sqlite3 — Python docs</a></p>
 </section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
@@ -472,7 +476,7 @@ slowing down for.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>UPDATE</code> — changing existing rows</h2><div class="cell"><pre class="code"><code>cursor.execute("UPDATE devices SET ip = ? WHERE id = ?", ("10.0.0.254", 1))
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a> · <a href="https://www.sqlite.org/lang_update.html">SQLite UPDATE</a> · <a href="https://www.sqlite.org/lang_delete.html">SQLite DELETE</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>UPDATE</code> — changing existing rows</h2><div class="cell"><pre class="code"><code>cursor.execute("UPDATE devices SET ip = ? WHERE id = ?", ("10.0.0.254", 1))
 conn.commit()
 print(cursor.execute("SELECT name, ip FROM devices WHERE id = 1").fetchone())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Update one device's name, then confirm the change with a SELECT.</p>
 </div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span><code>rowcount</code> — how many rows actually changed</h2><div class="cell"><pre class="code"><code>result = cursor.execute("UPDATE devices SET active = 0 WHERE name = ?", ("AP-Lobby",))
@@ -585,7 +589,7 @@ Week 9's flat-file users — converging into one real database.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t4-s1"><h2><span class="num">1.</span><code>DataFrame.to_sql()</code> — the whole migration, one line</h2><div class="cell"><pre class="code"><code>import pandas as pd, requests
+<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html">DataFrame.to_sql</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_sql.html">pandas.read_sql</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span><code>DataFrame.to_sql()</code> — the whole migration, one line</h2><div class="cell"><pre class="code"><code>import pandas as pd, requests
 from io import StringIO
 
 url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/tips.csv"

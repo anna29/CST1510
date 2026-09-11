@@ -54,6 +54,10 @@
   .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
   .topic-intro { margin-bottom: 10px; }
   .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  p.topic-docs { margin: 10px 0 18px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
   h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
   h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
@@ -151,7 +155,7 @@ is the right tool for a password.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
 </blockquote>
-</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Hashing is one-way, deterministic, and a fixed size</h2><p>Same input, same output, always — and no function reverses it back.</p>
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/hashlib.html">hashlib</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Hashing is one-way, deterministic, and a fixed size</h2><p>Same input, same output, always — and no function reverses it back.</p>
 <div class="cell"><pre class="code"><code>import hashlib
 
 print(hashlib.sha256(b"password123").hexdigest())
@@ -237,7 +241,7 @@ particular character rule.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_what_hashing_actually_does.py</code> — determinism, the avalanche effect, one-way
 <code>examples/02_why_plain_hashing_is_not_enough.py</code> — a real rainbow-table demonstration, and salting
-Docs: <a href="%7BBCRYPT_DOCS%7D">Python hashlib</a></p>
+Docs: <a href="https://pypi.org/project/bcrypt/">Python hashlib</a></p>
 </section><section class="topic" id="t1-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
@@ -271,7 +275,7 @@ on purpose.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>bcrypt works with bytes — encode first</h2><div class="cell"><pre class="code"><code>import bcrypt
+<p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>bcrypt works with bytes — encode first</h2><div class="cell"><pre class="code"><code>import bcrypt
 
 password = "correct-horse-battery-staple"
 password_bytes = password.encode("utf-8")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Encode a password of your own choosing to bytes.</p>
@@ -352,7 +356,7 @@ a wrong password.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_generate_and_check.py</code> — hashpw, checkpw, the salt embedded in the hash
 <code>examples/02_the_cost_factor.py</code> — real timings, and what they mean for an attacker
-Docs: <a href="%7BBCRYPT_DOCS%7D">bcrypt on PyPI</a></p>
+Docs: <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p>
 </section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
@@ -381,7 +385,7 @@ Docs: <a href="%7BBCRYPT_DOCS%7D">bcrypt on PyPI</a></p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>Registering — hash, then append</h2><div class="cell"><pre class="code"><code>import bcrypt
+<p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>Registering — hash, then append</h2><div class="cell"><pre class="code"><code>import bcrypt
 
 def register_user(username, password, path="users.txt"):
     """Hash password and append username,hash to the store."""
@@ -520,7 +524,7 @@ tokens, anything that must never sit in a file you might commit.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>A hard-coded secret is a mistake, not a style issue</h2><p>The moment it is pushed to a public repository, it is compromised — deleting
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>A hard-coded secret is a mistake, not a style issue</h2><p>The moment it is pushed to a public repository, it is compromised — deleting
 it later does not help, it is still in the commit history.</p>
 <div class="cell"><pre class="code"><code># BAD - never do this:
 # API_KEY = "sk-abc123realsecretvalue"

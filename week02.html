@@ -54,6 +54,10 @@
   p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
   p.muted { color: var(--ink-soft); }
   p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  p.topic-docs { margin: 10px 0 22px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
   .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
   .callout p { margin: 0; font-size: .98rem; }
@@ -82,10 +86,6 @@
   td code { white-space: nowrap; }
   ul.tight { margin: 8px 0 16px; padding-left: 20px; }
   ul.tight li { line-height: 1.6; margin-bottom: 4px; }
-  .practice-embed { max-width: 74ch; margin: 10px 0 8px; }
-  .practice-embed .practice-label { font-variant: small-caps; font-size: 13.5px; font-style: italic; color: var(--ink-soft); margin-bottom: 6px; }
-  .practice-embed .frame { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow: hidden; }
-  .practice-embed iframe { display: block; width: 100%; border: none; background: var(--paper); }
   footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
   @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
 </style>
@@ -143,11 +143,17 @@
       <p class="lede">By the end of this week you can compare values and combine conditions, write a
         program that takes a different path depending on what it finds, and repeat something either
         while a condition holds or a known number of times.</p>
-      <p class="box-note">Box we build this week: <b>PROCESS</b>. Each <em>Practice</em> is followed
-        by a small live notebook — real Python, running in the browser, no install.</p>
+      <p class="box-note">Box we build this week: <b>PROCESS</b>. Each <em>Practice</em> below sets a
+        short task — work it through in your own notebook.</p>
     </header>
 
+    <figure class="anim-figure" style="margin: 26px 0 0;">
+      <iframe src="architecture_map.html?embed=1&amp;week=2" title="System architecture — Week 2" loading="lazy" style="height:340px;"></iframe>
+      <figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>PROCESS</b>.</figcaption>
+    </figure>
+
     <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Comparisons and Boolean Logic</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/stdtypes.html#comparisons">Comparisons</a> · <a href="https://docs.python.org/3/library/stdtypes.html#boolean-operations-and-or-not">Boolean operations</a></p>
 
     <section class="topic" id="t1-s1">
       <h2><span class="num">1.</span>The six comparison operators</h2>
@@ -170,9 +176,6 @@ limit = 20
         <p>Set <code>attempts = 4</code> and <code>max_attempts = 3</code>. Print whether
           <code>attempts</code> is greater than <code>max_attempts</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_practice1.ipynb" title="Practice — attempts over max" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s2">
@@ -191,9 +194,6 @@ limit = 20
         <span class="callout-label">Practice</span>
         <p>Given <code>checks_done = 10</code>, write the line that <b>asks</b> whether
           <code>checks_done</code> is 10 — not the one that changes it.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_practice2.ipynb" title="Practice — = vs ==" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -214,9 +214,6 @@ limit = 20
         <span class="callout-label">Practice</span>
         <p>Store the result of <code>87 &lt;= 90</code> in a variable called
           <code>within_limit</code> and print it.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_practice3.ipynb" title="Practice — store a comparison" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -246,9 +243,6 @@ limit = 20
         <p>A server's <code>disk_used_pct</code> is 72. Write one line that checks whether it is
           between 70 and 90, inclusive, using <code>and</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_practice4.ipynb" title="Practice — combined condition" style="height:312px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s5">
@@ -260,9 +254,6 @@ limit = 20
         <pre class="code" style="margin-top:8px; border:1px solid var(--rule);">Locked: True</pre>
         <p style="margin-top:8px;">using an f-string.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_challenge.ipynb" title="Practice — Topic 1 challenge" style="height:409px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>A comparison is the universal <em>"does this cross a line?"</em> check — different job,
@@ -273,10 +264,6 @@ limit = 20
         <tr><td>Cyber Security</td><td><code>failed_logins &gt;= 3</code></td></tr>
         <tr><td>IT</td><td><code>disk_used_pct &gt;= 90</code></td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T01_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t1-s6">
@@ -309,6 +296,7 @@ limit = 20
     </section>
 
     <div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">if, elif, else</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/controlflow.html#if-statements">if statements</a></p>
 
     <section class="topic" id="t2-s1">
       <h2><span class="num">1.</span>if</h2>
@@ -325,9 +313,6 @@ limit = 20
         <span class="callout-label">Practice</span>
         <p>Given <code>attempts = 3</code>, write an <code>if</code> that prints
           <code>LOCKED</code> when <code>attempts &gt;= 3</code>.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_practice1.ipynb" title="Practice — if" style="height:312px;"></iframe></div>
       </div>
     </section>
 
@@ -355,9 +340,6 @@ limit = 20
         <p>Given <code>attempts = 2</code>, write an <code>if</code> / <code>else</code> that
           prints <code>LOCKED</code> when <code>attempts &gt;= 3</code>, otherwise
           <code>OK</code>.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_practice2.ipynb" title="Practice — if/else" style="height:312px;"></iframe></div>
       </div>
     </section>
 
@@ -405,9 +387,6 @@ limit = 20
         <p>A server's <code>disk_used_pct</code> is 72. Print <code>CRITICAL</code> if at or above
           90, <code>WARNING</code> if at or above 75, otherwise <code>OK</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_practice3.ipynb" title="Practice — elif" style="height:312px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s4">
@@ -428,9 +407,6 @@ limit = 20
         <p>Write an <code>if</code> / <code>elif</code> / <code>else</code> where every keyword
           lines up in the same column, each with two indented lines inside it.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_practice4.ipynb" title="Practice — indentation" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s5">
@@ -439,9 +415,6 @@ limit = 20
         <p>A login has <code>failed_attempts</code> and a limit of 3. Print <code>LOCKED</code>
           if at or over the limit, <code>WARNING</code> if exactly one below it, otherwise
           <code>OK</code>. Test it with <code>failed_attempts</code> set to 1, 2 and 3.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_challenge.ipynb" title="Practice — Topic 2 challenge" style="height:409px;"></iframe></div>
       </div>
 
       <h3>Same idea, three fields</h3>
@@ -452,10 +425,6 @@ limit = 20
         <tr><td>Cyber Security</td><td><code>if failed_logins &gt;= 3: print("LOCKED")</code></td></tr>
         <tr><td>IT</td><td><code>if disk_used_pct &gt;= 90: print("ALERT")</code></td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T02_three_fields.ipynb" title="Worked examples — three lanes" style="height:584px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t2-s6">
@@ -488,6 +457,7 @@ limit = 20
     </section>
 
     <div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">while Loops</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/reference/compound_stmts.html#the-while-statement">while statement</a></p>
 
     <section class="topic" id="t3-s1">
       <h2><span class="num">1.</span>while</h2>
@@ -524,9 +494,6 @@ limit = 20
         <span class="callout-label">Practice</span>
         <p>Print <code>hello</code> 5 times using a counter and <code>while</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_practice1.ipynb" title="Practice — while counter" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s2">
@@ -562,9 +529,6 @@ while count &lt;= 3:
         <p>Write a loop that keeps asking <code>Password: </code> and stops when it equals
           <code>python123</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_practice2.ipynb" title="Practice — while True + break" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s4">
@@ -587,9 +551,6 @@ while count &lt;= 3:
         <p>Write a loop that asks for numbers until the user types <code>done</code>, but uses
           <code>continue</code> to skip adding anything when they enter a blank line.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_practice3.ipynb" title="Practice — break and continue" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s5">
@@ -597,9 +558,6 @@ while count &lt;= 3:
       <div class="callout">
         <p>Keep a running total of numbers entered by the user. Stop when they type
           <code>done</code>. Print the total once the loop ends.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_challenge.ipynb" title="Practice — Topic 3 challenge" style="height:289px;"></iframe></div>
       </div>
 
       <h3>Same idea, three fields</h3>
@@ -610,10 +568,6 @@ while count &lt;= 3:
         <tr><td>Cyber Security</td><td>keep checking log lines until a sentinel or end of file</td></tr>
         <tr><td>IT</td><td>keep checking a server's status until it responds healthy</td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T03_three_fields.ipynb" title="Worked examples — three lanes" style="height:748px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t3-s6">
@@ -647,6 +601,7 @@ while count &lt;= 3:
     </section>
 
     <div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">for Loops and range</h2></div>
+    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/controlflow.html#for-statements">for statements</a> · <a href="https://docs.python.org/3/tutorial/controlflow.html#the-range-function">range()</a></p>
 
     <section class="topic" id="t4-s1">
       <h2><span class="num">1.</span>for i in range(n)</h2>
@@ -675,9 +630,6 @@ while count &lt;= 3:
         <p>Print <code>Record 1</code> through <code>Record 5</code> — not
           <code>Record 0</code> through <code>Record 4</code>.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_practice1.ipynb" title="Practice — range basics" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s2">
@@ -698,9 +650,6 @@ while count &lt;= 3:
         <span class="callout-label">Practice</span>
         <p>Print the numbers 1 to 10, inclusive.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_practice2.ipynb" title="Practice — range(start, stop)" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s3">
@@ -716,9 +665,6 @@ while count &lt;= 3:
       <div class="callout">
         <span class="callout-label">Practice</span>
         <p>Print every even number from 2 to 10.</p>
-      </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_practice3.ipynb" title="Practice — range with a step" style="height:289px;"></iframe></div>
       </div>
     </section>
 
@@ -740,9 +686,6 @@ while count &lt;= 3:
         <span class="callout-label">Practice</span>
         <p>Use a <code>for</code> loop to ask for 3 values and print their total.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_practice4.ipynb" title="Practice — for vs while" style="height:289px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s5">
@@ -753,9 +696,6 @@ while count &lt;= 3:
           <code>if</code> / <code>else</code> from Topic 2. Use a fixed <code>limit = 100</code>
           for every record.</p>
       </div>
-      <div class="practice-embed">
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_challenge.ipynb" title="Practice — Topic 4 challenge" style="height:312px;"></iframe></div>
-      </div>
 
       <h3>Same idea, three fields</h3>
       <p>Know the count in advance? That is what <code>for</code> is for.</p>
@@ -765,10 +705,6 @@ while count &lt;= 3:
         <tr><td>Cyber Security</td><td>check a fixed list of <code>n</code> known IPs</td></tr>
         <tr><td>IT</td><td>ping a fixed set of <code>n</code> servers</td></tr>
       </table>
-      <div class="practice-embed" style="max-width:900px;">
-        <div class="practice-label">Worked example — all three lanes</div>
-        <div class="frame"><iframe class="lazy-frame" data-src="notebooks/index.html?path=W02T04_three_fields.ipynb" title="Worked examples — three lanes" style="height:693px;"></iframe></div>
-      </div>
     </section>
 
     <section class="topic" id="t4-s6">
@@ -823,49 +759,6 @@ while count &lt;= 3:
   }
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
-
-  // Notebook iframes share one JupyterLite IndexedDB-backed contents store.
-  // Booting several at once races on that shared connection ("Cannot read
-  // properties of null (reading/setting 'db')"), so load them strictly one
-  // at a time, and confirm each one actually rendered (same-origin poll of
-  // its own DOM) before starting the next, rather than trusting the
-  // iframe's load event alone (it fires before JupyterLite's own async
-  // IndexedDB-backed init has necessarily finished).
-  (function () {
-    var queue = [];
-    var loading = false;
-    function pollReady(iframe, deadline, cb) {
-      var doc;
-      try { doc = iframe.contentDocument; } catch (e) { doc = null; }
-      var ready = doc && (doc.querySelector('.jp-Cell') || doc.querySelector('.jp-mod-error') || doc.querySelector('.jp-Dialog'));
-      if (ready || Date.now() > deadline) { cb(); return; }
-      setTimeout(function () { pollReady(iframe, deadline, cb); }, 200);
-    }
-    function next() {
-      if (loading || queue.length === 0) return;
-      loading = true;
-      var iframe = queue.shift();
-      iframe.src = iframe.getAttribute('data-src');
-      iframe.addEventListener('load', function onLoad() {
-        iframe.removeEventListener('load', onLoad);
-        pollReady(iframe, Date.now() + 9000, function () {
-          setTimeout(function () { loading = false; next(); }, 900);
-        });
-      });
-    }
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          var iframe = entry.target;
-          observer.unobserve(iframe);
-          queue.push(iframe);
-          next();
-        }
-      });
-    }, { rootMargin: '250px 0px' });
-    document.querySelectorAll('iframe.lazy-frame').forEach(function (f) { observer.observe(f); });
-  })();
-
 </script>
 </body>
 </html>

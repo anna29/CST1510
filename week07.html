@@ -54,6 +54,10 @@
   .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
   .topic-intro { margin-bottom: 10px; }
   .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  p.topic-docs { margin: 10px 0 18px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
   h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
   h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
@@ -150,7 +154,7 @@
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
 </blockquote>
-</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>The problem case creates</h2><p><code>&quot;SRV-01&quot; == &quot;srv-01&quot;</code> is <code>False</code> — same server, different text. Nothing about
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">String methods</a> · <a href="https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str">Text sequence type str</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>The problem case creates</h2><p><code>&quot;SRV-01&quot; == &quot;srv-01&quot;</code> is <code>False</code> — same server, different text. Nothing about
 Python assumes text means the same thing regardless of case; you have to say so.</p>
 <div class="cell"><pre class="code"><code>hostname_a = "SRV-01"
 hostname_b = "srv-01"
@@ -273,7 +277,7 @@ contains.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>in</code> — does this substring appear?</h2><div class="cell"><pre class="code"><code>line = "2026-09-08 ERROR failed to connect to srv-01"
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">String methods</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>in</code> — does this substring appear?</h2><div class="cell"><pre class="code"><code>line = "2026-09-08 ERROR failed to connect to srv-01"
 
 print("ERROR" in line)
 print("error" in line)          # case matters, same as any comparison
@@ -392,7 +396,7 @@ reverse.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>.split()</code> with no argument</h2><p>Splits on whitespace, any amount of it — handles uneven spacing automatically.</p>
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">String methods</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals">Formatted string literals</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>.split()</code> with no argument</h2><p>Splits on whitespace, any amount of it — handles uneven spacing automatically.</p>
 <div class="cell"><pre class="code"><code>messy = "srv-01    used=87   total=100"
 print(messy.split())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Split <code>&quot;a   b    c&quot;</code> (uneven spacing) with no argument and see what you get.</p>
 </div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span><code>maxsplit</code> — stop after N splits</h2><p>Everything after the Nth split stays together, unsplit. This is exactly what
@@ -515,7 +519,7 @@ piece, build a dict. This is exactly what this week's DEMO does.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>The pipeline, one step at a time</h2><div class="cell"><pre class="code"><code>raw_line = "  Srv-01 , used=87 , total=100  "
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">String methods</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>The pipeline, one step at a time</h2><div class="cell"><pre class="code"><code>raw_line = "  Srv-01 , used=87 , total=100  "
 
 line = raw_line.strip()
 hostname_part, rest = line.split(",", 1)

@@ -54,6 +54,10 @@
   .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
   .topic-intro { margin-bottom: 10px; }
   .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  p.topic-docs { margin: 10px 0 18px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  p.topic-docs b { color: var(--ink); }
+  p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  p.topic-docs a:hover { color: var(--accent); }
   h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
   h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
   h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
@@ -151,7 +155,7 @@
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
 </blockquote>
-</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A Series - one column, with an index</h2><div class="cell"><pre class="code"><code>import pandas as pd
+<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html">Pandas intro tutorial</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html">pandas.read_csv</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A Series - one column, with an index</h2><div class="cell"><pre class="code"><code>import pandas as pd
 
 values = pd.Series([87, 120, 45])
 print(values)</code></pre></div><div class="diagram"><pre>Series (one column):        DataFrame (a table of Series):
@@ -293,7 +297,7 @@ no loop.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>iloc</code> - by position, <code>loc</code> - by label</h2><p>With the default index they look the same, but they are asking different
+<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html">Subsetting data</a> · <a href="https://pandas.pydata.org/docs/user_guide/indexing.html">Indexing user guide</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>iloc</code> - by position, <code>loc</code> - by label</h2><p>With the default index they look the same, but they are asking different
 questions.</p>
 <div class="cell"><pre class="code"><code>import pandas as pd
 
@@ -417,7 +421,7 @@ in the <code>&quot;north&quot;</code> region <strong>and</strong> over 90%.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>groupby</code> splits the rows into groups</h2><div class="cell"><pre class="code"><code>import pandas as pd
+<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/06_calculate_statistics.html">Calculate statistics</a> · <a href="https://pandas.pydata.org/docs/reference/groupby.html">GroupBy reference</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>groupby</code> splits the rows into groups</h2><div class="cell"><pre class="code"><code>import pandas as pd
 
 servers = pd.read_csv("servers.csv")
 servers["percent"] = (servers["used"] / servers["total"]) * 100
@@ -527,7 +531,7 @@ only going to use once — usually right inside <code>.apply()</code>.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
 </blockquote>
-</div><section class="topic" id="t4-s1"><h2><span class="num">1.</span><code>.apply()</code> runs a function on every value in a column</h2><p>Start with a normal function, the way Week 3 taught it.</p>
+<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/user_guide/basics.html#row-or-column-wise-function-application">Function application</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html">Series.apply</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span><code>.apply()</code> runs a function on every value in a column</h2><p>Start with a normal function, the way Week 3 taught it.</p>
 <div class="cell"><pre class="code"><code>import pandas as pd
 
 servers = pd.read_csv("servers.csv")
