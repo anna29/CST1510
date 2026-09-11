@@ -77,6 +77,7 @@
   figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
   figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
   figure.anim-figure svg { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: transparent; }
+  figure.anim-figure img { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: #fff; }
   figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
   figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
   table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
@@ -152,7 +153,7 @@
 
     <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Case and Whitespace</h2></div><div class="topic-intro"><p>Real text arrives messy. This is the first, cheapest cleaning pass.</p>
 <blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>.</p>
 </blockquote>
 <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">String methods</a> · <a href="https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str">Text sequence type str</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>The problem case creates</h2><p><code>&quot;SRV-01&quot; == &quot;srv-01&quot;</code> is <code>False</code> — same server, different text. Nothing about
 Python assumes text means the same thing regardless of case; you have to say so.</p>
@@ -698,5 +699,6 @@ the lab — nothing about it resets.</p>
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 </script>
+
 </body>
 </html>

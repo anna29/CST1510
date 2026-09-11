@@ -77,6 +77,7 @@
   figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
   figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
   figure.anim-figure svg { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: transparent; }
+  figure.anim-figure img { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: #fff; }
   figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
   figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
   table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
@@ -95,13 +96,14 @@
     <span class="toc-label">Contents</span>
     <a href="#t1-top" class="toc-topic">Topic 1 — API Keys, Reviewed</a>
 <div class="toc-group" data-group="t1">
-<a href="#t1-s1" class="toc-sub">1. Loading the key — the same habit as Week 9</a>
-<a href="#t1-s2" class="toc-sub">2. Two different responses to a missing key</a>
-<a href="#t1-s3" class="toc-sub">3. Making a feature optional, end to end</a>
-<a href="#t1-s4" class="toc-sub">Challenge</a>
-<a href="#t1-s5" class="toc-sub">Same idea, three fields</a>
-<a href="#t1-s6" class="toc-sub">Common mistakes</a>
-<a href="#t1-s7" class="toc-sub">Recap</a>
+<a href="#t1-s1" class="toc-sub">Before you start — where <code>OPENAI_API_KEY</code> comes from</a>
+<a href="#t1-s2" class="toc-sub">1. Loading the key — the same habit as Week 9</a>
+<a href="#t1-s3" class="toc-sub">2. Two different responses to a missing key</a>
+<a href="#t1-s4" class="toc-sub">3. Making a feature optional, end to end</a>
+<a href="#t1-s5" class="toc-sub">Challenge</a>
+<a href="#t1-s6" class="toc-sub">Same idea, three fields</a>
+<a href="#t1-s7" class="toc-sub">Common mistakes</a>
+<a href="#t1-s8" class="toc-sub">Recap</a>
 </div>
 <a href="#t2-top" class="toc-topic">Topic 2 — Calling the ChatGPT API</a>
 <div class="toc-group" data-group="t2">
@@ -152,13 +154,27 @@
     <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">API Keys, Reviewed</h2></div><div class="topic-intro"><p>Week 9's lesson, one more time, for the one secret this whole week revolves
 around — and the pattern that makes a feature genuinely optional.</p>
 <blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>.</p>
 </blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a> · <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Loading the key — the same habit as Week 9</h2><div class="cell"><pre class="code"><code>import os
+<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a> · <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p></div><section class="topic" id="t1-s1"><h2>Before you start — where <code>OPENAI_API_KEY</code> comes from</h2><p>If you want to try the optional AI feature for real, you first need your own OpenAI API key.</p>
+<ol>
+<li>Sign in to the OpenAI platform dashboard.</li>
+<li>Create an API key there.</li>
+<li>Copy it once and store it safely — treat it like a password.</li>
+<li>Set it as an environment variable in your terminal.</li>
+</ol>
+<p><strong>macOS / Linux</strong></p>
+<div class="cell"><pre class="code"><code>export OPENAI_API_KEY="your_api_key_here"</code></pre></div>
+<p><strong>Windows PowerShell</strong></p>
+<div class="cell"><pre class="code"><code>$env:OPENAI_API_KEY="your_api_key_here"</code></pre></div>
+<p>OpenAI's Python tools can read the key from the environment automatically.</p>
+<p>If you do <strong>not</strong> have a key, keep going anyway: the AI feature is optional this week, and the required part of the coursework must still work without it.</p>
+<p>Docs: <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p>
+</section><section class="topic" id="t1-s2"><h2><span class="num">1.</span>Loading the key — the same habit as Week 9</h2><div class="cell"><pre class="code"><code>import os
 
 api_key = os.environ.get("OPENAI_API_KEY")
 print("set" if api_key else "not set")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Check whether <code>OPENAI_API_KEY</code> is set in your own terminal, without printing the value itself.</p>
-</div></section><section class="topic" id="t1-s2"><h2><span class="num">2.</span>Two different responses to a missing key</h2><p>Sometimes you want a clear, loud error. Sometimes you want the feature to
+</div></section><section class="topic" id="t1-s3"><h2><span class="num">2.</span>Two different responses to a missing key</h2><p>Sometimes you want a clear, loud error. Sometimes you want the feature to
 just quietly not appear. Both are correct — depending on what the feature is.</p>
 <div class="cell"><pre class="code"><code>def require_key():
     """Raise a clear error if the key is missing - use when the feature MUST have it."""
@@ -170,7 +186,7 @@ just quietly not appear. Both are correct — depending on what the feature is.<
 def optional_key():
     """Return None if missing - use when the feature can just be skipped."""
     return os.environ.get("OPENAI_API_KEY")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Explain, in your own words, when you would reach for <code>require_key()</code> versus <code>optional_key()</code>.</p>
-</div></section><section class="topic" id="t1-s3"><h2><span class="num">3.</span>Making a feature optional, end to end</h2><p>The required part of the app never depends on the optional part succeeding.</p>
+</div></section><section class="topic" id="t1-s4"><h2><span class="num">3.</span>Making a feature optional, end to end</h2><p>The required part of the app never depends on the optional part succeeding.</p>
 <div class="cell"><pre class="code"><code>def get_ai_summary(text):
     """Return a summary, or None if no key is set - never crashes."""
     api_key = os.environ.get("OPENAI_API_KEY")
@@ -184,10 +200,10 @@ def render_report(records):
     print(summary if summary else "(AI summary skipped - no key set)")
 
 render_report(["srv-01: OK", "srv-02: OVER LIMIT"])</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Run this without <code>OPENAI_API_KEY</code> set and confirm it completes cleanly with the skip message.</p>
-</div></section><section class="topic" id="t1-s4"><h2>Challenge</h2><p>Write a function that requires a key and raises a clear <code>RuntimeError</code> if it
+</div></section><section class="topic" id="t1-s5"><h2>Challenge</h2><p>Write a function that requires a key and raises a clear <code>RuntimeError</code> if it
 is missing, and a second function that wraps it, catches that error, and
 returns <code>None</code> instead — showing both patterns from the same underlying check.</p>
-</section><section class="topic" id="t1-s5"><h2>Same idea, three fields</h2><table class="booktabs">
+</section><section class="topic" id="t1-s6"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -209,7 +225,7 @@ returns <code>None</code> instead — showing both patterns from the same underl
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t1-s6"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="t1-s7"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -243,7 +259,7 @@ returns <code>None</code> instead — showing both patterns from the same underl
 <h3>Go deeper</h3>
 <p><code>examples/01_loading_the_key_safely.py</code> — os.environ, a clear required-key error
 <code>examples/02_making_a_feature_optional.py</code> — the full optional-feature pattern</p>
-</section><section class="topic" id="t1-s7"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="t1-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -672,5 +688,6 @@ want to — make it a little smarter. Nothing about any of it resets.</p>
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 </script>
+
 </body>
 </html>

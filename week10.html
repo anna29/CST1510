@@ -77,6 +77,7 @@
   figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
   figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
   figure.anim-figure svg { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: transparent; }
+  figure.anim-figure img { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: #fff; }
   figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
   figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
   table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
@@ -229,7 +230,7 @@ WHERE active = 1;</code></pre></div>
 <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Connecting and Creating Tables</h2></div><div class="topic-intro"><p>The whole database is one file. No server, nothing to install — <code>import sqlite3</code>
 is already in Python.</p>
 <blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>.</p>
 </blockquote>
 <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a> · <a href="https://www.sqlite.org/lang_createtable.html">SQLite CREATE TABLE</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Connecting opens the file, or creates it</h2><div class="cell"><pre class="code"><code>import sqlite3
 
@@ -740,5 +741,6 @@ real — nothing about it resets.</p>
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 </script>
+
 </body>
 </html>
