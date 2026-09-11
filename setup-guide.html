@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CST1510 Setup Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #faf9f6; --ink: #1c1b19; --ink-soft: #4a4844; --rule: #d8d4cc; --rule-strong: #8a867c;
+    --accent: #7a2e2e; --code-bg: #f1efe9; --code-ink: #2a2823; --card: #fffdf8;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; font-size: 17px; }
+  code, pre { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .page { max-width: 980px; margin: 0 auto; padding: 56px 28px 100px; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1 { margin: 0 0 10px; font-size: 2.2rem; letter-spacing: -.01em; }
+  .lede { margin: 0 0 20px; color: var(--ink-soft); max-width: 68ch; line-height: 1.6; font-style: italic; }
+  .callout { border-left: 3px solid var(--rule-strong); padding: 4px 0 4px 16px; margin: 20px 0 28px; max-width: 70ch; }
+  .callout p { margin: 0; }
+  .tabs { display: flex; gap: 8px; margin: 18px 0 24px; }
+  .tabs button {
+    border: 1px solid var(--rule); background: var(--card); color: var(--ink-soft);
+    padding: 8px 14px; border-radius: 999px; cursor: pointer; font: inherit; font-weight: 600;
+  }
+  .tabs button.active { color: var(--ink); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  section { margin: 34px 0 0; padding-top: 30px; border-top: 1px solid var(--rule); }
+  section:first-of-type { border-top: none; padding-top: 0; }
+  h2 { margin: 0 0 12px; font-size: 1.35rem; }
+  p { margin: 0 0 14px; line-height: 1.68; max-width: 70ch; }
+  ul, ol { max-width: 70ch; line-height: 1.66; }
+  li { margin-bottom: 8px; }
+  .check { display: inline-block; padding: 2px 8px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-soft); font-size: 13px; margin-bottom: 10px; }
+  .os { display: none; }
+  .os.active { display: block; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; max-width: 900px; }
+  .card { background: var(--card); border: 1px solid var(--rule); padding: 18px; border-radius: 10px; }
+  .card h3 { margin: 0 0 10px; font-size: 1.02rem; }
+  pre {
+    margin: 10px 0 14px; padding: 14px 16px; background: var(--code-bg); color: var(--code-ink);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow-x: auto; font-size: 13.5px; line-height: 1.58;
+  }
+  table { border-collapse: collapse; width: 100%; max-width: 860px; margin: 18px 0; font-size: 14.5px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  th, td { text-align: left; padding: 8px 14px 8px 0; vertical-align: top; }
+  th { border-bottom: 1px solid var(--ink-soft); font-variant: small-caps; color: var(--ink-soft); font-size: 14px; }
+  a { color: var(--accent); }
+  footer { margin-top: 42px; padding-top: 24px; border-top: 1px solid var(--rule); color: var(--ink-soft); font-variant: small-caps; font-size: 14px; }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #17181a; --ink: #e7e4dc; --ink-soft: #a8a399; --rule: #37372f; --rule-strong: #5c594e;
+      --accent: #d98c8c; --code-bg: #1f211f; --code-ink: #ddd8cc; --card: #1d1f21;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="breadcrumb">CST1510</div>
+  <h1>Setup Guide</h1>
+  <p class="lede">Install Python, VS Code, Git and this module's packages in a clear order.
+    Use the Windows / macOS switch below to see the commands written the way your machine expects them.</p>
+
+  <div class="callout">
+    <p>Do the steps in order. Python first, then VS Code, then Git/GitHub, then the module packages,
+      then the final verification check.</p>
+  </div>
+
+  <div class="tabs" aria-label="Operating system">
+    <button class="active" data-os="windows">Windows</button>
+    <button data-os="mac">macOS</button>
+  </div>
+
+  <section>
+    <h2>1. Python</h2>
+    <span class="check">Check it worked</span>
+    <div class="os active" data-os-panel="windows">
+      <p>Open PowerShell and check whether Python is already available:</p>
+      <pre>python --version</pre>
+      <p>If that shows Python 3.10 or higher, move on. If it says the command is not found, install Python from
+        <a href="https://www.python.org/downloads/">python.org/downloads</a> and tick <b>Add python.exe to PATH</b>.</p>
+      <pre>python --version</pre>
+    </div>
+    <div class="os" data-os-panel="mac">
+      <p>Open Terminal and check whether Python is already available:</p>
+      <pre>python3 --version</pre>
+      <p>If that shows Python 3.10 or higher, move on. If not, install Python from
+        <a href="https://www.python.org/downloads/">python.org/downloads</a>, then reopen Terminal and check again.</p>
+      <pre>python3 --version</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. VS Code</h2>
+    <span class="check">Check it worked</span>
+    <p>Install VS Code from <a href="https://code.visualstudio.com/">code.visualstudio.com</a>.
+      Then open VS Code and install these two extensions:</p>
+    <ul>
+      <li><b>Python</b> by Microsoft</li>
+      <li><b>Jupyter</b> by Microsoft</li>
+    </ul>
+    <p>These are needed because the walkthrough material uses both plain Python files and Jupyter notebooks.</p>
+  </section>
+
+  <section>
+    <h2>3. Git and GitHub</h2>
+    <span class="check">Check it worked</span>
+    <p>Install Git from <a href="https://git-scm.com/downloads">git-scm.com/downloads</a>. Create a GitHub account if you do not already have one.</p>
+    <div class="os active" data-os-panel="windows">
+      <pre>git --version
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"</pre>
+    </div>
+    <div class="os" data-os-panel="mac">
+      <pre>git --version
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"</pre>
+    </div>
+    <p>Use the same email here as the one on your GitHub account.</p>
+  </section>
+
+  <section>
+    <h2>4. Create your CST1510 repository</h2>
+    <p>This happens once, not every week. On GitHub, create a new repository named something like
+      <code>cst1510-yourname</code> and tick <b>Add a README file</b>.</p>
+    <p>Then copy the repository's HTTPS URL and clone it into a folder called <code>CST1510</code> inside your Documents folder.</p>
+    <div class="os active" data-os-panel="windows">
+      <pre>cd Documents
+mkdir CST1510
+cd CST1510
+git clone https://github.com/&lt;you&gt;/&lt;repo-name&gt;.git
+cd &lt;repo-name&gt;</pre>
+    </div>
+    <div class="os" data-os-panel="mac">
+      <pre>cd ~/Documents
+mkdir CST1510
+cd CST1510
+git clone https://github.com/&lt;you&gt;/&lt;repo-name&gt;.git
+cd &lt;repo-name&gt;</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>5. Install this module's packages</h2>
+    <span class="check">Check it worked</span>
+    <p>Inside your cloned repository, open the <code>Week 00 - Orientation and Setup</code> folder and install the packages listed in <code>requirements.txt</code>.</p>
+    <div class="grid">
+      <div class="card os active" data-os-panel="windows">
+        <h3>Windows</h3>
+        <pre>python -m pip install -r requirements.txt</pre>
+      </div>
+      <div class="card os active" data-os-panel="windows">
+        <h3>Optional virtual environment</h3>
+        <pre>python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -r requirements.txt</pre>
+      </div>
+      <div class="card os" data-os-panel="mac">
+        <h3>macOS</h3>
+        <pre>pip3 install -r requirements.txt</pre>
+      </div>
+      <div class="card os" data-os-panel="mac">
+        <h3>Optional virtual environment</h3>
+        <pre>python3 -m venv .venv
+source .venv/bin/activate
+pip3 install -r requirements.txt</pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>6. Run the final check</h2>
+    <span class="check">Check it worked</span>
+    <p>Run the verification script from inside <code>Week 00 - Orientation and Setup</code>. Every line should say <code>OK</code>.</p>
+    <div class="os active" data-os-panel="windows">
+      <pre>python verify_setup.py</pre>
+    </div>
+    <div class="os" data-os-panel="mac">
+      <pre>python3 verify_setup.py</pre>
+    </div>
+    <p>If anything says <code>MISSING</code>, fix that one thing and run the script again.</p>
+  </section>
+
+  <section>
+    <h2>Common problems</h2>
+    <table>
+      <tr><th>Problem</th><th>Likely fix</th></tr>
+      <tr><td>Python command not found</td><td>Reinstall Python and make sure it is added to PATH, then reopen the terminal.</td></tr>
+      <tr><td>pip command not found</td><td>Use <code>python -m pip</code> on Windows or <code>python3 -m pip</code> on macOS.</td></tr>
+      <tr><td>No Python kernel in VS Code</td><td>Install the Jupyter extension, reopen the notebook, then choose a kernel.</td></tr>
+      <tr><td>git command not found</td><td>Restart the terminal after installing Git. On Windows, try Git Bash if PowerShell still cannot see Git.</td></tr>
+      <tr><td>Permission error installing packages on macOS</td><td>Use a virtual environment or add <code>--user</code> to the pip command.</td></tr>
+    </table>
+  </section>
+
+  <footer>CST1510 - Setup Guide</footer>
+</div>
+<script>
+  (function () {
+    var buttons = document.querySelectorAll("[data-os]");
+    var panels = document.querySelectorAll("[data-os-panel]");
+    function setOS(name) {
+      buttons.forEach(function (button) {
+        button.classList.toggle("active", button.dataset.os === name);
+      });
+      panels.forEach(function (panel) {
+        panel.classList.toggle("active", panel.dataset.osPanel === name);
+      });
+    }
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        setOS(button.dataset.os);
+      });
+    });
+    setOS("windows");
+  }());
+</script>
+</body>
+</html>

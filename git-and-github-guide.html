@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CST1510 Git and GitHub Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #faf9f6; --ink: #1c1b19; --ink-soft: #4a4844; --rule: #d8d4cc; --rule-strong: #8a867c;
+    --accent: #7a2e2e; --code-bg: #f1efe9; --code-ink: #2a2823; --card: #fffdf8;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; font-size: 17px; }
+  code, pre { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .page { max-width: 960px; margin: 0 auto; padding: 56px 28px 100px; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1 { margin: 0 0 10px; font-size: 2.15rem; letter-spacing: -.01em; }
+  .lede { margin: 0 0 20px; color: var(--ink-soft); max-width: 68ch; line-height: 1.6; font-style: italic; }
+  .callout { border-left: 3px solid var(--rule-strong); padding: 4px 0 4px 16px; margin: 20px 0 28px; max-width: 70ch; }
+  .callout p { margin: 0; }
+  section { margin: 34px 0 0; padding-top: 30px; border-top: 1px solid var(--rule); }
+  section:first-of-type { border-top: none; padding-top: 0; }
+  h2 { margin: 0 0 12px; font-size: 1.35rem; }
+  p { margin: 0 0 14px; line-height: 1.68; max-width: 70ch; }
+  ul { max-width: 70ch; line-height: 1.66; }
+  li { margin-bottom: 8px; }
+  .quick {
+    max-width: 70ch; background: var(--card); border: 1px solid var(--rule); border-radius: 10px;
+    padding: 18px; margin: 22px 0;
+  }
+  .step-label { display: inline-block; padding: 2px 8px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-soft); font-size: 13px; margin-bottom: 10px; }
+  pre {
+    margin: 10px 0 14px; padding: 14px 16px; background: var(--code-bg); color: var(--code-ink);
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); overflow-x: auto; font-size: 13.5px; line-height: 1.58;
+  }
+  table { border-collapse: collapse; width: 100%; max-width: 860px; margin: 18px 0; font-size: 14.5px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  th, td { text-align: left; padding: 8px 14px 8px 0; vertical-align: top; }
+  th { border-bottom: 1px solid var(--ink-soft); font-variant: small-caps; color: var(--ink-soft); font-size: 14px; }
+  a { color: var(--accent); }
+  footer { margin-top: 42px; padding-top: 24px; border-top: 1px solid var(--rule); color: var(--ink-soft); font-variant: small-caps; font-size: 14px; }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #17181a; --ink: #e7e4dc; --ink-soft: #a8a399; --rule: #37372f; --rule-strong: #5c594e;
+      --accent: #d98c8c; --code-bg: #1f211f; --code-ink: #ddd8cc; --card: #1d1f21;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="breadcrumb">CST1510</div>
+  <h1>Git and GitHub Guide</h1>
+  <p class="lede">This is the weekly routine for saving your work properly: check what changed,
+    stage it, commit it, push it, then confirm it is really on GitHub.</p>
+
+  <div class="callout">
+    <p>Your GitHub repository is not just backup. It is part of the evidence that your work was
+      completed week by week across the term.</p>
+  </div>
+
+  <div class="quick">
+    <p><b>The short version, once you know the steps:</b></p>
+    <pre>git status
+git add .
+git commit -m "Week N lab and mini-project"
+git push</pre>
+    <p>Then open GitHub in a browser and check the files are really there.</p>
+  </div>
+
+  <section>
+    <h2>Step 0. Open a terminal in the right folder</h2>
+    <span class="step-label">Start here</span>
+    <p>You need to be inside your own CST1510 repository folder, not just somewhere in Documents.</p>
+    <p>The easiest way is to open your repository in VS Code, then open the built-in terminal.</p>
+    <pre>pwd</pre>
+    <p>If the path does not end in your repository folder name, move there first:</p>
+    <pre>cd path/to/your/repository</pre>
+  </section>
+
+  <section>
+    <h2>Step 1. See what changed</h2>
+    <span class="step-label">Look first</span>
+    <pre>git status</pre>
+    <p><code>modified</code> means you changed an existing file. <code>untracked</code> means there is a new file Git has not seen before.</p>
+    <pre>On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  modified:   Week 04 - Lists, Dictionaries and Files/LAB/W04_Lab.ipynb
+  modified:   Week 04 - Lists, Dictionaries and Files/LAB/template.py
+
+Untracked files:
+  Week 04 - Lists, Dictionaries and Files/LAB/my_records.csv</pre>
+  </section>
+
+  <section>
+    <h2>Step 2. Stage everything for the snapshot</h2>
+    <span class="step-label">Prepare it</span>
+    <pre>git add .</pre>
+    <p>This usually prints nothing. That is normal. The dot means everything in this repository folder.</p>
+    <p>Check again:</p>
+    <pre>git status</pre>
+    <p>Files should now appear under <code>Changes to be committed</code>.</p>
+  </section>
+
+  <section>
+    <h2>Step 3. Save a local snapshot</h2>
+    <span class="step-label">Commit it</span>
+    <pre>git commit -m "Week 4 lab and mini-project"</pre>
+    <p>Change the week number to the week you are on. This saves the snapshot on your machine only.</p>
+  </section>
+
+  <section>
+    <h2>Step 4. Send it to GitHub</h2>
+    <span class="step-label">Push it</span>
+    <pre>git push</pre>
+    <p>The first time, GitHub may ask you to sign in. Follow the prompts.</p>
+  </section>
+
+  <section>
+    <h2>Step 5. Check it really arrived</h2>
+    <span class="step-label">Verify it</span>
+    <p>Open your repository on GitHub in a browser and make sure this week's files are visible there.</p>
+    <p>A successful <code>git push</code> is a good sign, but seeing the files on GitHub is the real check.</p>
+  </section>
+
+  <section>
+    <h2>What actually matters each week</h2>
+    <table>
+      <tr><th>Weeks</th><th>Main files</th></tr>
+      <tr><td>1-7</td><td>Your lab notebook and that week's <code>LAB/template.py</code>. Some weeks also include a real data file for the mini-project.</td></tr>
+      <tr><td>8-12</td><td>Your continuing <code>project/</code> folder, updated and pushed every week.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Common mistakes</h2>
+    <table>
+      <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
+      <tr><td>Wrong folder</td><td><code>fatal: not a git repository</code></td><td>Run <code>pwd</code>, then <code>cd</code> into your repository root.</td></tr>
+      <tr><td>Forgot <code>git add .</code></td><td><code>nothing to commit</code></td><td>Stage first, then commit.</td></tr>
+      <tr><td>Committed but did not push</td><td>GitHub still shows last week's work</td><td>Run <code>git push</code>.</td></tr>
+      <tr><td>Vague message like <code>update</code></td><td>History becomes hard to read</td><td>Use <code>Week N lab and mini-project</code>.</td></tr>
+      <tr><td>Added a secret or database file by mistake</td><td>Private data ends up in the repo</td><td>Check <code>git status</code> before you commit. Use a <code>.gitignore</code> where needed.</td></tr>
+    </table>
+  </section>
+
+  <footer>CST1510 - Git and GitHub Guide</footer>
+</div>
+</body>
+</html>
