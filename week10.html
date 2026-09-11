@@ -89,7 +89,8 @@
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#t1-top" class="toc-topic">Topic 1 — Connecting and Creating Tables</a>
+    <a href="#prelude-top" class="toc-topic">Before Topic 1 — What SQL Is</a>
+<a href="#t1-top" class="toc-topic">Topic 1 — Connecting and Creating Tables</a>
 <div class="toc-group" data-group="t1">
 <a href="#t1-s1" class="toc-sub">1. Connecting opens the file, or creates it</a>
 <a href="#t1-s2" class="toc-sub">2. <code>CREATE TABLE</code> — defining the shape</a>
@@ -146,7 +147,82 @@
 
     <figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="The database lifecycle" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">STORE, for real</text><line x1="166.0" y1="164" x2="236.7" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Connecting and</tspan><tspan x="0.0" dy="19">Creating Tables</tspan></text><line x1="424.7" y1="164" x2="495.3" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="244.7" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="258.7" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="258.7" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="258.7" dy="0">Inserting and</tspan><tspan x="258.7" dy="19">Querying</tspan></text><line x1="683.3" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="503.3" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="517.3" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="517.3" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="517.3" dy="0">Updating, Deleting</tspan><tspan x="517.3" dy="19">and the Safe Pattern</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">Migrating Real Data</tspan><tspan x="776.0" dy="19">In</tspan></text></svg><figcaption><b>The database lifecycle</b>. Week 10 walks from schema creation to safe querying, updates, deletes, and importing real data.</figcaption></figure>
 
-    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Connecting and Creating Tables</h2></div><div class="topic-intro"><p>The whole database is one file. No server, nothing to install — <code>import sqlite3</code>
+    <div class="topic-divider" id="prelude-top"><span class="topic-divider-n">Primer</span><h2 class="topic-divider-title">Before Topic 1 — What SQL Is</h2></div><section class="topic" id="prelude-s1"><p>SQL is the language we use to talk to a relational database. Python is not replacing SQL this week; Python is simply the program that sends SQL commands to SQLite and receives the results back.</p>
+<p>Think of the database as a set of <strong>tables</strong>:</p>
+<table class="booktabs">
+<thead>
+<tr>
+  <th>Word</th>
+  <th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>table</strong></td>
+  <td>a whole grid of related data</td>
+</tr>
+<tr>
+  <td><strong>row</strong></td>
+  <td>one record in that table</td>
+</tr>
+<tr>
+  <td><strong>column</strong></td>
+  <td>one field repeated for every row</td>
+</tr>
+</tbody>
+</table>
+<div class="cell"><pre class="code"><code>devices
++----+----------+--------------+--------+
+| id | name     | ip           | active |
++----+----------+--------------+--------+
+| 1  | AP-Lobby | 10.0.0.10    | 1      |
+| 2  | Switch-1 | 10.0.0.11    | 0      |
++----+----------+--------------+--------+
+   row 1         row 2
+
+columns: id, name, ip, active</code></pre></div>
+<p>The four SQL jobs students meet first are:</p>
+<table class="booktabs">
+<thead>
+<tr>
+  <th>SQL verb</th>
+  <th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>CREATE TABLE</code></td>
+  <td>define the shape of the table</td>
+</tr>
+<tr>
+  <td><code>INSERT INTO</code></td>
+  <td>add rows</td>
+</tr>
+<tr>
+  <td><code>SELECT</code></td>
+  <td>read rows back out</td>
+</tr>
+<tr>
+  <td><code>UPDATE</code> / <code>DELETE</code></td>
+  <td>change or remove existing rows</td>
+</tr>
+</tbody>
+</table>
+<p>Read a query almost like an instruction sentence:</p>
+<div class="cell"><pre class="code"><code>SELECT name, ip
+FROM devices
+WHERE active = 1;</code></pre></div>
+<p>This means: &quot;from the <code>devices</code> table, give me the <code>name</code> and <code>ip</code> columns, but only for rows where <code>active</code> is <code>1</code>.&quot;</p>
+<p>A few beginner-friendly rules help here:</p>
+<ul>
+<li>SQL keywords are often written in capitals for readability, but SQL itself is not demanding capitals.</li>
+<li>The semicolon marks the end of a statement. In Python strings, it is often optional for SQLite, but it is still a good habit when learning SQL.</li>
+<li><code>SELECT *</code> means &quot;all columns&quot;, but naming the columns you actually want is usually clearer.</li>
+<li>The <code>WHERE</code> part filters rows. If there is no <code>WHERE</code>, the command affects or returns <strong>all rows</strong>.</li>
+</ul>
+<p>Once that picture is clear, the Python code in this week makes more sense: <code>sqlite3.connect(...)</code> opens the database file, <code>cursor.execute(...)</code> sends SQL to it, and methods like <code>fetchone()</code> or <code>fetchall()</code> bring the answers back into Python.</p>
+</section>
+<div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Connecting and Creating Tables</h2></div><div class="topic-intro"><p>The whole database is one file. No server, nothing to install — <code>import sqlite3</code>
 is already in Python.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
