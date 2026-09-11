@@ -8,435 +8,133 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
   :root {
-    --paper: #faf7f0;
-    --paper-2: #f2ede0;
-    --card: #fffdfa;
-    --ink: #1b1a17;
-    --ink-soft: #59554d;
-    --rule: #d8d0c2;
-    --rule-strong: #8b7f6b;
-    --accent: #8a3b12;
-    --accent-soft: #e5c6a6;
-    --accent-2: #355c5a;
-    --code-bg: #f3efe7;
-    --code-ink: #2d2a25;
+    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
+    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background:
-      radial-gradient(circle at top left, rgba(229, 198, 166, 0.36), transparent 24%),
-      linear-gradient(180deg, #fbf8f1 0%, var(--paper) 34%, #f8f4eb 100%);
-    color: var(--ink);
-    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-    font-size: 17px;
-  }
-  code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
-  a { color: inherit; }
-  .shell {
-    max-width: 1220px;
-    margin: 0 auto;
-    padding: 44px 28px 96px;
-    display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
-    gap: 36px;
-    align-items: start;
-  }
-  .toc {
-    position: sticky;
-    top: 24px;
-    border: 1px solid var(--rule);
-    background: rgba(255, 253, 250, 0.9);
-    backdrop-filter: blur(8px);
-    border-radius: 18px;
-    padding: 18px 16px;
-    max-height: calc(100vh - 48px);
-    overflow-y: auto;
-  }
-  .toc-label {
-    display: block;
-    font-variant: small-caps;
-    letter-spacing: .06em;
-    color: var(--ink-soft);
-    margin-bottom: 10px;
-  }
-  .toc a {
-    display: block;
-    text-decoration: none;
-    color: var(--ink-soft);
-    line-height: 1.4;
-    padding: 4px 0;
-  }
-  .toc a:hover,
-  .toc a.current { color: var(--accent); }
-  .toc a.toc-topic {
-    color: var(--ink);
-    font-weight: 700;
-    margin-top: 12px;
-    font-size: 13.5px;
-  }
-  .toc a.toc-topic:first-of-type { margin-top: 0; }
-  .toc a.toc-sub {
-    padding-left: 12px;
-    font-size: 12.5px;
-  }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif; font-size: 17px; }
+  code, .mono, pre { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  .shell { max-width: 1000px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; align-items: start; }
+  nav.toc { position: sticky; top: 32px; display: flex; flex-direction: column; gap: 1px; font-size: 13px; padding-top: 6px; max-height: calc(100vh - 64px); overflow-y: auto; }
+  nav.toc .toc-label { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); margin-bottom: 10px; font-size: 13px; }
+  nav.toc a { color: var(--ink-soft); text-decoration: none; padding: 3px 0; line-height: 1.4; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { color: var(--ink); }
+  nav.toc a.current { color: var(--accent); }
+  nav.toc a.toc-topic { color: var(--ink); font-weight: 700; margin-top: 16px; font-size: 13.5px; }
+  nav.toc a.toc-topic:first-of-type { margin-top: 0; }
+  nav.toc a.toc-sub { padding-left: 12px; font-size: 12.5px; }
+  nav.toc .toc-group { display: flex; flex-direction: column; max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  nav.toc .toc-group.open { max-height: 520px; }
   article { min-width: 0; }
-  .page-head {
-    position: relative;
-    margin-bottom: 34px;
-    padding: 26px 28px 28px;
-    background: linear-gradient(145deg, rgba(255,253,250,.94), rgba(248,242,232,.92));
-    border: 1px solid var(--rule);
-    border-radius: 28px;
-    overflow: hidden;
-  }
-  .page-head::after {
-    content: "";
-    position: absolute;
-    inset: auto -30px -34px auto;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(229,198,166,.68), rgba(229,198,166,0));
-    pointer-events: none;
-  }
-  .breadcrumb {
-    font-variant: small-caps;
-    letter-spacing: .06em;
-    color: var(--ink-soft);
-    margin-bottom: 8px;
-    font-size: 14px;
-  }
-  h1.page-title {
-    margin: 0 0 10px;
-    font-size: clamp(2rem, 3.4vw, 3rem);
-    line-height: 1.06;
-    letter-spacing: -.02em;
-  }
-  .lede {
-    margin: 0 0 14px;
-    max-width: 65ch;
-    color: var(--ink-soft);
-    font-size: 1.06rem;
-    line-height: 1.65;
-    font-style: italic;
-  }
-  .box-note {
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: 14.5px;
-  }
-  .box-note b { color: var(--ink); }
-  .box-note code {
-    background: var(--code-bg);
-    padding: 2px 6px;
-    border-radius: 999px;
-    color: var(--code-ink);
-  }
-  .study-note {
-    margin-top: 16px;
-    max-width: 70ch;
-    padding: 12px 14px;
-    border-left: 3px solid var(--accent);
-    background: rgba(229, 198, 166, 0.14);
-    color: var(--ink-soft);
-  }
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 14px;
-    margin: 22px 0 8px;
-  }
-  .summary-card {
-    padding: 14px 14px 12px;
-    border: 1px solid var(--rule);
-    border-radius: 18px;
-    background: rgba(255,255,255,.6);
-  }
-  .summary-card .k {
-    font-variant: small-caps;
-    letter-spacing: .05em;
-    color: var(--ink-soft);
-    font-size: 12px;
-  }
-  .summary-card .v {
-    margin-top: 8px;
-    font-size: 1rem;
-    line-height: 1.35;
-    font-weight: 700;
-  }
-  .outcomes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 10px;
-    margin: 20px 0 0;
-  }
-  .outcome {
-    padding: 10px 12px;
-    border: 1px solid var(--rule);
-    border-radius: 16px;
-    background: rgba(255,253,250,.76);
-    line-height: 1.45;
-    color: var(--ink);
-    font-size: .97rem;
-  }
-  figure.week-map {
-    margin: 30px 0 34px;
-    padding: 18px 18px 14px;
-    background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(248,242,232,.75));
-    border: 1px solid var(--rule);
-    border-radius: 24px;
-  }
-  figure.week-map figcaption {
-    margin-top: 10px;
-    color: var(--ink-soft);
-    font-size: 14px;
-    line-height: 1.5;
-    text-align: center;
-  }
-  .topic {
-    margin-bottom: 42px;
-    padding: 28px 28px 10px;
-    background: rgba(255,253,250,.78);
-    border: 1px solid var(--rule);
-    border-radius: 26px;
-    scroll-margin-top: 24px;
-  }
-  .topic-kicker {
-    font-variant: small-caps;
-    letter-spacing: .08em;
-    color: var(--ink-soft);
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-  h2.topic-title {
-    margin: 0 0 12px;
-    font-size: clamp(1.55rem, 2.2vw, 2rem);
-    line-height: 1.12;
-    letter-spacing: -.015em;
-  }
-  .topic-intro {
-    max-width: 70ch;
-    color: var(--ink-soft);
-  }
-  .topic-intro p:last-child { margin-bottom: 0; }
-  .section {
-    padding-top: 26px;
-    margin-top: 26px;
-    border-top: 1px solid var(--rule);
-    scroll-margin-top: 24px;
-  }
-  .section:first-of-type {
-    margin-top: 24px;
-  }
-  h3.section-title {
-    margin: 0 0 14px;
-    font-size: 1.18rem;
-    line-height: 1.25;
-  }
-  p, li {
-    line-height: 1.7;
-    max-width: 70ch;
-    text-wrap: pretty;
-  }
-  p {
-    margin: 0 0 14px;
-  }
-  ul, ol {
-    margin: 10px 0 16px;
-    padding-left: 22px;
-  }
-  li {
-    margin-bottom: 5px;
-  }
-  blockquote {
-    margin: 18px 0;
-    padding: 2px 0 2px 16px;
-    border-left: 3px solid var(--accent-soft);
-    color: var(--ink-soft);
-  }
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 78ch;
-    margin: 18px 0;
-    font-size: 14.5px;
-  }
-  table.booktabs {
-    border-top: 1.5px solid var(--ink);
-    border-bottom: 1.5px solid var(--ink);
-  }
-  th, td {
-    text-align: left;
-    padding: 8px 12px 8px 0;
-    vertical-align: top;
-    line-height: 1.5;
-  }
-  th {
-    border-bottom: 1px solid var(--rule-strong);
-    color: var(--ink-soft);
-    font-variant: small-caps;
-    letter-spacing: .04em;
-    font-size: 13px;
-  }
-  code {
-    background: var(--code-bg);
-    padding: 1px 5px;
-    border-radius: 4px;
-    color: var(--code-ink);
-    font-size: .9em;
-  }
-  .practice {
-    margin: 18px 0;
-    padding: 14px 16px;
-    border-radius: 18px;
-    border: 1px solid rgba(138,59,18,.18);
-    background: linear-gradient(180deg, rgba(229,198,166,.22), rgba(255,253,250,.7));
-    max-width: 78ch;
-  }
-  .practice .label {
-    display: block;
-    margin-bottom: 8px;
-    font-variant: small-caps;
-    letter-spacing: .06em;
-    color: var(--accent);
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .practice p:last-child { margin-bottom: 0; }
-  .cell {
-    margin: 18px 0;
-    max-width: 82ch;
-  }
-  .cell-label,
-  .diagram-label {
-    display: inline-block;
-    margin-bottom: 8px;
-    font-variant: small-caps;
-    letter-spacing: .06em;
-    color: var(--ink-soft);
-    font-size: 12px;
-  }
-  pre.code,
-  .md-code {
-    margin: 0;
-    padding: 14px 16px;
-    overflow-x: auto;
-    white-space: pre;
-    background: var(--code-bg);
-    color: var(--code-ink);
-    border: 1px solid var(--rule);
-    border-radius: 16px;
-    line-height: 1.58;
-    font-size: 13.5px;
-  }
-  .output {
-    margin-top: 10px;
-    padding: 10px 12px;
-    border-left: 3px solid var(--rule-strong);
-    background: rgba(255,255,255,.54);
-    color: var(--ink-soft);
-    font-size: 13.5px;
-    max-width: 78ch;
-  }
-  .output pre {
-    margin: 8px 0 0;
-    white-space: pre-wrap;
-    color: var(--ink);
-  }
-  .diagram-card {
-    margin: 18px 0;
-    max-width: 82ch;
-    padding: 14px 16px;
-    border: 1px solid var(--rule);
-    border-radius: 18px;
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.72), rgba(243,239,231,.88)),
-      repeating-linear-gradient(
-        180deg,
-        transparent,
-        transparent 24px,
-        rgba(216, 208, 194, 0.22) 24px,
-        rgba(216, 208, 194, 0.22) 25px
-      );
-  }
-  .diagram-card pre {
-    margin: 0;
-    white-space: pre;
-    overflow-x: auto;
-    color: var(--code-ink);
-    line-height: 1.6;
-    font-size: 13px;
-  }
-  .section-body h4,
-  .section-body h5 {
-    margin: 18px 0 8px;
-    font-size: 1rem;
-  }
-  .page-foot {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid var(--rule);
-    color: var(--ink-soft);
-    font-variant: small-caps;
-    letter-spacing: .05em;
-    font-size: 13px;
-  }
-  @media (max-width: 940px) {
-    .shell {
-      grid-template-columns: 1fr;
-      padding-inline: 18px;
-    }
-    .toc {
-      position: static;
-      max-height: none;
-    }
-  }
+  header.page-head { margin-bottom: 44px; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1.page-title { margin: 0 0 10px; font-size: 2.1rem; font-weight: 700; letter-spacing: -.01em; }
+  .lede { margin: 0; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
+  .lede em { font-style: normal; }
+  .lede code { font-style: normal; color: var(--ink); }
+  .box-note { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); }
+  .box-note b { color: var(--ink); font-weight: 600; }
+  p, li { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
+  p.muted { color: var(--ink-soft); }
+  p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  section.topic { margin-bottom: 44px; scroll-margin-top: 24px; }
+  .topic-divider { margin: 8px 0 18px; padding-top: 36px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
+  #t1-top { margin-top: 0; padding-top: 0; border-top: none; }
+  .topic-divider-n { font-variant: small-caps; letter-spacing: .06em; color: var(--ink-soft); font-size: 15.5px; }
+  .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
+  .topic-intro { margin-bottom: 10px; }
+  .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
+  h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
+  h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
+  blockquote { margin: 18px 0; padding: 2px 0 2px 18px; border-left: 2px solid var(--rule-strong); color: var(--ink-soft); }
+  .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
+  .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
+  .callout p { margin: 0; font-size: .98rem; }
+  .callout p + p { margin-top: 8px; }
+  .cell { margin: 20px 0; max-width: 74ch; }
+  .cell pre.code { margin: 0; background: var(--code-bg); color: var(--code-ink); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 14px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.62; }
+  .cell .output { padding: 8px 18px 4px; font-size: 13px; color: var(--ink-soft); }
+  .cell .output .out-label { font-variant: small-caps; margin-right: 10px; }
+  .cell .output .val { color: var(--ink); }
+  .cell .output pre.out-block { margin: 4px 0 0; font-size: 13px; color: var(--ink); white-space: pre-wrap; }
+  .diagram { margin: 16px 0; max-width: 74ch; border: 1px solid var(--rule); background: var(--code-bg); padding: 14px 18px; overflow-x: auto; }
+  .diagram pre { margin: 0; font-size: 13px; line-height: 1.6; color: var(--code-ink); white-space: pre; }
+  figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
+  figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  figure.anim-figure svg { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: transparent; }
+  figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
+  figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
+  table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
+  table.booktabs { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  table.booktabs th { border-bottom: 1px solid var(--ink-soft); }
+  th, td { text-align: left; padding: 7px 14px 7px 0; vertical-align: top; }
+  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; }
+  td code { white-space: nowrap; }
+  footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
+  @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
 </style>
 </head>
 <body>
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#topic-1" class="toc-topic">Topic 1 — Calling a Web API</a>
-<a href="#t1-1-a-get-request-asks-a-url-for-something" class="toc-sub">1. A GET request asks a URL for something</a>
-<a href="#t1-2-status-codes-tell-you-what-happened" class="toc-sub">2. Status codes tell you what happened</a>
-<a href="#t1-3-json-turns-the-response-into-python-data" class="toc-sub">3. `.json()` turns the response into Python data</a>
-<a href="#t1-4-query-parameters-and-always-set-a-timeout" class="toc-sub">4. Query parameters, and always set a timeout</a>
-<a href="#t1-topic-1-challenge" class="toc-sub">Topic 1 Challenge</a>
-<a href="#t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
-<a href="#t1-common-mistakes" class="toc-sub">Common mistakes</a>
-<a href="#t1-recap" class="toc-sub">Recap</a>
-<a href="#t1-5-handling-a-missing-field-safely" class="toc-sub">5. Handling a missing field safely</a>
-<a href="#topic-2" class="toc-topic">Topic 2 — Reading Files from the Web</a>
-<a href="#t2-1-a-raw-github-url-serves-the-real-file" class="toc-sub">1. A "raw" GitHub URL serves the real file</a>
-<a href="#t2-2-requests-stringio-the-reliable-way-into-pandas" class="toc-sub">2. `requests` + `StringIO` — the reliable way into pandas</a>
-<a href="#t2-3-pd-read-csv-url-directly-shorter-not-always-reliable" class="toc-sub">3. `pd.read_csv(url)` directly — shorter, not always reliable</a>
-<a href="#t2-4-kaggle-and-your-own-hosted-data" class="toc-sub">4. Kaggle, and your own hosted data</a>
-<a href="#t2-topic-2-challenge" class="toc-sub">Topic 2 Challenge</a>
-<a href="#t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
-<a href="#t2-common-mistakes" class="toc-sub">Common mistakes</a>
-<a href="#t2-recap" class="toc-sub">Recap</a>
-<a href="#topic-3" class="toc-topic">Topic 3 — Light Regex</a>
-<a href="#t3-1-why-week-7-s-tools-are-not-enough-here" class="toc-sub">1. Why Week 7's tools are not enough here</a>
-<a href="#t3-2-re-search-returns-none-when-nothing-matches" class="toc-sub">2. `re.search()` returns `None` when nothing matches</a>
-<a href="#t3-3-re-findall-every-match-as-a-list" class="toc-sub">3. `re.findall()` — every match, as a list</a>
-<a href="#t3-4-a-second-pattern-and-using-it-on-real-pulled-data" class="toc-sub">4. A second pattern, and using it on real pulled data</a>
-<a href="#t3-5-capture-groups-pulling-out-the-pieces-not-just-the-whole-match" class="toc-sub">5. Capture groups — pulling out the pieces, not just the whole match</a>
-<a href="#t3-6-re-sub-find-and-replace-by-shape" class="toc-sub">6. `re.sub()` — find and replace by shape</a>
-<a href="#t3-topic-3-challenge" class="toc-sub">Topic 3 Challenge</a>
-<a href="#t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
-<a href="#t3-common-mistakes" class="toc-sub">Common mistakes</a>
-<a href="#t3-recap" class="toc-sub">Recap</a>
-<a href="#topic-4" class="toc-topic">Topic 4 — From Functions to a Class</a>
-<a href="#t4-1-before-loose-functions-and-a-stray-variable" class="toc-sub">1. Before: loose functions and a stray variable</a>
-<a href="#t4-2-after-one-class-bundling-the-same-data-and-logic" class="toc-sub">2. After: one class, bundling the same data and logic</a>
-<a href="#t4-3-what-actually-changed" class="toc-sub">3. What actually changed</a>
-<a href="#t4-topic-4-challenge" class="toc-sub">Topic 4 Challenge</a>
-<a href="#t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
-<a href="#t4-common-mistakes" class="toc-sub">Common mistakes</a>
-<a href="#t4-recap" class="toc-sub">Recap</a>
+    <a href="#t1-top" class="toc-topic">Topic 1 — Calling a Web API</a>
+<div class="toc-group" data-group="t1">
+<a href="#t1-s1" class="toc-sub">1. A GET request asks a URL for something</a>
+<a href="#t1-s2" class="toc-sub">2. Status codes tell you what happened</a>
+<a href="#t1-s3" class="toc-sub">3. <code>.json()</code> turns the response into Python data</a>
+<a href="#t1-s4" class="toc-sub">4. Query parameters, and always set a timeout</a>
+<a href="#t1-s5" class="toc-sub">5. Handling a missing field safely</a>
+<a href="#t1-s6" class="toc-sub">Challenge</a>
+<a href="#t1-s7" class="toc-sub">Same idea, three fields</a>
+<a href="#t1-s8" class="toc-sub">Common mistakes</a>
+<a href="#t1-s9" class="toc-sub">Recap</a>
+</div>
+<a href="#t2-top" class="toc-topic">Topic 2 — Reading Files from the Web</a>
+<div class="toc-group" data-group="t2">
+<a href="#t2-s1" class="toc-sub">1. A "raw" GitHub URL serves the real file</a>
+<a href="#t2-s2" class="toc-sub">2. <code>requests</code> + <code>StringIO</code> — the reliable way into pandas</a>
+<a href="#t2-s3" class="toc-sub">3. <code>pd.read_csv(url)</code> directly — shorter, not always reliable</a>
+<a href="#t2-s4" class="toc-sub">4. Kaggle, and your own hosted data</a>
+<a href="#t2-s5" class="toc-sub">Challenge</a>
+<a href="#t2-s6" class="toc-sub">Same idea, three fields</a>
+<a href="#t2-s7" class="toc-sub">Common mistakes</a>
+<a href="#t2-s8" class="toc-sub">Recap</a>
+</div>
+<a href="#t3-top" class="toc-topic">Topic 3 — Light Regex</a>
+<div class="toc-group" data-group="t3">
+<a href="#t3-s1" class="toc-sub">1. Why Week 7's tools are not enough here</a>
+<a href="#t3-s2" class="toc-sub">2. <code>re.search()</code> returns <code>None</code> when nothing matches</a>
+<a href="#t3-s3" class="toc-sub">3. <code>re.findall()</code> — every match, as a list</a>
+<a href="#t3-s4" class="toc-sub">4. A second pattern, and using it on real pulled data</a>
+<a href="#t3-s5" class="toc-sub">5. Capture groups — pulling out the pieces, not just the whole match</a>
+<a href="#t3-s6" class="toc-sub">6. <code>re.sub()</code> — find and replace by shape</a>
+<a href="#t3-s7" class="toc-sub">Challenge</a>
+<a href="#t3-s8" class="toc-sub">Same idea, three fields</a>
+<a href="#t3-s9" class="toc-sub">Common mistakes</a>
+<a href="#t3-s10" class="toc-sub">Recap</a>
+</div>
+<a href="#t4-top" class="toc-topic">Topic 4 — From Functions to a Class</a>
+<div class="toc-group" data-group="t4">
+<a href="#t4-s1" class="toc-sub">1. Before: loose functions and a stray variable</a>
+<a href="#t4-s2" class="toc-sub">2. After: one class, bundling the same data and logic</a>
+<a href="#t4-s3" class="toc-sub">3. What actually changed</a>
+<a href="#t4-s4" class="toc-sub">Challenge</a>
+<a href="#t4-s5" class="toc-sub">Same idea, three fields</a>
+<a href="#t4-s6" class="toc-sub">Common mistakes</a>
+<a href="#t4-s7" class="toc-sub">Recap</a>
+</div>
   </nav>
 
   <article>
@@ -444,65 +142,57 @@
       <div class="breadcrumb">CST1510</div>
       <h1 class="page-title">Week 8 — Pulling Real Data</h1>
       <p class="lede">By the end of this week you can call a real web API with <code>requests</code>, read its status code, and parse its JSON, handle a failed or slow request without your program crashing, and download a real file from the web — a raw GitHub URL or a Kaggle dataset.</p>
-      <p class="box-note">Box we build this week: <b><code>INPUT, from outside</code> — see <code>../system_diagram.md</code></b></p>
-      <div class="study-note">This reading view combines the week's walkthrough notebooks into one page so students can follow the theory in order, even outside Jupyter.</div>
-      <div class="summary-grid">
-        <div class="summary-card"><div class="k">Topic 1</div><div class="v">Calling a Web API</div></div>
-<div class="summary-card"><div class="k">Topic 2</div><div class="v">Reading Files from the Web</div></div>
-<div class="summary-card"><div class="k">Topic 3</div><div class="v">Light Regex</div></div>
-<div class="summary-card"><div class="k">Topic 4</div><div class="v">From Functions to a Class</div></div>
-      </div>
-      <div class="outcomes">
-        <div class="outcome">Call a real web API with <code>requests</code>, read its status code, and parse its JSON</div><div class="outcome">Handle a failed or slow request without your program crashing</div><div class="outcome">Download a real file from the web — a raw GitHub URL or a Kaggle dataset</div><div class="outcome">Write a light regex pattern with <code>re.search()</code>/<code>re.findall()</code>, for the cases</div><div class="outcome">Pull out one piece of a match with a capture group, and find-and-replace by</div><div class="outcome">Refactor a set of related functions into one class — the same move Week 5's</div>
-      </div>
+      <p class="box-note">Box we build this week: <b><code>INPUT, from outside</code> — see <code>../system_diagram.md</code></b>. Each <em>Practice</em> below sets a short task.</p>
+      <p class="muted">This page combines the week's walkthrough notebooks into one reading view, keeping the theory in teaching order.</p>
     </header>
 
-    <figure class="week-map"><svg viewBox="0 0 920 220" role="img" aria-label="From the web into your program" style="width:100%;height:auto;display:block;"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#b8a88e" flood-opacity="0.35"/></filter></defs><rect x="22" y="18" width="220" height="48" rx="18" fill="#fffaf2" stroke="#d8d0c2"/><text x="40" y="38" fill="#59554d" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="40" y="56" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif">INPUT, from outside — see ../system_diagram.md</text><line x1="166.0" y1="142" x2="232.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="230.0,142 221.0,137 221.0,147" fill="#8a3b12"/><rect x="-16.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="0.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Calling a Web API</tspan></text><line x1="426.0" y1="142" x2="492.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="490.0,142 481.0,137 481.0,147" fill="#8a3b12"/><rect x="244.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#8b7f6b" filter="url(#shadow)"/><text x="260.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="260.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="260.0" dy="0">Reading Files from</tspan><tspan x="260.0" dy="19">the Web</tspan></text><line x1="686.0" y1="142" x2="752.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="750.0,142 741.0,137 741.0,147" fill="#8a3b12"/><rect x="504.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="520.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="520.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="520.0" dy="0">Light Regex</tspan></text><rect x="764.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#355c5a" filter="url(#shadow)"/><text x="780.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="780.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="780.0" dy="0">From Functions to a</tspan><tspan x="780.0" dy="19">Class</tspan></text></svg><figcaption><b>From the web into your program</b>. Week 8 shows the path from remote data to cleaned fields and then into a reusable class.</figcaption></figure>
+    <figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="From the web into your program" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">INPUT, from outside</text><line x1="166.0" y1="164" x2="236.7" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Calling a Web API</tspan></text><line x1="424.7" y1="164" x2="495.3" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="244.7" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="258.7" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="258.7" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="258.7" dy="0">Reading Files from</tspan><tspan x="258.7" dy="19">the Web</tspan></text><line x1="683.3" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="503.3" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="517.3" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="517.3" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="517.3" dy="0">Light Regex</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">From Functions to a</tspan><tspan x="776.0" dy="19">Class</tspan></text></svg><figcaption><b>From the web into your program</b>. Week 8 shows the path from remote data to cleaned fields and then into a reusable class.</figcaption></figure>
 
-    <section class="topic" id="topic-1"><div class="topic-kicker">Topic 1</div><h2 class="topic-title">Calling a Web API</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, from outside</strong></p>
-<p>Everything you have loaded so far has been a file you already had. This week
+    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Calling a Web API</h2></div><div class="topic-intro"><p>Everything you have loaded so far has been a file you already had. This week
 it is a real service, somewhere else, that you ask for data.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
 </blockquote>
-</div><section class="section" id="t1-1-a-get-request-asks-a-url-for-something"><h3 class="section-title">1. A GET request asks a URL for something</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import requests
+</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A GET request asks a URL for something</h2><div class="cell"><pre class="code"><code>import requests
 
 response = requests.get("https://api.github.com/orgs/python")
-print(response.status_code)</code></pre></div>
-<div class="diagram-card"><span class="diagram-label">Diagram</span><pre>your code                the API
+print(response.status_code)</code></pre></div><div class="diagram"><pre>your code                the API
     │                        │
     │──── GET request ──────▶│
     │                        │  looks it up
     │◀─── response ──────────│
     │   (status code + JSON)</pre></div>
-
-<aside class="practice"><span class="label">Your turn</span><p>GET <code>https://api.github.com/repos/python/cpython</code> and print its status code.</p>
-</aside></div></section><section class="section" id="t1-2-status-codes-tell-you-what-happened"><h3 class="section-title">2. Status codes tell you what happened</h3><div class="section-body"><p>200s = OK. 400s = you got something wrong. 500s = their fault, not yours.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>print(requests.get("https://api.github.com/orgs/python").status_code)              # 200
-print(requests.get("https://api.github.com/this-does-not-exist-xyz").status_code)     # 404</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>GET a URL you know does not exist and print its status code.</p>
-</aside></div></section><section class="section" id="t1-3-json-turns-the-response-into-python-data"><h3 class="section-title">3. `.json()` turns the response into Python data</h3><div class="section-body"><p>Almost every API replies in JSON — which looks exactly like a dict, or a list
+<div class="callout"><span class="callout-label">Practice</span><p>GET <code>https://api.github.com/repos/python/cpython</code> and print its status code.</p>
+</div></section><section class="topic" id="t1-s2"><h2><span class="num">2.</span>Status codes tell you what happened</h2><p>200s = OK. 400s = you got something wrong. 500s = their fault, not yours.</p>
+<div class="cell"><pre class="code"><code>print(requests.get("https://api.github.com/orgs/python").status_code)              # 200
+print(requests.get("https://api.github.com/this-does-not-exist-xyz").status_code)     # 404</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>GET a URL you know does not exist and print its status code.</p>
+</div></section><section class="topic" id="t1-s3"><h2><span class="num">3.</span><code>.json()</code> turns the response into Python data</h2><p>Almost every API replies in JSON — which looks exactly like a dict, or a list
 of dicts.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>response = requests.get("https://api.github.com/orgs/python")
+<div class="cell"><pre class="code"><code>response = requests.get("https://api.github.com/orgs/python")
 data = response.json()
-print(data["login"], data["public_repos"])</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>GET <code>https://api.github.com/repos/python/cpython</code> and print its <code>&quot;stargazers_count&quot;</code>.</p>
-</aside></div></section><section class="section" id="t1-4-query-parameters-and-always-set-a-timeout"><h3 class="section-title">4. Query parameters, and always set a timeout</h3><div class="section-body"><p>The <code>params</code> dict becomes <code>?key=value</code> on the URL for you. A <code>timeout</code> stops a
+print(data["login"], data["public_repos"])</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>GET <code>https://api.github.com/repos/python/cpython</code> and print its <code>&quot;stargazers_count&quot;</code>.</p>
+</div></section><section class="topic" id="t1-s4"><h2><span class="num">4.</span>Query parameters, and always set a timeout</h2><p>The <code>params</code> dict becomes <code>?key=value</code> on the URL for you. A <code>timeout</code> stops a
 dead server from hanging your program forever.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>response = requests.get(
+<div class="cell"><pre class="code"><code>response = requests.get(
     "https://api.github.com/orgs/python/repos",
     params={"per_page": 3, "sort": "updated"},
     timeout=10,
 )
 for repo in response.json():
-    print(repo["name"], repo["open_issues_count"])</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Change <code>per_page</code> to 5 and print how many repos came back.</p>
-</aside></div></section><section class="section" id="t1-topic-1-challenge"><h3 class="section-title">Topic 1 Challenge</h3><div class="section-body"><p>GET <code>https://api.github.com/orgs/python/repos</code> with <code>per_page=5</code>, and print
+    print(repo["name"], repo["open_issues_count"])</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Change <code>per_page</code> to 5 and print how many repos came back.</p>
+</div></section><section class="topic" id="t1-s5"><h2><span class="num">5.</span>Handling a missing field safely</h2><p>Not every response has the field you expect — an API can change shape, or you can mistype a key. <code>dict.get(key, default)</code> returns a fallback instead of raising <code>KeyError</code>; wrapping the lookup in <code>try</code>/<code>except KeyError</code> works too.</p>
+<div class="cell"><pre class="code"><code>data = requests.get("https://api.github.com/orgs/python").json()
+
+# data["repo_count"] would raise KeyError - that field does not exist.
+# .get() returns a fallback instead of crashing:
+repo_count = data.get("repo_count", "unknown")
+print(repo_count)
+
+# safe to use the same way even on a field that does exist:
+print(data.get("public_repos", "unknown"))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>GET <code>https://api.github.com/orgs/python</code> and print <code>data.get(&quot;stargazers_count&quot;, &quot;not provided&quot;)</code> — that key genuinely does not exist on an org, so you should see the fallback printed, not a crash.</p>
+</div></section><section class="topic" id="t1-s6"><h2>Challenge</h2><p>GET <code>https://api.github.com/orgs/python/repos</code> with <code>per_page=5</code>, and print
 each repo's name and star count, one per line, formatted with an f-string.</p>
-</div></section><section class="section" id="t1-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t1-s7"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -524,7 +214,7 @@ each repo's name and star count, one per line, formatted with an f-string.</p>
 </tr>
 </tbody>
 </table>
-</div></section><section class="section" id="t1-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t1-s8"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -559,7 +249,7 @@ each repo's name and star count, one per line, formatted with an f-string.</p>
 <p><code>examples/01_get_requests.py</code> — GET, status codes, .json(), params, timeout
 <code>examples/02_handling_api_errors.py</code> — raise_for_status(), timeouts, checking status yourself, missing fields
 Docs: <a href="https://requests.readthedocs.io/en/latest/">requests documentation</a></p>
-</div></section><section class="section" id="t1-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t1-s9"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -594,64 +284,44 @@ Docs: <a href="https://requests.readthedocs.io/en/latest/">requests documentatio
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — downloading a real file instead of calling an API.</p>
-</div></section><section class="section" id="t1-5-handling-a-missing-field-safely"><h3 class="section-title">5. Handling a missing field safely</h3><div class="section-body"><p>Not every response has the field you expect — an API can change shape, or you can mistype a key. <code>dict.get(key, default)</code> returns a fallback instead of raising <code>KeyError</code>; wrapping the lookup in <code>try</code>/<code>except KeyError</code> works too.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>data = requests.get("https://api.github.com/orgs/python").json()
-
-# data["repo_count"] would raise KeyError - that field does not exist.
-# .get() returns a fallback instead of crashing:
-repo_count = data.get("repo_count", "unknown")
-print(repo_count)
-
-# safe to use the same way even on a field that does exist:
-print(data.get("public_repos", "unknown"))</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>GET <code>https://api.github.com/orgs/python</code> and print <code>data.get(&quot;stargazers_count&quot;, &quot;not provided&quot;)</code> — that key genuinely does not exist on an org, so you should see the fallback printed, not a crash.</p>
-</aside></div></section></section>
-<section class="topic" id="topic-2"><div class="topic-kicker">Topic 2</div><h2 class="topic-title">Reading Files from the Web</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, a real file this time</strong></p>
-<p>Not every dataset needs an API — sometimes it is a file sitting on the web,
+</section>
+<div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Reading Files from the Web</h2></div><div class="topic-intro"><p>Not every dataset needs an API — sometimes it is a file sitting on the web,
 waiting to be downloaded.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
 </blockquote>
-</div><section class="section" id="t2-1-a-raw-github-url-serves-the-real-file"><h3 class="section-title">1. A "raw" GitHub URL serves the real file</h3><div class="section-body"><p><code>github.com/user/repo/blob/...</code> shows a formatted web page.
+</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>A "raw" GitHub URL serves the real file</h2><p><code>github.com/user/repo/blob/...</code> shows a formatted web page.
 <code>raw.githubusercontent.com/user/repo/branch/...</code> gives you the actual file.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import requests
+<div class="cell"><pre class="code"><code>import requests
 
 url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
 response = requests.get(url, timeout=10)
 print(response.status_code)
-print(response.text[:100])</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Fetch that same URL and print how many characters <code>response.text</code> contains.</p>
-</aside></div></section><section class="section" id="t2-2-requests-stringio-the-reliable-way-into-pandas"><h3 class="section-title">2. `requests` + `StringIO` — the reliable way into pandas</h3><div class="section-body"><p><code>StringIO</code> lets pandas treat downloaded text as if it were a local file. This
+print(response.text[:100])</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Fetch that same URL and print how many characters <code>response.text</code> contains.</p>
+</div></section><section class="topic" id="t2-s2"><h2><span class="num">2.</span><code>requests</code> + <code>StringIO</code> — the reliable way into pandas</h2><p><code>StringIO</code> lets pandas treat downloaded text as if it were a local file. This
 is the method to reach for by default.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import pandas as pd
+<div class="cell"><pre class="code"><code>import pandas as pd
 from io import StringIO
 
 df = pd.read_csv(StringIO(response.text))
 print(df.head())
-print(len(df), "rows")</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Load the same URL into a DataFrame using <code>requests</code> + <code>StringIO</code>, and print its shape.</p>
-</aside></div></section><section class="section" id="t2-3-pd-read-csv-url-directly-shorter-not-always-reliable"><h3 class="section-title">3. `pd.read_csv(url)` directly — shorter, not always reliable</h3><div class="section-body"><p>pandas can fetch a URL itself. It often works — but it uses your system's own
+print(len(df), "rows")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Load the same URL into a DataFrame using <code>requests</code> + <code>StringIO</code>, and print its shape.</p>
+</div></section><section class="topic" id="t2-s3"><h2><span class="num">3.</span><code>pd.read_csv(url)</code> directly — shorter, not always reliable</h2><p>pandas can fetch a URL itself. It often works — but it uses your system's own
 certificate setup, not <code>requests</code>' bundled one, and can fail with an SSL error
 on some machines even when <code>requests.get()</code> on the same URL is fine. Section 2's
 method always works instead.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code># df = pd.read_csv(url)
+<div class="cell"><pre class="code"><code># df = pd.read_csv(url)
 # SSL: CERTIFICATE_VERIFY_FAILED  &lt;- can happen here even though
-#                                    requests.get(url) worked above</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Try <code>pd.read_csv(url)</code> directly on your own machine. Does it work, or do you see the SSL error?</p>
-</aside></div></section><section class="section" id="t2-4-kaggle-and-your-own-hosted-data"><h3 class="section-title">4. Kaggle, and your own hosted data</h3><div class="section-body"><p>Kaggle needs an account and an API token (<code>pip install kaggle</code>, then
+#                                    requests.get(url) worked above</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Try <code>pd.read_csv(url)</code> directly on your own machine. Does it work, or do you see the SSL error?</p>
+</div></section><section class="topic" id="t2-s4"><h2><span class="num">4.</span>Kaggle, and your own hosted data</h2><p>Kaggle needs an account and an API token (<code>pip install kaggle</code>, then
 <code>kaggle datasets download -d owner/name</code>) — not a single <code>requests.get()</code>. But
 once it is a <code>.csv</code> on disk, everything from here works the same. A CSV you
 commit to your <strong>own</strong> GitHub repo works exactly like Topic 2's example — same
 mechanism, nothing special about who owns it.</p>
-
-<aside class="practice"><span class="label">Your turn</span><p>Check the dataset you loaded in section 2 against the checklist: 50+ rows, 4+ columns, one genuinely messy text column.</p>
-</aside></div></section><section class="section" id="t2-topic-2-challenge"><h3 class="section-title">Topic 2 Challenge</h3><div class="section-body"><p>Download a real CSV of your choice (or reuse <code>iris.csv</code>) using <code>requests</code> +
+<div class="callout"><span class="callout-label">Practice</span><p>Check the dataset you loaded in section 2 against the checklist: 50+ rows, 4+ columns, one genuinely messy text column.</p>
+</div></section><section class="topic" id="t2-s5"><h2>Challenge</h2><p>Download a real CSV of your choice (or reuse <code>iris.csv</code>) using <code>requests</code> +
 <code>StringIO</code>, and print its column names and row count.</p>
-</div></section><section class="section" id="t2-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t2-s6"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -673,7 +343,7 @@ mechanism, nothing special about who owns it.</p>
 </tr>
 </tbody>
 </table>
-</div></section><section class="section" id="t2-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t2-s7"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -708,7 +378,7 @@ mechanism, nothing special about who owns it.</p>
 <p><code>examples/01_downloading_a_csv.py</code> — raw URLs, requests + StringIO, the SSL gotcha
 <code>examples/02_kaggle_and_your_own_data.py</code> — Kaggle's flow, your own hosted data, the checklist
 Docs: <a href="%7BREQ_DOCS%7D">requests documentation</a></p>
-</div></section><section class="section" id="t2-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -735,73 +405,61 @@ Docs: <a href="%7BREQ_DOCS%7D">requests documentation</a></p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — finding a pattern in text that has no separator to split on.</p>
-</div></section></section>
-<section class="topic" id="topic-3"><div class="topic-kicker">Topic 3</div><h2 class="topic-title">Light Regex</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, matched by shape</strong></p>
-<p>Week 7's string methods need to know the exact text. This week: finding
+</section>
+<div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Light Regex</h2></div><div class="topic-intro"><p>Week 7's string methods need to know the exact text. This week: finding
 something by its <em>shape</em> instead.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
 </blockquote>
-</div><section class="section" id="t3-1-why-week-7-s-tools-are-not-enough-here"><h3 class="section-title">1. Why Week 7's tools are not enough here</h3><div class="section-body"><p>&quot;Does this contain an IP address&quot; is not &quot;does this contain one exact
+</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>Why Week 7's tools are not enough here</h2><p>&quot;Does this contain an IP address&quot; is not &quot;does this contain one exact
 substring&quot; — the IP is different every time.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import re
+<div class="cell"><pre class="code"><code>import re
 
 line = "2026-09-08 connection from 10.0.0.5 refused"
 
 match = re.search(r"\d+\.\d+\.\d+\.\d+", line)
-print(match.group())</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Given a line containing a different IP address, use the same pattern to find it.</p>
-</aside></div></section><section class="section" id="t3-2-re-search-returns-none-when-nothing-matches"><h3 class="section-title">2. `re.search()` returns `None` when nothing matches</h3><div class="section-body"><p>Same shape as Week 7's <code>.find()</code> returning <code>-1</code> — check before you use it.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>no_ip = "no address in this line"
+print(match.group())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given a line containing a different IP address, use the same pattern to find it.</p>
+</div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span><code>re.search()</code> returns <code>None</code> when nothing matches</h2><p>Same shape as Week 7's <code>.find()</code> returning <code>-1</code> — check before you use it.</p>
+<div class="cell"><pre class="code"><code>no_ip = "no address in this line"
 match = re.search(r"\d+\.\d+\.\d+\.\d+", no_ip)
 print(match)
 
 if match:
     print(match.group())
 else:
-    print("no IP found")</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Run the search on a line you know has no match, and check <code>match</code> before calling <code>.group()</code>.</p>
-</aside></div></section><section class="section" id="t3-3-re-findall-every-match-as-a-list"><h3 class="section-title">3. `re.findall()` — every match, as a list</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>log = "attempts from 10.0.0.5 and 192.168.1.1 and 10.0.0.9"
+    print("no IP found")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Run the search on a line you know has no match, and check <code>match</code> before calling <code>.group()</code>.</p>
+</div></section><section class="topic" id="t3-s3"><h2><span class="num">3.</span><code>re.findall()</code> — every match, as a list</h2><div class="cell"><pre class="code"><code>log = "attempts from 10.0.0.5 and 192.168.1.1 and 10.0.0.9"
 all_ips = re.findall(r"\d+\.\d+\.\d+\.\d+", log)
-print(all_ips)</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Use <code>re.findall()</code> to pull every 4-digit year out of a string containing several dates.</p>
-</aside></div></section><section class="section" id="t3-4-a-second-pattern-and-using-it-on-real-pulled-data"><h3 class="section-title">4. A second pattern, and using it on real pulled data</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>date_match = re.search(r"\d{4}-\d{2}-\d{2}", line)
+print(all_ips)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Use <code>re.findall()</code> to pull every 4-digit year out of a string containing several dates.</p>
+</div></section><section class="topic" id="t3-s4"><h2><span class="num">4.</span>A second pattern, and using it on real pulled data</h2><div class="cell"><pre class="code"><code>date_match = re.search(r"\d{4}-\d{2}-\d{2}", line)
 print(date_match.group())
 
 sample = "Supports Python 3.12 and above, tested on 3.10 too"
-print(re.findall(r"\d+\.\d+", sample))</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Write a pattern that matches something shaped like <code>something@something.something</code> (it does not need to be perfect).</p>
-</aside></div></section><section class="section" id="t3-5-capture-groups-pulling-out-the-pieces-not-just-the-whole-match"><h3 class="section-title">5. Capture groups — pulling out the pieces, not just the whole match</h3><div class="section-body"><p>Parentheses <code>(...)</code> in a pattern mark a &quot;capture group&quot; — a part of the match
+print(re.findall(r"\d+\.\d+", sample))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write a pattern that matches something shaped like <code>something@something.something</code> (it does not need to be perfect).</p>
+</div></section><section class="topic" id="t3-s5"><h2><span class="num">5.</span>Capture groups — pulling out the pieces, not just the whole match</h2><p>Parentheses <code>(...)</code> in a pattern mark a &quot;capture group&quot; — a part of the match
 you want separately, not just confirmed as present.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>log_line = "2026-09-08 ERROR connection from 10.0.0.5"
+<div class="cell"><pre class="code"><code>log_line = "2026-09-08 ERROR connection from 10.0.0.5"
 
 match = re.search(r"(\d{4}-\d{2}-\d{2}) (\w+)", log_line)
 print(match.group(0))   # the whole match: 2026-09-08 ERROR
 print(match.group(1))   # just the date:   2026-09-08
-print(match.group(2))   # just the level:  ERROR</code></pre></div>
-<p>Named groups — <code>(?P&lt;name&gt;...)</code> — read back much more clearly than counting
+print(match.group(2))   # just the level:  ERROR</code></pre></div><p>Named groups — <code>(?P&lt;name&gt;...)</code> — read back much more clearly than counting
 parentheses:</p>
-<div class="cell"><span class="cell-label">Code</span><pre class="md-code"><code>match = re.search(r"(?P&lt;date&gt;\d{4}-\d{2}-\d{2}) (?P&lt;level&gt;\w+)", log_line)
+<div class="cell"><pre class="code"><code>match = re.search(r"(?P&lt;date&gt;\d{4}-\d{2}-\d{2}) (?P&lt;level&gt;\w+)", log_line)
 print(match.group("date"))     # 2026-09-08
 print(match.group("level"))    # ERROR</code></pre></div>
-
-<aside class="practice"><span class="label">Your turn</span><p>Using <code>log_line</code>, write a named-group pattern that also captures the IP address
+<div class="callout"><span class="callout-label">Practice</span><p>Using <code>log_line</code>, write a named-group pattern that also captures the IP address
 (as <code>ip</code>), then print all three pieces by name.</p>
-</aside></div></section><section class="section" id="t3-6-re-sub-find-and-replace-by-shape"><h3 class="section-title">6. `re.sub()` — find and replace by shape</h3><div class="section-body"><p>Same idea as Week 7's <code>.replace()</code>, but matching a <em>shape</em> instead of exact
+</div></section><section class="topic" id="t3-s6"><h2><span class="num">6.</span><code>re.sub()</code> — find and replace by shape</h2><p>Same idea as Week 7's <code>.replace()</code>, but matching a <em>shape</em> instead of exact
 text — useful for redacting anything that looks like sensitive data.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>text = "Server IP: 192.168.0.10, DNS: 8.8.8.8, Gateway: 10.0.0.1"
+<div class="cell"><pre class="code"><code>text = "Server IP: 192.168.0.10, DNS: 8.8.8.8, Gateway: 10.0.0.1"
 
 redacted = re.sub(r"\d+\.\d+\.\d+\.\d+", "[REDACTED]", text)
-print(redacted)</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Given <code>log_line</code> from section 5, use <code>re.sub()</code> to replace just the IP address
+print(redacted)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given <code>log_line</code> from section 5, use <code>re.sub()</code> to replace just the IP address
 with <code>&quot;***&quot;</code>, leaving the date and level untouched.</p>
-</aside></div></section><section class="section" id="t3-topic-3-challenge"><h3 class="section-title">Topic 3 Challenge</h3><div class="section-body"><p>Pull 5 repos from the GitHub API (Topic 1). For each one, check whether its
+</div></section><section class="topic" id="t3-s7"><h2>Challenge</h2><p>Pull 5 repos from the GitHub API (Topic 1). For each one, check whether its
 description mentions a version number shaped like <code>3.12</code>, using <code>re.search()</code>.</p>
-</div></section><section class="section" id="t3-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t3-s8"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -823,7 +481,7 @@ description mentions a version number shaped like <code>3.12</code>, using <code
 </tr>
 </tbody>
 </table>
-</div></section><section class="section" id="t3-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t3-s9"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -864,7 +522,7 @@ description mentions a version number shaped like <code>3.12</code>, using <code
 <code>examples/02_regex_on_real_data.py</code> — applying a pattern to real pulled API data
 <code>examples/03_groups_and_sub.py</code> — capture groups, named groups, and <code>re.sub()</code>
 Docs: <a href="https://docs.python.org/3/library/re.html">re module</a></p>
-</div></section><section class="section" id="t3-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t3-s10"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -899,14 +557,13 @@ Docs: <a href="https://docs.python.org/3/library/re.html">re module</a></p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — turning what you have built into one class.</p>
-</div></section></section>
-<section class="topic" id="topic-4"><div class="topic-kicker">Topic 4</div><h2 class="topic-title">From Functions to a Class</h2><div class="topic-intro"><p><strong>Box we are building: the project's real architecture, starting now</strong></p>
-<p>The same refactor Week 5's demo did to <code>record_check.py</code>. This time you do it
+</section>
+<div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">From Functions to a Class</h2></div><div class="topic-intro"><p>The same refactor Week 5's demo did to <code>record_check.py</code>. This time you do it
 to your own code.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
 </blockquote>
-</div><section class="section" id="t4-1-before-loose-functions-and-a-stray-variable"><h3 class="section-title">1. Before: loose functions and a stray variable</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def parse_line(raw_line):
+</div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>Before: loose functions and a stray variable</h2><div class="cell"><pre class="code"><code>def parse_line(raw_line):
     """Turn one messy raw line into a dict."""
     label, value = raw_line.strip().split(",")
     return {"label": label.strip().lower(), "value": float(value)}
@@ -915,12 +572,10 @@ def status_of(value, limit=100):
     """Return OVER LIMIT or OK for a value against a limit."""
     return "OVER LIMIT" if value &gt;= limit else "OK"
 
-over_limit_count = 0   # &lt;- not attached to anything</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Call <code>parse_line</code> and <code>status_of</code> on <code>&quot;srv-01, 87&quot;</code> and print the result.</p>
-</aside></div></section><section class="section" id="t4-2-after-one-class-bundling-the-same-data-and-logic"><h3 class="section-title">2. After: one class, bundling the same data and logic</h3><div class="section-body"><p>Nothing here is new — every line is something Week 5 already taught. What
+over_limit_count = 0   # &lt;- not attached to anything</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Call <code>parse_line</code> and <code>status_of</code> on <code>&quot;srv-01, 87&quot;</code> and print the result.</p>
+</div></section><section class="topic" id="t4-s2"><h2><span class="num">2.</span>After: one class, bundling the same data and logic</h2><p>Nothing here is new — every line is something Week 5 already taught. What
 changed is where it lives.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>class RecordSource:
+<div class="cell"><pre class="code"><code>class RecordSource:
     """Loads raw lines, parses them, and tracks how many are over limit."""
 
     def __init__(self, limit=100):
@@ -933,8 +588,7 @@ changed is where it lives.</p>
         return {"label": label.strip().lower(), "value": float(value)}
 
     def status_of(self, value):
-        return "OVER LIMIT" if value &gt;= self.limit else "OK"</code></pre></div>
-<div class="diagram-card"><span class="diagram-label">Diagram</span><pre>before: loose functions            after: one class
+        return "OVER LIMIT" if value &gt;= self.limit else "OK"</code></pre></div><div class="diagram"><pre>before: loose functions            after: one class
 
 parse_line(raw_line)                class RecordSource:
 status_of(value, limit)                 self.limit
@@ -944,21 +598,18 @@ over_limit_count  (stray)               self.over_limit_count
 
 same logic - now it travels together, and two RecordSource objects
 never interfere with each other</pre></div>
-
-<aside class="practice"><span class="label">Your turn</span><p>Add a <code>load(self, raw_lines)</code> method that parses every line, prints its status, and updates <code>self.over_limit_count</code>.</p>
-</aside></div></section><section class="section" id="t4-3-what-actually-changed"><h3 class="section-title">3. What actually changed</h3><div class="section-body"><p><code>over_limit_count</code> can no longer be forgotten or reset by accident — it
+<div class="callout"><span class="callout-label">Practice</span><p>Add a <code>load(self, raw_lines)</code> method that parses every line, prints its status, and updates <code>self.over_limit_count</code>.</p>
+</div></section><section class="topic" id="t4-s3"><h2><span class="num">3.</span>What actually changed</h2><p><code>over_limit_count</code> can no longer be forgotten or reset by accident — it
 belongs to the object. <code>parse_line</code> and <code>status_of</code> no longer need their
 inputs passed between calls — they share <code>self</code>. You can now make a <em>second</em>
 <code>RecordSource</code> with a different limit, and the two will not interfere.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>a = RecordSource(limit=100)
+<div class="cell"><pre class="code"><code>a = RecordSource(limit=100)
 b = RecordSource(limit=50)
-print(a.limit, b.limit)   # independent</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Create two <code>RecordSource</code> objects with different limits and prove they do not share state.</p>
-</aside></div></section><section class="section" id="t4-topic-4-challenge"><h3 class="section-title">Topic 4 Challenge</h3><div class="section-body"><p>Take your Week 7 <code>parse_line</code>/<code>status_of</code> functions (or the versions above)
+print(a.limit, b.limit)   # independent</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Create two <code>RecordSource</code> objects with different limits and prove they do not share state.</p>
+</div></section><section class="topic" id="t4-s4"><h2>Challenge</h2><p>Take your Week 7 <code>parse_line</code>/<code>status_of</code> functions (or the versions above)
 and refactor them into one class, exactly the way this topic did — this is
 literally this week's project task, rehearsed here first.</p>
-</div></section><section class="section" id="t4-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t4-s5"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -980,7 +631,7 @@ literally this week's project task, rehearsed here first.</p>
 </tr>
 </tbody>
 </table>
-</div></section><section class="section" id="t4-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t4-s6"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -1014,7 +665,7 @@ literally this week's project task, rehearsed here first.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_before_and_after.py</code> — the exact refactor, side by side
 <code>examples/02_a_class_that_pulls_real_data.py</code> — the same shape as this week's DEMO</p>
-</div></section><section class="section" id="t4-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t4-s7"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -1038,30 +689,31 @@ literally this week's project task, rehearsed here first.</p>
 </table>
 <p><strong>You now have all of Week 8's tools.</strong> This is what starts your project in
 the lab — nothing about it resets.</p>
-</div></section></section>
+</section>
 
-    <footer class="page-foot">Built from the walkthrough notebooks for this week.</footer>
+    <footer class="page-foot">CST1510 · Week 08 · Pulling Real Data</footer>
   </article>
 </div>
+
 <script>
-const links = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
-const sections = links
-  .map(link => document.querySelector(link.getAttribute('href')))
-  .filter(Boolean);
+  var links = Array.from(document.querySelectorAll('nav.toc a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var groups = Array.from(document.querySelectorAll('nav.toc .toc-group'));
+  function onScroll() {
+    var y = window.scrollY + 80;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s && s.offsetTop <= y) current = s; });
+    links.forEach(function (a) { a.classList.remove('current'); });
+    var idx = sections.indexOf(current);
+    if (idx >= 0) links[idx].classList.add('current');
 
-function setCurrentLink() {
-  const offset = window.scrollY + 120;
-  let current = sections[0];
-  for (const section of sections) {
-    if (section.offsetTop <= offset) current = section;
+    var activePrefix = current && current.id ? current.id.split('-')[0] : null;
+    groups.forEach(function (g) {
+      g.classList.toggle('open', g.getAttribute('data-group') === activePrefix);
+    });
   }
-  links.forEach(link => {
-    link.classList.toggle('current', current && link.getAttribute('href') === '#' + current.id);
-  });
-}
-
-setCurrentLink();
-window.addEventListener('scroll', setCurrentLink, { passive: true });
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 </script>
 </body>
 </html>

@@ -8,433 +8,131 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
   :root {
-    --paper: #faf7f0;
-    --paper-2: #f2ede0;
-    --card: #fffdfa;
-    --ink: #1b1a17;
-    --ink-soft: #59554d;
-    --rule: #d8d0c2;
-    --rule-strong: #8b7f6b;
-    --accent: #8a3b12;
-    --accent-soft: #e5c6a6;
-    --accent-2: #355c5a;
-    --code-bg: #f3efe7;
-    --code-ink: #2d2a25;
+    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
+    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background:
-      radial-gradient(circle at top left, rgba(229, 198, 166, 0.36), transparent 24%),
-      linear-gradient(180deg, #fbf8f1 0%, var(--paper) 34%, #f8f4eb 100%);
-    color: var(--ink);
-    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-    font-size: 17px;
-  }
-  code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
-  a { color: inherit; }
-  .shell {
-    max-width: 1220px;
-    margin: 0 auto;
-    padding: 44px 28px 96px;
-    display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
-    gap: 36px;
-    align-items: start;
-  }
-  .toc {
-    position: sticky;
-    top: 24px;
-    border: 1px solid var(--rule);
-    background: rgba(255, 253, 250, 0.9);
-    backdrop-filter: blur(8px);
-    border-radius: 18px;
-    padding: 18px 16px;
-    max-height: calc(100vh - 48px);
-    overflow-y: auto;
-  }
-  .toc-label {
-    display: block;
-    font-variant: small-caps;
-    letter-spacing: .06em;
-    color: var(--ink-soft);
-    margin-bottom: 10px;
-  }
-  .toc a {
-    display: block;
-    text-decoration: none;
-    color: var(--ink-soft);
-    line-height: 1.4;
-    padding: 4px 0;
-  }
-  .toc a:hover,
-  .toc a.current { color: var(--accent); }
-  .toc a.toc-topic {
-    color: var(--ink);
-    font-weight: 700;
-    margin-top: 12px;
-    font-size: 13.5px;
-  }
-  .toc a.toc-topic:first-of-type { margin-top: 0; }
-  .toc a.toc-sub {
-    padding-left: 12px;
-    font-size: 12.5px;
-  }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif; font-size: 17px; }
+  code, .mono, pre { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  .shell { max-width: 1000px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; align-items: start; }
+  nav.toc { position: sticky; top: 32px; display: flex; flex-direction: column; gap: 1px; font-size: 13px; padding-top: 6px; max-height: calc(100vh - 64px); overflow-y: auto; }
+  nav.toc .toc-label { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); margin-bottom: 10px; font-size: 13px; }
+  nav.toc a { color: var(--ink-soft); text-decoration: none; padding: 3px 0; line-height: 1.4; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { color: var(--ink); }
+  nav.toc a.current { color: var(--accent); }
+  nav.toc a.toc-topic { color: var(--ink); font-weight: 700; margin-top: 16px; font-size: 13.5px; }
+  nav.toc a.toc-topic:first-of-type { margin-top: 0; }
+  nav.toc a.toc-sub { padding-left: 12px; font-size: 12.5px; }
+  nav.toc .toc-group { display: flex; flex-direction: column; max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  nav.toc .toc-group.open { max-height: 520px; }
   article { min-width: 0; }
-  .page-head {
-    position: relative;
-    margin-bottom: 34px;
-    padding: 26px 28px 28px;
-    background: linear-gradient(145deg, rgba(255,253,250,.94), rgba(248,242,232,.92));
-    border: 1px solid var(--rule);
-    border-radius: 28px;
-    overflow: hidden;
-  }
-  .page-head::after {
-    content: "";
-    position: absolute;
-    inset: auto -30px -34px auto;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(229,198,166,.68), rgba(229,198,166,0));
-    pointer-events: none;
-  }
-  .breadcrumb {
-    font-variant: small-caps;
-    letter-spacing: .06em;
-    color: var(--ink-soft);
-    margin-bottom: 8px;
-    font-size: 14px;
-  }
-  h1.page-title {
-    margin: 0 0 10px;
-    font-size: clamp(2rem, 3.4vw, 3rem);
-    line-height: 1.06;
-    letter-spacing: -.02em;
-  }
-  .lede {
-    margin: 0 0 14px;
-    max-width: 65ch;
-    color: var(--ink-soft);
-    font-size: 1.06rem;
-    line-height: 1.65;
-    font-style: italic;
-  }
-  .box-note {
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: 14.5px;
-  }
-  .box-note b { color: var(--ink); }
-  .box-note code {
-    background: var(--code-bg);
-    padding: 2px 6px;
-    border-radius: 999px;
-    color: var(--code-ink);
-  }
-  .study-note {
-    margin-top: 16px;
-    max-width: 70ch;
-    padding: 12px 14px;
-    border-left: 3px solid var(--accent);
-    background: rgba(229, 198, 166, 0.14);
-    color: var(--ink-soft);
-  }
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 14px;
-    margin: 22px 0 8px;
-  }
-  .summary-card {
-    padding: 14px 14px 12px;
-    border: 1px solid var(--rule);
-    border-radius: 18px;
-    background: rgba(255,255,255,.6);
-  }
-  .summary-card .k {
-    font-variant: small-caps;
-    letter-spacing: .05em;
-    color: var(--ink-soft);
-    font-size: 12px;
-  }
-  .summary-card .v {
-    margin-top: 8px;
-    font-size: 1rem;
-    line-height: 1.35;
-    font-weight: 700;
-  }
-  .outcomes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 10px;
-    margin: 20px 0 0;
-  }
-  .outcome {
-    padding: 10px 12px;
-    border: 1px solid var(--rule);
-    border-radius: 16px;
-    background: rgba(255,253,250,.76);
-    line-height: 1.45;
-    color: var(--ink);
-    font-size: .97rem;
-  }
-  figure.week-map {
-    margin: 30px 0 34px;
-    padding: 18px 18px 14px;
-    background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(248,242,232,.75));
-    border: 1px solid var(--rule);
-    border-radius: 24px;
-  }
-  figure.week-map figcaption {
-    margin-top: 10px;
-    color: var(--ink-soft);
-    font-size: 14px;
-    line-height: 1.5;
-    text-align: center;
-  }
-  .topic {
-    margin-bottom: 42px;
-    padding: 28px 28px 10px;
-    background: rgba(255,253,250,.78);
-    border: 1px solid var(--rule);
-    border-radius: 26px;
-    scroll-margin-top: 24px;
-  }
-  .topic-kicker {
-    font-variant: small-caps;
-    letter-spacing: .08em;
-    color: var(--ink-soft);
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-  h2.topic-title {
-    margin: 0 0 12px;
-    font-size: clamp(1.55rem, 2.2vw, 2rem);
-    line-height: 1.12;
-    letter-spacing: -.015em;
-  }
-  .topic-intro {
-    max-width: 70ch;
-    color: var(--ink-soft);
-  }
-  .topic-intro p:last-child { margin-bottom: 0; }
-  .section {
-    padding-top: 26px;
-    margin-top: 26px;
-    border-top: 1px solid var(--rule);
-    scroll-margin-top: 24px;
-  }
-  .section:first-of-type {
-    margin-top: 24px;
-  }
-  h3.section-title {
-    margin: 0 0 14px;
-    font-size: 1.18rem;
-    line-height: 1.25;
-  }
-  p, li {
-    line-height: 1.7;
-    max-width: 70ch;
-    text-wrap: pretty;
-  }
-  p {
-    margin: 0 0 14px;
-  }
-  ul, ol {
-    margin: 10px 0 16px;
-    padding-left: 22px;
-  }
-  li {
-    margin-bottom: 5px;
-  }
-  blockquote {
-    margin: 18px 0;
-    padding: 2px 0 2px 16px;
-    border-left: 3px solid var(--accent-soft);
-    color: var(--ink-soft);
-  }
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 78ch;
-    margin: 18px 0;
-    font-size: 14.5px;
-  }
-  table.booktabs {
-    border-top: 1.5px solid var(--ink);
-    border-bottom: 1.5px solid var(--ink);
-  }
-  th, td {
-    text-align: left;
-    padding: 8px 12px 8px 0;
-    vertical-align: top;
-    line-height: 1.5;
-  }
-  th {
-    border-bottom: 1px solid var(--rule-strong);
-    color: var(--ink-soft);
-    font-variant: small-caps;
-    letter-spacing: .04em;
-    font-size: 13px;
-  }
-  code {
-    background: var(--code-bg);
-    padding: 1px 5px;
-    border-radius: 4px;
-    color: var(--code-ink);
-    font-size: .9em;
-  }
-  .practice {
-    margin: 18px 0;
-    padding: 14px 16px;
-    border-radius: 18px;
-    border: 1px solid rgba(138,59,18,.18);
-    background: linear-gradient(180deg, rgba(229,198,166,.22), rgba(255,253,250,.7));
-    max-width: 78ch;
-  }
-  .practice .label {
-    display: block;
-    margin-bottom: 8px;
-    font-variant: small-caps;
-    letter-spacing: .06em;
-    color: var(--accent);
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .practice p:last-child { margin-bottom: 0; }
-  .cell {
-    margin: 18px 0;
-    max-width: 82ch;
-  }
-  .cell-label,
-  .diagram-label {
-    display: inline-block;
-    margin-bottom: 8px;
-    font-variant: small-caps;
-    letter-spacing: .06em;
-    color: var(--ink-soft);
-    font-size: 12px;
-  }
-  pre.code,
-  .md-code {
-    margin: 0;
-    padding: 14px 16px;
-    overflow-x: auto;
-    white-space: pre;
-    background: var(--code-bg);
-    color: var(--code-ink);
-    border: 1px solid var(--rule);
-    border-radius: 16px;
-    line-height: 1.58;
-    font-size: 13.5px;
-  }
-  .output {
-    margin-top: 10px;
-    padding: 10px 12px;
-    border-left: 3px solid var(--rule-strong);
-    background: rgba(255,255,255,.54);
-    color: var(--ink-soft);
-    font-size: 13.5px;
-    max-width: 78ch;
-  }
-  .output pre {
-    margin: 8px 0 0;
-    white-space: pre-wrap;
-    color: var(--ink);
-  }
-  .diagram-card {
-    margin: 18px 0;
-    max-width: 82ch;
-    padding: 14px 16px;
-    border: 1px solid var(--rule);
-    border-radius: 18px;
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.72), rgba(243,239,231,.88)),
-      repeating-linear-gradient(
-        180deg,
-        transparent,
-        transparent 24px,
-        rgba(216, 208, 194, 0.22) 24px,
-        rgba(216, 208, 194, 0.22) 25px
-      );
-  }
-  .diagram-card pre {
-    margin: 0;
-    white-space: pre;
-    overflow-x: auto;
-    color: var(--code-ink);
-    line-height: 1.6;
-    font-size: 13px;
-  }
-  .section-body h4,
-  .section-body h5 {
-    margin: 18px 0 8px;
-    font-size: 1rem;
-  }
-  .page-foot {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid var(--rule);
-    color: var(--ink-soft);
-    font-variant: small-caps;
-    letter-spacing: .05em;
-    font-size: 13px;
-  }
-  @media (max-width: 940px) {
-    .shell {
-      grid-template-columns: 1fr;
-      padding-inline: 18px;
-    }
-    .toc {
-      position: static;
-      max-height: none;
-    }
-  }
+  header.page-head { margin-bottom: 44px; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1.page-title { margin: 0 0 10px; font-size: 2.1rem; font-weight: 700; letter-spacing: -.01em; }
+  .lede { margin: 0; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
+  .lede em { font-style: normal; }
+  .lede code { font-style: normal; color: var(--ink); }
+  .box-note { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); }
+  .box-note b { color: var(--ink); font-weight: 600; }
+  p, li { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
+  p.muted { color: var(--ink-soft); }
+  p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  section.topic { margin-bottom: 44px; scroll-margin-top: 24px; }
+  .topic-divider { margin: 8px 0 18px; padding-top: 36px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
+  #t1-top { margin-top: 0; padding-top: 0; border-top: none; }
+  .topic-divider-n { font-variant: small-caps; letter-spacing: .06em; color: var(--ink-soft); font-size: 15.5px; }
+  .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
+  .topic-intro { margin-bottom: 10px; }
+  .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
+  h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
+  h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
+  blockquote { margin: 18px 0; padding: 2px 0 2px 18px; border-left: 2px solid var(--rule-strong); color: var(--ink-soft); }
+  .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
+  .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
+  .callout p { margin: 0; font-size: .98rem; }
+  .callout p + p { margin-top: 8px; }
+  .cell { margin: 20px 0; max-width: 74ch; }
+  .cell pre.code { margin: 0; background: var(--code-bg); color: var(--code-ink); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 14px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.62; }
+  .cell .output { padding: 8px 18px 4px; font-size: 13px; color: var(--ink-soft); }
+  .cell .output .out-label { font-variant: small-caps; margin-right: 10px; }
+  .cell .output .val { color: var(--ink); }
+  .cell .output pre.out-block { margin: 4px 0 0; font-size: 13px; color: var(--ink); white-space: pre-wrap; }
+  .diagram { margin: 16px 0; max-width: 74ch; border: 1px solid var(--rule); background: var(--code-bg); padding: 14px 18px; overflow-x: auto; }
+  .diagram pre { margin: 0; font-size: 13px; line-height: 1.6; color: var(--code-ink); white-space: pre; }
+  figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
+  figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  figure.anim-figure svg { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: transparent; }
+  figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
+  figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
+  table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
+  table.booktabs { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  table.booktabs th { border-bottom: 1px solid var(--ink-soft); }
+  th, td { text-align: left; padding: 7px 14px 7px 0; vertical-align: top; }
+  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; }
+  td code { white-space: nowrap; }
+  footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
+  @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
 </style>
 </head>
 <body>
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#topic-1" class="toc-topic">Topic 1 — Case and Whitespace</a>
-<a href="#t1-1-the-problem-case-creates" class="toc-sub">1. The problem case creates</a>
-<a href="#t1-2-upper-lower-title" class="toc-sub">2. `.upper()`, `.lower()`, `.title()`</a>
-<a href="#t1-3-strip-the-single-most-important-cleaning-step" class="toc-sub">3. `.strip()` — the single most important cleaning step</a>
-<a href="#t1-4-lstrip-rstrip-and-chaining" class="toc-sub">4. `.lstrip()`, `.rstrip()`, and chaining</a>
-<a href="#t1-topic-1-challenge" class="toc-sub">Topic 1 Challenge</a>
-<a href="#t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
-<a href="#t1-common-mistakes" class="toc-sub">Common mistakes</a>
-<a href="#t1-recap" class="toc-sub">Recap</a>
-<a href="#topic-2" class="toc-topic">Topic 2 — Searching and Replacing</a>
-<a href="#t2-1-in-does-this-substring-appear" class="toc-sub">1. `in` — does this substring appear?</a>
-<a href="#t2-2-find-where-not-just-whether" class="toc-sub">2. `.find()` — WHERE, not just whether</a>
-<a href="#t2-3-replace-swap-every-occurrence" class="toc-sub">3. `.replace()` — swap every occurrence</a>
-<a href="#t2-4-startswith-endswith-count" class="toc-sub">4. `.startswith()`, `.endswith()`, `.count()`</a>
-<a href="#t2-topic-2-challenge" class="toc-sub">Topic 2 Challenge</a>
-<a href="#t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
-<a href="#t2-common-mistakes" class="toc-sub">Common mistakes</a>
-<a href="#t2-recap" class="toc-sub">Recap</a>
-<a href="#topic-3" class="toc-topic">Topic 3 — Splitting, Joining and Building Strings</a>
-<a href="#t3-1-split-with-no-argument" class="toc-sub">1. `.split()` with no argument</a>
-<a href="#t3-2-maxsplit-stop-after-n-splits" class="toc-sub">2. `maxsplit` — stop after N splits</a>
-<a href="#t3-3-join-the-reverse-of-split" class="toc-sub">3. `.join()` — the reverse of split</a>
-<a href="#t3-4-join-needs-strings-and-f-strings-build-clean-output" class="toc-sub">4. `.join()` needs strings, and f-strings build clean output</a>
-<a href="#t3-topic-3-challenge" class="toc-sub">Topic 3 Challenge</a>
-<a href="#t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
-<a href="#t3-common-mistakes" class="toc-sub">Common mistakes</a>
-<a href="#t3-recap" class="toc-sub">Recap</a>
-<a href="#topic-4" class="toc-topic">Topic 4 — Parsing Real Text</a>
-<a href="#t4-1-the-pipeline-one-step-at-a-time" class="toc-sub">1. The pipeline, one step at a time</a>
-<a href="#t4-2-the-whole-pipeline-as-one-function" class="toc-sub">2. The whole pipeline as one function</a>
-<a href="#t4-3-when-parsing-breaks" class="toc-sub">3. When parsing breaks</a>
-<a href="#t4-topic-4-challenge" class="toc-sub">Topic 4 Challenge</a>
-<a href="#t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
-<a href="#t4-common-mistakes" class="toc-sub">Common mistakes</a>
-<a href="#t4-recap" class="toc-sub">Recap</a>
-<a href="#t4-4-parsing-every-line-in-a-file" class="toc-sub">4. Parsing every line in a file</a>
+    <a href="#t1-top" class="toc-topic">Topic 1 — Case and Whitespace</a>
+<div class="toc-group" data-group="t1">
+<a href="#t1-s1" class="toc-sub">1. The problem case creates</a>
+<a href="#t1-s2" class="toc-sub">2. <code>.upper()</code>, <code>.lower()</code>, <code>.title()</code></a>
+<a href="#t1-s3" class="toc-sub">3. <code>.strip()</code> — the single most important cleaning step</a>
+<a href="#t1-s4" class="toc-sub">4. <code>.lstrip()</code>, <code>.rstrip()</code>, and chaining</a>
+<a href="#t1-s5" class="toc-sub">Challenge</a>
+<a href="#t1-s6" class="toc-sub">Same idea, three fields</a>
+<a href="#t1-s7" class="toc-sub">Common mistakes</a>
+<a href="#t1-s8" class="toc-sub">Recap</a>
+</div>
+<a href="#t2-top" class="toc-topic">Topic 2 — Searching and Replacing</a>
+<div class="toc-group" data-group="t2">
+<a href="#t2-s1" class="toc-sub">1. <code>in</code> — does this substring appear?</a>
+<a href="#t2-s2" class="toc-sub">2. <code>.find()</code> — WHERE, not just whether</a>
+<a href="#t2-s3" class="toc-sub">3. <code>.replace()</code> — swap every occurrence</a>
+<a href="#t2-s4" class="toc-sub">4. <code>.startswith()</code>, <code>.endswith()</code>, <code>.count()</code></a>
+<a href="#t2-s5" class="toc-sub">Challenge</a>
+<a href="#t2-s6" class="toc-sub">Same idea, three fields</a>
+<a href="#t2-s7" class="toc-sub">Common mistakes</a>
+<a href="#t2-s8" class="toc-sub">Recap</a>
+</div>
+<a href="#t3-top" class="toc-topic">Topic 3 — Splitting, Joining and Building Strings</a>
+<div class="toc-group" data-group="t3">
+<a href="#t3-s1" class="toc-sub">1. <code>.split()</code> with no argument</a>
+<a href="#t3-s2" class="toc-sub">2. <code>maxsplit</code> — stop after N splits</a>
+<a href="#t3-s3" class="toc-sub">3. <code>.join()</code> — the reverse of split</a>
+<a href="#t3-s4" class="toc-sub">4. <code>.join()</code> needs strings, and f-strings build clean output</a>
+<a href="#t3-s5" class="toc-sub">Challenge</a>
+<a href="#t3-s6" class="toc-sub">Same idea, three fields</a>
+<a href="#t3-s7" class="toc-sub">Common mistakes</a>
+<a href="#t3-s8" class="toc-sub">Recap</a>
+</div>
+<a href="#t4-top" class="toc-topic">Topic 4 — Parsing Real Text</a>
+<div class="toc-group" data-group="t4">
+<a href="#t4-s1" class="toc-sub">1. The pipeline, one step at a time</a>
+<a href="#t4-s2" class="toc-sub">2. The whole pipeline as one function</a>
+<a href="#t4-s3" class="toc-sub">3. When parsing breaks</a>
+<a href="#t4-s4" class="toc-sub">4. Parsing every line in a file</a>
+<a href="#t4-s5" class="toc-sub">Challenge</a>
+<a href="#t4-s6" class="toc-sub">Same idea, three fields</a>
+<a href="#t4-s7" class="toc-sub">Common mistakes</a>
+<a href="#t4-s8" class="toc-sub">Recap</a>
+</div>
   </nav>
 
   <article>
@@ -442,64 +140,46 @@
       <div class="breadcrumb">CST1510</div>
       <h1 class="page-title">Week 7 — Strings and Text Manipulation</h1>
       <p class="lede">By the end of this week you can normalise text with <code>.lower()</code>, <code>.upper()</code> and <code>.title()</code>, remove stray whitespace with <code>.strip()</code>, <code>.lstrip()</code> and <code>.rstrip()</code>, and check for and locate substrings with <code>in</code> and <code>.find()</code>.</p>
-      <p class="box-note">Box we build this week: <b><code>INPUT, deepened</code> — see <code>../system_diagram.md</code></b></p>
-      <div class="study-note">This reading view combines the week's walkthrough notebooks into one page so students can follow the theory in order, even outside Jupyter.</div>
-      <div class="summary-grid">
-        <div class="summary-card"><div class="k">Topic 1</div><div class="v">Case and Whitespace</div></div>
-<div class="summary-card"><div class="k">Topic 2</div><div class="v">Searching and Replacing</div></div>
-<div class="summary-card"><div class="k">Topic 3</div><div class="v">Splitting, Joining and Building Strings</div></div>
-<div class="summary-card"><div class="k">Topic 4</div><div class="v">Parsing Real Text</div></div>
-      </div>
-      <div class="outcomes">
-        <div class="outcome">Normalise text with <code>.lower()</code>, <code>.upper()</code> and <code>.title()</code></div><div class="outcome">Remove stray whitespace with <code>.strip()</code>, <code>.lstrip()</code> and <code>.rstrip()</code></div><div class="outcome">Check for and locate substrings with <code>in</code> and <code>.find()</code></div><div class="outcome">Swap text with <code>.replace()</code>, and check edges with <code>.startswith()</code>/<code>.endswith()</code></div><div class="outcome">Split text properly — with no separator, a separator, and a <code>maxsplit</code> limit</div><div class="outcome">Rebuild text with <code>.join()</code> and f-strings</div><div class="outcome">Parse one raw, messy real-world line into a clean dict — and know which</div>
-      </div>
+      <p class="box-note">Box we build this week: <b><code>INPUT, deepened</code> — see <code>../system_diagram.md</code></b>. Each <em>Practice</em> below sets a short task.</p>
+      <p class="muted">This page combines the week's walkthrough notebooks into one reading view, keeping the theory in teaching order.</p>
     </header>
 
-    <figure class="week-map"><svg viewBox="0 0 920 220" role="img" aria-label="A text-cleaning pipeline" style="width:100%;height:auto;display:block;"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#b8a88e" flood-opacity="0.35"/></filter></defs><rect x="22" y="18" width="220" height="48" rx="18" fill="#fffaf2" stroke="#d8d0c2"/><text x="40" y="38" fill="#59554d" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="40" y="56" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif">INPUT, deepened — see ../system_diagram.md</text><line x1="166.0" y1="142" x2="232.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="230.0,142 221.0,137 221.0,147" fill="#8a3b12"/><rect x="-16.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="0.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Case and Whitespace</tspan></text><line x1="426.0" y1="142" x2="492.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="490.0,142 481.0,137 481.0,147" fill="#8a3b12"/><rect x="244.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#8b7f6b" filter="url(#shadow)"/><text x="260.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="260.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="260.0" dy="0">Searching and</tspan><tspan x="260.0" dy="19">Replacing</tspan></text><line x1="686.0" y1="142" x2="752.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="750.0,142 741.0,137 741.0,147" fill="#8a3b12"/><rect x="504.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="520.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="520.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="520.0" dy="0">Splitting, Joining</tspan><tspan x="520.0" dy="19">and Building Strings</tspan></text><rect x="764.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#355c5a" filter="url(#shadow)"/><text x="780.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="780.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="780.0" dy="0">Parsing Real Text</tspan></text></svg><figcaption><b>A text-cleaning pipeline</b>. Week 7 treats messy text as something we can clean, search, split, and finally turn into structured data.</figcaption></figure>
+    <figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="A text-cleaning pipeline" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">INPUT, deepened</text><line x1="166.0" y1="164" x2="236.7" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Case and Whitespace</tspan></text><line x1="424.7" y1="164" x2="495.3" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="244.7" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="258.7" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="258.7" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="258.7" dy="0">Searching and</tspan><tspan x="258.7" dy="19">Replacing</tspan></text><line x1="683.3" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="503.3" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="517.3" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="517.3" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="517.3" dy="0">Splitting, Joining</tspan><tspan x="517.3" dy="19">and Building Strings</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">Parsing Real Text</tspan></text></svg><figcaption><b>A text-cleaning pipeline</b>. Week 7 treats messy text as something we can clean, search, split, and finally turn into structured data.</figcaption></figure>
 
-    <section class="topic" id="topic-1"><div class="topic-kicker">Topic 1</div><h2 class="topic-title">Case and Whitespace</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, properly</strong></p>
-<p>Real text arrives messy. This is the first, cheapest cleaning pass.</p>
+    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Case and Whitespace</h2></div><div class="topic-intro"><p>Real text arrives messy. This is the first, cheapest cleaning pass.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
 </blockquote>
-</div><section class="section" id="t1-1-the-problem-case-creates"><h3 class="section-title">1. The problem case creates</h3><div class="section-body"><p><code>&quot;SRV-01&quot; == &quot;srv-01&quot;</code> is <code>False</code> — same server, different text. Nothing about
+</div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>The problem case creates</h2><p><code>&quot;SRV-01&quot; == &quot;srv-01&quot;</code> is <code>False</code> — same server, different text. Nothing about
 Python assumes text means the same thing regardless of case; you have to say so.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>hostname_a = "SRV-01"
+<div class="cell"><pre class="code"><code>hostname_a = "SRV-01"
 hostname_b = "srv-01"
 
 print(hostname_a == hostname_b)
-print(hostname_a.lower() == hostname_b.lower())</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Given <code>ids = [&quot;R-001&quot;, &quot;r-002&quot;, &quot;R-003&quot;]</code>, print all three in lowercase.</p>
-</aside></div></section><section class="section" id="t1-2-upper-lower-title"><h3 class="section-title">2. `.upper()`, `.lower()`, `.title()`</h3><div class="section-body"><p>Each returns a <strong>new</strong> string — strings are locked (Week 4). The original never
+print(hostname_a.lower() == hostname_b.lower())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given <code>ids = [&quot;R-001&quot;, &quot;r-002&quot;, &quot;R-003&quot;]</code>, print all three in lowercase.</p>
+</div></section><section class="topic" id="t1-s2"><h2><span class="num">2.</span><code>.upper()</code>, <code>.lower()</code>, <code>.title()</code></h2><p>Each returns a <strong>new</strong> string — strings are locked (Week 4). The original never
 changes.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>name = "record check console"
+<div class="cell"><pre class="code"><code>name = "record check console"
 print(name.title())
 
 original = "SRV-01"
 print(original.lower())
-print(original)   # unchanged</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Explain in one sentence why <code>original</code> is unchanged after calling <code>.lower()</code> on it.</p>
-</aside></div></section><section class="section" id="t1-3-strip-the-single-most-important-cleaning-step"><h3 class="section-title">3. `.strip()` — the single most important cleaning step</h3><div class="section-body"><p>Removes whitespace from both ends. Real text almost always has some you cannot
+print(original)   # unchanged</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Explain in one sentence why <code>original</code> is unchanged after calling <code>.lower()</code> on it.</p>
+</div></section><section class="topic" id="t1-s3"><h2><span class="num">3.</span><code>.strip()</code> — the single most important cleaning step</h2><p>Removes whitespace from both ends. Real text almost always has some you cannot
 see in <code>print()</code>.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>raw = "  srv-01  "
+<div class="cell"><pre class="code"><code>raw = "  srv-01  "
 print(f"[{raw}]")
-print(f"[{raw.strip()}]")</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Given <code>&quot;   R-004   &quot;</code>, print it with the whitespace removed.</p>
-</aside></div></section><section class="section" id="t1-4-lstrip-rstrip-and-chaining"><h3 class="section-title">4. `.lstrip()`, `.rstrip()`, and chaining</h3><div class="section-body"><p>One side only, or a specific character instead of whitespace. Methods chain —
+print(f"[{raw.strip()}]")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given <code>&quot;   R-004   &quot;</code>, print it with the whitespace removed.</p>
+</div></section><section class="topic" id="t1-s4"><h2><span class="num">4.</span><code>.lstrip()</code>, <code>.rstrip()</code>, and chaining</h2><p>One side only, or a specific character instead of whitespace. Methods chain —
 <code>.strip().lower()</code> runs left to right.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>messy = "***srv-01***"
+<div class="cell"><pre class="code"><code>messy = "***srv-01***"
 print(messy.strip("*"))
 
 field = "  SRV-01  "
-print(field.strip().lower())</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Given <code>&quot;///R-004///&quot;</code>, strip just the <code>/</code> characters. Then chain <code>.strip()</code> and <code>.upper()</code> on a value of your own.</p>
-</aside></div></section><section class="section" id="t1-topic-1-challenge"><h3 class="section-title">Topic 1 Challenge</h3><div class="section-body"><p>Given <code>raw = &quot;   SRV-01   &quot;</code>, produce <code>&quot;srv-01&quot;</code> in one line, chaining exactly
+print(field.strip().lower())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given <code>&quot;///R-004///&quot;</code>, strip just the <code>/</code> characters. Then chain <code>.strip()</code> and <code>.upper()</code> on a value of your own.</p>
+</div></section><section class="topic" id="t1-s5"><h2>Challenge</h2><p>Given <code>raw = &quot;   SRV-01   &quot;</code>, produce <code>&quot;srv-01&quot;</code> in one line, chaining exactly
 the methods you need and no others.</p>
-</div></section><section class="section" id="t1-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t1-s6"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -521,7 +201,7 @@ the methods you need and no others.</p>
 </tr>
 </tbody>
 </table>
-</div></section><section class="section" id="t1-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t1-s7"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -556,7 +236,7 @@ the methods you need and no others.</p>
 <p><code>examples/01_case_methods.py</code> — upper, lower, title, and why the original is unchanged
 <code>examples/02_whitespace_methods.py</code> — strip, lstrip, rstrip, stripping specific characters
 Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">docs.python.org — String Methods</a></p>
-</div></section><section class="section" id="t1-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t1-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -587,46 +267,38 @@ Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">d
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — checking what text contains, and changing it.</p>
-</div></section></section>
-<section class="topic" id="topic-2"><div class="topic-kicker">Topic 2</div><h2 class="topic-title">Searching and Replacing</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, checked</strong></p>
-<p>Before you can decide something about a line of text, you need to know what it
+</section>
+<div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Searching and Replacing</h2></div><div class="topic-intro"><p>Before you can decide something about a line of text, you need to know what it
 contains.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
 </blockquote>
-</div><section class="section" id="t2-1-in-does-this-substring-appear"><h3 class="section-title">1. `in` — does this substring appear?</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>line = "2026-09-08 ERROR failed to connect to srv-01"
+</div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>in</code> — does this substring appear?</h2><div class="cell"><pre class="code"><code>line = "2026-09-08 ERROR failed to connect to srv-01"
 
 print("ERROR" in line)
 print("error" in line)          # case matters, same as any comparison
-print("error" in line.lower())   # normalise first</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Given <code>log = &quot;2026-09-08 WARNING disk 90% full&quot;</code>, check whether it contains <code>&quot;WARNING&quot;</code>, case-insensitively.</p>
-</aside></div></section><section class="section" id="t2-2-find-where-not-just-whether"><h3 class="section-title">2. `.find()` — WHERE, not just whether</h3><div class="section-body"><p>Returns the starting index, or <code>-1</code> if not found. Not an error, not <code>None</code> —
+print("error" in line.lower())   # normalise first</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given <code>log = &quot;2026-09-08 WARNING disk 90% full&quot;</code>, check whether it contains <code>&quot;WARNING&quot;</code>, case-insensitively.</p>
+</div></section><section class="topic" id="t2-s2"><h2><span class="num">2.</span><code>.find()</code> — WHERE, not just whether</h2><p>Returns the starting index, or <code>-1</code> if not found. Not an error, not <code>None</code> —
 check for <code>-1</code> specifically.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>position = line.find("ERROR")
+<div class="cell"><pre class="code"><code>position = line.find("ERROR")
 print(position)     # 11
 
 missing = line.find("WARNING")
-print(missing)        # -1 - not found</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Use <code>.find()</code> to locate where <code>&quot;disk&quot;</code> starts in the <code>log</code> string from section 1.</p>
-</aside></div></section><section class="section" id="t2-3-replace-swap-every-occurrence"><h3 class="section-title">3. `.replace()` — swap every occurrence</h3><div class="section-body"><p>Case-sensitive, like everything else this week.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>hostname = "srv_01_east"
-print(hostname.replace("_", "-"))</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Replace every <code>-</code> with <code>_</code> in <code>&quot;srv-01-east&quot;</code>.</p>
-</aside></div></section><section class="section" id="t2-4-startswith-endswith-count"><h3 class="section-title">4. `.startswith()`, `.endswith()`, `.count()`</h3><div class="section-body"><p>Very common for filtering — log levels, file extensions, repeated warnings.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>lines = ["ERROR: disk full", "INFO: backup complete", "ERROR: timeout"]
+print(missing)        # -1 - not found</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Use <code>.find()</code> to locate where <code>&quot;disk&quot;</code> starts in the <code>log</code> string from section 1.</p>
+</div></section><section class="topic" id="t2-s3"><h2><span class="num">3.</span><code>.replace()</code> — swap every occurrence</h2><p>Case-sensitive, like everything else this week.</p>
+<div class="cell"><pre class="code"><code>hostname = "srv_01_east"
+print(hostname.replace("_", "-"))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Replace every <code>-</code> with <code>_</code> in <code>&quot;srv-01-east&quot;</code>.</p>
+</div></section><section class="topic" id="t2-s4"><h2><span class="num">4.</span><code>.startswith()</code>, <code>.endswith()</code>, <code>.count()</code></h2><p>Very common for filtering — log levels, file extensions, repeated warnings.</p>
+<div class="cell"><pre class="code"><code>lines = ["ERROR: disk full", "INFO: backup complete", "ERROR: timeout"]
 
 for l in lines:
     if l.startswith("ERROR"):
         print("Needs attention:", l)
 
-print("retry retry retry failed".count("retry"))</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Given a list of filenames, print only the ones ending in <code>&quot;.log&quot;</code>.</p>
-</aside></div></section><section class="section" id="t2-topic-2-challenge"><h3 class="section-title">Topic 2 Challenge</h3><div class="section-body"><p>Given a list of raw log lines, print only the ones that contain <code>&quot;ERROR&quot;</code>
+print("retry retry retry failed".count("retry"))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given a list of filenames, print only the ones ending in <code>&quot;.log&quot;</code>.</p>
+</div></section><section class="topic" id="t2-s5"><h2>Challenge</h2><p>Given a list of raw log lines, print only the ones that contain <code>&quot;ERROR&quot;</code>
 (case-insensitively), with <code>&quot;ERROR&quot;</code> replaced by <code>&quot;[FLAGGED]&quot;</code>.</p>
-</div></section><section class="section" id="t2-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t2-s6"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -648,7 +320,7 @@ print("retry retry retry failed".count("retry"))</code></pre></div>
 </tr>
 </tbody>
 </table>
-</div></section><section class="section" id="t2-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t2-s7"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -683,7 +355,7 @@ print("retry retry retry failed".count("retry"))</code></pre></div>
 <p><code>examples/01_in_and_find.py</code> — in, find, and the -1 case
 <code>examples/02_replace_startswith_endswith.py</code> — replace, startswith, endswith, count
 Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">docs.python.org — String Methods</a></p>
-</div></section><section class="section" id="t2-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -714,51 +386,42 @@ Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">d
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — splitting text apart, and building it back up.</p>
-</div></section></section>
-<section class="topic" id="topic-3"><div class="topic-kicker">Topic 3</div><h2 class="topic-title">Splitting, Joining and Building Strings</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, taken apart and put back together</strong></p>
-<p>You have used <code>.split()</code> since Week 4. Here is the rest of it — plus its
+</section>
+<div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Splitting, Joining and Building Strings</h2></div><div class="topic-intro"><p>You have used <code>.split()</code> since Week 4. Here is the rest of it — plus its
 reverse.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
 </blockquote>
-</div><section class="section" id="t3-1-split-with-no-argument"><h3 class="section-title">1. `.split()` with no argument</h3><div class="section-body"><p>Splits on whitespace, any amount of it — handles uneven spacing automatically.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>messy = "srv-01    used=87   total=100"
-print(messy.split())</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Split <code>&quot;a   b    c&quot;</code> (uneven spacing) with no argument and see what you get.</p>
-</aside></div></section><section class="section" id="t3-2-maxsplit-stop-after-n-splits"><h3 class="section-title">2. `maxsplit` — stop after N splits</h3><div class="section-body"><p>Everything after the Nth split stays together, unsplit. This is exactly what
+</div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>.split()</code> with no argument</h2><p>Splits on whitespace, any amount of it — handles uneven spacing automatically.</p>
+<div class="cell"><pre class="code"><code>messy = "srv-01    used=87   total=100"
+print(messy.split())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Split <code>&quot;a   b    c&quot;</code> (uneven spacing) with no argument and see what you get.</p>
+</div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span><code>maxsplit</code> — stop after N splits</h2><p>Everything after the Nth split stays together, unsplit. This is exactly what
 lets you pull a hostname off the front of a line without also splitting
 whatever comes after it.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>record = "srv-01,used=87,total=100"
+<div class="cell"><pre class="code"><code>record = "srv-01,used=87,total=100"
 
 print(record.split(","))
-print(record.split(",", 1))</code></pre></div>
-<div class="cell"><span class="cell-label">Code</span><pre class="md-code"><code>"srv-01,used=87,total=100".split(",", 1)
+print(record.split(",", 1))</code></pre></div><div class="cell"><pre class="code"><code>"srv-01,used=87,total=100".split(",", 1)
               |
               v
    ["srv-01", "used=87,total=100"]
     one split, everything after stays together</code></pre></div>
-
-<aside class="practice"><span class="label">Your turn</span><p>Split <code>&quot;hostname:srv-01:east&quot;</code> so that only the first <code>:</code> is used.</p>
-</aside></div></section><section class="section" id="t3-3-join-the-reverse-of-split"><h3 class="section-title">3. `.join()` — the reverse of split</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>parts = ["srv-01", "87", "100"]
+<div class="callout"><span class="callout-label">Practice</span><p>Split <code>&quot;hostname:srv-01:east&quot;</code> so that only the first <code>:</code> is used.</p>
+</div></section><section class="topic" id="t3-s3"><h2><span class="num">3.</span><code>.join()</code> — the reverse of split</h2><div class="cell"><pre class="code"><code>parts = ["srv-01", "87", "100"]
 print(",".join(parts))
-print(" | ".join(parts))</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Join <code>[&quot;R-001&quot;, &quot;R-002&quot;, &quot;R-003&quot;]</code> into one line separated by <code>&quot; | &quot;</code>.</p>
-</aside></div></section><section class="section" id="t3-4-join-needs-strings-and-f-strings-build-clean-output"><h3 class="section-title">4. `.join()` needs strings, and f-strings build clean output</h3><div class="section-body"><p><code>.join()</code> fails on a list of numbers — convert first. f-strings remain how you
+print(" | ".join(parts))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Join <code>[&quot;R-001&quot;, &quot;R-002&quot;, &quot;R-003&quot;]</code> into one line separated by <code>&quot; | &quot;</code>.</p>
+</div></section><section class="topic" id="t3-s4"><h2><span class="num">4.</span><code>.join()</code> needs strings, and f-strings build clean output</h2><p><code>.join()</code> fails on a list of numbers — convert first. f-strings remain how you
 build a report line, same as Week 1, now with real cleaned data.</p>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>numbers = [87, 100]
+<div class="cell"><pre class="code"><code>numbers = [87, 100]
 # ",".join(numbers)  # TypeError: expected str instance, int found
 print(",".join(str(n) for n in numbers))
 
 hostname, used, total = "srv-01", 87.0, 100.0
-print(f"{hostname:&lt;10} {used:&gt;6.1f}/{total:&lt;6.1f}")</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Given <code>percentages = [87.0, 120.0, 45.0]</code>, build one comma-separated string of them formatted to 1 decimal place each.</p>
-</aside></div></section><section class="section" id="t3-topic-3-challenge"><h3 class="section-title">Topic 3 Challenge</h3><div class="section-body"><p>Given <code>&quot;srv-01,used=87,total=100&quot;</code>, split off the hostname using <code>maxsplit</code>,
+print(f"{hostname:&lt;10} {used:&gt;6.1f}/{total:&lt;6.1f}")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given <code>percentages = [87.0, 120.0, 45.0]</code>, build one comma-separated string of them formatted to 1 decimal place each.</p>
+</div></section><section class="topic" id="t3-s5"><h2>Challenge</h2><p>Given <code>&quot;srv-01,used=87,total=100&quot;</code>, split off the hostname using <code>maxsplit</code>,
 then split the rest into key=value pairs, and print each as
 <code>&quot;key: value&quot;</code> using an f-string.</p>
-</div></section><section class="section" id="t3-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t3-s6"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -780,7 +443,7 @@ then split the rest into key=value pairs, and print each as
 </tr>
 </tbody>
 </table>
-</div></section><section class="section" id="t3-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t3-s7"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -815,7 +478,7 @@ then split the rest into key=value pairs, and print each as
 <p><code>examples/01_split_deeper.py</code> — split with no argument, maxsplit, and why it matters
 <code>examples/02_join_and_fstrings.py</code> — join, round-tripping split/join, building output
 Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">docs.python.org — String Methods</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals">Formatted String Literals</a></p>
-</div></section><section class="section" id="t3-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t3-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -846,29 +509,26 @@ Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">d
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — putting all of it together on one real, messy line.</p>
-</div></section></section>
-<section class="topic" id="topic-4"><div class="topic-kicker">Topic 4</div><h2 class="topic-title">Parsing Real Text</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, finished</strong></p>
-<p>Everything this week combines into one pipeline: strip, split, clean each
+</section>
+<div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Parsing Real Text</h2></div><div class="topic-intro"><p>Everything this week combines into one pipeline: strip, split, clean each
 piece, build a dict. This is exactly what this week's DEMO does.</p>
 <blockquote>
 <p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
 </blockquote>
-</div><section class="section" id="t4-1-the-pipeline-one-step-at-a-time"><h3 class="section-title">1. The pipeline, one step at a time</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>raw_line = "  Srv-01 , used=87 , total=100  "
+</div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>The pipeline, one step at a time</h2><div class="cell"><pre class="code"><code>raw_line = "  Srv-01 , used=87 , total=100  "
 
 line = raw_line.strip()
 hostname_part, rest = line.split(",", 1)
 hostname = hostname_part.strip().lower()
-print(hostname, "|", rest)</code></pre></div>
-<div class="cell"><span class="cell-label">Code</span><pre class="md-code"><code>"  Srv-01 , used=87 , total=100  "
+print(hostname, "|", rest)</code></pre></div><div class="cell"><pre class="code"><code>"  Srv-01 , used=87 , total=100  "
         | .strip()
 "Srv-01 , used=87 , total=100"
         | .split(",", 1)
 ["Srv-01 ", "used=87 , total=100"]
         | .strip().lower() on the first piece, .split(",") on the rest
 {"hostname": "srv-01", "used": 87.0, "total": 100.0}</code></pre></div>
-
-<aside class="practice"><span class="label">Your turn</span><p>Trace the same steps by hand on <code>&quot;srv-03,used=45,total=100&quot;</code> before running anything.</p>
-</aside></div></section><section class="section" id="t4-2-the-whole-pipeline-as-one-function"><h3 class="section-title">2. The whole pipeline as one function</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def parse_line(raw_line):
+<div class="callout"><span class="callout-label">Practice</span><p>Trace the same steps by hand on <code>&quot;srv-03,used=45,total=100&quot;</code> before running anything.</p>
+</div></section><section class="topic" id="t4-s2"><h2><span class="num">2.</span>The whole pipeline as one function</h2><div class="cell"><pre class="code"><code>def parse_line(raw_line):
     """Turn one messy raw status line into a clean dict."""
     line = raw_line.strip()
     hostname_part, rest = line.split(",", 1)
@@ -881,28 +541,40 @@ print(hostname, "|", rest)</code></pre></div>
 
     return {"hostname": hostname, "used": fields["used"], "total": fields["total"]}
 
-print(parse_line("  Srv-01 , used=87 , total=100  "))</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Adapt <code>parse_line</code> for a line shaped <code>&quot;hostname:region:used:total&quot;</code> instead (colon-separated, no key=value pairs).</p>
-</aside></div></section><section class="section" id="t4-3-when-parsing-breaks"><h3 class="section-title">3. When parsing breaks</h3><div class="section-body"><p>Three different failures, three different meanings — knowing which is which is
+print(parse_line("  Srv-01 , used=87 , total=100  "))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Adapt <code>parse_line</code> for a line shaped <code>&quot;hostname:region:used:total&quot;</code> instead (colon-separated, no key=value pairs).</p>
+</div></section><section class="topic" id="t4-s3"><h2><span class="num">3.</span>When parsing breaks</h2><p>Three different failures, three different meanings — knowing which is which is
 most of the job:</p>
 <ul>
 <li>an extra <code>=</code> in a value → <code>ValueError: too many values to unpack</code></li>
 <li>a missing field → <code>KeyError</code></li>
 <li>a value that is not really a number → <code>ValueError: could not convert string to float</code></li>
 </ul>
-
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code># parse_line("srv-01,note=server=east,used=87,total=100")
+<div class="cell"><pre class="code"><code># parse_line("srv-01,note=server=east,used=87,total=100")
 # ValueError: too many values to unpack (expected 2, got 3)
 
 # parse_line("srv-01,used=87")
 # KeyError: 'total'
 
 # parse_line("srv-01,used=unknown,total=100")
-# ValueError: could not convert string to float: 'unknown'</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Uncomment each broken call one at a time, run it, and check the error matches what is described above.</p>
-</aside></div></section><section class="section" id="t4-topic-4-challenge"><h3 class="section-title">Topic 4 Challenge</h3><div class="section-body"><p>Write <code>parse_line</code> for your own project's lane (see the project brief), and
+# ValueError: could not convert string to float: 'unknown'</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Uncomment each broken call one at a time, run it, and check the error matches what is described above.</p>
+</div></section><section class="topic" id="t4-s4"><h2><span class="num">4.</span>Parsing every line in a file</h2><p>Real messy text does not arrive as one line typed into the code — it arrives as a file of many lines. Combine <code>parse_line</code> with Week 4's <code>for line in f:</code>, and write the status check once, as its own function, rather than repeating the <code>if</code>/<code>elif</code> inside the loop.</p>
+<div class="cell"><pre class="code"><code>def status_of(used, total, warning_at=90):
+    """Return OVER LIMIT, WARNING or OK for a used/total pair."""
+    percent = (used / total) * 100
+    if percent &gt;= 100:
+        return "OVER LIMIT"
+    elif percent &gt;= warning_at:
+        return "WARNING"
+    else:
+        return "OK"
+
+with open("messy_lines.txt") as f:
+    for raw_line in f:
+        record = parse_line(raw_line)
+        print(record["hostname"], status_of(record["used"], record["total"]))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Save a few messy <code>hostname , used=.. , total=..</code> lines of your own to a file. Read it line by line, parse each one with <code>parse_line</code>, and print its status — without writing the cleaning logic or the status logic more than once.</p>
+</div></section><section class="topic" id="t4-s5"><h2>Challenge</h2><p>Write <code>parse_line</code> for your own project's lane (see the project brief), and
 test it against at least 3 raw lines with different spacing and case.</p>
-</div></section><section class="section" id="t4-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t4-s6"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -924,7 +596,7 @@ test it against at least 3 raw lines with different spacing and case.</p>
 </tr>
 </tbody>
 </table>
-</div></section><section class="section" id="t4-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t4-s7"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -960,7 +632,7 @@ test it against at least 3 raw lines with different spacing and case.</p>
 <code>examples/02_when_parsing_breaks.py</code> — the three failures, and what each means
 <code>examples/03_parsing_a_file.py</code> — parse_line + status_of, applied to every line in a file
 Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">docs.python.org — String Methods</a></p>
-</div></section><section class="section" id="t4-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+</section><section class="topic" id="t4-s8"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -996,47 +668,31 @@ Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">d
 </table>
 <p><strong>You now have all of Week 7's INPUT.</strong> This is what starts your project in
 the lab — nothing about it resets.</p>
-</div></section><section class="section" id="t4-4-parsing-every-line-in-a-file"><h3 class="section-title">4. Parsing every line in a file</h3><div class="section-body"><p>Real messy text does not arrive as one line typed into the code — it arrives as a file of many lines. Combine <code>parse_line</code> with Week 4's <code>for line in f:</code>, and write the status check once, as its own function, rather than repeating the <code>if</code>/<code>elif</code> inside the loop.</p>
+</section>
 
-<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def status_of(used, total, warning_at=90):
-    """Return OVER LIMIT, WARNING or OK for a used/total pair."""
-    percent = (used / total) * 100
-    if percent &gt;= 100:
-        return "OVER LIMIT"
-    elif percent &gt;= warning_at:
-        return "WARNING"
-    else:
-        return "OK"
-
-with open("messy_lines.txt") as f:
-    for raw_line in f:
-        record = parse_line(raw_line)
-        print(record["hostname"], status_of(record["used"], record["total"]))</code></pre></div>
-<aside class="practice"><span class="label">Your turn</span><p>Save a few messy <code>hostname , used=.. , total=..</code> lines of your own to a file. Read it line by line, parse each one with <code>parse_line</code>, and print its status — without writing the cleaning logic or the status logic more than once.</p>
-</aside></div></section></section>
-
-    <footer class="page-foot">Built from the walkthrough notebooks for this week.</footer>
+    <footer class="page-foot">CST1510 · Week 07 · Strings and Text Manipulation</footer>
   </article>
 </div>
+
 <script>
-const links = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
-const sections = links
-  .map(link => document.querySelector(link.getAttribute('href')))
-  .filter(Boolean);
+  var links = Array.from(document.querySelectorAll('nav.toc a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  var groups = Array.from(document.querySelectorAll('nav.toc .toc-group'));
+  function onScroll() {
+    var y = window.scrollY + 80;
+    var current = sections[0];
+    sections.forEach(function (s) { if (s && s.offsetTop <= y) current = s; });
+    links.forEach(function (a) { a.classList.remove('current'); });
+    var idx = sections.indexOf(current);
+    if (idx >= 0) links[idx].classList.add('current');
 
-function setCurrentLink() {
-  const offset = window.scrollY + 120;
-  let current = sections[0];
-  for (const section of sections) {
-    if (section.offsetTop <= offset) current = section;
+    var activePrefix = current && current.id ? current.id.split('-')[0] : null;
+    groups.forEach(function (g) {
+      g.classList.toggle('open', g.getAttribute('data-group') === activePrefix);
+    });
   }
-  links.forEach(link => {
-    link.classList.toggle('current', current && link.getAttribute('href') === '#' + current.id);
-  });
-}
-
-setCurrentLink();
-window.addEventListener('scroll', setCurrentLink, { passive: true });
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 </script>
 </body>
 </html>
