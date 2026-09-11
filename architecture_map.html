@@ -1,0 +1,209 @@
+<meta charset="utf-8">
+<title>System Architecture</title>
+<script>if (location.search.indexOf('embed=1') !== -1) document.documentElement.className += ' embed';</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E7ECF1;
+    --fg: #182430;
+    --fg-muted: #5B6B7A;
+    --border: #C9D3DC;
+    --accent-a: #D8425F;
+    --accent-a-soft: #F6DDE2;
+    --accent-b: #0E8F8B;
+    --accent-b-soft: #D9F0EE;
+    --code-bg: #10161F;
+    --code-fg: #E7EEF3;
+    --code-muted: #7C8CA0;
+    --shadow: 0 1px 2px rgba(20,30,40,.06), 0 10px 28px rgba(20,30,40,.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0D131E; --surface: #161F2C; --surface-2: #1E2836; --fg: #E7EEF5;
+      --fg-muted: #8FA0B2; --border: #2B3A4C; --accent-a: #FF7A92; --accent-a-soft: #3A2028;
+      --accent-b: #35DCCF; --accent-b-soft: #123330; --code-bg: #090D14; --code-fg: #DCE6EE;
+      --code-muted: #5E7488; --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0D131E; --surface: #161F2C; --surface-2: #1E2836; --fg: #E7EEF5;
+    --fg-muted: #8FA0B2; --border: #2B3A4C; --accent-a: #FF7A92; --accent-a-soft: #3A2028;
+    --accent-b: #35DCCF; --accent-b-soft: #123330; --code-bg: #090D14; --code-fg: #DCE6EE;
+    --code-muted: #5E7488; --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 32px rgba(0,0,0,.4);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+  .page { max-width: 980px; margin: 0 auto; padding: 40px 24px 48px; display: flex; flex-direction: column; gap: 22px; }
+  header { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--fg-muted); }
+  h1 { margin: 0; font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; text-wrap: balance; letter-spacing: -0.01em; }
+  header p { margin: 0; max-width: 64ch; color: var(--fg-muted); font-size: 1rem; line-height: 1.55; }
+  code, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+  .diagram { display: flex; align-items: stretch; gap: 0; }
+  .box {
+    flex: 1; min-width: 0; position: relative; background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 16px 12px; text-align: center; box-shadow: var(--shadow);
+    transition: border-color .35s ease, box-shadow .35s ease, background .35s ease, transform .35s ease;
+  }
+  .box.lit { border-color: var(--accent-a); box-shadow: 0 0 0 3px var(--accent-a-soft), var(--shadow); transform: translateY(-2px); }
+  .box.dim { opacity: .5; }
+  .box .name { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-weight: 700; font-size: 14.5px; letter-spacing: .04em; margin-bottom: 6px; transition: color .3s ease; }
+  .box.lit .name { color: var(--accent-a); }
+  .box .desc { font-size: 12.5px; color: var(--fg-muted); font-style: italic; line-height: 1.4; min-height: 32px; }
+  .box .week-pill {
+    margin-top: 10px; display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; font-weight: 600;
+    color: var(--fg-muted); border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px;
+    opacity: 0; transform: translateY(4px); transition: opacity .3s ease, transform .3s ease, color .3s ease, border-color .3s ease;
+  }
+  .box.lit .week-pill { opacity: 1; transform: translateY(0); color: var(--accent-a); border-color: var(--accent-a); }
+
+  .arrow-wrap { flex: none; display: flex; align-items: center; justify-content: center; width: 34px; position: relative; }
+  .arrow-wrap svg { overflow: visible; }
+  .arrow-wrap path { fill: none; stroke: var(--border); stroke-width: 2; stroke-linecap: round; transition: stroke .35s ease; }
+  .arrow-wrap path.active { stroke: var(--accent-b); }
+  .arrow-wrap path.flow { stroke-dasharray: 6 6; animation: flow .5s linear infinite; }
+  @keyframes flow { to { stroke-dashoffset: -24; } }
+  .arrow-wrap .head { fill: var(--border); transition: fill .35s ease; }
+  .arrow-wrap .head.active { fill: var(--accent-b); }
+
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  button { font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 14px; font-weight: 600; border-radius: 10px; padding: 9px 16px; cursor: pointer; border: 1.5px solid var(--border); background: var(--surface); color: var(--fg); display: inline-flex; align-items: center; gap: 8px; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+  button:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  button .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-a); flex: none; }
+
+  .status { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; color: var(--fg-muted); min-height: 1.4em; padding: 10px 14px; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--border); }
+  .status b { color: var(--fg); font-weight: 600; }
+
+  @media (max-width: 560px) {
+    .diagram { flex-direction: column; }
+    .arrow-wrap { width: auto; height: 26px; }
+    .arrow-wrap svg { transform: rotate(90deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { .arrow-wrap path.flow { animation: none; } * { transition-duration: .01ms !important; } }
+
+  html.embed .page { padding: 4px 4px 8px; }
+  html.embed header { display: none; }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">CST1510 · System Architecture</span>
+    <h1>The system we are building</h1>
+    <p>Four boxes, one program, growing week by week. <code>record_check.py</code> is revisited every
+      week — this diagram never changes, only which box becomes real.</p>
+  </header>
+
+  <div class="diagram" id="diagram">
+    <div class="box" data-box="input">
+      <div class="name">INPUT</div>
+      <div class="desc">getting data</div>
+      <div class="week-pill" id="pill-input"></div>
+    </div>
+    <div class="arrow-wrap" id="arrow-1"><svg width="30" height="16" viewBox="0 0 30 16"><path id="path-1" d="M2 8 H22"></path><polygon class="head" id="head-1" points="20,3 28,8 20,13"></polygon></svg></div>
+    <div class="box" data-box="store">
+      <div class="name">STORE</div>
+      <div class="desc">keeping data</div>
+      <div class="week-pill" id="pill-store"></div>
+    </div>
+    <div class="arrow-wrap" id="arrow-2"><svg width="30" height="16" viewBox="0 0 30 16"><path id="path-2" d="M2 8 H22"></path><polygon class="head" id="head-2" points="20,3 28,8 20,13"></polygon></svg></div>
+    <div class="box" data-box="process">
+      <div class="name">PROCESS</div>
+      <div class="desc">working it out</div>
+      <div class="week-pill" id="pill-process"></div>
+    </div>
+    <div class="arrow-wrap" id="arrow-3"><svg width="30" height="16" viewBox="0 0 30 16"><path id="path-3" d="M2 8 H22"></path><polygon class="head" id="head-3" points="20,3 28,8 20,13"></polygon></svg></div>
+    <div class="box" data-box="output">
+      <div class="name">OUTPUT</div>
+      <div class="desc">showing results</div>
+      <div class="week-pill" id="pill-output"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="btn-replay"><span class="dot"></span>Replay</button>
+  </div>
+
+  <div class="status mono" id="status" aria-live="polite">Loading…</div>
+</div>
+
+<script>
+(function () {
+  var WEEKS = {
+    1: { boxes: ['input', 'output'], label: 'INPUT + OUTPUT', tools: 'input(), print(), f-strings, types' },
+    2: { boxes: ['process'],         label: 'PROCESS',        tools: 'if / elif / else, loops' },
+    3: { boxes: ['process'],         label: 'the wiring',     tools: 'functions, modules' },
+    4: { boxes: ['store'],           label: 'STORE',          tools: 'lists, dictionaries, files' },
+    5: { boxes: ['process'],         label: 'one box becomes a component', tools: 'objects' },
+    6: { boxes: ['store', 'process'], label: 'STORE + PROCESS, upgraded',  tools: 'pandas' },
+    7: { boxes: ['input'],           label: 'INPUT, deepened', tools: 'string methods — cleaning real, messy text' },
+    8: { boxes: ['input'],           label: 'INPUT, from outside', tools: 'a real API, Kaggle, or GitHub' },
+    9: { boxes: ['process'],         label: 'PROCESS, made safe', tools: 'hashing, salting, authentication' },
+    10: { boxes: ['store'],          label: 'STORE, for real', tools: 'SQLite' },
+    11: { boxes: ['output'],         label: 'OUTPUT, for someone else', tools: 'Streamlit' },
+    12: { boxes: ['process'],        label: 'PROCESS, intelligent (optional) — and shipped', tools: 'an LLM, deployment' }
+  };
+
+  var params = new URLSearchParams(location.search);
+  var week = parseInt(params.get('week'), 10);
+  if (!WEEKS[week]) week = 1;
+  var data = WEEKS[week];
+
+  var boxes = Array.from(document.querySelectorAll('.box'));
+  var arrows = [
+    { path: document.getElementById('path-1'), head: document.getElementById('head-1') },
+    { path: document.getElementById('path-2'), head: document.getElementById('head-2') },
+    { path: document.getElementById('path-3'), head: document.getElementById('head-3') }
+  ];
+  var status = document.getElementById('status');
+  var btnReplay = document.getElementById('btn-replay');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stepDelay = reduceMotion ? 0 : 260;
+
+  boxes.forEach(function (box) {
+    var pill = document.getElementById('pill-' + box.dataset.box);
+    if (pill) pill.textContent = 'Week ' + week;
+  });
+
+  function reset() {
+    boxes.forEach(function (b) { b.classList.remove('lit', 'dim'); });
+    arrows.forEach(function (a) {
+      a.path.classList.remove('active', 'flow');
+      a.head.classList.remove('active');
+    });
+    status.textContent = 'Idle — press Replay to watch data move through the system.';
+  }
+
+  function play() {
+    reset();
+    boxes.forEach(function (b) { b.classList.add('dim'); });
+    status.innerHTML = 'Following the pipeline: <b>INPUT → STORE → PROCESS → OUTPUT</b>…';
+
+    arrows.forEach(function (a, i) {
+      setTimeout(function () {
+        a.path.classList.add('active', 'flow');
+        a.head.classList.add('active');
+      }, stepDelay * (i + 1));
+      setTimeout(function () {
+        a.path.classList.remove('flow');
+      }, stepDelay * (i + 1) + 500);
+    });
+
+    setTimeout(function () {
+      boxes.forEach(function (b) {
+        b.classList.remove('dim');
+        if (data.boxes.indexOf(b.dataset.box) !== -1) b.classList.add('lit');
+      });
+      var boxNames = data.boxes.map(function (b) { return b.toUpperCase(); }).join(' + ');
+      status.innerHTML = '<b>Week ' + week + '</b> builds <b>' + boxNames + '</b> — using ' + data.tools + '.';
+    }, stepDelay * (arrows.length + 1));
+  }
+
+  btnReplay.addEventListener('click', play);
+  play();
+})();
+</script>
