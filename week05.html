@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,198 +7,946 @@
 <title>Week 5 — Classes and Objects</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-
   :root {
-    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
-    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823; --card: #FFFDF8;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-      --card: #1D1F21;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-    --card: #1D1F21;
+    --paper: #faf7f0;
+    --paper-2: #f2ede0;
+    --card: #fffdfa;
+    --ink: #1b1a17;
+    --ink-soft: #59554d;
+    --rule: #d8d0c2;
+    --rule-strong: #8b7f6b;
+    --accent: #8a3b12;
+    --accent-soft: #e5c6a6;
+    --accent-2: #355c5a;
+    --code-bg: #f3efe7;
+    --code-ink: #2d2a25;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-size: 17px; }
-  code, pre { font-family: "IBM Plex Mono", ui-monospace, monospace; }
-  a { color: var(--accent); }
-  .shell { max-width: 1040px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 38px; align-items: start; }
-  nav.toc { position: sticky; top: 28px; display: flex; flex-direction: column; gap: 8px; max-height: calc(100vh - 56px); overflow-y: auto; padding-top: 4px; }
-  nav.toc .label { font-variant: small-caps; letter-spacing: .04em; font-size: 13px; color: var(--ink-soft); margin-bottom: 4px; }
-  nav.toc a { color: var(--ink-soft); text-decoration: none; line-height: 1.45; font-size: 13.5px; }
-  nav.toc a.topic { color: var(--ink); font-weight: 700; margin-top: 8px; }
-  nav.toc a.topic:first-of-type { margin-top: 0; }
-  nav.toc a:hover { color: var(--accent); }
-  article { min-width: 0; }
-  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
-  h1 { margin: 0 0 10px; font-size: 2.15rem; font-weight: 700; letter-spacing: -.01em; }
-  .lede { margin: 0 0 12px; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
-  .box-note { margin: 14px 0 0; font-size: 14.5px; color: var(--ink-soft); }
-  .box-note b { color: var(--ink); font-weight: 600; }
-  .callout { max-width: 68ch; border-left: 2px solid var(--rule-strong); padding: 4px 0 4px 18px; margin: 24px 0; }
-  .callout p { margin: 0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 900px; margin: 26px 0 34px; }
-  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 18px; }
-  .card h2 { margin: 0 0 10px; font-size: 1.06rem; }
-  .card p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
-  section { margin: 0 0 44px; padding-top: 34px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
-  section:first-of-type { border-top: none; padding-top: 0; }
-  h2.section-title { margin: 0 0 18px; font-size: 1.45rem; letter-spacing: -.01em; }
-  p { line-height: 1.68; color: var(--ink); max-width: 68ch; margin: 0 0 16px; }
-  ul.tight, ol.tight { margin: 8px 0 0 20px; padding: 0; max-width: 68ch; }
-  ul.tight li, ol.tight li { line-height: 1.62; margin-bottom: 7px; }
-  table { border-collapse: collapse; margin: 18px 0; max-width: 860px; width: 100%; font-size: 14.5px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
-  th, td { text-align: left; padding: 8px 14px 8px 0; vertical-align: top; }
-  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; border-bottom: 1px solid var(--ink-soft); }
-  td code, p code, li code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
-  .topic-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; max-width: 900px; }
-  .topic { border-top: 1px solid var(--rule); padding-top: 12px; }
-  .topic .n { font-variant: small-caps; color: var(--ink-soft); font-size: 13px; letter-spacing: .04em; display: block; margin-bottom: 5px; }
-  .topic .t { font-weight: 700; display: block; margin-bottom: 5px; }
-  .muted { color: var(--ink-soft); }
-  footer { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
-  @media (max-width: 860px) {
-    .shell { grid-template-columns: 1fr; }
-    nav.toc { position: static; max-height: none; display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 16px; }
-    nav.toc a { font-size: 13px; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at top left, rgba(229, 198, 166, 0.36), transparent 24%),
+      linear-gradient(180deg, #fbf8f1 0%, var(--paper) 34%, #f8f4eb 100%);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-size: 17px;
   }
-
+  code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  a { color: inherit; }
+  .shell {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 44px 28px 96px;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    border: 1px solid var(--rule);
+    background: rgba(255, 253, 250, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 18px;
+    padding: 18px 16px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+  }
+  .toc-label {
+    display: block;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .toc a {
+    display: block;
+    text-decoration: none;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    padding: 4px 0;
+  }
+  .toc a:hover,
+  .toc a.current { color: var(--accent); }
+  .toc a.toc-topic {
+    color: var(--ink);
+    font-weight: 700;
+    margin-top: 12px;
+    font-size: 13.5px;
+  }
+  .toc a.toc-topic:first-of-type { margin-top: 0; }
+  .toc a.toc-sub {
+    padding-left: 12px;
+    font-size: 12.5px;
+  }
+  article { min-width: 0; }
+  .page-head {
+    position: relative;
+    margin-bottom: 34px;
+    padding: 26px 28px 28px;
+    background: linear-gradient(145deg, rgba(255,253,250,.94), rgba(248,242,232,.92));
+    border: 1px solid var(--rule);
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  .page-head::after {
+    content: "";
+    position: absolute;
+    inset: auto -30px -34px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(229,198,166,.68), rgba(229,198,166,0));
+    pointer-events: none;
+  }
+  .breadcrumb {
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  h1.page-title {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+  }
+  .lede {
+    margin: 0 0 14px;
+    max-width: 65ch;
+    color: var(--ink-soft);
+    font-size: 1.06rem;
+    line-height: 1.65;
+    font-style: italic;
+  }
+  .box-note {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+  }
+  .box-note b { color: var(--ink); }
+  .box-note code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 999px;
+    color: var(--code-ink);
+  }
+  .study-note {
+    margin-top: 16px;
+    max-width: 70ch;
+    padding: 12px 14px;
+    border-left: 3px solid var(--accent);
+    background: rgba(229, 198, 166, 0.14);
+    color: var(--ink-soft);
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 22px 0 8px;
+  }
+  .summary-card {
+    padding: 14px 14px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background: rgba(255,255,255,.6);
+  }
+  .summary-card .k {
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  .summary-card .v {
+    margin-top: 8px;
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+  .outcomes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin: 20px 0 0;
+  }
+  .outcome {
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: rgba(255,253,250,.76);
+    line-height: 1.45;
+    color: var(--ink);
+    font-size: .97rem;
+  }
+  figure.week-map {
+    margin: 30px 0 34px;
+    padding: 18px 18px 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(248,242,232,.75));
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+  }
+  figure.week-map figcaption {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .topic {
+    margin-bottom: 42px;
+    padding: 28px 28px 10px;
+    background: rgba(255,253,250,.78);
+    border: 1px solid var(--rule);
+    border-radius: 26px;
+    scroll-margin-top: 24px;
+  }
+  .topic-kicker {
+    font-variant: small-caps;
+    letter-spacing: .08em;
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  h2.topic-title {
+    margin: 0 0 12px;
+    font-size: clamp(1.55rem, 2.2vw, 2rem);
+    line-height: 1.12;
+    letter-spacing: -.015em;
+  }
+  .topic-intro {
+    max-width: 70ch;
+    color: var(--ink-soft);
+  }
+  .topic-intro p:last-child { margin-bottom: 0; }
+  .section {
+    padding-top: 26px;
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 24px;
+  }
+  .section:first-of-type {
+    margin-top: 24px;
+  }
+  h3.section-title {
+    margin: 0 0 14px;
+    font-size: 1.18rem;
+    line-height: 1.25;
+  }
+  p, li {
+    line-height: 1.7;
+    max-width: 70ch;
+    text-wrap: pretty;
+  }
+  p {
+    margin: 0 0 14px;
+  }
+  ul, ol {
+    margin: 10px 0 16px;
+    padding-left: 22px;
+  }
+  li {
+    margin-bottom: 5px;
+  }
+  blockquote {
+    margin: 18px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--accent-soft);
+    color: var(--ink-soft);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 78ch;
+    margin: 18px 0;
+    font-size: 14.5px;
+  }
+  table.booktabs {
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 12px 8px 0;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  th {
+    border-bottom: 1px solid var(--rule-strong);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .04em;
+    font-size: 13px;
+  }
+  code {
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--code-ink);
+    font-size: .9em;
+  }
+  .practice {
+    margin: 18px 0;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(138,59,18,.18);
+    background: linear-gradient(180deg, rgba(229,198,166,.22), rgba(255,253,250,.7));
+    max-width: 78ch;
+  }
+  .practice .label {
+    display: block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .practice p:last-child { margin-bottom: 0; }
+  .cell {
+    margin: 18px 0;
+    max-width: 82ch;
+  }
+  .cell-label,
+  .diagram-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  pre.code,
+  .md-code {
+    margin: 0;
+    padding: 14px 16px;
+    overflow-x: auto;
+    white-space: pre;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    line-height: 1.58;
+    font-size: 13.5px;
+  }
+  .output {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-left: 3px solid var(--rule-strong);
+    background: rgba(255,255,255,.54);
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    max-width: 78ch;
+  }
+  .output pre {
+    margin: 8px 0 0;
+    white-space: pre-wrap;
+    color: var(--ink);
+  }
+  .diagram-card {
+    margin: 18px 0;
+    max-width: 82ch;
+    padding: 14px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.72), rgba(243,239,231,.88)),
+      repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 24px,
+        rgba(216, 208, 194, 0.22) 24px,
+        rgba(216, 208, 194, 0.22) 25px
+      );
+  }
+  .diagram-card pre {
+    margin: 0;
+    white-space: pre;
+    overflow-x: auto;
+    color: var(--code-ink);
+    line-height: 1.6;
+    font-size: 13px;
+  }
+  .section-body h4,
+  .section-body h5 {
+    margin: 18px 0 8px;
+    font-size: 1rem;
+  }
+  .page-foot {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    font-size: 13px;
+  }
+  @media (max-width: 940px) {
+    .shell {
+      grid-template-columns: 1fr;
+      padding-inline: 18px;
+    }
+    .toc {
+      position: static;
+      max-height: none;
+    }
+  }
 </style>
 </head>
 <body>
 <div class="shell">
-  <nav class="toc">
-    <span class="label">Contents</span>
-    <a class="topic" href="#overview">Overview</a>
-    <a href="#outcomes">By The End</a>
-    <a href="#workshop">Workshop</a>
-    <a href="#lab">Lab</a>
-    <a href="#materials">Materials</a>
-    <a href="#threads">Threaded Skills</a>
-    <a href="#assessment">Assessment</a>
+  <nav class="toc" id="toc">
+    <span class="toc-label">Contents</span>
+    <a href="#topic-1" class="toc-topic">Topic 1 — Classes and Objects</a>
+<a href="#t1-1-a-class-defines-the-shape-init-fills-it-in" class="toc-sub">1. A class defines the shape, `__init__` fills it in</a>
+<a href="#t1-2-init-runs-automatically" class="toc-sub">2. `__init__` runs automatically</a>
+<a href="#t1-3-dot-notation-compared-to-week-4-s-dict" class="toc-sub">3. Dot notation, compared to Week 4's dict</a>
+<a href="#t1-4-self-what-it-actually-is" class="toc-sub">4. `self` — what it actually is</a>
+<a href="#t1-topic-1-challenge" class="toc-sub">Topic 1 Challenge</a>
+<a href="#t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t1-recap" class="toc-sub">Recap</a>
+<a href="#topic-2" class="toc-topic">Topic 2 — Methods</a>
+<a href="#t2-1-a-method-is-a-function-that-lives-inside-a-class" class="toc-sub">1. A method is a function that lives inside a class</a>
+<a href="#t2-2-self-is-whichever-object-made-the-call" class="toc-sub">2. `self` is whichever object made the call</a>
+<a href="#t2-3-one-method-can-call-another-through-self" class="toc-sub">3. One method can call another, through `self`</a>
+<a href="#t2-4-a-method-can-change-its-own-object-s-state" class="toc-sub">4. A method CAN change its own object's state</a>
+<a href="#t2-topic-2-challenge" class="toc-sub">Topic 2 Challenge</a>
+<a href="#t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t2-recap" class="toc-sub">Recap</a>
+<a href="#topic-3" class="toc-topic">Topic 3 — Many Objects Together</a>
+<a href="#t3-1-a-list-of-objects" class="toc-sub">1. A list of objects</a>
+<a href="#t3-2-looping-and-calling-a-method-on-each" class="toc-sub">2. Looping and calling a method on each</a>
+<a href="#t3-3-loading-objects-from-a-file" class="toc-sub">3. Loading objects from a file</a>
+<a href="#t3-4-why-this-matters" class="toc-sub">4. Why this matters</a>
+<a href="#t3-topic-3-challenge" class="toc-sub">Topic 3 Challenge</a>
+<a href="#t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t3-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
-    <header>
+    <header class="page-head">
       <div class="breadcrumb">CST1510</div>
-      <h1>Week 5 — Classes and Objects</h1>
-      <p class="lede">Objects turn one-off values and behaviour into a named component students can build, inspect and extend.</p>
-      <p class="box-note">Box we build this week: <b>component</b>.</p>
-      <div class="callout">
-        <p>This is still part of the CW1 toolkit-building half of the module. Use the downloaded weekly folder for the actual notebook, code files and mini-project.</p>
+      <h1 class="page-title">Week 5 — Classes and Objects</h1>
+      <p class="lede">By the end of this week you can define a class with <code>__init__</code> and create objects from it, explain what <code>self</code> actually refers to, and why it must be a method's first parameter, and access and change an object's attributes with dot notation.</p>
+      <p class="box-note">Box we build this week: <b><code>component</code> — see <code>../system_diagram.md</code></b></p>
+      <div class="study-note">This reading view combines the week's walkthrough notebooks into one page so students can follow the theory in order, even outside Jupyter.</div>
+      <div class="summary-grid">
+        <div class="summary-card"><div class="k">Topic 1</div><div class="v">Classes and Objects</div></div>
+<div class="summary-card"><div class="k">Topic 2</div><div class="v">Methods</div></div>
+<div class="summary-card"><div class="k">Topic 3</div><div class="v">Many Objects Together</div></div>
+      </div>
+      <div class="outcomes">
+        <div class="outcome">Define a class with <code>__init__</code> and create objects from it</div><div class="outcome">Explain what <code>self</code> actually refers to, and why it must be a method's first parameter</div><div class="outcome">Access and change an object's attributes with dot notation</div><div class="outcome">Define a method, and explain how it differs from a plain function</div><div class="outcome">Explain why a method can change its own object's state, when Week 3's functions could not</div><div class="outcome">Build and process a list of objects, including loading them from a file</div>
       </div>
     </header>
 
-    <section id="overview">
-      <h2 class="section-title">Overview</h2>
-      <div class="topic-list">
-      <div class="topic">
-        <span class="n">Topic 1</span>
-        <span class="t">Classes and Objects</span>
-        <p>Define a class with __init__, create objects, and store related data together.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 2</span>
-        <span class="t">Methods</span>
-        <p>Move behaviour onto the object itself and use self to work with that object's state.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 3</span>
-        <span class="t">Many Objects Together</span>
-        <p>Build a list of objects and load them from a file rather than hard-coding each one.</p>
-      </div>
-      </div>
-    </section>
+    <figure class="week-map"><svg viewBox="0 0 920 220" role="img" aria-label="From blueprint to many objects" style="width:100%;height:auto;display:block;"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#b8a88e" flood-opacity="0.35"/></filter></defs><rect x="22" y="18" width="220" height="48" rx="18" fill="#fffaf2" stroke="#d8d0c2"/><text x="40" y="38" fill="#59554d" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="40" y="56" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif">component — see ../system_diagram.md</text><line x1="166.0" y1="142" x2="362.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="360.0,142 351.0,137 351.0,147" fill="#8a3b12"/><rect x="-16.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="0.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Classes and Objects</tspan></text><line x1="556.0" y1="142" x2="752.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="750.0,142 741.0,137 741.0,147" fill="#8a3b12"/><rect x="374.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#8b7f6b" filter="url(#shadow)"/><text x="390.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="390.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="390.0" dy="0">Methods</tspan></text><rect x="764.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#355c5a" filter="url(#shadow)"/><text x="780.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="780.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="780.0" dy="0">Many Objects</tspan><tspan x="780.0" dy="19">Together</tspan></text></svg><figcaption><b>From blueprint to many objects</b>. Week 5 moves from defining the shape of one object to managing many separate objects together.</figcaption></figure>
 
-    <section id="outcomes">
-      <h2 class="section-title">By The End Of This Week</h2>
-      <ol class="tight">
-      <li>Define a class with `__init__` and create objects from it.</li>
-      <li>Explain what `self` refers to and why it must be a method's first parameter.</li>
-      <li>Access and change an object's attributes with dot notation.</li>
-      <li>Define a method and explain how it differs from a plain function.</li>
-      <li>Explain why a method can change its own object's state.</li>
-      <li>Build and process a list of objects, including loading them from a file.</li>
-      </ol>
-    </section>
+    <section class="topic" id="topic-1"><div class="topic-kicker">Topic 1</div><h2 class="topic-title">Classes and Objects</h2><div class="topic-intro"><p><strong>Box we are building: a first look at component</strong></p>
+<p>A class is a blueprint. An object is one particular thing built from it.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
+</blockquote>
+</div><section class="section" id="t1-1-a-class-defines-the-shape-init-fills-it-in"><h3 class="section-title">1. A class defines the shape, `__init__` fills it in</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>class Record:
+    def __init__(self, label, value, limit):
+        self.label = label
+        self.value = value
+        self.limit = limit
 
-    <section id="workshop">
-      <h2 class="section-title">Workshop — 2 hours</h2>
-      <p>The workshop still shows the finished idea first, then works through the week's topics in smaller parts.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Run the demo</td><td>See the record-check program bundled into one component.</td></tr>
-      <tr><td>0:10</td><td>System diagram</td><td>Focus on this week's `component` box.</td></tr>
-      <tr><td>0:20</td><td>Topic 1</td><td>Classes and Objects</td></tr>
-      <tr><td>0:45</td><td>Topic 2</td><td>Methods</td></tr>
-      <tr><td>1:10</td><td>Break</td><td></td></tr>
-      <tr><td>1:20</td><td>Topic 3</td><td>Many Objects Together</td></tr>
-      <tr><td>1:45</td><td>Brief the mini-project</td><td>Preview the lab build.</td></tr>
-      </table>
-    </section>
+r1 = Record("R-001", 87.0, 100.0)
+print(r1.label)
+print(r1.value)</code></pre></div>
+<div class="diagram-card"><span class="diagram-label">Diagram</span><pre>class Record:                 the blueprint - shape only, no data yet
+    __init__(self, label, value, limit)
 
-    <section id="lab">
-      <h2 class="section-title">Lab — 3 hours</h2>
-      <p>The lab notebook runs the session in order. Use the downloaded weekly folder for the actual code, files and notebook work.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Warm-up</td><td>Fix 3 deliberately broken files in `LAB/warmup/`.</td></tr>
-      <tr><td>0:15</td><td>Drills</td><td>7 tasks across Threshold / Typical / Excellent.</td></tr>
-      <tr><td>1:15</td><td>Break</td><td></td></tr>
-      <tr><td>1:25</td><td>Mini-project</td><td>`LAB/template.py`, three lanes, three tiers.</td></tr>
-      <tr><td>2:40</td><td>Wrap</td><td>Demo to a neighbour, Box 5 of the Cheat Sheet, then commit and push.</td></tr>
-      </table>
-    </section>
+Record("R-001", 87, 100)          Record("R-002", 120, 100)
+        │                                  │
+        ▼                                  ▼
+   r1.label = "R-001"                r2.label = "R-002"
+   r1.value = 87                      r2.value = 120
+   r1.limit = 100                      r2.limit = 100
 
-    <section id="materials">
-      <h2 class="section-title">Materials At A Glance</h2>
-      <table>
-        <tr><th>Material</th><th>What it is for</th></tr>
-      <tr><td>`DEMO/record_check.py` + `DEMO/records.txt`</td><td>The finished program shown in the workshop.</td></tr>
-      <tr><td>`01 - Classes and Objects/`</td><td>Walkthrough plus two runnable examples.</td></tr>
-      <tr><td>`02 - Methods/`</td><td>Walkthrough plus two runnable examples.</td></tr>
-      <tr><td>`03 - Many Objects Together/`</td><td>Walkthrough, examples and sample data.</td></tr>
-      <tr><td>`LAB/W05_Lab.ipynb`</td><td>Warm-up, drills, mini-project and wrap.</td></tr>
-      <tr><td>`LAB/template.py`</td><td>The mini-project scaffold.</td></tr>
-      </table>
-    </section>
+   two separate objects, same shape, completely independent data</pre></div>
 
-    <section id="threads">
-      <h2 class="section-title">Threaded Skills</h2>
-      <table>
-        <tr><th>Thread</th><th>This week</th></tr>
-      <tr><td>Git</td><td>Fifth commit and push.</td></tr>
-      <tr><td>Cheat Sheet</td><td>Box 5 photographed and submitted.</td></tr>
-      <tr><td>Debugging</td><td>`TypeError` (missing `self`), `AttributeError`, `NameError`.</td></tr>
-      </table>
-    </section>
+<aside class="practice"><span class="label">Your turn</span><p>Define a class <code>Server</code> with <code>__init__(self, hostname, used, total)</code>. Create one instance and print its <code>hostname</code>.</p>
+</aside></div></section><section class="section" id="t1-2-init-runs-automatically"><h3 class="section-title">2. `__init__` runs automatically</h3><div class="section-body"><p>You never call it yourself. <code>Record(&quot;R-001&quot;, 87.0, 100.0)</code> calls it for you, the
+moment the object is created.</p>
 
-    <section id="assessment">
-      <h2 class="section-title">Assessment Note</h2>
-      <div class="grid">
-        <div class="card">
-          <h2>What to remember</h2>
-          <p>Nothing is marked this week. Keep the notebook and mini-project work as part of CW1.</p>
-        </div>
-        <div class="card">
-          <h2>Student workflow</h2>
-          <p>Open the week's folder in VS Code, start with <code>README.md</code>, complete the lab, then commit and push.</p>
-        </div>
-        <div class="card">
-          <h2>Where the real work happens</h2>
-          <p>This public page is a guide only. The coding, notebooks, files and project work happen in the downloaded weekly materials.</p>
-        </div>
-      </div>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>r2 = Record("R-002", 120.0, 100.0)
 
-    <footer>CST1510 · Week 5 · Classes and Objects</footer>
+print(r1.label, r1.value)   # unchanged
+print(r2.label, r2.value)    # completely separate</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Create two <code>Server</code> instances with different data. Change one's <code>used</code> value and prove the other is unaffected.</p>
+</aside></div></section><section class="section" id="t1-3-dot-notation-compared-to-week-4-s-dict"><h3 class="section-title">3. Dot notation, compared to Week 4's dict</h3><div class="section-body"><p>Same data, a different way to reach it — no quotes, no square brackets.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>record_dict = {"label": "R-001", "value": 87.0}
+record_obj  = Record("R-001", 87.0, 100.0)
+
+print(record_dict["label"])   # square brackets, a string key
+print(record_obj.label)        # dot, a name</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Given a dict and an object holding the same data, write one line accessing each, side by side.</p>
+</aside></div></section><section class="section" id="t1-4-self-what-it-actually-is"><h3 class="section-title">4. `self` — what it actually is</h3><div class="section-body"><p><code>self</code> is just <em>this particular object</em>. Python passes it in for you — you never
+write it in the call. <code>Record(&quot;R-001&quot;, 87.0, 100.0)</code> is really doing something
+closer to <code>Record.__init__(new_object, &quot;R-001&quot;, 87.0, 100.0)</code>.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>class Broken:
+    def __init__(value):    # missing self
+        pass
+
+# Broken(100)
+# TypeError: __init__() takes 1 positional argument but 2 were given</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Explain in one sentence why <code>self</code> has to be the first parameter, even though you never type it when calling.</p>
+</aside></div></section><section class="section" id="t1-topic-1-challenge"><h3 class="section-title">Topic 1 Challenge</h3><div class="section-body"><p>Define a class <code>Record</code> with <code>__init__(self, label, value, limit)</code>. Create two
+instances with different data, then print both labels to prove they are
+independent.</p>
+</div></section><section class="section" id="t1-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td><code>Dataset(name, rows, source)</code></td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td><code>Alert(ip, severity, timestamp)</code></td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td><code>Server(hostname, used, total)</code></td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t1-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>forgetting <code>self</code> in <code>__init__</code></td>
+  <td><code>TypeError: __init__() takes ... positional arguments but ... were given</code></td>
+  <td><code>self</code> is always the first parameter</td>
+</tr>
+<tr>
+  <td><code>self.value = value</code> written as just <code>value = value</code></td>
+  <td>the object never actually stores it</td>
+  <td>attributes need the <code>self.</code> prefix on the left</td>
+</tr>
+<tr>
+  <td>expecting two objects to share data</td>
+  <td>changing one changes the other — they do not</td>
+  <td>each object keeps its own separate copy</td>
+</tr>
+<tr>
+  <td><code>Record.label</code> instead of <code>r1.label</code></td>
+  <td><code>AttributeError</code></td>
+  <td>access attributes on the object, not the class itself</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_classes_and_init.py</code> — classes, <code>__init__</code>, independent objects
+<code>examples/02_self_explained.py</code> — what <code>self</code> is, and what goes wrong without it</p>
+</div></section><section class="section" id="t1-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>define a class</td>
+  <td><code>class Name:</code></td>
+</tr>
+<tr>
+  <td>set up a new object</td>
+  <td><code>__init__(self, ...)</code></td>
+</tr>
+<tr>
+  <td>create an object</td>
+  <td><code>Name(...)</code></td>
+</tr>
+<tr>
+  <td>access its data</td>
+  <td><code>obj.attribute</code></td>
+</tr>
+<tr>
+  <td>explain <code>self</code></td>
+  <td>it is <em>this particular object</em>, passed in for you</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 2 — giving objects their own behaviour.</p>
+</div></section></section>
+<section class="topic" id="topic-2"><div class="topic-kicker">Topic 2</div><h2 class="topic-title">Methods</h2><div class="topic-intro"><p><strong>Box we are building: component, that can do things</strong></p>
+<p>A dict can only hold data. An object can hold data <em>and</em> the actions that belong
+to it.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t2-1-a-method-is-a-function-that-lives-inside-a-class"><h3 class="section-title">1. A method is a function that lives inside a class</h3><div class="section-body"><p><code>self</code> gives it access to that object's own attributes — no need to pass them in
+again.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>class Record:
+    def __init__(self, label, value, limit):
+        self.label = label
+        self.value = value
+        self.limit = limit
+
+    def summary(self):
+        """Return a one-line description of this record."""
+        return f"{self.label}: {self.value}/{self.limit}"
+
+r = Record("R-001", 87.0, 100.0)
+print(r.summary())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Add a method <code>percent(self)</code> to a <code>Record</code>-like class that returns <code>(self.value / self.limit) * 100</code>.</p>
+</aside></div></section><section class="section" id="t2-2-self-is-whichever-object-made-the-call"><h3 class="section-title">2. `self` is whichever object made the call</h3><div class="section-body"><p>Same method, same code — <code>self</code> becomes a different object depending on who
+called it.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>r_a = Record("R-001", 87.0, 100.0)
+r_b = Record("R-002", 120.0, 100.0)
+
+print(r_a.summary())    # self was r_a here
+print(r_b.summary())     # self was r_b here, same method</code></pre></div>
+<div class="diagram-card"><span class="diagram-label">Diagram</span><pre>r_a.summary()                     r_b.summary()
+     │                                  │
+     ▼                                  ▼
+def summary(self):                 def summary(self):
+    return f"{self.label}..."          return f"{self.label}..."
+     │                                  │
+  self = r_a                         self = r_b
+     │                                  │
+     ▼                                  ▼
+ "R-001: 87.0/100.0"               "R-002: 120.0/100.0"</pre></div>
+
+<aside class="practice"><span class="label">Your turn</span><p>Call the same method on two different objects and print both results side by side.</p>
+</aside></div></section><section class="section" id="t2-3-one-method-can-call-another-through-self"><h3 class="section-title">3. One method can call another, through `self`</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>class Record2:
+    def __init__(self, label, value, limit):
+        self.label = label
+        self.value = value
+        self.limit = limit
+
+    def percent(self):
+        """Return value as a percentage of limit."""
+        return (self.value / self.limit) * 100
+
+    def status(self):
+        """Return OVER LIMIT, WARNING or OK based on percent()."""
+        p = self.percent()
+        if p &gt;= 100:
+            return "OVER LIMIT"
+        elif p &gt;= 90:
+            return "WARNING"
+        else:
+            return "OK"
+
+r2 = Record2("R-002", 95.0, 100.0)
+print(r2.status())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Add a <code>status()</code> method to your own class from Topic 1, using <code>self.percent()</code> inside it.</p>
+</aside></div></section><section class="section" id="t2-4-a-method-can-change-its-own-object-s-state"><h3 class="section-title">4. A method CAN change its own object's state</h3><div class="section-body"><p>Week 3 taught you a function cannot reach outside itself and change your
+variable. A method is the exception — because <code>self</code> <strong>is</strong> the object, not a
+copy of it. This is a genuine difference, not a contradiction: the wall from
+Week 3 is still there, a method just has a key to its own room.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>class Checker:
+    def __init__(self):
+        self.over_limit_count = 0
+
+    def check(self, value, limit):
+        """Update the running count if value is over limit."""
+        if value &gt; limit:
+            self.over_limit_count += 1
+
+c = Checker()
+c.check(120, 100)
+c.check(87, 100)
+print(c.over_limit_count)   # 1 - it actually changed, no return needed</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Add a <code>reset(self)</code> method to <code>Checker</code> that sets <code>over_limit_count</code> back to <code>0</code>.</p>
+</aside></div></section><section class="section" id="t2-topic-2-challenge"><h3 class="section-title">Topic 2 Challenge</h3><div class="section-body"><p>Add <code>percent(self)</code> and <code>status(self)</code> to your <code>Record</code> class from Topic 1.
+<code>status()</code> should call <code>self.percent()</code>, not recalculate it. Test it on two
+different instances.</p>
+</div></section><section class="section" id="t2-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td><code>dataset.summary()</code></td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td><code>alert.escalate()</code></td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td><code>server.check_disk()</code></td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t2-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>calling a method without the object — <code>status()</code> not <code>r.status()</code></td>
+  <td><code>NameError</code></td>
+  <td>methods are called on an object: <code>r.status()</code></td>
+</tr>
+<tr>
+  <td>recalculating instead of calling another method</td>
+  <td>works, but repeats logic</td>
+  <td>call <code>self.other_method()</code> instead of rewriting it</td>
+</tr>
+<tr>
+  <td>forgetting a method needs <code>self</code> even with no other parameters</td>
+  <td><code>TypeError</code></td>
+  <td>every method's first parameter is <code>self</code>, always</td>
+</tr>
+<tr>
+  <td>expecting a method's <code>return</code> to also update the caller's variable</td>
+  <td>it only returns — nothing updates unless you reassign, or the method sets <code>self.x</code></td>
+  <td><code>return</code> a value, or update <code>self</code> directly — know which one you meant</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_defining_methods.py</code> — methods, calling other methods through self
+<code>examples/02_methods_that_change_state.py</code> — the one thing methods can do that Week 3's functions could not</p>
+</div></section><section class="section" id="t2-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>define a method</td>
+  <td>a function inside a class, first parameter <code>self</code></td>
+</tr>
+<tr>
+  <td>call it</td>
+  <td><code>obj.method()</code></td>
+</tr>
+<tr>
+  <td>have one method use another</td>
+  <td><code>self.other_method()</code></td>
+</tr>
+<tr>
+  <td>change the object's own state</td>
+  <td><code>self.attribute = new_value</code> inside a method</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 3 — many objects, working together.</p>
+</div></section></section>
+<section class="topic" id="topic-3"><div class="topic-kicker">Topic 3</div><h2 class="topic-title">Many Objects Together</h2><div class="topic-intro"><p><strong>Box we are building: component, many of them</strong></p>
+<p>Week 4: a list of dicts. This week: a list of objects — same shape, and now each
+item can also <em>do</em> something.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t3-1-a-list-of-objects"><h3 class="section-title">1. A list of objects</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>class Record:
+    def __init__(self, label, value, limit):
+        self.label = label
+        self.value = value
+        self.limit = limit
+
+    def status(self):
+        percent = (self.value / self.limit) * 100
+        return "OVER LIMIT" if percent &gt;= 100 else "OK"
+
+records = [
+    Record("R-001", 87.0, 100.0),
+    Record("R-002", 120.0, 100.0),
+]
+
+print(type(records))       # list
+print(type(records[0]))     # Record - each ITEM is an object</code></pre></div>
+<div class="diagram-card"><span class="diagram-label">Diagram</span><pre>[  Record("R-001", 87, 100),
+   Record("R-002", 120, 100),
+   Record("R-003", 45, 100)   ]
+   └────────────────┬────────────────┘
+              a list                each item an OBJECT, not a dict
+                                      records[0].label
+                                      records[0].status()</pre></div>
+
+<aside class="practice"><span class="label">Your turn</span><p>Build a list of 3 <code>Record</code> objects by hand. Loop over it and print only the labels of the ones that are <code>OK</code>.</p>
+</aside></div></section><section class="section" id="t3-2-looping-and-calling-a-method-on-each"><h3 class="section-title">2. Looping and calling a method on each</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>for record in records:
+    print(record.label, record.status())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Count how many records in your list are <code>OVER LIMIT</code>, using a running total updated inside the loop.</p>
+</aside>
+<h4>Stretch: keeping the count <em>on</em> the class</h4>
+<p>A running total outside the loop (above) works fine and is enough. If you want the count to live with the <code>Record</code> class itself instead of a separate variable, a <strong>class attribute</strong> — assigned once, indented under the class but outside any method — is shared by every instance rather than copied per object:</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>class Record:
+    over_limit_count = 0     # one shared counter, not one per instance
+
+    def __init__(self, label, value, limit):
+        self.label = label
+        self.value = value
+        self.limit = limit
+
+    def status(self):
+        percent = (self.value / self.limit) * 100
+        result = "OVER LIMIT" if percent &gt;= 100 else "OK"
+        if result == "OVER LIMIT":
+            Record.over_limit_count += 1
+        return result</code></pre></div>
+<p>Every <code>Record</code> shares the same <code>over_limit_count</code> — read and update it as <code>Record.over_limit_count</code>, not <code>self.over_limit_count</code> (assigning through <code>self.</code> would silently create a separate, per-instance attribute instead of changing the shared one).</p>
+</div></section><section class="section" id="t3-3-loading-objects-from-a-file"><h3 class="section-title">3. Loading objects from a file</h3><div class="section-body"><p>Week 4's <code>load_records</code> built a list of dicts. The only real change: build a
+<code>Record</code> inside the loop instead of a dict.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def load_records(path):
+    """Read label,value,limit lines from a file and return a list of Records."""
+    records = []
+    with open(path) as f:
+        for line in f:
+            label, value, limit = line.strip().split(",")
+            records.append(Record(label, float(value), float(limit)))
+    return records</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Save 3 <code>label,value,limit</code> lines to a file, then load them with <code>load_records</code> and print each one's <code>.status()</code>.</p>
+</aside></div></section><section class="section" id="t3-4-why-this-matters"><h3 class="section-title">4. Why this matters</h3><div class="section-body"><p>This is what <em>component</em> meant in this week's system diagram box: the record and
+the logic that checks it are no longer separate — they are one reusable thing.
+Next week's <code>pandas</code> DataFrame works the same way underneath: rows of data, with
+methods that already know how to work on them.</p>
+</div></section><section class="section" id="t3-topic-3-challenge"><h3 class="section-title">Topic 3 Challenge</h3><div class="section-body"><p>Write <code>load_records(path)</code>, load records from a file of your own, and print a
+summary line: <code>&quot;N of M were over limit&quot;</code> — using a list of <code>Record</code> objects, not
+dicts.</p>
+</div></section><section class="section" id="t3-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>a list of <code>Reading</code> objects loaded from a CSV</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>a list of <code>LogEntry</code> objects loaded from a log file</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>a list of <code>Server</code> objects loaded from a config file</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t3-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>records[&quot;label&quot;]</code> instead of <code>records[0].label</code></td>
+  <td><code>TypeError</code></td>
+  <td>index into the list first, then dot into the object</td>
+</tr>
+<tr>
+  <td>forgetting <code>load_records</code> must <code>return</code> the list</td>
+  <td><code>None</code> where you expected records</td>
+  <td>check every function actually returns what it builds</td>
+</tr>
+<tr>
+  <td>building each <code>Record</code> with fields in the wrong order</td>
+  <td>wrong values on the wrong attributes, no error</td>
+  <td>match the order in <code>__init__</code>, or use keyword arguments</td>
+</tr>
+<tr>
+  <td>updating a class attribute through <code>self.</code></td>
+  <td>a new per-instance copy is created; the shared value never changes</td>
+  <td>update it as <code>ClassName.attribute</code>, not <code>self.attribute</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_a_list_of_objects.py</code> — building the list by hand
+<code>examples/02_loading_objects_from_a_file.py</code> — the full pipeline, load then process</p>
+</div></section><section class="section" id="t3-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>build a list of objects</td>
+  <td>same shape as a list of dicts</td>
+</tr>
+<tr>
+  <td>process it consistently</td>
+  <td><code>for record in records:</code></td>
+</tr>
+<tr>
+  <td>load objects from a file</td>
+  <td>build one object per line, inside <code>load_records</code></td>
+</tr>
+<tr>
+  <td>share a running total across every instance</td>
+  <td>a class attribute, updated as <code>ClassName.attribute</code></td>
+</tr>
+<tr>
+  <td>see why this is <em>component</em></td>
+  <td>data and behaviour, bundled into one reusable thing</td>
+</tr>
+</tbody>
+</table>
+<p><strong>You now have all of Week 5's component.</strong> Go and build your own in the lab.</p>
+</div></section></section>
+
+    <footer class="page-foot">Built from the walkthrough notebooks for this week.</footer>
   </article>
 </div>
+<script>
+const links = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+const sections = links
+  .map(link => document.querySelector(link.getAttribute('href')))
+  .filter(Boolean);
+
+function setCurrentLink() {
+  const offset = window.scrollY + 120;
+  let current = sections[0];
+  for (const section of sections) {
+    if (section.offsetTop <= offset) current = section;
+  }
+  links.forEach(link => {
+    link.classList.toggle('current', current && link.getAttribute('href') === '#' + current.id);
+  });
+}
+
+setCurrentLink();
+window.addEventListener('scroll', setCurrentLink, { passive: true });
+</script>
 </body>
 </html>

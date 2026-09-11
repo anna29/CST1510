@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,201 +7,1010 @@
 <title>Week 9 — Hashing and Auth</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-
   :root {
-    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
-    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823; --card: #FFFDF8;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-      --card: #1D1F21;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-    --card: #1D1F21;
+    --paper: #faf7f0;
+    --paper-2: #f2ede0;
+    --card: #fffdfa;
+    --ink: #1b1a17;
+    --ink-soft: #59554d;
+    --rule: #d8d0c2;
+    --rule-strong: #8b7f6b;
+    --accent: #8a3b12;
+    --accent-soft: #e5c6a6;
+    --accent-2: #355c5a;
+    --code-bg: #f3efe7;
+    --code-ink: #2d2a25;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-size: 17px; }
-  code, pre { font-family: "IBM Plex Mono", ui-monospace, monospace; }
-  a { color: var(--accent); }
-  .shell { max-width: 1040px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 38px; align-items: start; }
-  nav.toc { position: sticky; top: 28px; display: flex; flex-direction: column; gap: 8px; max-height: calc(100vh - 56px); overflow-y: auto; padding-top: 4px; }
-  nav.toc .label { font-variant: small-caps; letter-spacing: .04em; font-size: 13px; color: var(--ink-soft); margin-bottom: 4px; }
-  nav.toc a { color: var(--ink-soft); text-decoration: none; line-height: 1.45; font-size: 13.5px; }
-  nav.toc a.topic { color: var(--ink); font-weight: 700; margin-top: 8px; }
-  nav.toc a.topic:first-of-type { margin-top: 0; }
-  nav.toc a:hover { color: var(--accent); }
-  article { min-width: 0; }
-  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
-  h1 { margin: 0 0 10px; font-size: 2.15rem; font-weight: 700; letter-spacing: -.01em; }
-  .lede { margin: 0 0 12px; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
-  .box-note { margin: 14px 0 0; font-size: 14.5px; color: var(--ink-soft); }
-  .box-note b { color: var(--ink); font-weight: 600; }
-  .callout { max-width: 68ch; border-left: 2px solid var(--rule-strong); padding: 4px 0 4px 18px; margin: 24px 0; }
-  .callout p { margin: 0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 900px; margin: 26px 0 34px; }
-  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 18px; }
-  .card h2 { margin: 0 0 10px; font-size: 1.06rem; }
-  .card p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
-  section { margin: 0 0 44px; padding-top: 34px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
-  section:first-of-type { border-top: none; padding-top: 0; }
-  h2.section-title { margin: 0 0 18px; font-size: 1.45rem; letter-spacing: -.01em; }
-  p { line-height: 1.68; color: var(--ink); max-width: 68ch; margin: 0 0 16px; }
-  ul.tight, ol.tight { margin: 8px 0 0 20px; padding: 0; max-width: 68ch; }
-  ul.tight li, ol.tight li { line-height: 1.62; margin-bottom: 7px; }
-  table { border-collapse: collapse; margin: 18px 0; max-width: 860px; width: 100%; font-size: 14.5px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
-  th, td { text-align: left; padding: 8px 14px 8px 0; vertical-align: top; }
-  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; border-bottom: 1px solid var(--ink-soft); }
-  td code, p code, li code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
-  .topic-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; max-width: 900px; }
-  .topic { border-top: 1px solid var(--rule); padding-top: 12px; }
-  .topic .n { font-variant: small-caps; color: var(--ink-soft); font-size: 13px; letter-spacing: .04em; display: block; margin-bottom: 5px; }
-  .topic .t { font-weight: 700; display: block; margin-bottom: 5px; }
-  .muted { color: var(--ink-soft); }
-  footer { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
-  @media (max-width: 860px) {
-    .shell { grid-template-columns: 1fr; }
-    nav.toc { position: static; max-height: none; display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 16px; }
-    nav.toc a { font-size: 13px; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at top left, rgba(229, 198, 166, 0.36), transparent 24%),
+      linear-gradient(180deg, #fbf8f1 0%, var(--paper) 34%, #f8f4eb 100%);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-size: 17px;
   }
-
+  code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  a { color: inherit; }
+  .shell {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 44px 28px 96px;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    border: 1px solid var(--rule);
+    background: rgba(255, 253, 250, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 18px;
+    padding: 18px 16px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+  }
+  .toc-label {
+    display: block;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .toc a {
+    display: block;
+    text-decoration: none;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    padding: 4px 0;
+  }
+  .toc a:hover,
+  .toc a.current { color: var(--accent); }
+  .toc a.toc-topic {
+    color: var(--ink);
+    font-weight: 700;
+    margin-top: 12px;
+    font-size: 13.5px;
+  }
+  .toc a.toc-topic:first-of-type { margin-top: 0; }
+  .toc a.toc-sub {
+    padding-left: 12px;
+    font-size: 12.5px;
+  }
+  article { min-width: 0; }
+  .page-head {
+    position: relative;
+    margin-bottom: 34px;
+    padding: 26px 28px 28px;
+    background: linear-gradient(145deg, rgba(255,253,250,.94), rgba(248,242,232,.92));
+    border: 1px solid var(--rule);
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  .page-head::after {
+    content: "";
+    position: absolute;
+    inset: auto -30px -34px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(229,198,166,.68), rgba(229,198,166,0));
+    pointer-events: none;
+  }
+  .breadcrumb {
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  h1.page-title {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+  }
+  .lede {
+    margin: 0 0 14px;
+    max-width: 65ch;
+    color: var(--ink-soft);
+    font-size: 1.06rem;
+    line-height: 1.65;
+    font-style: italic;
+  }
+  .box-note {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+  }
+  .box-note b { color: var(--ink); }
+  .box-note code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 999px;
+    color: var(--code-ink);
+  }
+  .study-note {
+    margin-top: 16px;
+    max-width: 70ch;
+    padding: 12px 14px;
+    border-left: 3px solid var(--accent);
+    background: rgba(229, 198, 166, 0.14);
+    color: var(--ink-soft);
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 22px 0 8px;
+  }
+  .summary-card {
+    padding: 14px 14px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background: rgba(255,255,255,.6);
+  }
+  .summary-card .k {
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  .summary-card .v {
+    margin-top: 8px;
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+  .outcomes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin: 20px 0 0;
+  }
+  .outcome {
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: rgba(255,253,250,.76);
+    line-height: 1.45;
+    color: var(--ink);
+    font-size: .97rem;
+  }
+  figure.week-map {
+    margin: 30px 0 34px;
+    padding: 18px 18px 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(248,242,232,.75));
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+  }
+  figure.week-map figcaption {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .topic {
+    margin-bottom: 42px;
+    padding: 28px 28px 10px;
+    background: rgba(255,253,250,.78);
+    border: 1px solid var(--rule);
+    border-radius: 26px;
+    scroll-margin-top: 24px;
+  }
+  .topic-kicker {
+    font-variant: small-caps;
+    letter-spacing: .08em;
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  h2.topic-title {
+    margin: 0 0 12px;
+    font-size: clamp(1.55rem, 2.2vw, 2rem);
+    line-height: 1.12;
+    letter-spacing: -.015em;
+  }
+  .topic-intro {
+    max-width: 70ch;
+    color: var(--ink-soft);
+  }
+  .topic-intro p:last-child { margin-bottom: 0; }
+  .section {
+    padding-top: 26px;
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 24px;
+  }
+  .section:first-of-type {
+    margin-top: 24px;
+  }
+  h3.section-title {
+    margin: 0 0 14px;
+    font-size: 1.18rem;
+    line-height: 1.25;
+  }
+  p, li {
+    line-height: 1.7;
+    max-width: 70ch;
+    text-wrap: pretty;
+  }
+  p {
+    margin: 0 0 14px;
+  }
+  ul, ol {
+    margin: 10px 0 16px;
+    padding-left: 22px;
+  }
+  li {
+    margin-bottom: 5px;
+  }
+  blockquote {
+    margin: 18px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--accent-soft);
+    color: var(--ink-soft);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 78ch;
+    margin: 18px 0;
+    font-size: 14.5px;
+  }
+  table.booktabs {
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 12px 8px 0;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  th {
+    border-bottom: 1px solid var(--rule-strong);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .04em;
+    font-size: 13px;
+  }
+  code {
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--code-ink);
+    font-size: .9em;
+  }
+  .practice {
+    margin: 18px 0;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(138,59,18,.18);
+    background: linear-gradient(180deg, rgba(229,198,166,.22), rgba(255,253,250,.7));
+    max-width: 78ch;
+  }
+  .practice .label {
+    display: block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .practice p:last-child { margin-bottom: 0; }
+  .cell {
+    margin: 18px 0;
+    max-width: 82ch;
+  }
+  .cell-label,
+  .diagram-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  pre.code,
+  .md-code {
+    margin: 0;
+    padding: 14px 16px;
+    overflow-x: auto;
+    white-space: pre;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    line-height: 1.58;
+    font-size: 13.5px;
+  }
+  .output {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-left: 3px solid var(--rule-strong);
+    background: rgba(255,255,255,.54);
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    max-width: 78ch;
+  }
+  .output pre {
+    margin: 8px 0 0;
+    white-space: pre-wrap;
+    color: var(--ink);
+  }
+  .diagram-card {
+    margin: 18px 0;
+    max-width: 82ch;
+    padding: 14px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.72), rgba(243,239,231,.88)),
+      repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 24px,
+        rgba(216, 208, 194, 0.22) 24px,
+        rgba(216, 208, 194, 0.22) 25px
+      );
+  }
+  .diagram-card pre {
+    margin: 0;
+    white-space: pre;
+    overflow-x: auto;
+    color: var(--code-ink);
+    line-height: 1.6;
+    font-size: 13px;
+  }
+  .section-body h4,
+  .section-body h5 {
+    margin: 18px 0 8px;
+    font-size: 1rem;
+  }
+  .page-foot {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    font-size: 13px;
+  }
+  @media (max-width: 940px) {
+    .shell {
+      grid-template-columns: 1fr;
+      padding-inline: 18px;
+    }
+    .toc {
+      position: static;
+      max-height: none;
+    }
+  }
 </style>
 </head>
 <body>
 <div class="shell">
-  <nav class="toc">
-    <span class="label">Contents</span>
-    <a class="topic" href="#overview">Overview</a>
-    <a href="#outcomes">By The End</a>
-    <a href="#workshop">Workshop</a>
-    <a href="#lab">Lab</a>
-    <a href="#materials">Materials</a>
-    <a href="#threads">Threaded Skills</a>
-    <a href="#assessment">Assessment</a>
+  <nav class="toc" id="toc">
+    <span class="toc-label">Contents</span>
+    <a href="#topic-1" class="toc-topic">Topic 1 — Why Hash, Not Encrypt</a>
+<a href="#t1-1-hashing-is-one-way-deterministic-and-a-fixed-size" class="toc-sub">1. Hashing is one-way, deterministic, and a fixed size</a>
+<a href="#t1-2-the-avalanche-effect" class="toc-sub">2. The avalanche effect</a>
+<a href="#t1-3-why-not-encryption" class="toc-sub">3. Why not encryption?</a>
+<a href="#t1-4-rainbow-tables-and-why-salting-defeats-them" class="toc-sub">4. Rainbow tables, and why salting defeats them</a>
+<a href="#t1-topic-1-challenge" class="toc-sub">Topic 1 Challenge</a>
+<a href="#t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t1-recap" class="toc-sub">Recap</a>
+<a href="#topic-2" class="toc-topic">Topic 2 — bcrypt in Python</a>
+<a href="#t2-1-bcrypt-works-with-bytes-encode-first" class="toc-sub">1. bcrypt works with bytes — encode first</a>
+<a href="#t2-2-gensalt-hashpw-generating-a-hash" class="toc-sub">2. `gensalt()` + `hashpw()` — generating a hash</a>
+<a href="#t2-3-checkpw-verifying-without-ever-decrypting" class="toc-sub">3. `checkpw()` — verifying, without ever decrypting</a>
+<a href="#t2-4-the-cost-factor-slow-is-the-feature" class="toc-sub">4. The cost factor — slow is the feature</a>
+<a href="#t2-topic-2-challenge" class="toc-sub">Topic 2 Challenge</a>
+<a href="#t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t2-recap" class="toc-sub">Recap</a>
+<a href="#topic-3" class="toc-topic">Topic 3 — Register and Login</a>
+<a href="#t3-1-registering-hash-then-append" class="toc-sub">1. Registering — hash, then append</a>
+<a href="#t3-2-logging-in-find-the-line-then-checkpw" class="toc-sub">2. Logging in — find the line, then `checkpw()`</a>
+<a href="#t3-3-a-missing-file-should-not-crash-a-login-attempt" class="toc-sub">3. A missing file should not crash a login attempt</a>
+<a href="#t3-4-refusing-a-duplicate-username" class="toc-sub">4. Refusing a duplicate username</a>
+<a href="#t3-topic-3-challenge" class="toc-sub">Topic 3 Challenge</a>
+<a href="#t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t3-recap" class="toc-sub">Recap</a>
+<a href="#topic-4" class="toc-topic">Topic 4 — Keeping Secrets Out of Code</a>
+<a href="#t4-1-a-hard-coded-secret-is-a-mistake-not-a-style-issue" class="toc-sub">1. A hard-coded secret is a mistake, not a style issue</a>
+<a href="#t4-2-environment-variables-the-secret-lives-outside-your-code" class="toc-sub">2. Environment variables — the secret lives outside your code</a>
+<a href="#t4-3-gitignore-deciding-what-never-gets-tracked" class="toc-sub">3. `.gitignore` — deciding what never gets tracked</a>
+<a href="#t4-4-if-a-secret-leaks-anyway" class="toc-sub">4. If a secret leaks anyway</a>
+<a href="#t4-topic-4-challenge" class="toc-sub">Topic 4 Challenge</a>
+<a href="#t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t4-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t4-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
-    <header>
+    <header class="page-head">
       <div class="breadcrumb">CST1510</div>
-      <h1>Week 9 — Hashing and Auth</h1>
-      <p class="lede">Week 9 makes the project safer: students move from plain text handling to password hashing, login flow and keeping secrets out of the repository.</p>
-      <p class="box-note">Box we build this week: <b>PROCESS, made safe</b>.</p>
-      <div class="callout">
-        <p>The public page is just the overview. Students still need the downloaded week folder for the lab notebook, examples and project code.</p>
+      <h1 class="page-title">Week 9 — Hashing and Auth</h1>
+      <p class="lede">By the end of this week you can explain why passwords are hashed, never encrypted, and why that distinction matters, explain what a rainbow table attack is, and why salting defeats it, and hash and verify a password with bcrypt — <code>hashpw()</code>, <code>gensalt()</code>, <code>checkpw()</code>.</p>
+      <p class="box-note">Box we build this week: <b><code>PROCESS, made safe</code> — see <code>../system_diagram.md</code></b></p>
+      <div class="study-note">This reading view combines the week's walkthrough notebooks into one page so students can follow the theory in order, even outside Jupyter.</div>
+      <div class="summary-grid">
+        <div class="summary-card"><div class="k">Topic 1</div><div class="v">Why Hash, Not Encrypt</div></div>
+<div class="summary-card"><div class="k">Topic 2</div><div class="v">bcrypt in Python</div></div>
+<div class="summary-card"><div class="k">Topic 3</div><div class="v">Register and Login</div></div>
+<div class="summary-card"><div class="k">Topic 4</div><div class="v">Keeping Secrets Out of Code</div></div>
+      </div>
+      <div class="outcomes">
+        <div class="outcome">Explain why passwords are hashed, never encrypted, and why that distinction matters</div><div class="outcome">Explain what a rainbow table attack is, and why salting defeats it</div><div class="outcome">Hash and verify a password with bcrypt — <code>hashpw()</code>, <code>gensalt()</code>, <code>checkpw()</code></div><div class="outcome">Explain what the bcrypt cost factor trades off, concretely, in real seconds</div><div class="outcome">Build a register/login flow against a plain file, safely</div><div class="outcome">Keep a real secret out of your code and out of your repository</div>
       </div>
     </header>
 
-    <section id="overview">
-      <h2 class="section-title">Overview</h2>
-      <div class="topic-list">
-      <div class="topic">
-        <span class="n">Topic 1</span>
-        <span class="t">Why Hash, Not Encrypt</span>
-        <p>Understand the difference between storing passwords and protecting them safely.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 2</span>
-        <span class="t">bcrypt in Python</span>
-        <p>Generate and verify password hashes using a real library.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 3</span>
-        <span class="t">Register and Login</span>
-        <p>Build a working login flow against a plain file.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 4</span>
-        <span class="t">Keeping Secrets Out of Code</span>
-        <p>Use environment variables and `.gitignore` rather than hard-coding secrets.</p>
-      </div>
-      </div>
-    </section>
+    <figure class="week-map"><svg viewBox="0 0 920 220" role="img" aria-label="How login should really work" style="width:100%;height:auto;display:block;"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#b8a88e" flood-opacity="0.35"/></filter></defs><rect x="22" y="18" width="220" height="48" rx="18" fill="#fffaf2" stroke="#d8d0c2"/><text x="40" y="38" fill="#59554d" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="40" y="56" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif">PROCESS, made safe — see ../system_diagram.md</text><line x1="166.0" y1="142" x2="232.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="230.0,142 221.0,137 221.0,147" fill="#8a3b12"/><rect x="-16.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="0.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Why Hash, Not</tspan><tspan x="0.0" dy="19">Encrypt</tspan></text><line x1="426.0" y1="142" x2="492.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="490.0,142 481.0,137 481.0,147" fill="#8a3b12"/><rect x="244.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#8b7f6b" filter="url(#shadow)"/><text x="260.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="260.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="260.0" dy="0">bcrypt in Python</tspan></text><line x1="686.0" y1="142" x2="752.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="750.0,142 741.0,137 741.0,147" fill="#8a3b12"/><rect x="504.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="520.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="520.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="520.0" dy="0">Register and Login</tspan></text><rect x="764.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#355c5a" filter="url(#shadow)"/><text x="780.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="780.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="780.0" dy="0">Keeping Secrets Out</tspan><tspan x="780.0" dy="19">of Code</tspan></text></svg><figcaption><b>How login should really work</b>. Week 9 separates plain passwords, hashes, login checks, and secret handling into a safe flow.</figcaption></figure>
 
-    <section id="outcomes">
-      <h2 class="section-title">By The End Of This Week</h2>
-      <ol class="tight">
-      <li>Explain why passwords are hashed, never encrypted, and why that distinction matters.</li>
-      <li>Explain what a rainbow table attack is and why salting defeats it.</li>
-      <li>Hash and verify a password with bcrypt.</li>
-      <li>Explain what the bcrypt cost factor trades off.</li>
-      <li>Build a register/login flow against a plain file, safely.</li>
-      <li>Keep a real secret out of the code and out of the repository.</li>
-      </ol>
-    </section>
+    <section class="topic" id="topic-1"><div class="topic-kicker">Topic 1</div><h2 class="topic-title">Why Hash, Not Encrypt</h2><div class="topic-intro"><p><strong>Box we are building: PROCESS, made safe</strong></p>
+<p>Before any bcrypt function, the concept: what hashing actually is, and why it
+is the right tool for a password.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
+</blockquote>
+</div><section class="section" id="t1-1-hashing-is-one-way-deterministic-and-a-fixed-size"><h3 class="section-title">1. Hashing is one-way, deterministic, and a fixed size</h3><div class="section-body"><p>Same input, same output, always — and no function reverses it back.</p>
 
-    <section id="workshop">
-      <h2 class="section-title">Workshop — 2 hours</h2>
-      <p>The workshop still shows the finished idea first, then works through the week's topics in smaller parts.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Run the demo</td><td>See the project gated by a real login before any explanation.</td></tr>
-      <tr><td>0:10</td><td>System diagram</td><td>Upgrade `PROCESS` by making it safe.</td></tr>
-      <tr><td>0:20</td><td>Topic 1</td><td>Why Hash, Not Encrypt</td></tr>
-      <tr><td>0:40</td><td>Topic 2</td><td>bcrypt in Python</td></tr>
-      <tr><td>1:00</td><td>Break</td><td></td></tr>
-      <tr><td>1:10</td><td>Topic 3</td><td>Register and Login</td></tr>
-      <tr><td>1:30</td><td>Topic 4</td><td>Keeping Secrets Out of Code</td></tr>
-      <tr><td>1:50</td><td>Brief the project</td><td>Extend last week's project with login.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import hashlib
 
-    <section id="lab">
-      <h2 class="section-title">Lab — 3 hours</h2>
-      <p>The lab notebook runs the session in order. Use the downloaded weekly folder for the actual code, files and notebook work.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Warm-up</td><td>Fix 3 deliberately broken files in `LAB/warmup/`.</td></tr>
-      <tr><td>0:15</td><td>Drills</td><td>7 tasks across Threshold / Typical / Excellent.</td></tr>
-      <tr><td>1:15</td><td>Break</td><td></td></tr>
-      <tr><td>1:25</td><td>Project</td><td>Open last week's `project/` and add login.</td></tr>
-      <tr><td>2:40</td><td>Wrap</td><td>Demo to a neighbour, then commit and push project progress.</td></tr>
-      </table>
-    </section>
+print(hashlib.sha256(b"password123").hexdigest())
+print(hashlib.sha256(b"password123").hexdigest())   # identical, every time</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Hash your own name with <code>hashlib.sha256</code> and confirm hashing it twice gives the same result.</p>
+</aside></div></section><section class="section" id="t1-2-the-avalanche-effect"><h3 class="section-title">2. The avalanche effect</h3><div class="section-body"><p>One character different in the input changes the entire output — there is no
+&quot;close&quot; match to look for.</p>
 
-    <section id="materials">
-      <h2 class="section-title">Materials At A Glance</h2>
-      <table>
-        <tr><th>Material</th><th>What it is for</th></tr>
-      <tr><td>`DEMO/ops_console.py`</td><td>The workshop demonstration.</td></tr>
-      <tr><td>`01` to `04` topic folders</td><td>Walkthrough notebooks plus examples.</td></tr>
-      <tr><td>`LAB/W09_Lab.ipynb`</td><td>Warm-up, drills and project extension.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>print(hashlib.sha256(b"password123").hexdigest())
+print(hashlib.sha256(b"password124").hexdigest())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Change one character in a string of your own and compare the two hashes.</p>
+</aside></div></section><section class="section" id="t1-3-why-not-encryption"><h3 class="section-title">3. Why not encryption?</h3><div class="section-body"><p>Encryption is two-way — whoever holds the key can decrypt it back. A password
+only ever needs <em>checking</em>, never recovering, so a one-way hash is the safer
+tool: there is no key to steal.</p>
 
-    <section id="threads">
-      <h2 class="section-title">Threaded Skills</h2>
-      <table>
-        <tr><th>Thread</th><th>This week</th></tr>
-      <tr><td>Git</td><td>Ninth commit and push inside `project/`.</td></tr>
-      <tr><td>Debugging</td><td>`TypeError` for `str` vs `bytes`, `ValueError` from malformed lines or argument order.</td></tr>
-      <tr><td>Domains</td><td>Every project now needs a login flow.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>typed = "password123"
+stored_hash = hashlib.sha256(b"password123").hexdigest()
 
-    <section id="assessment">
-      <h2 class="section-title">Assessment Note</h2>
-      <div class="grid">
-        <div class="card">
-          <h2>What to remember</h2>
-          <p>Nothing is marked this week. Keep the work as part of CW2 and follow the shared CW2 specification on Moodle.</p>
-        </div>
-        <div class="card">
-          <h2>Student workflow</h2>
-          <p>Open the week's folder in VS Code, start with <code>README.md</code>, complete the lab, then commit and push.</p>
-        </div>
-        <div class="card">
-          <h2>Where the real work happens</h2>
-          <p>This public page is a guide only. The coding, notebooks, files and project work happen in the downloaded weekly materials.</p>
-        </div>
-      </div>
-    </section>
+# verify by hashing AGAIN and comparing - never by decrypting
+print(hashlib.sha256(typed.encode()).hexdigest() == stored_hash)</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Explain, in your own words, why &quot;hash again and compare&quot; replaces &quot;decrypt and compare&quot; for a password.</p>
+</aside></div></section><section class="section" id="t1-4-rainbow-tables-and-why-salting-defeats-them"><h3 class="section-title">4. Rainbow tables, and why salting defeats them</h3><div class="section-body"><p>An attacker can pre-compute hashes for millions of common passwords once,
+then just look up a stolen hash in that table. A unique random salt per user
+makes every hash different, even for the same password — the table becomes
+useless.</p>
 
-    <footer>CST1510 · Week 9 · Hashing and Auth</footer>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>common = ["123456", "password", "qwerty"]
+table = {hashlib.sha256(p.encode()).hexdigest(): p for p in common}
+
+stolen = hashlib.sha256(b"qwerty").hexdigest()
+print(stolen in table)     # True - instantly cracked, no salt</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Add <code>&quot;letmein&quot;</code> to <code>common</code> and check whether a stolen hash of it would be found in the table.</p>
+</aside></div></section><section class="section" id="t1-topic-1-challenge"><h3 class="section-title">Topic 1 Challenge</h3><div class="section-body"><p>Given a small rainbow table (5 common passwords) and a &quot;stolen&quot; hash of a
+genuinely random, unique password, show it is <em>not</em> found in the table — then
+explain in one sentence why length and randomness matter more than any
+particular character rule.</p>
+</div></section><section class="section" id="t1-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>hashing to check whether two data files are identical, without comparing every byte</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>recognising a rainbow-table attack against a leaked password database</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>verifying a downloaded file has not been tampered with, via its published hash</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t1-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>calling hashing &quot;encryption&quot;</td>
+  <td>technically wrong, and the wrong mental model</td>
+  <td>hashing has no key and cannot be reversed — encryption does and can</td>
+</tr>
+<tr>
+  <td>assuming a hash can be &quot;decoded&quot; back to the password</td>
+  <td>there is no function for this</td>
+  <td>verification means hashing the guess again and comparing</td>
+</tr>
+<tr>
+  <td>using an unsalted hash for passwords</td>
+  <td>vulnerable to a pre-computed rainbow table</td>
+  <td>always salt — bcrypt does this for you automatically (Topic 2)</td>
+</tr>
+<tr>
+  <td>picking a &quot;clever&quot; but common password</td>
+  <td>it is very likely already in an attacker's table</td>
+  <td>length and genuine randomness beat cleverness</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_what_hashing_actually_does.py</code> — determinism, the avalanche effect, one-way
+<code>examples/02_why_plain_hashing_is_not_enough.py</code> — a real rainbow-table demonstration, and salting
+Docs: <a href="%7BBCRYPT_DOCS%7D">Python hashlib</a></p>
+</div></section><section class="section" id="t1-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>explain what a hash is</td>
+  <td>one-way, deterministic, fixed size</td>
+</tr>
+<tr>
+  <td>explain why not encryption</td>
+  <td>no key to steal, never needs reversing</td>
+</tr>
+<tr>
+  <td>explain a rainbow table attack</td>
+  <td>pre-computed hashes of common passwords</td>
+</tr>
+<tr>
+  <td>explain why salting defeats it</td>
+  <td>a unique salt makes every hash different</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 2 — doing this properly, with bcrypt.</p>
+</div></section></section>
+<section class="topic" id="topic-2"><div class="topic-kicker">Topic 2</div><h2 class="topic-title">bcrypt in Python</h2><div class="topic-intro"><p><strong>Box we are building: PROCESS, made safe, for real</strong></p>
+<p>Two functions, and the one design choice worth understanding: bcrypt is slow
+on purpose.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t2-1-bcrypt-works-with-bytes-encode-first"><h3 class="section-title">1. bcrypt works with bytes — encode first</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import bcrypt
+
+password = "correct-horse-battery-staple"
+password_bytes = password.encode("utf-8")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Encode a password of your own choosing to bytes.</p>
+</aside></div></section><section class="section" id="t2-2-gensalt-hashpw-generating-a-hash"><h3 class="section-title">2. `gensalt()` + `hashpw()` — generating a hash</h3><div class="section-body"><p>The salt is generated fresh, at random, and embedded inside the hash itself —
+you never store it separately.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>salt = bcrypt.gensalt()
+hashed = bcrypt.hashpw(password_bytes, salt)
+print(hashed.decode("utf-8"))
+print(len(hashed))    # always 60 characters</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Hash your own encoded password from section 1 and print the result.</p>
+</aside></div></section><section class="section" id="t2-3-checkpw-verifying-without-ever-decrypting"><h3 class="section-title">3. `checkpw()` — verifying, without ever decrypting</h3><div class="section-body"><p>Re-derives the salt from the stored hash, re-hashes the candidate, and
+compares.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>print(bcrypt.checkpw(b"correct-horse-battery-staple", hashed))    # True
+print(bcrypt.checkpw(b"wrong-password", hashed))                     # False</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Check your own hash from section 2 against the right password, then a wrong one.</p>
+</aside></div></section><section class="section" id="t2-4-the-cost-factor-slow-is-the-feature"><h3 class="section-title">4. The cost factor — slow is the feature</h3><div class="section-body"><p>Each <code>+1</code> roughly doubles the work. A fraction of a second for a real login;
+days added up across a brute-force attempt.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import time
+
+for rounds in (10, 12, 14):
+    start = time.perf_counter()
+    bcrypt.hashpw(password_bytes, bcrypt.gensalt(rounds=rounds))
+    print(rounds, f"{time.perf_counter() - start:.3f}s")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Time cost factor 8 alongside 10, 12 and 14. How much faster is it?</p>
+</aside></div></section><section class="section" id="t2-topic-2-challenge"><h3 class="section-title">Topic 2 Challenge</h3><div class="section-body"><p>Write <code>generate_hash(password)</code> and <code>is_valid_hash(password, hashed)</code> — the
+two functions this whole week's project rests on. Test both with a right and
+a wrong password.</p>
+</div></section><section class="section" id="t2-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>hashing an account password before storing dataset access credentials</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>verifying a login attempt without ever holding the real password</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>hashing service-account credentials in a config management tool</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t2-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>passing a <code>str</code> instead of <code>bytes</code></td>
+  <td><code>TypeError: argument 'password': 'str' object cannot be converted to 'PyBytes'</code></td>
+  <td><code>.encode(&quot;utf-8&quot;)</code> first</td>
+</tr>
+<tr>
+  <td>swapping the argument order in <code>checkpw()</code></td>
+  <td><code>ValueError: Invalid salt</code></td>
+  <td>password first, hash second — always</td>
+</tr>
+<tr>
+  <td>storing the salt separately from the hash</td>
+  <td>unnecessary — and easy to lose track of which belongs to which</td>
+  <td>bcrypt already embeds it in the hash string</td>
+</tr>
+<tr>
+  <td>picking an unnecessarily high cost factor</td>
+  <td>logins become slow for everyone, including real users</td>
+  <td>the default is already a reasonable choice</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_generate_and_check.py</code> — hashpw, checkpw, the salt embedded in the hash
+<code>examples/02_the_cost_factor.py</code> — real timings, and what they mean for an attacker
+Docs: <a href="%7BBCRYPT_DOCS%7D">bcrypt on PyPI</a></p>
+</div></section><section class="section" id="t2-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>hash a password</td>
+  <td><code>bcrypt.hashpw(password_bytes, bcrypt.gensalt())</code></td>
+</tr>
+<tr>
+  <td>verify one</td>
+  <td><code>bcrypt.checkpw(candidate_bytes, hashed)</code></td>
+</tr>
+<tr>
+  <td>explain the cost factor</td>
+  <td>slower per attempt, on purpose</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 3 — wiring this into a real register/login flow.</p>
+</div></section></section>
+<section class="topic" id="topic-3"><div class="topic-kicker">Topic 3</div><h2 class="topic-title">Register and Login</h2><div class="topic-intro"><p><strong>Box we are building: PROCESS, made safe, and usable</strong></p>
+<p>Wiring bcrypt into a real, if simple, authentication flow against a file.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t3-1-registering-hash-then-append"><h3 class="section-title">1. Registering — hash, then append</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import bcrypt
+
+def register_user(username, password, path="users.txt"):
+    """Hash password and append username,hash to the store."""
+    hashed = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+    with open(path, "a") as f:
+        f.write(f"{username},{hashed.decode('utf-8')}\n")
+
+register_user("alice", "correct-horse-battery-staple", "demo.txt")
+with open("demo.txt") as f:
+    print(f.read())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Register a second user into the same file and print the file's contents.</p>
+</aside></div></section><section class="section" id="t3-2-logging-in-find-the-line-then-checkpw"><h3 class="section-title">2. Logging in — find the line, then `checkpw()`</h3><div class="section-body"><p>Week 7's <code>.strip().split(&quot;,&quot;, 1)</code> pattern, applied to a security-relevant
+file.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def login_user(username, password, path="users.txt"):
+    """Return True if username/password match a stored, hashed record."""
+    with open(path) as f:
+        for line in f:
+            stored_username, stored_hash = line.strip().split(",", 1)
+            if stored_username == username:
+                return bcrypt.checkpw(password.encode("utf-8"), stored_hash.encode("utf-8"))
+    return False
+
+print(login_user("alice", "correct-horse-battery-staple", "demo.txt"))
+print(login_user("alice", "wrong-guess", "demo.txt"))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Log in with a username that was never registered, and confirm it returns <code>False</code> without crashing.</p>
+</aside></div></section><section class="section" id="t3-3-a-missing-file-should-not-crash-a-login-attempt"><h3 class="section-title">3. A missing file should not crash a login attempt</h3><div class="section-body"><p>The first person to ever try logging in will hit a file that does not exist
+yet — handle it, do not let it crash.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import os
+
+def login_user_safe(username, password, path="users.txt"):
+    """Return False, not a crash, if the store does not exist yet."""
+    if not os.path.exists(path):
+        return False
+    return login_user(username, password, path)
+
+print(login_user_safe("nobody", "anything", "does_not_exist.txt"))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Call <code>login_user_safe</code> on a path you know does not exist and confirm it returns <code>False</code> cleanly.</p>
+</aside></div></section><section class="section" id="t3-4-refusing-a-duplicate-username"><h3 class="section-title">4. Refusing a duplicate username</h3><div class="section-body"><p>Registering the same username twice silently creates two records — the
+<code>login()</code> function only ever finds the first. Worth refusing outright.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def username_exists(username, path="users.txt"):
+    """Return True if username already has a record in the store."""
+    if not os.path.exists(path):
+        return False
+    with open(path) as f:
+        for line in f:
+            stored_username, _ = line.strip().split(",", 1)
+            if stored_username == username:
+                return True
+    return False</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Use <code>username_exists</code> inside <code>register_user</code> to refuse a duplicate registration, returning <code>False</code> instead of writing a second line.</p>
+</aside></div></section><section class="section" id="t3-topic-3-challenge"><h3 class="section-title">Topic 3 Challenge</h3><div class="section-body"><p>Build a complete register/login pair — hashing, duplicate-username refusal,
+and a missing-file-safe login — and test all three behaviours: a fresh
+registration, a duplicate attempt, and a login with the wrong password.</p>
+</div></section><section class="section" id="t3-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>gating access to a shared dataset behind a login</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>the exact flow an incident console's own users go through</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>gating a monitoring dashboard so only authorised staff see it</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t3-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>.split(&quot;,&quot;)</code> without <code>maxsplit</code> on a line with an extra comma</td>
+  <td><code>ValueError: too many values to unpack</code></td>
+  <td><code>.split(&quot;,&quot;, 1)</code> — same lesson as Week 7</td>
+</tr>
+<tr>
+  <td>no check for the store file existing yet</td>
+  <td><code>FileNotFoundError</code> on the very first login attempt</td>
+  <td>check <code>os.path.exists()</code> first, or catch it</td>
+</tr>
+<tr>
+  <td>allowing duplicate usernames</td>
+  <td>login always finds the first record, silently wrong later</td>
+  <td>check <code>username_exists()</code> before registering</td>
+</tr>
+<tr>
+  <td>printing a password anywhere, even for debugging</td>
+  <td>it is now in your terminal history / logs</td>
+  <td>print confirmation messages only, never the value</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_register_and_login.py</code> — the full flow, right and wrong password, unknown user
+<code>examples/02_a_menu_and_duplicate_usernames.py</code> — refusing duplicates, a real interactive menu</p>
+</div></section><section class="section" id="t3-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>register a user safely</td>
+  <td>hash, then append</td>
+</tr>
+<tr>
+  <td>log a user in</td>
+  <td>find the line, <code>checkpw()</code></td>
+</tr>
+<tr>
+  <td>handle a missing store</td>
+  <td>check before opening, or catch the error</td>
+</tr>
+<tr>
+  <td>refuse a duplicate username</td>
+  <td>check first, before writing</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 4 — keeping the secrets this all depends on out of your code.</p>
+</div></section></section>
+<section class="topic" id="topic-4"><div class="topic-kicker">Topic 4</div><h2 class="topic-title">Keeping Secrets Out of Code</h2><div class="topic-intro"><p><strong>Box we are building: PROCESS, made safe, and kept that way</strong></p>
+<p>Hashing protects passwords. This topic protects everything else — API keys,
+tokens, anything that must never sit in a file you might commit.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t4-1-a-hard-coded-secret-is-a-mistake-not-a-style-issue"><h3 class="section-title">1. A hard-coded secret is a mistake, not a style issue</h3><div class="section-body"><p>The moment it is pushed to a public repository, it is compromised — deleting
+it later does not help, it is still in the commit history.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code># BAD - never do this:
+# API_KEY = "sk-abc123realsecretvalue"
+
+print("see the comment above - nothing to run here")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Explain in one sentence why deleting a leaked key from your latest commit does not fix the leak.</p>
+</aside></div></section><section class="section" id="t4-2-environment-variables-the-secret-lives-outside-your-code"><h3 class="section-title">2. Environment variables — the secret lives outside your code</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import os
+
+api_key = os.environ.get("MY_API_KEY", "not set")
+print(api_key)</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Set an environment variable in your terminal, then read it back with <code>os.environ.get()</code>.</p>
+</aside>
+<p>A default like <code>&quot;not set&quot;</code> is fine for something optional. When a variable is <em>required</em> — the program genuinely cannot continue without it — raise a clear error instead of letting it fail later with a confusing message.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def require_env(name):
+    """Return the named environment variable, or raise a clear error if it is missing."""
+    value = os.environ.get(name)
+    if value is None:
+        raise RuntimeError(f"{name} is not set. Set it before running this.")
+    return value
+
+try:
+    require_env("MY_API_KEY")
+except RuntimeError as e:
+    print("Caught it:", e)</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Write <code>require_env(&quot;HOME&quot;)</code> (or another variable you know is set on your machine) and check it returns the value instead of raising.</p>
+</aside></div></section><section class="section" id="t4-3-gitignore-deciding-what-never-gets-tracked"><h3 class="section-title">3. `.gitignore` — deciding what never gets tracked</h3><div class="section-body"><p>Once your project has real accounts and real keys, these need to be in it.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>gitignore_lines = ["*.db", "*.env", ".streamlit/secrets.toml", "__pycache__/", "users.txt"]
+for line in gitignore_lines:
+    print(line)</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Write a <code>.gitignore</code> file for your own <code>project/</code> folder, covering what applies so far.</p>
+</aside></div></section><section class="section" id="t4-4-if-a-secret-leaks-anyway"><h3 class="section-title">4. If a secret leaks anyway</h3><div class="section-body"><p>Removing it from the latest commit is not enough — it is still readable in
+history. Revoke the key at its source first, generate a new one, worry about
+cleaning history second.</p>
+
+<aside class="practice"><span class="label">Your turn</span><p>Name one place you would go to revoke a leaked API key for a service you use.</p>
+</aside></div></section><section class="section" id="t4-topic-4-challenge"><h3 class="section-title">Topic 4 Challenge</h3><div class="section-body"><p>Write a small script that reads a required environment variable and raises a
+clear error (not a crash with a confusing traceback) if it is missing.</p>
+</div></section><section class="section" id="t4-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>keeping a Kaggle API token out of a notebook you might share</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>keeping a threat-intel API key out of a public incident console repo</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>keeping a monitoring service's token out of a committed config file</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t4-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>committing a <code>.db</code> or <code>.txt</code> file full of real hashed users</td>
+  <td>it is now in your repository's history</td>
+  <td>add it to <code>.gitignore</code> <em>before</em> the first commit that includes it</td>
+</tr>
+<tr>
+  <td>assuming a private repo makes secrets safe</td>
+  <td>tutors, group members, and future public forks can still see it</td>
+  <td>treat every repo as if it could become public</td>
+</tr>
+<tr>
+  <td>hard-coding &quot;just for testing&quot;</td>
+  <td>it is easy to forget to remove before committing</td>
+  <td>use an environment variable from the start, even in testing</td>
+</tr>
+<tr>
+  <td>checking <code>.gitignore</code> after committing the file once</td>
+  <td>too late — it is already tracked</td>
+  <td><code>git rm --cached &lt;file&gt;</code> is needed on top of <code>.gitignore</code> if this happens</td>
+</tr>
+<tr>
+  <td>defaulting a <em>required</em> variable to <code>&quot;not set&quot;</code> and carrying on</td>
+  <td>it fails later, somewhere confusing, instead of here</td>
+  <td><code>raise</code> a clear error the moment you know it's missing</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_environment_variables.py</code> — os.environ, sensible defaults, raising on a missing required variable
+<code>examples/02_gitignore_and_what_not_to_commit.py</code> — what belongs in .gitignore, and why</p>
+</div></section><section class="section" id="t4-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>keep a secret out of your code</td>
+  <td><code>os.environ.get(&quot;NAME&quot;)</code></td>
+</tr>
+<tr>
+  <td>refuse to continue without a required one</td>
+  <td><code>raise RuntimeError(...)</code></td>
+</tr>
+<tr>
+  <td>keep it out of your repository</td>
+  <td><code>.gitignore</code></td>
+</tr>
+<tr>
+  <td>respond correctly to a leak</td>
+  <td>revoke first, clean history second</td>
+</tr>
+</tbody>
+</table>
+<p><strong>You now have all of Week 9's tools.</strong> Open last week's project and add a
+login to it — nothing about it resets.</p>
+</div></section></section>
+
+    <footer class="page-foot">Built from the walkthrough notebooks for this week.</footer>
   </article>
 </div>
+<script>
+const links = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+const sections = links
+  .map(link => document.querySelector(link.getAttribute('href')))
+  .filter(Boolean);
+
+function setCurrentLink() {
+  const offset = window.scrollY + 120;
+  let current = sections[0];
+  for (const section of sections) {
+    if (section.offsetTop <= offset) current = section;
+  }
+  links.forEach(link => {
+    link.classList.toggle('current', current && link.getAttribute('href') === '#' + current.id);
+  });
+}
+
+setCurrentLink();
+window.addEventListener('scroll', setCurrentLink, { passive: true });
+</script>
 </body>
 </html>

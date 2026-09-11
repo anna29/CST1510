@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,201 +7,1004 @@
 <title>Week 12 — Intelligence (Optional) and Deployment</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-
   :root {
-    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
-    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823; --card: #FFFDF8;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-      --card: #1D1F21;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-    --card: #1D1F21;
+    --paper: #faf7f0;
+    --paper-2: #f2ede0;
+    --card: #fffdfa;
+    --ink: #1b1a17;
+    --ink-soft: #59554d;
+    --rule: #d8d0c2;
+    --rule-strong: #8b7f6b;
+    --accent: #8a3b12;
+    --accent-soft: #e5c6a6;
+    --accent-2: #355c5a;
+    --code-bg: #f3efe7;
+    --code-ink: #2d2a25;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-size: 17px; }
-  code, pre { font-family: "IBM Plex Mono", ui-monospace, monospace; }
-  a { color: var(--accent); }
-  .shell { max-width: 1040px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 38px; align-items: start; }
-  nav.toc { position: sticky; top: 28px; display: flex; flex-direction: column; gap: 8px; max-height: calc(100vh - 56px); overflow-y: auto; padding-top: 4px; }
-  nav.toc .label { font-variant: small-caps; letter-spacing: .04em; font-size: 13px; color: var(--ink-soft); margin-bottom: 4px; }
-  nav.toc a { color: var(--ink-soft); text-decoration: none; line-height: 1.45; font-size: 13.5px; }
-  nav.toc a.topic { color: var(--ink); font-weight: 700; margin-top: 8px; }
-  nav.toc a.topic:first-of-type { margin-top: 0; }
-  nav.toc a:hover { color: var(--accent); }
-  article { min-width: 0; }
-  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
-  h1 { margin: 0 0 10px; font-size: 2.15rem; font-weight: 700; letter-spacing: -.01em; }
-  .lede { margin: 0 0 12px; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
-  .box-note { margin: 14px 0 0; font-size: 14.5px; color: var(--ink-soft); }
-  .box-note b { color: var(--ink); font-weight: 600; }
-  .callout { max-width: 68ch; border-left: 2px solid var(--rule-strong); padding: 4px 0 4px 18px; margin: 24px 0; }
-  .callout p { margin: 0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 900px; margin: 26px 0 34px; }
-  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 18px; }
-  .card h2 { margin: 0 0 10px; font-size: 1.06rem; }
-  .card p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
-  section { margin: 0 0 44px; padding-top: 34px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
-  section:first-of-type { border-top: none; padding-top: 0; }
-  h2.section-title { margin: 0 0 18px; font-size: 1.45rem; letter-spacing: -.01em; }
-  p { line-height: 1.68; color: var(--ink); max-width: 68ch; margin: 0 0 16px; }
-  ul.tight, ol.tight { margin: 8px 0 0 20px; padding: 0; max-width: 68ch; }
-  ul.tight li, ol.tight li { line-height: 1.62; margin-bottom: 7px; }
-  table { border-collapse: collapse; margin: 18px 0; max-width: 860px; width: 100%; font-size: 14.5px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
-  th, td { text-align: left; padding: 8px 14px 8px 0; vertical-align: top; }
-  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; border-bottom: 1px solid var(--ink-soft); }
-  td code, p code, li code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
-  .topic-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; max-width: 900px; }
-  .topic { border-top: 1px solid var(--rule); padding-top: 12px; }
-  .topic .n { font-variant: small-caps; color: var(--ink-soft); font-size: 13px; letter-spacing: .04em; display: block; margin-bottom: 5px; }
-  .topic .t { font-weight: 700; display: block; margin-bottom: 5px; }
-  .muted { color: var(--ink-soft); }
-  footer { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
-  @media (max-width: 860px) {
-    .shell { grid-template-columns: 1fr; }
-    nav.toc { position: static; max-height: none; display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 16px; }
-    nav.toc a { font-size: 13px; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at top left, rgba(229, 198, 166, 0.36), transparent 24%),
+      linear-gradient(180deg, #fbf8f1 0%, var(--paper) 34%, #f8f4eb 100%);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-size: 17px;
   }
-
+  code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  a { color: inherit; }
+  .shell {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 44px 28px 96px;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    border: 1px solid var(--rule);
+    background: rgba(255, 253, 250, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 18px;
+    padding: 18px 16px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+  }
+  .toc-label {
+    display: block;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .toc a {
+    display: block;
+    text-decoration: none;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    padding: 4px 0;
+  }
+  .toc a:hover,
+  .toc a.current { color: var(--accent); }
+  .toc a.toc-topic {
+    color: var(--ink);
+    font-weight: 700;
+    margin-top: 12px;
+    font-size: 13.5px;
+  }
+  .toc a.toc-topic:first-of-type { margin-top: 0; }
+  .toc a.toc-sub {
+    padding-left: 12px;
+    font-size: 12.5px;
+  }
+  article { min-width: 0; }
+  .page-head {
+    position: relative;
+    margin-bottom: 34px;
+    padding: 26px 28px 28px;
+    background: linear-gradient(145deg, rgba(255,253,250,.94), rgba(248,242,232,.92));
+    border: 1px solid var(--rule);
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  .page-head::after {
+    content: "";
+    position: absolute;
+    inset: auto -30px -34px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(229,198,166,.68), rgba(229,198,166,0));
+    pointer-events: none;
+  }
+  .breadcrumb {
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  h1.page-title {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+  }
+  .lede {
+    margin: 0 0 14px;
+    max-width: 65ch;
+    color: var(--ink-soft);
+    font-size: 1.06rem;
+    line-height: 1.65;
+    font-style: italic;
+  }
+  .box-note {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+  }
+  .box-note b { color: var(--ink); }
+  .box-note code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 999px;
+    color: var(--code-ink);
+  }
+  .study-note {
+    margin-top: 16px;
+    max-width: 70ch;
+    padding: 12px 14px;
+    border-left: 3px solid var(--accent);
+    background: rgba(229, 198, 166, 0.14);
+    color: var(--ink-soft);
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 22px 0 8px;
+  }
+  .summary-card {
+    padding: 14px 14px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background: rgba(255,255,255,.6);
+  }
+  .summary-card .k {
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  .summary-card .v {
+    margin-top: 8px;
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+  .outcomes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin: 20px 0 0;
+  }
+  .outcome {
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: rgba(255,253,250,.76);
+    line-height: 1.45;
+    color: var(--ink);
+    font-size: .97rem;
+  }
+  figure.week-map {
+    margin: 30px 0 34px;
+    padding: 18px 18px 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(248,242,232,.75));
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+  }
+  figure.week-map figcaption {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .topic {
+    margin-bottom: 42px;
+    padding: 28px 28px 10px;
+    background: rgba(255,253,250,.78);
+    border: 1px solid var(--rule);
+    border-radius: 26px;
+    scroll-margin-top: 24px;
+  }
+  .topic-kicker {
+    font-variant: small-caps;
+    letter-spacing: .08em;
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  h2.topic-title {
+    margin: 0 0 12px;
+    font-size: clamp(1.55rem, 2.2vw, 2rem);
+    line-height: 1.12;
+    letter-spacing: -.015em;
+  }
+  .topic-intro {
+    max-width: 70ch;
+    color: var(--ink-soft);
+  }
+  .topic-intro p:last-child { margin-bottom: 0; }
+  .section {
+    padding-top: 26px;
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 24px;
+  }
+  .section:first-of-type {
+    margin-top: 24px;
+  }
+  h3.section-title {
+    margin: 0 0 14px;
+    font-size: 1.18rem;
+    line-height: 1.25;
+  }
+  p, li {
+    line-height: 1.7;
+    max-width: 70ch;
+    text-wrap: pretty;
+  }
+  p {
+    margin: 0 0 14px;
+  }
+  ul, ol {
+    margin: 10px 0 16px;
+    padding-left: 22px;
+  }
+  li {
+    margin-bottom: 5px;
+  }
+  blockquote {
+    margin: 18px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--accent-soft);
+    color: var(--ink-soft);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 78ch;
+    margin: 18px 0;
+    font-size: 14.5px;
+  }
+  table.booktabs {
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 12px 8px 0;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  th {
+    border-bottom: 1px solid var(--rule-strong);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .04em;
+    font-size: 13px;
+  }
+  code {
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--code-ink);
+    font-size: .9em;
+  }
+  .practice {
+    margin: 18px 0;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(138,59,18,.18);
+    background: linear-gradient(180deg, rgba(229,198,166,.22), rgba(255,253,250,.7));
+    max-width: 78ch;
+  }
+  .practice .label {
+    display: block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .practice p:last-child { margin-bottom: 0; }
+  .cell {
+    margin: 18px 0;
+    max-width: 82ch;
+  }
+  .cell-label,
+  .diagram-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  pre.code,
+  .md-code {
+    margin: 0;
+    padding: 14px 16px;
+    overflow-x: auto;
+    white-space: pre;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    line-height: 1.58;
+    font-size: 13.5px;
+  }
+  .output {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-left: 3px solid var(--rule-strong);
+    background: rgba(255,255,255,.54);
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    max-width: 78ch;
+  }
+  .output pre {
+    margin: 8px 0 0;
+    white-space: pre-wrap;
+    color: var(--ink);
+  }
+  .diagram-card {
+    margin: 18px 0;
+    max-width: 82ch;
+    padding: 14px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.72), rgba(243,239,231,.88)),
+      repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 24px,
+        rgba(216, 208, 194, 0.22) 24px,
+        rgba(216, 208, 194, 0.22) 25px
+      );
+  }
+  .diagram-card pre {
+    margin: 0;
+    white-space: pre;
+    overflow-x: auto;
+    color: var(--code-ink);
+    line-height: 1.6;
+    font-size: 13px;
+  }
+  .section-body h4,
+  .section-body h5 {
+    margin: 18px 0 8px;
+    font-size: 1rem;
+  }
+  .page-foot {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    font-size: 13px;
+  }
+  @media (max-width: 940px) {
+    .shell {
+      grid-template-columns: 1fr;
+      padding-inline: 18px;
+    }
+    .toc {
+      position: static;
+      max-height: none;
+    }
+  }
 </style>
 </head>
 <body>
 <div class="shell">
-  <nav class="toc">
-    <span class="label">Contents</span>
-    <a class="topic" href="#overview">Overview</a>
-    <a href="#outcomes">By The End</a>
-    <a href="#workshop">Workshop</a>
-    <a href="#lab">Lab</a>
-    <a href="#materials">Materials</a>
-    <a href="#threads">Threaded Skills</a>
-    <a href="#assessment">Assessment</a>
+  <nav class="toc" id="toc">
+    <span class="toc-label">Contents</span>
+    <a href="#topic-1" class="toc-topic">Topic 1 — API Keys, Reviewed</a>
+<a href="#t1-1-loading-the-key-the-same-habit-as-week-9" class="toc-sub">1. Loading the key — the same habit as Week 9</a>
+<a href="#t1-2-two-different-responses-to-a-missing-key" class="toc-sub">2. Two different responses to a missing key</a>
+<a href="#t1-3-making-a-feature-optional-end-to-end" class="toc-sub">3. Making a feature optional, end to end</a>
+<a href="#t1-topic-1-challenge" class="toc-sub">Topic 1 Challenge</a>
+<a href="#t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t1-recap" class="toc-sub">Recap</a>
+<a href="#topic-2" class="toc-topic">Topic 2 — Calling the ChatGPT API</a>
+<a href="#t2-1-the-client-and-one-call" class="toc-sub">1. The client, and one call</a>
+<a href="#t2-2-the-reply-s-exact-shape" class="toc-sub">2. The reply's exact shape</a>
+<a href="#t2-3-the-api-is-stateless-history-has-to-be-resent-every-time" class="toc-sub">3. The API is stateless — history has to be resent every time</a>
+<a href="#t2-4-verifying-the-calling-code-without-a-real-key-mocking-previewed" class="toc-sub">4. Verifying the calling code without a real key — mocking, previewed</a>
+<a href="#t2-topic-2-challenge" class="toc-sub">Topic 2 Challenge</a>
+<a href="#t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t2-recap" class="toc-sub">Recap</a>
+<a href="#topic-3" class="toc-topic">Topic 3 — Testing Your App</a>
+<a href="#t3-1-a-pytest-test-is-a-function-starting-with-test" class="toc-sub">1. A pytest test is a function starting with `test_`</a>
+<a href="#t3-2-test-the-edges-not-just-the-middle" class="toc-sub">2. Test the edges, not just the middle</a>
+<a href="#t3-3-testing-code-that-calls-something-external-with-a-mock" class="toc-sub">3. Testing code that calls something external — with a mock</a>
+<a href="#t3-4-running-with-the-real-pytest-command" class="toc-sub">4. Running with the real `pytest` command</a>
+<a href="#t3-topic-3-challenge" class="toc-sub">Topic 3 Challenge</a>
+<a href="#t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t3-recap" class="toc-sub">Recap</a>
+<a href="#topic-4" class="toc-topic">Topic 4 — Deploying</a>
+<a href="#t4-1-requirements-txt-what-the-cloud-needs-to-install" class="toc-sub">1. `requirements.txt` — what the cloud needs to install</a>
+<a href="#t4-2-gitignore-the-last-check-before-every-commit-from-here" class="toc-sub">2. `.gitignore` — the last check before every commit from here</a>
+<a href="#t4-3-a-pre-flight-check-script-catching-mistakes-before-streamlit-cloud-does" class="toc-sub">3. A pre-flight check script — catching mistakes before Streamlit Cloud does</a>
+<a href="#t4-4-the-real-deployment-steps" class="toc-sub">4. The real deployment steps</a>
+<a href="#t4-topic-4-challenge" class="toc-sub">Topic 4 Challenge</a>
+<a href="#t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t4-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t4-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
-    <header>
+    <header class="page-head">
       <div class="breadcrumb">CST1510</div>
-      <h1>Week 12 — Intelligence (Optional) and Deployment</h1>
-      <p class="lede">This final week tests, deploys and finishes the project. Deployment is required; the AI feature is optional.</p>
-      <p class="box-note">Box we build this week: <b>PROCESS, intelligent (optional) — and shipped</b>.</p>
-      <div class="callout">
-        <p>Students should use this page as a guide, then do the real testing, deployment and optional API work from the downloaded week folder.</p>
+      <h1 class="page-title">Week 12 — Intelligence (Optional) and Deployment</h1>
+      <p class="lede">By the end of this week you can load an API key safely, and make a feature degrade gracefully without one, call the ChatGPT API — messages, roles, and why conversation history has to be resent, and write basic <code>pytest</code> tests for the pure-function parts of your project.</p>
+      <p class="box-note">Box we build this week: <b><code>PROCESS, intelligent (optional) — and shipped</code> — see <code>../system_diagram.md</code></b></p>
+      <div class="study-note">This reading view combines the week's walkthrough notebooks into one page so students can follow the theory in order, even outside Jupyter.</div>
+      <div class="summary-grid">
+        <div class="summary-card"><div class="k">Topic 1</div><div class="v">API Keys, Reviewed</div></div>
+<div class="summary-card"><div class="k">Topic 2</div><div class="v">Calling the ChatGPT API</div></div>
+<div class="summary-card"><div class="k">Topic 3</div><div class="v">Testing Your App</div></div>
+<div class="summary-card"><div class="k">Topic 4</div><div class="v">Deploying</div></div>
+      </div>
+      <div class="outcomes">
+        <div class="outcome">Load an API key safely, and make a feature degrade gracefully without one</div><div class="outcome">Call the ChatGPT API — messages, roles, and why conversation history has to be resent</div><div class="outcome">Write basic <code>pytest</code> tests for the pure-function parts of your project</div><div class="outcome">Test code that calls an external API, without actually calling it, using a mock</div><div class="outcome">Write a <code>requirements.txt</code> and <code>.gitignore</code> that are actually correct</div><div class="outcome">Deploy a working app to a public URL</div>
       </div>
     </header>
 
-    <section id="overview">
-      <h2 class="section-title">Overview</h2>
-      <div class="topic-list">
-      <div class="topic">
-        <span class="n">Topic 1</span>
-        <span class="t">API Keys, Reviewed</span>
-        <p>Load an API key safely and make a feature degrade gracefully when no key is available.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 2</span>
-        <span class="t">Calling the ChatGPT API</span>
-        <p>Understand the shape of a real API call and the role of messages and history.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 3</span>
-        <span class="t">Testing Your App</span>
-        <p>Write `pytest` tests and mock external calls rather than hitting real services every run.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 4</span>
-        <span class="t">Deploying</span>
-        <p>Package the app correctly and publish it at a public URL.</p>
-      </div>
-      </div>
-    </section>
+    <figure class="week-map"><svg viewBox="0 0 920 220" role="img" aria-label="From local app to deployed AI app" style="width:100%;height:auto;display:block;"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#b8a88e" flood-opacity="0.35"/></filter></defs><rect x="22" y="18" width="220" height="48" rx="18" fill="#fffaf2" stroke="#d8d0c2"/><text x="40" y="38" fill="#59554d" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="40" y="56" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif">PROCESS, intelligent (optional) — and shipped — see ../system_diagram.md</text><line x1="166.0" y1="142" x2="232.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="230.0,142 221.0,137 221.0,147" fill="#8a3b12"/><rect x="-16.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="0.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">API Keys, Reviewed</tspan></text><line x1="426.0" y1="142" x2="492.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="490.0,142 481.0,137 481.0,147" fill="#8a3b12"/><rect x="244.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#8b7f6b" filter="url(#shadow)"/><text x="260.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="260.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="260.0" dy="0">Calling the ChatGPT</tspan><tspan x="260.0" dy="19">API</tspan></text><line x1="686.0" y1="142" x2="752.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="750.0,142 741.0,137 741.0,147" fill="#8a3b12"/><rect x="504.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="520.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="520.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="520.0" dy="0">Testing Your App</tspan></text><rect x="764.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#355c5a" filter="url(#shadow)"/><text x="780.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="780.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="780.0" dy="0">Deploying</tspan></text></svg><figcaption><b>From local app to deployed AI app</b>. Week 12 connects keys, model calls, testing, and deployment into one final production-minded picture.</figcaption></figure>
 
-    <section id="outcomes">
-      <h2 class="section-title">By The End Of This Week</h2>
-      <ol class="tight">
-      <li>Load an API key safely and make a feature degrade gracefully without one.</li>
-      <li>Call the ChatGPT API and explain why conversation history has to be resent.</li>
-      <li>Write basic `pytest` tests for the pure-function parts of a project.</li>
-      <li>Test code that calls an external API by mocking it.</li>
-      <li>Write a `requirements.txt` and `.gitignore` that are actually correct.</li>
-      <li>Deploy a working app to a public URL.</li>
-      </ol>
-    </section>
+    <section class="topic" id="topic-1"><div class="topic-kicker">Topic 1</div><h2 class="topic-title">API Keys, Reviewed</h2><div class="topic-intro"><p><strong>Box we are building: PROCESS, intelligent — optionally</strong></p>
+<p>Week 9's lesson, one more time, for the one secret this whole week revolves
+around — and the pattern that makes a feature genuinely optional.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
+</blockquote>
+</div><section class="section" id="t1-1-loading-the-key-the-same-habit-as-week-9"><h3 class="section-title">1. Loading the key — the same habit as Week 9</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import os
 
-    <section id="workshop">
-      <h2 class="section-title">Workshop — 2 hours</h2>
-      <p>The workshop still shows the finished idea first, then works through the week's topics in smaller parts.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Run the demo</td><td>See the finished project, AI optional, working either way.</td></tr>
-      <tr><td>0:10</td><td>System diagram</td><td>Finish the final `PROCESS` box and ship it.</td></tr>
-      <tr><td>0:20</td><td>Topic 1</td><td>API Keys, Reviewed</td></tr>
-      <tr><td>0:40</td><td>Topic 2</td><td>Calling the ChatGPT API</td></tr>
-      <tr><td>1:00</td><td>Break</td><td></td></tr>
-      <tr><td>1:10</td><td>Topic 3</td><td>Testing Your App</td></tr>
-      <tr><td>1:30</td><td>Topic 4</td><td>Deploying</td></tr>
-      <tr><td>1:50</td><td>Brief the project</td><td>Final push.</td></tr>
-      </table>
-    </section>
+api_key = os.environ.get("OPENAI_API_KEY")
+print("set" if api_key else "not set")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Check whether <code>OPENAI_API_KEY</code> is set in your own terminal, without printing the value itself.</p>
+</aside></div></section><section class="section" id="t1-2-two-different-responses-to-a-missing-key"><h3 class="section-title">2. Two different responses to a missing key</h3><div class="section-body"><p>Sometimes you want a clear, loud error. Sometimes you want the feature to
+just quietly not appear. Both are correct — depending on what the feature is.</p>
 
-    <section id="lab">
-      <h2 class="section-title">Lab — 3 hours</h2>
-      <p>The lab notebook runs the session in order. Use the downloaded weekly folder for the actual code, files and notebook work.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Warm-up</td><td>Fix 3 deliberately broken files in `LAB/warmup/`.</td></tr>
-      <tr><td>0:15</td><td>Drills</td><td>7 tasks across Threshold / Typical / Excellent.</td></tr>
-      <tr><td>1:15</td><td>Break</td><td></td></tr>
-      <tr><td>1:25</td><td>Project</td><td>Test it, ship it, and optionally make it smarter.</td></tr>
-      <tr><td>2:40</td><td>Wrap</td><td>Demo to a neighbour, then commit and push final progress.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def require_key():
+    """Raise a clear error if the key is missing - use when the feature MUST have it."""
+    key = os.environ.get("OPENAI_API_KEY")
+    if key is None:
+        raise RuntimeError("OPENAI_API_KEY is not set.")
+    return key
 
-    <section id="materials">
-      <h2 class="section-title">Materials At A Glance</h2>
-      <table>
-        <tr><th>Material</th><th>What it is for</th></tr>
-      <tr><td>`DEMO/ops_console.py`</td><td>The workshop demonstration.</td></tr>
-      <tr><td>`01` to `04` topic folders</td><td>Walkthrough notebooks plus examples.</td></tr>
-      <tr><td>`LAB/W12_Lab.ipynb`</td><td>Warm-up, drills and final project push.</td></tr>
-      </table>
-    </section>
+def optional_key():
+    """Return None if missing - use when the feature can just be skipped."""
+    return os.environ.get("OPENAI_API_KEY")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Explain, in your own words, when you would reach for <code>require_key()</code> versus <code>optional_key()</code>.</p>
+</aside></div></section><section class="section" id="t1-3-making-a-feature-optional-end-to-end"><h3 class="section-title">3. Making a feature optional, end to end</h3><div class="section-body"><p>The required part of the app never depends on the optional part succeeding.</p>
 
-    <section id="threads">
-      <h2 class="section-title">Threaded Skills</h2>
-      <table>
-        <tr><th>Thread</th><th>This week</th></tr>
-      <tr><td>Git</td><td>Twelfth and final commit and push.</td></tr>
-      <tr><td>Debugging</td><td>`AuthenticationError`, `OpenAIError` from a missing key, `AssertionError` from a real failing test.</td></tr>
-      <tr><td>Domains</td><td>The finished project should be tested and live at a real URL.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def get_ai_summary(text):
+    """Return a summary, or None if no key is set - never crashes."""
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if api_key is None:
+        return None
+    return f"(a real summary would go here for: {text[:20]}...)"
 
-    <section id="assessment">
-      <h2 class="section-title">Assessment Note</h2>
-      <div class="grid">
-        <div class="card">
-          <h2>What to remember</h2>
-          <p>Use the shared CW2 specification on Moodle for the final submission rules. Deployment is required; the AI feature is optional.</p>
-        </div>
-        <div class="card">
-          <h2>Student workflow</h2>
-          <p>Open the week's folder in VS Code, start with <code>README.md</code>, complete the lab, then commit and push.</p>
-        </div>
-        <div class="card">
-          <h2>Where the real work happens</h2>
-          <p>This public page is a guide only. The coding, notebooks, files and project work happen in the downloaded weekly materials.</p>
-        </div>
-      </div>
-    </section>
+def render_report(records):
+    print(f"Checked {len(records)} records.")
+    summary = get_ai_summary(str(records))
+    print(summary if summary else "(AI summary skipped - no key set)")
 
-    <footer>CST1510 · Week 12 · Intelligence (Optional) and Deployment</footer>
+render_report(["srv-01: OK", "srv-02: OVER LIMIT"])</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Run this without <code>OPENAI_API_KEY</code> set and confirm it completes cleanly with the skip message.</p>
+</aside></div></section><section class="section" id="t1-topic-1-challenge"><h3 class="section-title">Topic 1 Challenge</h3><div class="section-body"><p>Write a function that requires a key and raises a clear <code>RuntimeError</code> if it
+is missing, and a second function that wraps it, catches that error, and
+returns <code>None</code> instead — showing both patterns from the same underlying check.</p>
+</div></section><section class="section" id="t1-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>an optional AI-generated dataset summary, dashboard works without it</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>an optional AI incident triage note, alerts still work without it</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>an optional AI-suggested fix, the status page works without it</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t1-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>hard-coding a key &quot;just to test&quot;</td>
+  <td>it is one commit away from a public leak</td>
+  <td><code>os.environ.get()</code>, from the first line you write</td>
+</tr>
+<tr>
+  <td>letting a missing key crash the whole app</td>
+  <td>the required features become unavailable too</td>
+  <td>check for the key, degrade only the optional part</td>
+</tr>
+<tr>
+  <td>printing the key anywhere, even partially, to debug</td>
+  <td>it is now in your terminal history or logs</td>
+  <td>print &quot;set&quot;/&quot;not set&quot;, never the value</td>
+</tr>
+<tr>
+  <td>forgetting the difference between <code>require_key()</code> and <code>optional_key()</code></td>
+  <td>either an unwanted crash, or a silent missing feature nobody notices</td>
+  <td>choose deliberately per feature</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_loading_the_key_safely.py</code> — os.environ, a clear required-key error
+<code>examples/02_making_a_feature_optional.py</code> — the full optional-feature pattern</p>
+</div></section><section class="section" id="t1-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>load a key safely</td>
+  <td><code>os.environ.get(&quot;OPENAI_API_KEY&quot;)</code></td>
+</tr>
+<tr>
+  <td>fail loudly when a feature needs it</td>
+  <td><code>require_key()</code>-style, raising clearly</td>
+</tr>
+<tr>
+  <td>degrade gracefully when it does not</td>
+  <td>return <code>None</code>, check before using it</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 2 — what the key is actually for.</p>
+</div></section></section>
+<section class="topic" id="topic-2"><div class="topic-kicker">Topic 2</div><h2 class="topic-title">Calling the ChatGPT API</h2><div class="topic-intro"><p><strong>Box we are building: PROCESS, intelligent</strong></p>
+<p>Needs a real key to actually call OpenAI — the shape below is correct and
+current either way, and every cell here can be read and understood without one.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t2-1-the-client-and-one-call"><h3 class="section-title">1. The client, and one call</h3><div class="section-body"><p><code>messages</code> is a list of <code>{&quot;role&quot;: ..., &quot;content&quot;: ...}</code> dicts. <code>&quot;system&quot;</code>
+sets the assistant's behaviour, <code>&quot;user&quot;</code> is the actual question.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code># from openai import OpenAI
+# client = OpenAI(api_key=api_key)
+#
+# response = client.chat.completions.create(
+#     model="gpt-4o-mini",
+#     messages=[
+#         {"role": "system", "content": "You are a concise ops assistant."},
+#         {"role": "user", "content": "Summarise: 2 of 5 repos are over limit."},
+#     ],
+# )
+# print(response.choices[0].message.content)
+print("the shape above is exactly what examples/01 runs, with a real key")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>If you have a key, run <code>examples/01_the_chat_completions_api.py</code> for real and read the reply.</p>
+</aside></div></section><section class="section" id="t2-2-the-reply-s-exact-shape"><h3 class="section-title">2. The reply's exact shape</h3><div class="section-body"><p><code>response.choices[0].message.content</code> — this path is the same every time,
+worth knowing by heart rather than looking up each time.</p>
+
+<aside class="practice"><span class="label">Your turn</span><p>Explain, in your own words, why the reply is nested inside <code>choices[0]</code> rather than being the response itself — hint: an API designed to sometimes return more than one candidate answer.</p>
+</aside></div></section><section class="section" id="t2-3-the-api-is-stateless-history-has-to-be-resent-every-time"><h3 class="section-title">3. The API is stateless — history has to be resent every time</h3><div class="section-body"><p>Nothing is remembered between calls unless YOU send the whole conversation
+back.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>messages = [{"role": "system", "content": "You are a concise ops assistant."}]
+
+def ask(client, user_text):
+    messages.append({"role": "user", "content": user_text})
+    response = client.chat.completions.create(model="gpt-4o-mini", messages=messages)
+    reply = response.choices[0].message.content
+    messages.append({"role": "assistant", "content": reply})   # &lt;- this line IS the memory
+    return reply</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Explain, in one sentence, what a second call to <code>ask()</code> would be missing if the <code>messages.append()</code> for the assistant's reply were deleted.</p>
+</aside></div></section><section class="section" id="t2-4-verifying-the-calling-code-without-a-real-key-mocking-previewed"><h3 class="section-title">4. Verifying the calling code without a real key — mocking, previewed</h3><div class="section-body"><p>Topic 3 teaches this properly. Here is the idea: a fake client that behaves
+like the real one, so you can check YOUR code is right without a network call.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>from unittest.mock import MagicMock
+
+fake_client = MagicMock()
+fake_client.chat.completions.create.return_value.choices = [
+    MagicMock(message=MagicMock(content="4"))
+]
+
+reply = ask(fake_client, "what is 2+2?")
+print(reply)          # "4" - from the fake, not a real call
+print(messages)         # still updated correctly</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Change the fake reply to something else and confirm <code>ask()</code> still works correctly with it.</p>
+</aside></div></section><section class="section" id="t2-topic-2-challenge"><h3 class="section-title">Topic 2 Challenge</h3><div class="section-body"><p>Write a function that takes a list of repo statuses and returns a one-line
+prompt asking for a plain-English summary — then, if you have a key, call it
+for real.</p>
+</div></section><section class="section" id="t2-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>asking for a plain-English summary of a dataset's quality issues</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>asking for a plain-English explanation of a suspicious log line</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>asking for a suggested next step given a service's current status</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t2-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>an invalid or fake key</td>
+  <td><code>openai.AuthenticationError</code></td>
+  <td>use a real key, or check <code>os.environ.get()</code> first</td>
+</tr>
+<tr>
+  <td>no key set at all, and no check for it</td>
+  <td><code>openai.OpenAIError: Missing credentials</code></td>
+  <td>check for the key before constructing the client</td>
+</tr>
+<tr>
+  <td>forgetting to append the assistant's reply to <code>messages</code></td>
+  <td>the next call has no memory of this one</td>
+  <td>always append both the user message and the reply</td>
+</tr>
+<tr>
+  <td>assuming every call is free</td>
+  <td>real cost per request, in production</td>
+  <td>use <code>gpt-4o-mini</code> while developing, set a spending limit</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_the_chat_completions_api.py</code> — the client, messages, roles, the reply's shape
+<code>examples/02_conversation_history.py</code> — why and how history is resent every call
+Docs: <a href="%7BOPENAI_DOCS%7D">OpenAI Chat Completions API</a></p>
+</div></section><section class="section" id="t2-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>call the API</td>
+  <td><code>client.chat.completions.create(model=..., messages=...)</code></td>
+</tr>
+<tr>
+  <td>read the reply</td>
+  <td><code>response.choices[0].message.content</code></td>
+</tr>
+<tr>
+  <td>keep a conversation going</td>
+  <td>append both sides to <code>messages</code>, every turn</td>
+</tr>
+<tr>
+  <td>verify your code without a key</td>
+  <td>mocking, <code>unittest.mock.MagicMock</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 3 — testing this, and everything else, properly.</p>
+</div></section></section>
+<section class="topic" id="topic-3"><div class="topic-kicker">Topic 3</div><h2 class="topic-title">Testing Your App</h2><div class="topic-intro"><p><strong>Box we are building: confidence, before you ship</strong></p>
+<p>The pure-function parts of your project can be tested directly. The parts
+that touch a network can be tested too — without actually touching it.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t3-1-a-pytest-test-is-a-function-starting-with-test"><h3 class="section-title">1. A pytest test is a function starting with `test_`</h3><div class="section-body"><p><code>assert</code> checks something is true — if not, the test fails and tells you
+exactly what happened.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def status_of(open_issues, warning_at=50, limit=100):
+    if open_issues &gt;= limit:
+        return "OVER LIMIT"
+    elif open_issues &gt;= warning_at:
+        return "WARNING"
+    else:
+        return "OK"
+
+def test_status_over_limit():
+    assert status_of(150) == "OVER LIMIT"
+
+test_status_over_limit()
+print("passed")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Write <code>test_status_ok()</code> and <code>test_status_warning()</code> for the function above.</p>
+</aside></div></section><section class="section" id="t3-2-test-the-edges-not-just-the-middle"><h3 class="section-title">2. Test the edges, not just the middle</h3><div class="section-body"><p>This is where real bugs hide — the exact boundary between two branches.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def test_status_exactly_at_limit():
+    assert status_of(100) == "OVER LIMIT"   # &gt;= , not &gt;
+
+def test_status_just_below_warning():
+    assert status_of(49) == "OK"
+
+test_status_exactly_at_limit()
+test_status_just_below_warning()
+print("both passed")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Write a test for <code>status_of</code> at exactly the warning boundary (50).</p>
+</aside></div></section><section class="section" id="t3-3-testing-code-that-calls-something-external-with-a-mock"><h3 class="section-title">3. Testing code that calls something external — with a mock</h3><div class="section-body"><p><code>MagicMock</code> stands in for a real client. You decide exactly what it
+&quot;returns&quot; — no network, no key, no cost, no flakiness.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>from unittest.mock import MagicMock
+
+def ask(client, messages, user_text):
+    messages.append({"role": "user", "content": user_text})
+    response = client.chat.completions.create(model="gpt-4o-mini", messages=messages)
+    reply = response.choices[0].message.content
+    messages.append({"role": "assistant", "content": reply})
+    return reply
+
+def test_ask_returns_mocked_reply():
+    client = MagicMock()
+    client.chat.completions.create.return_value.choices = [MagicMock(message=MagicMock(content="4"))]
+    assert ask(client, [], "2+2?") == "4"
+
+test_ask_returns_mocked_reply()
+print("passed, no real API call made")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Write a test confirming <code>ask()</code> appends exactly 2 new items to <code>messages</code>, regardless of the reply's text.</p>
+</aside></div></section><section class="section" id="t3-4-running-with-the-real-pytest-command"><h3 class="section-title">4. Running with the real `pytest` command</h3><div class="section-body"><p><code>pytest filename.py</code> finds every <code>test_</code> function automatically and reports
+pass/fail for each, with the exact line that failed.</p>
+
+<aside class="practice"><span class="label">Your turn</span><p>Run <code>pytest examples/01_pytest_basics.py -v</code> in a terminal and read the output.</p>
+</aside></div></section><section class="section" id="t3-topic-3-challenge"><h3 class="section-title">Topic 3 Challenge</h3><div class="section-body"><p>Write at least 3 tests for a <code>parse_line</code>-style function from your own
+project (Week 7/8), including at least one edge case.</p>
+</div></section><section class="section" id="t3-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>testing a cleaning function against known messy input</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>testing a severity classifier against known edge-case incidents</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>testing <code>status_of</code> against every documented threshold</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t3-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>only testing the &quot;happy path&quot;</td>
+  <td>bugs hide at the exact boundaries</td>
+  <td>test the edges: exactly at each threshold</td>
+</tr>
+<tr>
+  <td>calling a real, paid API inside a test</td>
+  <td>slow, costs money, fails when the network is down</td>
+  <td>mock the client instead</td>
+</tr>
+<tr>
+  <td>a test with no <code>assert</code> at all</td>
+  <td>it &quot;passes&quot; without checking anything</td>
+  <td>every test needs at least one real assertion</td>
+</tr>
+<tr>
+  <td>one giant test checking everything</td>
+  <td>a failure does not tell you which part broke</td>
+  <td>one focused thing per test function</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_pytest_basics.py</code> — test functions, edges, a tiny runner without pytest
+<code>examples/02_testing_without_the_real_network.py</code> — mocking an external call properly
+Docs: <a href="%7BPYTEST_DOCS%7D">pytest documentation</a></p>
+</div></section><section class="section" id="t3-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>write a test</td>
+  <td>a function named <code>test_...</code>, with <code>assert</code></td>
+</tr>
+<tr>
+  <td>test the boundaries, not just the middle</td>
+  <td>exact threshold values</td>
+</tr>
+<tr>
+  <td>test code that calls something external</td>
+  <td><code>unittest.mock.MagicMock</code></td>
+</tr>
+<tr>
+  <td>run every test at once</td>
+  <td><code>pytest filename.py</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 4 — shipping it.</p>
+</div></section></section>
+<section class="topic" id="topic-4"><div class="topic-kicker">Topic 4</div><h2 class="topic-title">Deploying</h2><div class="topic-intro"><p><strong>Box we are building: shipped</strong></p>
+<p>The last step. A working app on your machine is not the same thing as a
+working app someone else can open.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t4-1-requirements-txt-what-the-cloud-needs-to-install"><h3 class="section-title">1. `requirements.txt` — what the cloud needs to install</h3><div class="section-body"><p>Without this, the deployed app fails to even start.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>REQUIREMENTS = ["streamlit", "pandas", "requests", "bcrypt", "openai"]
+for lib in REQUIREMENTS:
+    print(lib)</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Write <code>requirements.txt</code> for your own project, listing every library you actually import.</p>
+</aside></div></section><section class="section" id="t4-2-gitignore-the-last-check-before-every-commit-from-here"><h3 class="section-title">2. `.gitignore` — the last check before every commit from here</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>GITIGNORE = ["*.db", ".streamlit/secrets.toml", "__pycache__/", ".pytest_cache/"]
+for pattern in GITIGNORE:
+    print(pattern)</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Check your own project's <code>.gitignore</code> against this list.</p>
+</aside></div></section><section class="section" id="t4-3-a-pre-flight-check-script-catching-mistakes-before-streamlit-cloud-does"><h3 class="section-title">3. A pre-flight check script — catching mistakes before Streamlit Cloud does</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import os
+
+def check_requirements_txt(project_dir):
+    path = os.path.join(project_dir, "requirements.txt")
+    return os.path.exists(path) and os.path.getsize(path) &gt; 0
+
+print(check_requirements_txt("."))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Run <code>examples/02_a_preflight_check_script.py</code> against your own <code>project/</code> folder.</p>
+</aside></div></section><section class="section" id="t4-4-the-real-deployment-steps"><h3 class="section-title">4. The real deployment steps</h3><div class="section-body"><p>Push to GitHub → <code>requirements.txt</code> and <code>.gitignore</code> correct → connect the
+repo on <code>share.streamlit.io</code> → paste secrets into the Cloud dashboard, never
+into a file → test the public URL in a browser you are not logged into.</p>
+
+<aside class="practice"><span class="label">Your turn</span><p>Write your own final checklist: 3 things you will check on the deployed URL before calling it done.</p>
+</aside></div></section><section class="section" id="t4-topic-4-challenge"><h3 class="section-title">Topic 4 Challenge</h3><div class="section-body"><p>Run the pre-flight script against your real project. Fix every <code>FAIL</code> it
+reports. Then deploy, if you are ready to.</p>
+</div></section><section class="section" id="t4-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>a dataset console anyone on the team can open and use</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>an incident console reachable by whoever is on call</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>a status dashboard live for the whole team, not just your laptop</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t4-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>deploying without testing on a fresh clone first</td>
+  <td>it worked locally, fails in the cloud</td>
+  <td>clone into a fresh folder, test from there before deploying</td>
+</tr>
+<tr>
+  <td>a <code>.db</code> file committed before <code>.gitignore</code> caught it</td>
+  <td>real hashed passwords are now in your public history</td>
+  <td>remove and revoke; <code>.gitignore</code> alone does not fix an already-committed file</td>
+</tr>
+<tr>
+  <td>secrets pasted into a file instead of the Cloud dashboard</td>
+  <td>leaked the moment the repo is public</td>
+  <td><code>st.secrets</code> locally, the Cloud Secrets panel once deployed</td>
+</tr>
+<tr>
+  <td>assuming &quot;it works on my machine&quot; is enough</td>
+  <td>a stranger's fresh clone fails</td>
+  <td>the pre-flight checklist exists exactly for this gap</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_the_deployment_checklist.py</code> — requirements.txt, .gitignore, the real steps
+<code>examples/02_a_preflight_check_script.py</code> — a real, runnable readiness check</p>
+</div></section><section class="section" id="t4-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>tell the cloud what to install</td>
+  <td><code>requirements.txt</code></td>
+</tr>
+<tr>
+  <td>keep secrets and data out of the repo</td>
+  <td><code>.gitignore</code>, checked before every commit</td>
+</tr>
+<tr>
+  <td>catch mistakes before deploying</td>
+  <td>a pre-flight check script</td>
+</tr>
+<tr>
+  <td>ship it</td>
+  <td>GitHub + <code>share.streamlit.io</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>You now have all twelve weeks' toolkit.</strong> Test it, ship it, and — if you
+want to — make it a little smarter. Nothing about any of it resets.</p>
+</div></section></section>
+
+    <footer class="page-foot">Built from the walkthrough notebooks for this week.</footer>
   </article>
 </div>
+<script>
+const links = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+const sections = links
+  .map(link => document.querySelector(link.getAttribute('href')))
+  .filter(Boolean);
+
+function setCurrentLink() {
+  const offset = window.scrollY + 120;
+  let current = sections[0];
+  for (const section of sections) {
+    if (section.offsetTop <= offset) current = section;
+  }
+  links.forEach(link => {
+    link.classList.toggle('current', current && link.getAttribute('href') === '#' + current.id);
+  });
+}
+
+setCurrentLink();
+window.addEventListener('scroll', setCurrentLink, { passive: true });
+</script>
 </body>
 </html>

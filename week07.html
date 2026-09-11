@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,204 +7,1036 @@
 <title>Week 7 — Strings and Text Manipulation</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-
   :root {
-    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
-    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823; --card: #FFFDF8;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-      --card: #1D1F21;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-    --card: #1D1F21;
+    --paper: #faf7f0;
+    --paper-2: #f2ede0;
+    --card: #fffdfa;
+    --ink: #1b1a17;
+    --ink-soft: #59554d;
+    --rule: #d8d0c2;
+    --rule-strong: #8b7f6b;
+    --accent: #8a3b12;
+    --accent-soft: #e5c6a6;
+    --accent-2: #355c5a;
+    --code-bg: #f3efe7;
+    --code-ink: #2d2a25;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-size: 17px; }
-  code, pre { font-family: "IBM Plex Mono", ui-monospace, monospace; }
-  a { color: var(--accent); }
-  .shell { max-width: 1040px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 38px; align-items: start; }
-  nav.toc { position: sticky; top: 28px; display: flex; flex-direction: column; gap: 8px; max-height: calc(100vh - 56px); overflow-y: auto; padding-top: 4px; }
-  nav.toc .label { font-variant: small-caps; letter-spacing: .04em; font-size: 13px; color: var(--ink-soft); margin-bottom: 4px; }
-  nav.toc a { color: var(--ink-soft); text-decoration: none; line-height: 1.45; font-size: 13.5px; }
-  nav.toc a.topic { color: var(--ink); font-weight: 700; margin-top: 8px; }
-  nav.toc a.topic:first-of-type { margin-top: 0; }
-  nav.toc a:hover { color: var(--accent); }
-  article { min-width: 0; }
-  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
-  h1 { margin: 0 0 10px; font-size: 2.15rem; font-weight: 700; letter-spacing: -.01em; }
-  .lede { margin: 0 0 12px; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
-  .box-note { margin: 14px 0 0; font-size: 14.5px; color: var(--ink-soft); }
-  .box-note b { color: var(--ink); font-weight: 600; }
-  .callout { max-width: 68ch; border-left: 2px solid var(--rule-strong); padding: 4px 0 4px 18px; margin: 24px 0; }
-  .callout p { margin: 0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 900px; margin: 26px 0 34px; }
-  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 18px; }
-  .card h2 { margin: 0 0 10px; font-size: 1.06rem; }
-  .card p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
-  section { margin: 0 0 44px; padding-top: 34px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
-  section:first-of-type { border-top: none; padding-top: 0; }
-  h2.section-title { margin: 0 0 18px; font-size: 1.45rem; letter-spacing: -.01em; }
-  p { line-height: 1.68; color: var(--ink); max-width: 68ch; margin: 0 0 16px; }
-  ul.tight, ol.tight { margin: 8px 0 0 20px; padding: 0; max-width: 68ch; }
-  ul.tight li, ol.tight li { line-height: 1.62; margin-bottom: 7px; }
-  table { border-collapse: collapse; margin: 18px 0; max-width: 860px; width: 100%; font-size: 14.5px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
-  th, td { text-align: left; padding: 8px 14px 8px 0; vertical-align: top; }
-  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; border-bottom: 1px solid var(--ink-soft); }
-  td code, p code, li code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
-  .topic-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; max-width: 900px; }
-  .topic { border-top: 1px solid var(--rule); padding-top: 12px; }
-  .topic .n { font-variant: small-caps; color: var(--ink-soft); font-size: 13px; letter-spacing: .04em; display: block; margin-bottom: 5px; }
-  .topic .t { font-weight: 700; display: block; margin-bottom: 5px; }
-  .muted { color: var(--ink-soft); }
-  footer { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
-  @media (max-width: 860px) {
-    .shell { grid-template-columns: 1fr; }
-    nav.toc { position: static; max-height: none; display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 16px; }
-    nav.toc a { font-size: 13px; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at top left, rgba(229, 198, 166, 0.36), transparent 24%),
+      linear-gradient(180deg, #fbf8f1 0%, var(--paper) 34%, #f8f4eb 100%);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-size: 17px;
   }
-
+  code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  a { color: inherit; }
+  .shell {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 44px 28px 96px;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    border: 1px solid var(--rule);
+    background: rgba(255, 253, 250, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 18px;
+    padding: 18px 16px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+  }
+  .toc-label {
+    display: block;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .toc a {
+    display: block;
+    text-decoration: none;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    padding: 4px 0;
+  }
+  .toc a:hover,
+  .toc a.current { color: var(--accent); }
+  .toc a.toc-topic {
+    color: var(--ink);
+    font-weight: 700;
+    margin-top: 12px;
+    font-size: 13.5px;
+  }
+  .toc a.toc-topic:first-of-type { margin-top: 0; }
+  .toc a.toc-sub {
+    padding-left: 12px;
+    font-size: 12.5px;
+  }
+  article { min-width: 0; }
+  .page-head {
+    position: relative;
+    margin-bottom: 34px;
+    padding: 26px 28px 28px;
+    background: linear-gradient(145deg, rgba(255,253,250,.94), rgba(248,242,232,.92));
+    border: 1px solid var(--rule);
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  .page-head::after {
+    content: "";
+    position: absolute;
+    inset: auto -30px -34px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(229,198,166,.68), rgba(229,198,166,0));
+    pointer-events: none;
+  }
+  .breadcrumb {
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  h1.page-title {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+  }
+  .lede {
+    margin: 0 0 14px;
+    max-width: 65ch;
+    color: var(--ink-soft);
+    font-size: 1.06rem;
+    line-height: 1.65;
+    font-style: italic;
+  }
+  .box-note {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+  }
+  .box-note b { color: var(--ink); }
+  .box-note code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 999px;
+    color: var(--code-ink);
+  }
+  .study-note {
+    margin-top: 16px;
+    max-width: 70ch;
+    padding: 12px 14px;
+    border-left: 3px solid var(--accent);
+    background: rgba(229, 198, 166, 0.14);
+    color: var(--ink-soft);
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 22px 0 8px;
+  }
+  .summary-card {
+    padding: 14px 14px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background: rgba(255,255,255,.6);
+  }
+  .summary-card .k {
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  .summary-card .v {
+    margin-top: 8px;
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+  .outcomes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin: 20px 0 0;
+  }
+  .outcome {
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: rgba(255,253,250,.76);
+    line-height: 1.45;
+    color: var(--ink);
+    font-size: .97rem;
+  }
+  figure.week-map {
+    margin: 30px 0 34px;
+    padding: 18px 18px 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(248,242,232,.75));
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+  }
+  figure.week-map figcaption {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .topic {
+    margin-bottom: 42px;
+    padding: 28px 28px 10px;
+    background: rgba(255,253,250,.78);
+    border: 1px solid var(--rule);
+    border-radius: 26px;
+    scroll-margin-top: 24px;
+  }
+  .topic-kicker {
+    font-variant: small-caps;
+    letter-spacing: .08em;
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  h2.topic-title {
+    margin: 0 0 12px;
+    font-size: clamp(1.55rem, 2.2vw, 2rem);
+    line-height: 1.12;
+    letter-spacing: -.015em;
+  }
+  .topic-intro {
+    max-width: 70ch;
+    color: var(--ink-soft);
+  }
+  .topic-intro p:last-child { margin-bottom: 0; }
+  .section {
+    padding-top: 26px;
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 24px;
+  }
+  .section:first-of-type {
+    margin-top: 24px;
+  }
+  h3.section-title {
+    margin: 0 0 14px;
+    font-size: 1.18rem;
+    line-height: 1.25;
+  }
+  p, li {
+    line-height: 1.7;
+    max-width: 70ch;
+    text-wrap: pretty;
+  }
+  p {
+    margin: 0 0 14px;
+  }
+  ul, ol {
+    margin: 10px 0 16px;
+    padding-left: 22px;
+  }
+  li {
+    margin-bottom: 5px;
+  }
+  blockquote {
+    margin: 18px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--accent-soft);
+    color: var(--ink-soft);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 78ch;
+    margin: 18px 0;
+    font-size: 14.5px;
+  }
+  table.booktabs {
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 12px 8px 0;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  th {
+    border-bottom: 1px solid var(--rule-strong);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .04em;
+    font-size: 13px;
+  }
+  code {
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--code-ink);
+    font-size: .9em;
+  }
+  .practice {
+    margin: 18px 0;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(138,59,18,.18);
+    background: linear-gradient(180deg, rgba(229,198,166,.22), rgba(255,253,250,.7));
+    max-width: 78ch;
+  }
+  .practice .label {
+    display: block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .practice p:last-child { margin-bottom: 0; }
+  .cell {
+    margin: 18px 0;
+    max-width: 82ch;
+  }
+  .cell-label,
+  .diagram-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  pre.code,
+  .md-code {
+    margin: 0;
+    padding: 14px 16px;
+    overflow-x: auto;
+    white-space: pre;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    line-height: 1.58;
+    font-size: 13.5px;
+  }
+  .output {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-left: 3px solid var(--rule-strong);
+    background: rgba(255,255,255,.54);
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    max-width: 78ch;
+  }
+  .output pre {
+    margin: 8px 0 0;
+    white-space: pre-wrap;
+    color: var(--ink);
+  }
+  .diagram-card {
+    margin: 18px 0;
+    max-width: 82ch;
+    padding: 14px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.72), rgba(243,239,231,.88)),
+      repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 24px,
+        rgba(216, 208, 194, 0.22) 24px,
+        rgba(216, 208, 194, 0.22) 25px
+      );
+  }
+  .diagram-card pre {
+    margin: 0;
+    white-space: pre;
+    overflow-x: auto;
+    color: var(--code-ink);
+    line-height: 1.6;
+    font-size: 13px;
+  }
+  .section-body h4,
+  .section-body h5 {
+    margin: 18px 0 8px;
+    font-size: 1rem;
+  }
+  .page-foot {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    font-size: 13px;
+  }
+  @media (max-width: 940px) {
+    .shell {
+      grid-template-columns: 1fr;
+      padding-inline: 18px;
+    }
+    .toc {
+      position: static;
+      max-height: none;
+    }
+  }
 </style>
 </head>
 <body>
 <div class="shell">
-  <nav class="toc">
-    <span class="label">Contents</span>
-    <a class="topic" href="#overview">Overview</a>
-    <a href="#outcomes">By The End</a>
-    <a href="#workshop">Workshop</a>
-    <a href="#lab">Lab</a>
-    <a href="#materials">Materials</a>
-    <a href="#threads">Threaded Skills</a>
-    <a href="#assessment">Assessment</a>
+  <nav class="toc" id="toc">
+    <span class="toc-label">Contents</span>
+    <a href="#topic-1" class="toc-topic">Topic 1 — Case and Whitespace</a>
+<a href="#t1-1-the-problem-case-creates" class="toc-sub">1. The problem case creates</a>
+<a href="#t1-2-upper-lower-title" class="toc-sub">2. `.upper()`, `.lower()`, `.title()`</a>
+<a href="#t1-3-strip-the-single-most-important-cleaning-step" class="toc-sub">3. `.strip()` — the single most important cleaning step</a>
+<a href="#t1-4-lstrip-rstrip-and-chaining" class="toc-sub">4. `.lstrip()`, `.rstrip()`, and chaining</a>
+<a href="#t1-topic-1-challenge" class="toc-sub">Topic 1 Challenge</a>
+<a href="#t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t1-recap" class="toc-sub">Recap</a>
+<a href="#topic-2" class="toc-topic">Topic 2 — Searching and Replacing</a>
+<a href="#t2-1-in-does-this-substring-appear" class="toc-sub">1. `in` — does this substring appear?</a>
+<a href="#t2-2-find-where-not-just-whether" class="toc-sub">2. `.find()` — WHERE, not just whether</a>
+<a href="#t2-3-replace-swap-every-occurrence" class="toc-sub">3. `.replace()` — swap every occurrence</a>
+<a href="#t2-4-startswith-endswith-count" class="toc-sub">4. `.startswith()`, `.endswith()`, `.count()`</a>
+<a href="#t2-topic-2-challenge" class="toc-sub">Topic 2 Challenge</a>
+<a href="#t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t2-recap" class="toc-sub">Recap</a>
+<a href="#topic-3" class="toc-topic">Topic 3 — Splitting, Joining and Building Strings</a>
+<a href="#t3-1-split-with-no-argument" class="toc-sub">1. `.split()` with no argument</a>
+<a href="#t3-2-maxsplit-stop-after-n-splits" class="toc-sub">2. `maxsplit` — stop after N splits</a>
+<a href="#t3-3-join-the-reverse-of-split" class="toc-sub">3. `.join()` — the reverse of split</a>
+<a href="#t3-4-join-needs-strings-and-f-strings-build-clean-output" class="toc-sub">4. `.join()` needs strings, and f-strings build clean output</a>
+<a href="#t3-topic-3-challenge" class="toc-sub">Topic 3 Challenge</a>
+<a href="#t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t3-recap" class="toc-sub">Recap</a>
+<a href="#topic-4" class="toc-topic">Topic 4 — Parsing Real Text</a>
+<a href="#t4-1-the-pipeline-one-step-at-a-time" class="toc-sub">1. The pipeline, one step at a time</a>
+<a href="#t4-2-the-whole-pipeline-as-one-function" class="toc-sub">2. The whole pipeline as one function</a>
+<a href="#t4-3-when-parsing-breaks" class="toc-sub">3. When parsing breaks</a>
+<a href="#t4-topic-4-challenge" class="toc-sub">Topic 4 Challenge</a>
+<a href="#t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t4-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t4-recap" class="toc-sub">Recap</a>
+<a href="#t4-4-parsing-every-line-in-a-file" class="toc-sub">4. Parsing every line in a file</a>
   </nav>
 
   <article>
-    <header>
+    <header class="page-head">
       <div class="breadcrumb">CST1510</div>
-      <h1>Week 7 — Strings and Text Manipulation</h1>
-      <p class="lede">This is the last toolkit week before the module shifts into one continuous project in Week 8.</p>
-      <p class="box-note">Box we build this week: <b>INPUT, deepened</b>.</p>
-      <div class="callout">
-        <p>Use this quick view for the shape of the week. The real coding, notebooks and mini-project still happen in the downloaded folder.</p>
+      <h1 class="page-title">Week 7 — Strings and Text Manipulation</h1>
+      <p class="lede">By the end of this week you can normalise text with <code>.lower()</code>, <code>.upper()</code> and <code>.title()</code>, remove stray whitespace with <code>.strip()</code>, <code>.lstrip()</code> and <code>.rstrip()</code>, and check for and locate substrings with <code>in</code> and <code>.find()</code>.</p>
+      <p class="box-note">Box we build this week: <b><code>INPUT, deepened</code> — see <code>../system_diagram.md</code></b></p>
+      <div class="study-note">This reading view combines the week's walkthrough notebooks into one page so students can follow the theory in order, even outside Jupyter.</div>
+      <div class="summary-grid">
+        <div class="summary-card"><div class="k">Topic 1</div><div class="v">Case and Whitespace</div></div>
+<div class="summary-card"><div class="k">Topic 2</div><div class="v">Searching and Replacing</div></div>
+<div class="summary-card"><div class="k">Topic 3</div><div class="v">Splitting, Joining and Building Strings</div></div>
+<div class="summary-card"><div class="k">Topic 4</div><div class="v">Parsing Real Text</div></div>
+      </div>
+      <div class="outcomes">
+        <div class="outcome">Normalise text with <code>.lower()</code>, <code>.upper()</code> and <code>.title()</code></div><div class="outcome">Remove stray whitespace with <code>.strip()</code>, <code>.lstrip()</code> and <code>.rstrip()</code></div><div class="outcome">Check for and locate substrings with <code>in</code> and <code>.find()</code></div><div class="outcome">Swap text with <code>.replace()</code>, and check edges with <code>.startswith()</code>/<code>.endswith()</code></div><div class="outcome">Split text properly — with no separator, a separator, and a <code>maxsplit</code> limit</div><div class="outcome">Rebuild text with <code>.join()</code> and f-strings</div><div class="outcome">Parse one raw, messy real-world line into a clean dict — and know which</div>
       </div>
     </header>
 
-    <section id="overview">
-      <h2 class="section-title">Overview</h2>
-      <div class="topic-list">
-      <div class="topic">
-        <span class="n">Topic 1</span>
-        <span class="t">Case and Whitespace</span>
-        <p>Normalise raw text before doing anything more ambitious with it.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 2</span>
-        <span class="t">Searching and Replacing</span>
-        <p>Find substrings, replace fragments, and check string edges.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 3</span>
-        <span class="t">Splitting, Joining and Building Strings</span>
-        <p>Break text apart and rebuild it into a cleaner form.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 4</span>
-        <span class="t">Parsing Real Text</span>
-        <p>Turn one messy line into a clean record and recognise the errors when parsing fails.</p>
-      </div>
-      </div>
-    </section>
+    <figure class="week-map"><svg viewBox="0 0 920 220" role="img" aria-label="A text-cleaning pipeline" style="width:100%;height:auto;display:block;"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#b8a88e" flood-opacity="0.35"/></filter></defs><rect x="22" y="18" width="220" height="48" rx="18" fill="#fffaf2" stroke="#d8d0c2"/><text x="40" y="38" fill="#59554d" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="40" y="56" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif">INPUT, deepened — see ../system_diagram.md</text><line x1="166.0" y1="142" x2="232.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="230.0,142 221.0,137 221.0,147" fill="#8a3b12"/><rect x="-16.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="0.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Case and Whitespace</tspan></text><line x1="426.0" y1="142" x2="492.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="490.0,142 481.0,137 481.0,147" fill="#8a3b12"/><rect x="244.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#8b7f6b" filter="url(#shadow)"/><text x="260.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="260.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="260.0" dy="0">Searching and</tspan><tspan x="260.0" dy="19">Replacing</tspan></text><line x1="686.0" y1="142" x2="752.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="750.0,142 741.0,137 741.0,147" fill="#8a3b12"/><rect x="504.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="520.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="520.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="520.0" dy="0">Splitting, Joining</tspan><tspan x="520.0" dy="19">and Building Strings</tspan></text><rect x="764.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#355c5a" filter="url(#shadow)"/><text x="780.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="780.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="780.0" dy="0">Parsing Real Text</tspan></text></svg><figcaption><b>A text-cleaning pipeline</b>. Week 7 treats messy text as something we can clean, search, split, and finally turn into structured data.</figcaption></figure>
 
-    <section id="outcomes">
-      <h2 class="section-title">By The End Of This Week</h2>
-      <ol class="tight">
-      <li>Normalise text with `.lower()`, `.upper()` and `.title()`.</li>
-      <li>Remove stray whitespace with `.strip()`, `.lstrip()` and `.rstrip()`.</li>
-      <li>Check for and locate substrings with `in` and `.find()`.</li>
-      <li>Replace text and check string edges with `.startswith()` / `.endswith()`.</li>
-      <li>Split text with no separator, a separator, and a `maxsplit` limit.</li>
-      <li>Rebuild text with `.join()` and f-strings.</li>
-      <li>Parse one raw, messy real-world line into a clean dict.</li>
-      </ol>
-    </section>
+    <section class="topic" id="topic-1"><div class="topic-kicker">Topic 1</div><h2 class="topic-title">Case and Whitespace</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, properly</strong></p>
+<p>Real text arrives messy. This is the first, cheapest cleaning pass.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
+</blockquote>
+</div><section class="section" id="t1-1-the-problem-case-creates"><h3 class="section-title">1. The problem case creates</h3><div class="section-body"><p><code>&quot;SRV-01&quot; == &quot;srv-01&quot;</code> is <code>False</code> — same server, different text. Nothing about
+Python assumes text means the same thing regardless of case; you have to say so.</p>
 
-    <section id="workshop">
-      <h2 class="section-title">Workshop — 2 hours</h2>
-      <p>The workshop still shows the finished idea first, then works through the week's topics in smaller parts.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Run the demo</td><td>Preview next week's real project with messy text cleaning.</td></tr>
-      <tr><td>0:10</td><td>System diagram</td><td>Deepen `INPUT` and look ahead to CW2.</td></tr>
-      <tr><td>0:20</td><td>Topic 1</td><td>Case and Whitespace</td></tr>
-      <tr><td>0:40</td><td>Topic 2</td><td>Searching and Replacing</td></tr>
-      <tr><td>1:00</td><td>Break</td><td></td></tr>
-      <tr><td>1:10</td><td>Topic 3</td><td>Splitting, Joining and Building Strings</td></tr>
-      <tr><td>1:30</td><td>Topic 4</td><td>Parsing Real Text</td></tr>
-      <tr><td>1:50</td><td>Brief the mini-project</td><td>Preview the lab build.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>hostname_a = "SRV-01"
+hostname_b = "srv-01"
 
-    <section id="lab">
-      <h2 class="section-title">Lab — 3 hours</h2>
-      <p>The lab notebook runs the session in order. Use the downloaded weekly folder for the actual code, files and notebook work.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Warm-up</td><td>Fix 3 deliberately broken files in `LAB/warmup/`.</td></tr>
-      <tr><td>0:15</td><td>Drills</td><td>7 tasks across Threshold / Typical / Excellent.</td></tr>
-      <tr><td>1:15</td><td>Break</td><td></td></tr>
-      <tr><td>1:25</td><td>Mini-project</td><td>`LAB/template.py`, three lanes, three tiers.</td></tr>
-      <tr><td>2:40</td><td>Wrap</td><td>Demo to a neighbour, Box 7 of the Cheat Sheet, then commit and push.</td></tr>
-      </table>
-    </section>
+print(hostname_a == hostname_b)
+print(hostname_a.lower() == hostname_b.lower())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Given <code>ids = [&quot;R-001&quot;, &quot;r-002&quot;, &quot;R-003&quot;]</code>, print all three in lowercase.</p>
+</aside></div></section><section class="section" id="t1-2-upper-lower-title"><h3 class="section-title">2. `.upper()`, `.lower()`, `.title()`</h3><div class="section-body"><p>Each returns a <strong>new</strong> string — strings are locked (Week 4). The original never
+changes.</p>
 
-    <section id="materials">
-      <h2 class="section-title">Materials At A Glance</h2>
-      <table>
-        <tr><th>Material</th><th>What it is for</th></tr>
-      <tr><td>`DEMO/ops_console.py`</td><td>The workshop demonstration.</td></tr>
-      <tr><td>`01` to `04` topic folders</td><td>Walkthrough notebooks plus runnable examples.</td></tr>
-      <tr><td>`LAB/W07_Lab.ipynb`</td><td>Warm-up, drills, mini-project and wrap.</td></tr>
-      <tr><td>`LAB/messy_lines.txt`</td><td>Sample messy text for the drills.</td></tr>
-      <tr><td>`EXTRA_PROJECTS.md`</td><td>Optional extra practice.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>name = "record check console"
+print(name.title())
 
-    <section id="threads">
-      <h2 class="section-title">Threaded Skills</h2>
-      <table>
-        <tr><th>Thread</th><th>This week</th></tr>
-      <tr><td>Git</td><td>Seventh commit and push.</td></tr>
-      <tr><td>Cheat Sheet</td><td>Box 7 photographed and submitted.</td></tr>
-      <tr><td>Debugging</td><td>`ValueError` from unpacking and float conversion, `AttributeError` from calling a method on the wrong type.</td></tr>
-      </table>
-    </section>
+original = "SRV-01"
+print(original.lower())
+print(original)   # unchanged</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Explain in one sentence why <code>original</code> is unchanged after calling <code>.lower()</code> on it.</p>
+</aside></div></section><section class="section" id="t1-3-strip-the-single-most-important-cleaning-step"><h3 class="section-title">3. `.strip()` — the single most important cleaning step</h3><div class="section-body"><p>Removes whitespace from both ends. Real text almost always has some you cannot
+see in <code>print()</code>.</p>
 
-    <section id="assessment">
-      <h2 class="section-title">Assessment Note</h2>
-      <div class="grid">
-        <div class="card">
-          <h2>What to remember</h2>
-          <p>Nothing is marked this week. This is the final CW1 build week before the Week 8 format change.</p>
-        </div>
-        <div class="card">
-          <h2>Student workflow</h2>
-          <p>Open the week's folder in VS Code, start with <code>README.md</code>, complete the lab, then commit and push.</p>
-        </div>
-        <div class="card">
-          <h2>Where the real work happens</h2>
-          <p>This public page is a guide only. The coding, notebooks, files and project work happen in the downloaded weekly materials.</p>
-        </div>
-      </div>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>raw = "  srv-01  "
+print(f"[{raw}]")
+print(f"[{raw.strip()}]")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Given <code>&quot;   R-004   &quot;</code>, print it with the whitespace removed.</p>
+</aside></div></section><section class="section" id="t1-4-lstrip-rstrip-and-chaining"><h3 class="section-title">4. `.lstrip()`, `.rstrip()`, and chaining</h3><div class="section-body"><p>One side only, or a specific character instead of whitespace. Methods chain —
+<code>.strip().lower()</code> runs left to right.</p>
 
-    <footer>CST1510 · Week 7 · Strings and Text Manipulation</footer>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>messy = "***srv-01***"
+print(messy.strip("*"))
+
+field = "  SRV-01  "
+print(field.strip().lower())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Given <code>&quot;///R-004///&quot;</code>, strip just the <code>/</code> characters. Then chain <code>.strip()</code> and <code>.upper()</code> on a value of your own.</p>
+</aside></div></section><section class="section" id="t1-topic-1-challenge"><h3 class="section-title">Topic 1 Challenge</h3><div class="section-body"><p>Given <code>raw = &quot;   SRV-01   &quot;</code>, produce <code>&quot;srv-01&quot;</code> in one line, chaining exactly
+the methods you need and no others.</p>
+</div></section><section class="section" id="t1-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td><code>answer.strip().lower()</code> before comparing survey responses</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td><code>ip.strip()</code> before checking it against a blocklist</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td><code>hostname.strip().lower()</code> before looking it up in your records</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t1-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>comparing text without normalising case</td>
+  <td><code>False</code> when you expected <code>True</code></td>
+  <td><code>.lower()</code> both sides before comparing</td>
+</tr>
+<tr>
+  <td>assuming <code>.strip()</code> removes spaces in the middle</td>
+  <td>it does not — only the ends</td>
+  <td>that needs <code>.replace(&quot; &quot;, &quot;&quot;)</code> instead</td>
+</tr>
+<tr>
+  <td>forgetting a method returns a new string</td>
+  <td>the original &quot;did not change&quot;, confusion</td>
+  <td>reassign: <code>x = x.strip()</code></td>
+</tr>
+<tr>
+  <td>stripping the wrong characters</td>
+  <td>nothing removed, or too much removed</td>
+  <td><code>.strip()</code> alone means whitespace; <code>.strip(&quot;*&quot;)</code> means exactly those characters</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_case_methods.py</code> — upper, lower, title, and why the original is unchanged
+<code>examples/02_whitespace_methods.py</code> — strip, lstrip, rstrip, stripping specific characters
+Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">docs.python.org — String Methods</a></p>
+</div></section><section class="section" id="t1-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>normalise case</td>
+  <td><code>.lower()</code>, <code>.upper()</code>, <code>.title()</code></td>
+</tr>
+<tr>
+  <td>remove outer whitespace</td>
+  <td><code>.strip()</code></td>
+</tr>
+<tr>
+  <td>remove from one side only</td>
+  <td><code>.lstrip()</code>, <code>.rstrip()</code></td>
+</tr>
+<tr>
+  <td>strip specific characters</td>
+  <td><code>.strip(&quot;*&quot;)</code></td>
+</tr>
+<tr>
+  <td>chain cleaning steps</td>
+  <td><code>.strip().lower()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 2 — checking what text contains, and changing it.</p>
+</div></section></section>
+<section class="topic" id="topic-2"><div class="topic-kicker">Topic 2</div><h2 class="topic-title">Searching and Replacing</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, checked</strong></p>
+<p>Before you can decide something about a line of text, you need to know what it
+contains.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t2-1-in-does-this-substring-appear"><h3 class="section-title">1. `in` — does this substring appear?</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>line = "2026-09-08 ERROR failed to connect to srv-01"
+
+print("ERROR" in line)
+print("error" in line)          # case matters, same as any comparison
+print("error" in line.lower())   # normalise first</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Given <code>log = &quot;2026-09-08 WARNING disk 90% full&quot;</code>, check whether it contains <code>&quot;WARNING&quot;</code>, case-insensitively.</p>
+</aside></div></section><section class="section" id="t2-2-find-where-not-just-whether"><h3 class="section-title">2. `.find()` — WHERE, not just whether</h3><div class="section-body"><p>Returns the starting index, or <code>-1</code> if not found. Not an error, not <code>None</code> —
+check for <code>-1</code> specifically.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>position = line.find("ERROR")
+print(position)     # 11
+
+missing = line.find("WARNING")
+print(missing)        # -1 - not found</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Use <code>.find()</code> to locate where <code>&quot;disk&quot;</code> starts in the <code>log</code> string from section 1.</p>
+</aside></div></section><section class="section" id="t2-3-replace-swap-every-occurrence"><h3 class="section-title">3. `.replace()` — swap every occurrence</h3><div class="section-body"><p>Case-sensitive, like everything else this week.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>hostname = "srv_01_east"
+print(hostname.replace("_", "-"))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Replace every <code>-</code> with <code>_</code> in <code>&quot;srv-01-east&quot;</code>.</p>
+</aside></div></section><section class="section" id="t2-4-startswith-endswith-count"><h3 class="section-title">4. `.startswith()`, `.endswith()`, `.count()`</h3><div class="section-body"><p>Very common for filtering — log levels, file extensions, repeated warnings.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>lines = ["ERROR: disk full", "INFO: backup complete", "ERROR: timeout"]
+
+for l in lines:
+    if l.startswith("ERROR"):
+        print("Needs attention:", l)
+
+print("retry retry retry failed".count("retry"))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Given a list of filenames, print only the ones ending in <code>&quot;.log&quot;</code>.</p>
+</aside></div></section><section class="section" id="t2-topic-2-challenge"><h3 class="section-title">Topic 2 Challenge</h3><div class="section-body"><p>Given a list of raw log lines, print only the ones that contain <code>&quot;ERROR&quot;</code>
+(case-insensitively), with <code>&quot;ERROR&quot;</code> replaced by <code>&quot;[FLAGGED]&quot;</code>.</p>
+</div></section><section class="section" id="t2-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td><code>&quot;missing&quot; in row.lower()</code> to flag a bad survey response</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td><code>line.startswith(&quot;FAILED&quot;)</code> to filter failed logins</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td><code>filename.endswith(&quot;.log&quot;)</code> to find the files worth checking</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t2-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>checking <code>.find(x) == True</code></td>
+  <td>never true — <code>.find()</code> returns a number, not a bool</td>
+  <td>use <code>in</code> for yes/no, <code>.find()</code> for position</td>
+</tr>
+<tr>
+  <td>treating <code>-1</code> as falsy without checking</td>
+  <td>a real match at position 0 gets missed by a careless <code>if line.find(x):</code></td>
+  <td>compare explicitly: <code>if line.find(x) != -1:</code></td>
+</tr>
+<tr>
+  <td><code>.replace()</code> not matching due to case</td>
+  <td>nothing replaced, no error</td>
+  <td><code>.lower()</code> first if case should not matter</td>
+</tr>
+<tr>
+  <td>forgetting <code>.startswith()</code> needs the exact prefix</td>
+  <td><code>False</code> when text just contains it, not starts with it</td>
+  <td>use <code>in</code> instead if position does not matter</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_in_and_find.py</code> — in, find, and the -1 case
+<code>examples/02_replace_startswith_endswith.py</code> — replace, startswith, endswith, count
+Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">docs.python.org — String Methods</a></p>
+</div></section><section class="section" id="t2-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>check whether text contains something</td>
+  <td><code>in</code></td>
+</tr>
+<tr>
+  <td>find where</td>
+  <td><code>.find()</code> — <code>-1</code> means not found</td>
+</tr>
+<tr>
+  <td>replace text</td>
+  <td><code>.replace(old, new)</code></td>
+</tr>
+<tr>
+  <td>check the edges</td>
+  <td><code>.startswith()</code>, <code>.endswith()</code></td>
+</tr>
+<tr>
+  <td>count occurrences</td>
+  <td><code>.count()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 3 — splitting text apart, and building it back up.</p>
+</div></section></section>
+<section class="topic" id="topic-3"><div class="topic-kicker">Topic 3</div><h2 class="topic-title">Splitting, Joining and Building Strings</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, taken apart and put back together</strong></p>
+<p>You have used <code>.split()</code> since Week 4. Here is the rest of it — plus its
+reverse.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t3-1-split-with-no-argument"><h3 class="section-title">1. `.split()` with no argument</h3><div class="section-body"><p>Splits on whitespace, any amount of it — handles uneven spacing automatically.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>messy = "srv-01    used=87   total=100"
+print(messy.split())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Split <code>&quot;a   b    c&quot;</code> (uneven spacing) with no argument and see what you get.</p>
+</aside></div></section><section class="section" id="t3-2-maxsplit-stop-after-n-splits"><h3 class="section-title">2. `maxsplit` — stop after N splits</h3><div class="section-body"><p>Everything after the Nth split stays together, unsplit. This is exactly what
+lets you pull a hostname off the front of a line without also splitting
+whatever comes after it.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>record = "srv-01,used=87,total=100"
+
+print(record.split(","))
+print(record.split(",", 1))</code></pre></div>
+<div class="cell"><span class="cell-label">Code</span><pre class="md-code"><code>"srv-01,used=87,total=100".split(",", 1)
+              |
+              v
+   ["srv-01", "used=87,total=100"]
+    one split, everything after stays together</code></pre></div>
+
+<aside class="practice"><span class="label">Your turn</span><p>Split <code>&quot;hostname:srv-01:east&quot;</code> so that only the first <code>:</code> is used.</p>
+</aside></div></section><section class="section" id="t3-3-join-the-reverse-of-split"><h3 class="section-title">3. `.join()` — the reverse of split</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>parts = ["srv-01", "87", "100"]
+print(",".join(parts))
+print(" | ".join(parts))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Join <code>[&quot;R-001&quot;, &quot;R-002&quot;, &quot;R-003&quot;]</code> into one line separated by <code>&quot; | &quot;</code>.</p>
+</aside></div></section><section class="section" id="t3-4-join-needs-strings-and-f-strings-build-clean-output"><h3 class="section-title">4. `.join()` needs strings, and f-strings build clean output</h3><div class="section-body"><p><code>.join()</code> fails on a list of numbers — convert first. f-strings remain how you
+build a report line, same as Week 1, now with real cleaned data.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>numbers = [87, 100]
+# ",".join(numbers)  # TypeError: expected str instance, int found
+print(",".join(str(n) for n in numbers))
+
+hostname, used, total = "srv-01", 87.0, 100.0
+print(f"{hostname:&lt;10} {used:&gt;6.1f}/{total:&lt;6.1f}")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Given <code>percentages = [87.0, 120.0, 45.0]</code>, build one comma-separated string of them formatted to 1 decimal place each.</p>
+</aside></div></section><section class="section" id="t3-topic-3-challenge"><h3 class="section-title">Topic 3 Challenge</h3><div class="section-body"><p>Given <code>&quot;srv-01,used=87,total=100&quot;</code>, split off the hostname using <code>maxsplit</code>,
+then split the rest into key=value pairs, and print each as
+<code>&quot;key: value&quot;</code> using an f-string.</p>
+</div></section><section class="section" id="t3-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>splitting a CSV-style survey row before building a summary line</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>splitting <code>&quot;ip:port&quot;</code> before checking each part separately</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>splitting <code>&quot;key=value&quot;</code> pairs out of a status line</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t3-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>piece.split(&quot;=&quot;)</code> when a value itself contains <code>&quot;=&quot;</code></td>
+  <td><code>ValueError: too many values to unpack</code></td>
+  <td>use <code>maxsplit</code>: <code>piece.split(&quot;=&quot;, 1)</code></td>
+</tr>
+<tr>
+  <td><code>.join()</code> on a list of numbers</td>
+  <td><code>TypeError: expected str instance, int found</code></td>
+  <td>convert first: <code>str(n) for n in numbers</code></td>
+</tr>
+<tr>
+  <td>assuming <code>.split()</code> and <code>.split(&quot; &quot;)</code> are identical</td>
+  <td>different on multiple/irregular spaces</td>
+  <td>no argument = whitespace, any amount; <code>&quot; &quot;</code> = exactly one space each time</td>
+</tr>
+<tr>
+  <td>forgetting <code>.join()</code> is called ON the separator</td>
+  <td><code>AttributeError</code> or wrong result</td>
+  <td><code>&quot;,&quot;.join(parts)</code>, not <code>parts.join(&quot;,&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_split_deeper.py</code> — split with no argument, maxsplit, and why it matters
+<code>examples/02_join_and_fstrings.py</code> — join, round-tripping split/join, building output
+Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">docs.python.org — String Methods</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals">Formatted String Literals</a></p>
+</div></section><section class="section" id="t3-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>split on whitespace, any amount</td>
+  <td><code>.split()</code></td>
+</tr>
+<tr>
+  <td>stop after N splits</td>
+  <td><code>.split(sep, maxsplit)</code></td>
+</tr>
+<tr>
+  <td>rebuild from a list</td>
+  <td><code>&quot;sep&quot;.join(parts)</code></td>
+</tr>
+<tr>
+  <td>convert before joining</td>
+  <td><code>str(n) for n in numbers</code></td>
+</tr>
+<tr>
+  <td>build a clean report line</td>
+  <td>f-strings, same as Week 1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 4 — putting all of it together on one real, messy line.</p>
+</div></section></section>
+<section class="topic" id="topic-4"><div class="topic-kicker">Topic 4</div><h2 class="topic-title">Parsing Real Text</h2><div class="topic-intro"><p><strong>Box we are building: INPUT, finished</strong></p>
+<p>Everything this week combines into one pipeline: strip, split, clean each
+piece, build a dict. This is exactly what this week's DEMO does.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t4-1-the-pipeline-one-step-at-a-time"><h3 class="section-title">1. The pipeline, one step at a time</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>raw_line = "  Srv-01 , used=87 , total=100  "
+
+line = raw_line.strip()
+hostname_part, rest = line.split(",", 1)
+hostname = hostname_part.strip().lower()
+print(hostname, "|", rest)</code></pre></div>
+<div class="cell"><span class="cell-label">Code</span><pre class="md-code"><code>"  Srv-01 , used=87 , total=100  "
+        | .strip()
+"Srv-01 , used=87 , total=100"
+        | .split(",", 1)
+["Srv-01 ", "used=87 , total=100"]
+        | .strip().lower() on the first piece, .split(",") on the rest
+{"hostname": "srv-01", "used": 87.0, "total": 100.0}</code></pre></div>
+
+<aside class="practice"><span class="label">Your turn</span><p>Trace the same steps by hand on <code>&quot;srv-03,used=45,total=100&quot;</code> before running anything.</p>
+</aside></div></section><section class="section" id="t4-2-the-whole-pipeline-as-one-function"><h3 class="section-title">2. The whole pipeline as one function</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def parse_line(raw_line):
+    """Turn one messy raw status line into a clean dict."""
+    line = raw_line.strip()
+    hostname_part, rest = line.split(",", 1)
+    hostname = hostname_part.strip().lower()
+
+    fields = {}
+    for piece in rest.split(","):
+        key, value = piece.split("=")
+        fields[key.strip().lower()] = float(value.strip())
+
+    return {"hostname": hostname, "used": fields["used"], "total": fields["total"]}
+
+print(parse_line("  Srv-01 , used=87 , total=100  "))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Adapt <code>parse_line</code> for a line shaped <code>&quot;hostname:region:used:total&quot;</code> instead (colon-separated, no key=value pairs).</p>
+</aside></div></section><section class="section" id="t4-3-when-parsing-breaks"><h3 class="section-title">3. When parsing breaks</h3><div class="section-body"><p>Three different failures, three different meanings — knowing which is which is
+most of the job:</p>
+<ul>
+<li>an extra <code>=</code> in a value → <code>ValueError: too many values to unpack</code></li>
+<li>a missing field → <code>KeyError</code></li>
+<li>a value that is not really a number → <code>ValueError: could not convert string to float</code></li>
+</ul>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code># parse_line("srv-01,note=server=east,used=87,total=100")
+# ValueError: too many values to unpack (expected 2, got 3)
+
+# parse_line("srv-01,used=87")
+# KeyError: 'total'
+
+# parse_line("srv-01,used=unknown,total=100")
+# ValueError: could not convert string to float: 'unknown'</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Uncomment each broken call one at a time, run it, and check the error matches what is described above.</p>
+</aside></div></section><section class="section" id="t4-topic-4-challenge"><h3 class="section-title">Topic 4 Challenge</h3><div class="section-body"><p>Write <code>parse_line</code> for your own project's lane (see the project brief), and
+test it against at least 3 raw lines with different spacing and case.</p>
+</div></section><section class="section" id="t4-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>parsing a raw survey row into a clean dict of answers</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>parsing a raw log line into a clean dict of <code>{ip, attempts, result}</code></td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>parsing a raw status line into a clean dict of <code>{hostname, used, total}</code></td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t4-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>assuming every real line is well-formed</td>
+  <td>the pipeline works until one day it doesn't</td>
+  <td>know which error means what, before it happens live</td>
+</tr>
+<tr>
+  <td>cleaning after converting instead of before</td>
+  <td><code>AttributeError</code> — numbers have no <code>.strip()</code></td>
+  <td>always clean the text, then convert</td>
+</tr>
+<tr>
+  <td>writing the pipeline as one long line</td>
+  <td>hard to debug when it breaks</td>
+  <td>keep it as named steps, like section 1, until you are confident</td>
+</tr>
+<tr>
+  <td>repeating the OVER LIMIT / WARNING / OK check inline for every line</td>
+  <td>the same logic typed twice, easy to make it disagree with itself</td>
+  <td>write it once as <code>status_of(...)</code> and call it</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_the_full_pipeline.py</code> — the five steps, then as one function
+<code>examples/02_when_parsing_breaks.py</code> — the three failures, and what each means
+<code>examples/03_parsing_a_file.py</code> — parse_line + status_of, applied to every line in a file
+Docs: <a href="https://docs.python.org/3/library/stdtypes.html#string-methods">docs.python.org — String Methods</a></p>
+</div></section><section class="section" id="t4-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>clean a raw line</td>
+  <td><code>.strip()</code>, <code>.lower()</code></td>
+</tr>
+<tr>
+  <td>split it into fields</td>
+  <td><code>.split(&quot;,&quot;, 1)</code>, <code>.split(&quot;,&quot;)</code></td>
+</tr>
+<tr>
+  <td>build a clean dict from it</td>
+  <td><code>parse_line(raw_line)</code></td>
+</tr>
+<tr>
+  <td>tell parsing failures apart</td>
+  <td><code>ValueError</code> (unpack, float) vs <code>KeyError</code> (missing field)</td>
+</tr>
+<tr>
+  <td>parse a whole file of messy lines</td>
+  <td><code>for raw_line in f:</code> + <code>parse_line(raw_line)</code></td>
+</tr>
+<tr>
+  <td>classify each one without repeating the logic</td>
+  <td>a <code>status_of(...)</code> function, called once per line</td>
+</tr>
+</tbody>
+</table>
+<p><strong>You now have all of Week 7's INPUT.</strong> This is what starts your project in
+the lab — nothing about it resets.</p>
+</div></section><section class="section" id="t4-4-parsing-every-line-in-a-file"><h3 class="section-title">4. Parsing every line in a file</h3><div class="section-body"><p>Real messy text does not arrive as one line typed into the code — it arrives as a file of many lines. Combine <code>parse_line</code> with Week 4's <code>for line in f:</code>, and write the status check once, as its own function, rather than repeating the <code>if</code>/<code>elif</code> inside the loop.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>def status_of(used, total, warning_at=90):
+    """Return OVER LIMIT, WARNING or OK for a used/total pair."""
+    percent = (used / total) * 100
+    if percent &gt;= 100:
+        return "OVER LIMIT"
+    elif percent &gt;= warning_at:
+        return "WARNING"
+    else:
+        return "OK"
+
+with open("messy_lines.txt") as f:
+    for raw_line in f:
+        record = parse_line(raw_line)
+        print(record["hostname"], status_of(record["used"], record["total"]))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Save a few messy <code>hostname , used=.. , total=..</code> lines of your own to a file. Read it line by line, parse each one with <code>parse_line</code>, and print its status — without writing the cleaning logic or the status logic more than once.</p>
+</aside></div></section></section>
+
+    <footer class="page-foot">Built from the walkthrough notebooks for this week.</footer>
   </article>
 </div>
+<script>
+const links = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+const sections = links
+  .map(link => document.querySelector(link.getAttribute('href')))
+  .filter(Boolean);
+
+function setCurrentLink() {
+  const offset = window.scrollY + 120;
+  let current = sections[0];
+  for (const section of sections) {
+    if (section.offsetTop <= offset) current = section;
+  }
+  links.forEach(link => {
+    link.classList.toggle('current', current && link.getAttribute('href') === '#' + current.id);
+  });
+}
+
+setCurrentLink();
+window.addEventListener('scroll', setCurrentLink, { passive: true });
+</script>
 </body>
 </html>

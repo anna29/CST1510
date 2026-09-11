@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,201 +7,996 @@
 <title>Week 10 — SQL, Properly</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-
   :root {
-    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
-    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823; --card: #FFFDF8;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-      --card: #1D1F21;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
-    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
-    --card: #1D1F21;
+    --paper: #faf7f0;
+    --paper-2: #f2ede0;
+    --card: #fffdfa;
+    --ink: #1b1a17;
+    --ink-soft: #59554d;
+    --rule: #d8d0c2;
+    --rule-strong: #8b7f6b;
+    --accent: #8a3b12;
+    --accent-soft: #e5c6a6;
+    --accent-2: #355c5a;
+    --code-bg: #f3efe7;
+    --code-ink: #2d2a25;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-size: 17px; }
-  code, pre { font-family: "IBM Plex Mono", ui-monospace, monospace; }
-  a { color: var(--accent); }
-  .shell { max-width: 1040px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 38px; align-items: start; }
-  nav.toc { position: sticky; top: 28px; display: flex; flex-direction: column; gap: 8px; max-height: calc(100vh - 56px); overflow-y: auto; padding-top: 4px; }
-  nav.toc .label { font-variant: small-caps; letter-spacing: .04em; font-size: 13px; color: var(--ink-soft); margin-bottom: 4px; }
-  nav.toc a { color: var(--ink-soft); text-decoration: none; line-height: 1.45; font-size: 13.5px; }
-  nav.toc a.topic { color: var(--ink); font-weight: 700; margin-top: 8px; }
-  nav.toc a.topic:first-of-type { margin-top: 0; }
-  nav.toc a:hover { color: var(--accent); }
-  article { min-width: 0; }
-  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
-  h1 { margin: 0 0 10px; font-size: 2.15rem; font-weight: 700; letter-spacing: -.01em; }
-  .lede { margin: 0 0 12px; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
-  .box-note { margin: 14px 0 0; font-size: 14.5px; color: var(--ink-soft); }
-  .box-note b { color: var(--ink); font-weight: 600; }
-  .callout { max-width: 68ch; border-left: 2px solid var(--rule-strong); padding: 4px 0 4px 18px; margin: 24px 0; }
-  .callout p { margin: 0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 900px; margin: 26px 0 34px; }
-  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 18px; }
-  .card h2 { margin: 0 0 10px; font-size: 1.06rem; }
-  .card p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
-  section { margin: 0 0 44px; padding-top: 34px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
-  section:first-of-type { border-top: none; padding-top: 0; }
-  h2.section-title { margin: 0 0 18px; font-size: 1.45rem; letter-spacing: -.01em; }
-  p { line-height: 1.68; color: var(--ink); max-width: 68ch; margin: 0 0 16px; }
-  ul.tight, ol.tight { margin: 8px 0 0 20px; padding: 0; max-width: 68ch; }
-  ul.tight li, ol.tight li { line-height: 1.62; margin-bottom: 7px; }
-  table { border-collapse: collapse; margin: 18px 0; max-width: 860px; width: 100%; font-size: 14.5px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
-  th, td { text-align: left; padding: 8px 14px 8px 0; vertical-align: top; }
-  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; border-bottom: 1px solid var(--ink-soft); }
-  td code, p code, li code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
-  .topic-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; max-width: 900px; }
-  .topic { border-top: 1px solid var(--rule); padding-top: 12px; }
-  .topic .n { font-variant: small-caps; color: var(--ink-soft); font-size: 13px; letter-spacing: .04em; display: block; margin-bottom: 5px; }
-  .topic .t { font-weight: 700; display: block; margin-bottom: 5px; }
-  .muted { color: var(--ink-soft); }
-  footer { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
-  @media (max-width: 860px) {
-    .shell { grid-template-columns: 1fr; }
-    nav.toc { position: static; max-height: none; display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 16px; }
-    nav.toc a { font-size: 13px; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at top left, rgba(229, 198, 166, 0.36), transparent 24%),
+      linear-gradient(180deg, #fbf8f1 0%, var(--paper) 34%, #f8f4eb 100%);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-size: 17px;
   }
-
+  code, pre, .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  a { color: inherit; }
+  .shell {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 44px 28px 96px;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    border: 1px solid var(--rule);
+    background: rgba(255, 253, 250, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 18px;
+    padding: 18px 16px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+  }
+  .toc-label {
+    display: block;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .toc a {
+    display: block;
+    text-decoration: none;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    padding: 4px 0;
+  }
+  .toc a:hover,
+  .toc a.current { color: var(--accent); }
+  .toc a.toc-topic {
+    color: var(--ink);
+    font-weight: 700;
+    margin-top: 12px;
+    font-size: 13.5px;
+  }
+  .toc a.toc-topic:first-of-type { margin-top: 0; }
+  .toc a.toc-sub {
+    padding-left: 12px;
+    font-size: 12.5px;
+  }
+  article { min-width: 0; }
+  .page-head {
+    position: relative;
+    margin-bottom: 34px;
+    padding: 26px 28px 28px;
+    background: linear-gradient(145deg, rgba(255,253,250,.94), rgba(248,242,232,.92));
+    border: 1px solid var(--rule);
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  .page-head::after {
+    content: "";
+    position: absolute;
+    inset: auto -30px -34px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(229,198,166,.68), rgba(229,198,166,0));
+    pointer-events: none;
+  }
+  .breadcrumb {
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  h1.page-title {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+  }
+  .lede {
+    margin: 0 0 14px;
+    max-width: 65ch;
+    color: var(--ink-soft);
+    font-size: 1.06rem;
+    line-height: 1.65;
+    font-style: italic;
+  }
+  .box-note {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+  }
+  .box-note b { color: var(--ink); }
+  .box-note code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 999px;
+    color: var(--code-ink);
+  }
+  .study-note {
+    margin-top: 16px;
+    max-width: 70ch;
+    padding: 12px 14px;
+    border-left: 3px solid var(--accent);
+    background: rgba(229, 198, 166, 0.14);
+    color: var(--ink-soft);
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 22px 0 8px;
+  }
+  .summary-card {
+    padding: 14px 14px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background: rgba(255,255,255,.6);
+  }
+  .summary-card .k {
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  .summary-card .v {
+    margin-top: 8px;
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+  .outcomes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin: 20px 0 0;
+  }
+  .outcome {
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: rgba(255,253,250,.76);
+    line-height: 1.45;
+    color: var(--ink);
+    font-size: .97rem;
+  }
+  figure.week-map {
+    margin: 30px 0 34px;
+    padding: 18px 18px 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(248,242,232,.75));
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+  }
+  figure.week-map figcaption {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .topic {
+    margin-bottom: 42px;
+    padding: 28px 28px 10px;
+    background: rgba(255,253,250,.78);
+    border: 1px solid var(--rule);
+    border-radius: 26px;
+    scroll-margin-top: 24px;
+  }
+  .topic-kicker {
+    font-variant: small-caps;
+    letter-spacing: .08em;
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  h2.topic-title {
+    margin: 0 0 12px;
+    font-size: clamp(1.55rem, 2.2vw, 2rem);
+    line-height: 1.12;
+    letter-spacing: -.015em;
+  }
+  .topic-intro {
+    max-width: 70ch;
+    color: var(--ink-soft);
+  }
+  .topic-intro p:last-child { margin-bottom: 0; }
+  .section {
+    padding-top: 26px;
+    margin-top: 26px;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 24px;
+  }
+  .section:first-of-type {
+    margin-top: 24px;
+  }
+  h3.section-title {
+    margin: 0 0 14px;
+    font-size: 1.18rem;
+    line-height: 1.25;
+  }
+  p, li {
+    line-height: 1.7;
+    max-width: 70ch;
+    text-wrap: pretty;
+  }
+  p {
+    margin: 0 0 14px;
+  }
+  ul, ol {
+    margin: 10px 0 16px;
+    padding-left: 22px;
+  }
+  li {
+    margin-bottom: 5px;
+  }
+  blockquote {
+    margin: 18px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--accent-soft);
+    color: var(--ink-soft);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 78ch;
+    margin: 18px 0;
+    font-size: 14.5px;
+  }
+  table.booktabs {
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 12px 8px 0;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  th {
+    border-bottom: 1px solid var(--rule-strong);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .04em;
+    font-size: 13px;
+  }
+  code {
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--code-ink);
+    font-size: .9em;
+  }
+  .practice {
+    margin: 18px 0;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(138,59,18,.18);
+    background: linear-gradient(180deg, rgba(229,198,166,.22), rgba(255,253,250,.7));
+    max-width: 78ch;
+  }
+  .practice .label {
+    display: block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .practice p:last-child { margin-bottom: 0; }
+  .cell {
+    margin: 18px 0;
+    max-width: 82ch;
+  }
+  .cell-label,
+  .diagram-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-variant: small-caps;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  pre.code,
+  .md-code {
+    margin: 0;
+    padding: 14px 16px;
+    overflow-x: auto;
+    white-space: pre;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    line-height: 1.58;
+    font-size: 13.5px;
+  }
+  .output {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-left: 3px solid var(--rule-strong);
+    background: rgba(255,255,255,.54);
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    max-width: 78ch;
+  }
+  .output pre {
+    margin: 8px 0 0;
+    white-space: pre-wrap;
+    color: var(--ink);
+  }
+  .diagram-card {
+    margin: 18px 0;
+    max-width: 82ch;
+    padding: 14px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.72), rgba(243,239,231,.88)),
+      repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 24px,
+        rgba(216, 208, 194, 0.22) 24px,
+        rgba(216, 208, 194, 0.22) 25px
+      );
+  }
+  .diagram-card pre {
+    margin: 0;
+    white-space: pre;
+    overflow-x: auto;
+    color: var(--code-ink);
+    line-height: 1.6;
+    font-size: 13px;
+  }
+  .section-body h4,
+  .section-body h5 {
+    margin: 18px 0 8px;
+    font-size: 1rem;
+  }
+  .page-foot {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-variant: small-caps;
+    letter-spacing: .05em;
+    font-size: 13px;
+  }
+  @media (max-width: 940px) {
+    .shell {
+      grid-template-columns: 1fr;
+      padding-inline: 18px;
+    }
+    .toc {
+      position: static;
+      max-height: none;
+    }
+  }
 </style>
 </head>
 <body>
 <div class="shell">
-  <nav class="toc">
-    <span class="label">Contents</span>
-    <a class="topic" href="#overview">Overview</a>
-    <a href="#outcomes">By The End</a>
-    <a href="#workshop">Workshop</a>
-    <a href="#lab">Lab</a>
-    <a href="#materials">Materials</a>
-    <a href="#threads">Threaded Skills</a>
-    <a href="#assessment">Assessment</a>
+  <nav class="toc" id="toc">
+    <span class="toc-label">Contents</span>
+    <a href="#topic-1" class="toc-topic">Topic 1 — Connecting and Creating Tables</a>
+<a href="#t1-1-connecting-opens-the-file-or-creates-it" class="toc-sub">1. Connecting opens the file, or creates it</a>
+<a href="#t1-2-create-table-defining-the-shape" class="toc-sub">2. `CREATE TABLE` — defining the shape</a>
+<a href="#t1-3-five-storage-classes-that-is-genuinely-all-of-them" class="toc-sub">3. Five storage classes — that is genuinely all of them</a>
+<a href="#t1-4-sqlite-will-not-stop-you-being-wrong" class="toc-sub">4. SQLite will not stop you being wrong</a>
+<a href="#t1-topic-1-challenge" class="toc-sub">Topic 1 Challenge</a>
+<a href="#t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t1-recap" class="toc-sub">Recap</a>
+<a href="#topic-2" class="toc-topic">Topic 2 — Inserting and Querying</a>
+<a href="#t2-1-placeholders-never-build-sql-by-joining-strings" class="toc-sub">1. `?` placeholders — never build SQL by joining strings</a>
+<a href="#t2-2-executemany-several-rows-at-once" class="toc-sub">2. `executemany()` — several rows at once</a>
+<a href="#t2-3-fetchall-fetchone-and-iterating-the-cursor-directly" class="toc-sub">3. `fetchall()`, `fetchone()`, and iterating the cursor directly</a>
+<a href="#t2-4-sql-injection-seeing-it-actually-work-and-actually-get-blocked" class="toc-sub">4. SQL injection — seeing it actually work, and actually get blocked</a>
+<a href="#t2-topic-2-challenge" class="toc-sub">Topic 2 Challenge</a>
+<a href="#t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t2-recap" class="toc-sub">Recap</a>
+<a href="#topic-3" class="toc-topic">Topic 3 — Updating, Deleting and the Safe Pattern</a>
+<a href="#t3-1-update-changing-existing-rows" class="toc-sub">1. `UPDATE` — changing existing rows</a>
+<a href="#t3-2-rowcount-how-many-rows-actually-changed" class="toc-sub">2. `rowcount` — how many rows actually changed</a>
+<a href="#t3-3-delete-and-the-mistake-that-affects-every-row" class="toc-sub">3. `DELETE`, and the mistake that affects every row</a>
+<a href="#t3-4-the-with-pattern-commit-and-close-handled-for-you" class="toc-sub">4. The `with` pattern — commit and close, handled for you</a>
+<a href="#t3-topic-3-challenge" class="toc-sub">Topic 3 Challenge</a>
+<a href="#t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t3-recap" class="toc-sub">Recap</a>
+<a href="#topic-4" class="toc-topic">Topic 4 — Migrating Real Data In</a>
+<a href="#t4-1-dataframe-to-sql-the-whole-migration-one-line" class="toc-sub">1. `DataFrame.to_sql()` — the whole migration, one line</a>
+<a href="#t4-2-pd-read-sql-querying-back-out-as-a-dataframe" class="toc-sub">2. `pd.read_sql()` — querying back out as a DataFrame</a>
+<a href="#t4-3-migrating-week-9-s-flat-file-into-a-users-table" class="toc-sub">3. Migrating Week 9's flat file into a `users` table</a>
+<a href="#t4-4-login-still-works-exactly-the-same-way" class="toc-sub">4. Login still works exactly the same way</a>
+<a href="#t4-topic-4-challenge" class="toc-sub">Topic 4 Challenge</a>
+<a href="#t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#t4-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#t4-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
-    <header>
+    <header class="page-head">
       <div class="breadcrumb">CST1510</div>
-      <h1>Week 10 — SQL, Properly</h1>
-      <p class="lede">Week 10 replaces flat files with SQLite so both project data and project users live in one real database.</p>
-      <p class="box-note">Box we build this week: <b>STORE, for real</b>.</p>
-      <div class="callout">
-        <p>This page gives the week shape only. Students should still work from the downloaded lab notebook and code on their own machine.</p>
+      <h1 class="page-title">Week 10 — SQL, Properly</h1>
+      <p class="lede">By the end of this week you can connect to a SQLite database and create a table with a real schema, insert and query rows safely, with <code>?</code> placeholders — and explain why, and explain SQL injection concretely, having seen it actually work and actually get blocked.</p>
+      <p class="box-note">Box we build this week: <b><code>STORE, for real</code> — see <code>../system_diagram.md</code></b></p>
+      <div class="study-note">This reading view combines the week's walkthrough notebooks into one page so students can follow the theory in order, even outside Jupyter.</div>
+      <div class="summary-grid">
+        <div class="summary-card"><div class="k">Topic 1</div><div class="v">Connecting and Creating Tables</div></div>
+<div class="summary-card"><div class="k">Topic 2</div><div class="v">Inserting and Querying</div></div>
+<div class="summary-card"><div class="k">Topic 3</div><div class="v">Updating, Deleting and the Safe Pattern</div></div>
+<div class="summary-card"><div class="k">Topic 4</div><div class="v">Migrating Real Data In</div></div>
+      </div>
+      <div class="outcomes">
+        <div class="outcome">Connect to a SQLite database and create a table with a real schema</div><div class="outcome">Insert and query rows safely, with <code>?</code> placeholders — and explain why</div><div class="outcome">Explain SQL injection concretely, having seen it actually work and actually get blocked</div><div class="outcome">Update and delete rows safely, and explain what a missing <code>WHERE</code> clause does</div><div class="outcome">Use <code>with sqlite3.connect(...)</code> for automatic commit and rollback</div><div class="outcome">Migrate a real dataset and a flat file of users into proper tables</div>
       </div>
     </header>
 
-    <section id="overview">
-      <h2 class="section-title">Overview</h2>
-      <div class="topic-list">
-      <div class="topic">
-        <span class="n">Topic 1</span>
-        <span class="t">Connecting and Creating Tables</span>
-        <p>Create a database file and define a real schema.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 2</span>
-        <span class="t">Inserting and Querying</span>
-        <p>Insert rows safely with placeholders and query them back out.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 3</span>
-        <span class="t">Updating, Deleting and the Safe Pattern</span>
-        <p>Use updates carefully and recognise the risk of a missing WHERE clause.</p>
-      </div>
-      <div class="topic">
-        <span class="n">Topic 4</span>
-        <span class="t">Migrating Real Data In</span>
-        <p>Move both project data and users into proper tables.</p>
-      </div>
-      </div>
-    </section>
+    <figure class="week-map"><svg viewBox="0 0 920 220" role="img" aria-label="The database lifecycle" style="width:100%;height:auto;display:block;"><defs><filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#b8a88e" flood-opacity="0.35"/></filter></defs><rect x="22" y="18" width="220" height="48" rx="18" fill="#fffaf2" stroke="#d8d0c2"/><text x="40" y="38" fill="#59554d" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="40" y="56" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif">STORE, for real — see ../system_diagram.md</text><line x1="166.0" y1="142" x2="232.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="230.0,142 221.0,137 221.0,147" fill="#8a3b12"/><rect x="-16.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="0.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Connecting and</tspan><tspan x="0.0" dy="19">Creating Tables</tspan></text><line x1="426.0" y1="142" x2="492.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="490.0,142 481.0,137 481.0,147" fill="#8a3b12"/><rect x="244.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#8b7f6b" filter="url(#shadow)"/><text x="260.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="260.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="260.0" dy="0">Inserting and</tspan><tspan x="260.0" dy="19">Querying</tspan></text><line x1="686.0" y1="142" x2="752.0" y2="142" stroke="#8b7f6b" stroke-width="2.4"/><polygon points="750.0,142 741.0,137 741.0,147" fill="#8a3b12"/><rect x="504.0" y="108.0" width="172" height="68" rx="20" fill="#fffdfa" stroke="#8b7f6b" filter="url(#shadow)"/><text x="520.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="520.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="520.0" dy="0">Updating, Deleting</tspan><tspan x="520.0" dy="19">and the Safe Pattern</tspan></text><rect x="764.0" y="108.0" width="172" height="68" rx="20" fill="#f4eee2" stroke="#355c5a" filter="url(#shadow)"/><text x="780.0" y="129.0" fill="#59554d" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="780.0" y="150.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="780.0" dy="0">Migrating Real Data</tspan><tspan x="780.0" dy="19">In</tspan></text></svg><figcaption><b>The database lifecycle</b>. Week 10 walks from schema creation to safe querying, updates, deletes, and importing real data.</figcaption></figure>
 
-    <section id="outcomes">
-      <h2 class="section-title">By The End Of This Week</h2>
-      <ol class="tight">
-      <li>Connect to a SQLite database and create a table with a real schema.</li>
-      <li>Insert and query rows safely with `?` placeholders.</li>
-      <li>Explain SQL injection concretely after seeing it succeed and fail.</li>
-      <li>Update and delete rows safely and explain the effect of a missing `WHERE` clause.</li>
-      <li>Use `with sqlite3.connect(...)` for automatic commit and rollback.</li>
-      <li>Migrate a real dataset and a flat file of users into proper tables.</li>
-      </ol>
-    </section>
+    <section class="topic" id="topic-1"><div class="topic-kicker">Topic 1</div><h2 class="topic-title">Connecting and Creating Tables</h2><div class="topic-intro"><p><strong>Box we are building: STORE, for real</strong></p>
+<p>The whole database is one file. No server, nothing to install — <code>import sqlite3</code>
+is already in Python.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>, then help a neighbour.</p>
+</blockquote>
+</div><section class="section" id="t1-1-connecting-opens-the-file-or-creates-it"><h3 class="section-title">1. Connecting opens the file, or creates it</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import sqlite3
 
-    <section id="workshop">
-      <h2 class="section-title">Workshop — 2 hours</h2>
-      <p>The workshop still shows the finished idea first, then works through the week's topics in smaller parts.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Run the demo</td><td>See both flat stores become one real database.</td></tr>
-      <tr><td>0:10</td><td>System diagram</td><td>Upgrade `STORE` into SQLite.</td></tr>
-      <tr><td>0:20</td><td>Topic 1</td><td>Connecting and Creating Tables</td></tr>
-      <tr><td>0:40</td><td>Topic 2</td><td>Inserting and Querying</td></tr>
-      <tr><td>1:00</td><td>Break</td><td></td></tr>
-      <tr><td>1:10</td><td>Topic 3</td><td>Updating, Deleting and the Safe Pattern</td></tr>
-      <tr><td>1:30</td><td>Topic 4</td><td>Migrating Real Data In</td></tr>
-      <tr><td>1:50</td><td>Brief the project</td><td>Migrate the project from Weeks 8-9.</td></tr>
-      </table>
-    </section>
+conn = sqlite3.connect("network.db")
+cursor = conn.cursor()
+print(type(conn))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Connect to a new database file of your own name and print its type.</p>
+</aside></div></section><section class="section" id="t1-2-create-table-defining-the-shape"><h3 class="section-title">2. `CREATE TABLE` — defining the shape</h3><div class="section-body"><p><code>IF NOT EXISTS</code> avoids an error if it is already there. <code>PRIMARY KEY</code> is a
+unique, auto-numbered row identifier.</p>
 
-    <section id="lab">
-      <h2 class="section-title">Lab — 3 hours</h2>
-      <p>The lab notebook runs the session in order. Use the downloaded weekly folder for the actual code, files and notebook work.</p>
-      <table>
-        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
-      <tr><td>0:00</td><td>Warm-up</td><td>Fix 3 deliberately broken files in `LAB/warmup/`.</td></tr>
-      <tr><td>0:15</td><td>Drills</td><td>7 tasks across Threshold / Typical / Excellent.</td></tr>
-      <tr><td>1:15</td><td>Break</td><td></td></tr>
-      <tr><td>1:25</td><td>Project</td><td>Open `project/` and migrate it to SQLite.</td></tr>
-      <tr><td>2:40</td><td>Wrap</td><td>Demo to a neighbour, then commit and push project progress.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>cursor.execute("""
+    CREATE TABLE IF NOT EXISTS devices (
+        id     INTEGER PRIMARY KEY,
+        name   TEXT NOT NULL,
+        ip     TEXT UNIQUE NOT NULL,
+        active INTEGER DEFAULT 1
+    )
+""")
+conn.commit()</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Create a table called <code>notes</code> with <code>id</code> (primary key) and <code>text</code> (not null).</p>
+</aside></div></section><section class="section" id="t1-3-five-storage-classes-that-is-genuinely-all-of-them"><h3 class="section-title">3. Five storage classes — that is genuinely all of them</h3><div class="section-body"><p><code>INTEGER</code>, <code>REAL</code>, <code>TEXT</code>, <code>BLOB</code>, <code>NULL</code>. No separate date type — store dates
+as <code>TEXT</code>, ISO format (<code>YYYY-MM-DD</code>), so they still sort correctly.</p>
 
-    <section id="materials">
-      <h2 class="section-title">Materials At A Glance</h2>
-      <table>
-        <tr><th>Material</th><th>What it is for</th></tr>
-      <tr><td>`DEMO/ops_console.py`</td><td>The workshop demonstration.</td></tr>
-      <tr><td>`01` to `04` topic folders</td><td>Walkthrough notebooks plus examples.</td></tr>
-      <tr><td>`LAB/W10_Lab.ipynb`</td><td>Warm-up, drills and project migration.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>cursor.execute("""
+    CREATE TABLE readings (
+        id       INTEGER PRIMARY KEY,
+        sensor   TEXT NOT NULL,
+        value    REAL NOT NULL,
+        recorded TEXT NOT NULL
+    )
+""")
+conn.commit()</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Design a <code>CREATE TABLE</code> statement for log entries: <code>id</code>, <code>timestamp</code> (TEXT), <code>level</code> (TEXT), <code>message</code> (TEXT).</p>
+</aside></div></section><section class="section" id="t1-4-sqlite-will-not-stop-you-being-wrong"><h3 class="section-title">4. SQLite will not stop you being wrong</h3><div class="section-body"><p>It is flexible about types — a string can land in a <code>REAL</code> column with no
+error at all. Your own code has to enforce what the schema will not.</p>
 
-    <section id="threads">
-      <h2 class="section-title">Threaded Skills</h2>
-      <table>
-        <tr><th>Thread</th><th>This week</th></tr>
-      <tr><td>Git</td><td>Tenth commit and push inside `project/`.</td></tr>
-      <tr><td>Debugging</td><td>`IntegrityError`, `OperationalError`, `ProgrammingError` from bad bindings.</td></tr>
-      <tr><td>Domains</td><td>Project data and users now live in one database.</td></tr>
-      </table>
-    </section>
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>cursor.execute("INSERT INTO readings (sensor, value, recorded) VALUES (?, ?, ?)",
+               ("temp-01", "not-a-number", "2026-09-08"))
+conn.commit()
 
-    <section id="assessment">
-      <h2 class="section-title">Assessment Note</h2>
-      <div class="grid">
-        <div class="card">
-          <h2>What to remember</h2>
-          <p>Nothing is marked this week. Keep the work as part of CW2 and follow the shared CW2 specification on Moodle.</p>
-        </div>
-        <div class="card">
-          <h2>Student workflow</h2>
-          <p>Open the week's folder in VS Code, start with <code>README.md</code>, complete the lab, then commit and push.</p>
-        </div>
-        <div class="card">
-          <h2>Where the real work happens</h2>
-          <p>This public page is a guide only. The coding, notebooks, files and project work happen in the downloaded weekly materials.</p>
-        </div>
-      </div>
-    </section>
+row = cursor.execute("SELECT value FROM readings").fetchone()
+print(row, type(row[0]))    # stored as-is - no error, no warning</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Write a small function that converts a value to <code>float</code> <em>before</em> inserting it, so a bad value fails loudly instead of being stored silently.</p>
+</aside></div></section><section class="section" id="t1-topic-1-challenge"><h3 class="section-title">Topic 1 Challenge</h3><div class="section-body"><p>Create a table <code>servers</code> with <code>id</code>, <code>hostname</code> (unique, required), <code>used</code>
+(real) and <code>total</code> (real). Confirm it was created by inserting one row and
+selecting it back.</p>
+</div></section><section class="section" id="t1-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>a <code>datasets</code> table, one row per dataset you have loaded</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>an <code>incidents</code> table, one row per event you have logged</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>a <code>devices</code> table, one row per server or service you track</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t1-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>forgetting <code>conn.commit()</code></td>
+  <td>changes silently vanish</td>
+  <td>commit after every write, or use <code>with</code> (Topic 3)</td>
+</tr>
+<tr>
+  <td>assuming a type is enforced</td>
+  <td>a string lands in a <code>REAL</code> column with no error</td>
+  <td>validate/convert in Python before inserting</td>
+</tr>
+<tr>
+  <td>querying a table that does not exist yet</td>
+  <td><code>sqlite3.OperationalError: no such table</code></td>
+  <td>run <code>CREATE TABLE</code> first, check the name matches exactly</td>
+</tr>
+<tr>
+  <td>forgetting <code>NOT NULL</code>/<code>UNIQUE</code> where it matters</td>
+  <td>duplicate or missing data slips in silently</td>
+  <td>decide your constraints when you design the schema, not after</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_connect_and_create.py</code> — connecting, cursors, CREATE TABLE, in-memory databases
+<code>examples/02_data_types_and_schema.py</code> — the five storage classes, and SQLite's loose typing
+Docs: <a href="https://docs.python.org/3/library/sqlite3.html">sqlite3 — Python docs</a></p>
+</div></section><section class="section" id="t1-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>connect to a database</td>
+  <td><code>sqlite3.connect(path)</code></td>
+</tr>
+<tr>
+  <td>create a table</td>
+  <td><code>CREATE TABLE IF NOT EXISTS</code></td>
+</tr>
+<tr>
+  <td>choose a type</td>
+  <td><code>INTEGER</code>, <code>REAL</code>, <code>TEXT</code>, <code>BLOB</code>, <code>NULL</code></td>
+</tr>
+<tr>
+  <td>save your changes</td>
+  <td><code>conn.commit()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 2 — putting real data in, and getting it back out.</p>
+</div></section></section>
+<section class="topic" id="topic-2"><div class="topic-kicker">Topic 2</div><h2 class="topic-title">Inserting and Querying</h2><div class="topic-intro"><p><strong>Box we are building: STORE, safely</strong></p>
+<p>Adding rows, getting them back, and the one habit that keeps you safe from
+SQL injection.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t2-1-placeholders-never-build-sql-by-joining-strings"><h3 class="section-title">1. `?` placeholders — never build SQL by joining strings</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>cursor.execute(
+    "INSERT INTO devices (name, ip, type) VALUES (?, ?, ?)",
+    ("Router-A", "10.0.0.1", "router"),
+)
+conn.commit()</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Insert a device of your own using a placeholder query.</p>
+</aside></div></section><section class="section" id="t2-2-executemany-several-rows-at-once"><h3 class="section-title">2. `executemany()` — several rows at once</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>rows = [("Switch-1", "10.0.0.2", "switch"), ("AP-Lobby", "10.0.0.3", "access point")]
+cursor.executemany("INSERT INTO devices (name, ip, type) VALUES (?, ?, ?)", rows)
+conn.commit()</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Use <code>executemany()</code> to insert 3 rows of your own choosing.</p>
+</aside></div></section><section class="section" id="t2-3-fetchall-fetchone-and-iterating-the-cursor-directly"><h3 class="section-title">3. `fetchall()`, `fetchone()`, and iterating the cursor directly</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>print(cursor.execute("SELECT * FROM devices").fetchall())
+print(cursor.execute("SELECT name FROM devices WHERE id = ?", (999,)).fetchone())   # None, no crash
 
-    <footer>CST1510 · Week 10 · SQL, Properly</footer>
+for name, ip in cursor.execute("SELECT name, ip FROM devices"):
+    print(name, "-&gt;", ip)</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>SELECT a row you know does not exist and confirm <code>fetchone()</code> gives <code>None</code>, not an error.</p>
+</aside></div></section><section class="section" id="t2-4-sql-injection-seeing-it-actually-work-and-actually-get-blocked"><h3 class="section-title">4. SQL injection — seeing it actually work, and actually get blocked</h3><div class="section-body"><p>Building SQL by joining a string in is not a style choice — it is a real
+vulnerability.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>name = "' OR '1'='1"
+unsafe = f"SELECT * FROM devices WHERE name = '{name}'"
+print(cursor.execute(unsafe).fetchall())    # returns EVERY row - the WHERE did nothing
+
+safe = cursor.execute("SELECT * FROM devices WHERE name = ?", (name,)).fetchall()
+print(safe)    # empty - treated as data, not code</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Try your own malicious-looking string against both the unsafe and safe versions and compare the results.</p>
+</aside></div></section><section class="section" id="t2-topic-2-challenge"><h3 class="section-title">Topic 2 Challenge</h3><div class="section-body"><p>Insert 4 devices of different types. Then write one query using <code>WHERE</code>,
+<code>ORDER BY</code> and <code>LIMIT</code> together to find the 2 most recently inserted routers.</p>
+</div></section><section class="section" id="t2-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>inserting cleaned rows from a DataFrame, one at a time or via <code>to_sql()</code></td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>querying incidents <code>WHERE severity = ?</code> safely, even with attacker-controlled input</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>filtering devices <code>WHERE type = ? AND active = 1</code></td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t2-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>building SQL with an f-string and a real value</td>
+  <td>SQL injection — a crafted value can return or destroy data it should not</td>
+  <td>always use <code>?</code> placeholders</td>
+</tr>
+<tr>
+  <td>forgetting the trailing comma on a single value</td>
+  <td><code>ProgrammingError: Incorrect number of bindings supplied</code></td>
+  <td><code>(value,)</code> is a tuple; <code>(value)</code> is not</td>
+</tr>
+<tr>
+  <td>expecting <code>fetchone()</code> to error when nothing matches</td>
+  <td>it returns <code>None</code> quietly</td>
+  <td>check for <code>None</code> before using the result</td>
+</tr>
+<tr>
+  <td>mixing up <code>fetchall()</code> and iterating the cursor</td>
+  <td>both work, but calling <code>fetchall()</code> twice returns nothing the second time</td>
+  <td>fetch once, store the result if you need it twice</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_insert_and_select.py</code> — INSERT, executemany, fetchall, fetchone
+<code>examples/02_injection_filtering_sorting.py</code> — a real injection, WHERE, AND, ORDER BY, LIMIT
+Docs: <a href="%7BSQLITE_DOCS%7D">sqlite3 — Python docs</a></p>
+</div></section><section class="section" id="t2-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>insert a row safely</td>
+  <td><code>INSERT ... VALUES (?, ?, ?)</code></td>
+</tr>
+<tr>
+  <td>insert many at once</td>
+  <td><code>executemany()</code></td>
+</tr>
+<tr>
+  <td>get rows back</td>
+  <td><code>fetchall()</code>, <code>fetchone()</code></td>
+</tr>
+<tr>
+  <td>filter, sort, limit</td>
+  <td><code>WHERE</code>, <code>ORDER BY</code>, <code>LIMIT</code></td>
+</tr>
+<tr>
+  <td>stay safe from injection</td>
+  <td><code>?</code> placeholders, always</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 3 — changing and removing rows, safely.</p>
+</div></section></section>
+<section class="topic" id="topic-3"><div class="topic-kicker">Topic 3</div><h2 class="topic-title">Updating, Deleting and the Safe Pattern</h2><div class="topic-intro"><p><strong>Box we are building: STORE, changed carefully</strong></p>
+<p>The one mistake in this topic affects every row in a table at once — worth
+slowing down for.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t3-1-update-changing-existing-rows"><h3 class="section-title">1. `UPDATE` — changing existing rows</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>cursor.execute("UPDATE devices SET ip = ? WHERE id = ?", ("10.0.0.254", 1))
+conn.commit()
+print(cursor.execute("SELECT name, ip FROM devices WHERE id = 1").fetchone())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Update one device's name, then confirm the change with a SELECT.</p>
+</aside></div></section><section class="section" id="t3-2-rowcount-how-many-rows-actually-changed"><h3 class="section-title">2. `rowcount` — how many rows actually changed</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>result = cursor.execute("UPDATE devices SET active = 0 WHERE name = ?", ("AP-Lobby",))
+conn.commit()
+print(result.rowcount)</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Update a row and print how many rows <code>rowcount</code> says were affected.</p>
+</aside></div></section><section class="section" id="t3-3-delete-and-the-mistake-that-affects-every-row"><h3 class="section-title">3. `DELETE`, and the mistake that affects every row</h3><div class="section-body"><p>A missing <code>WHERE</code> on <code>UPDATE</code> or <code>DELETE</code> changes or removes <strong>everything</strong> in
+the table — no confirmation, no undo.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>cursor.execute("DELETE FROM devices WHERE active = 0")
+conn.commit()
+print(cursor.execute("SELECT name FROM devices").fetchall())
+
+# cursor.execute("DELETE FROM devices")
+# -&gt; wipes the WHOLE table. Always run the matching SELECT first.</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Run the matching <code>SELECT</code> for a <code>DELETE</code> you are about to write, and check the result looks right, before actually deleting.</p>
+</aside></div></section><section class="section" id="t3-4-the-with-pattern-commit-and-close-handled-for-you"><h3 class="section-title">4. The `with` pattern — commit and close, handled for you</h3><div class="section-body"><p>Auto-commits on success. Auto-rolls-back if an error is raised inside the
+block — nothing half-finished gets saved.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>try:
+    with sqlite3.connect("network.db") as c:
+        c.execute("INSERT INTO devices (name, ip) VALUES (?, ?)", ("Duplicate", "10.0.0.254"))
+except sqlite3.IntegrityError as e:
+    print("Nothing was committed:", e)</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Rewrite one of Topic 2's inserts to use the <code>with</code> pattern instead of a manual <code>commit()</code>.</p>
+</aside></div></section><section class="section" id="t3-topic-3-challenge"><h3 class="section-title">Topic 3 Challenge</h3><div class="section-body"><p>Using <code>with</code>, insert a device, then trigger a <code>UNIQUE</code> constraint violation
+on purpose inside a second <code>with</code> block, and confirm the first insert is
+still there afterwards but the second never landed.</p>
+</div></section><section class="section" id="t3-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>correcting one bad value in a stored dataset</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>marking one incident resolved, without touching the others</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>decommissioning one server record, by id, never by a blanket delete</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t3-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>UPDATE</code>/<code>DELETE</code> with no <code>WHERE</code></td>
+  <td>every row changes or disappears</td>
+  <td>always include <code>WHERE</code>, run the matching <code>SELECT</code> first</td>
+</tr>
+<tr>
+  <td>forgetting <code>conn.commit()</code> outside a <code>with</code> block</td>
+  <td>the change silently does not persist</td>
+  <td>commit explicitly, or switch to <code>with</code></td>
+</tr>
+<tr>
+  <td>leaving a connection open</td>
+  <td>resources leak in a long-running program</td>
+  <td>close it, or use <code>with</code> so it happens automatically</td>
+</tr>
+<tr>
+  <td>assuming <code>rowcount</code> means something before <code>commit()</code></td>
+  <td>it is still accurate — the mistake is elsewhere, usually a missing commit after</td>
+  <td>check commit happened, not just rowcount</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_update_and_delete.py</code> — UPDATE, DELETE, rowcount, the no-WHERE trap
+<code>examples/02_the_with_pattern.py</code> — with, automatic rollback, sqlite3.Row</p>
+</div></section><section class="section" id="t3-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>change existing rows</td>
+  <td><code>UPDATE ... SET ... WHERE ...</code></td>
+</tr>
+<tr>
+  <td>remove rows</td>
+  <td><code>DELETE FROM ... WHERE ...</code></td>
+</tr>
+<tr>
+  <td>check what actually changed</td>
+  <td><code>.rowcount</code></td>
+</tr>
+<tr>
+  <td>commit and close safely</td>
+  <td><code>with sqlite3.connect(...) as conn:</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 4 — moving your real data and users into this.</p>
+</div></section></section>
+<section class="topic" id="topic-4"><div class="topic-kicker">Topic 4</div><h2 class="topic-title">Migrating Real Data In</h2><div class="topic-intro"><p><strong>Box we are building: STORE, finished</strong></p>
+<p>Three weeks of separate skills — Week 7's parsing, Week 8's pulled data,
+Week 9's flat-file users — converging into one real database.</p>
+<blockquote>
+<p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
+</blockquote>
+</div><section class="section" id="t4-1-dataframe-to-sql-the-whole-migration-one-line"><h3 class="section-title">1. `DataFrame.to_sql()` — the whole migration, one line</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import pandas as pd, requests
+from io import StringIO
+
+url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/tips.csv"
+df = pd.read_csv(StringIO(requests.get(url, timeout=10).text))
+
+with sqlite3.connect("network.db") as conn:
+    df.to_sql("tips", conn, if_exists="replace", index=False)
+print("migrated", len(df), "rows")</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Migrate a dataset of your own (or Week 8's fallback) into a new table with <code>to_sql()</code>.</p>
+</aside></div></section><section class="section" id="t4-2-pd-read-sql-querying-back-out-as-a-dataframe"><h3 class="section-title">2. `pd.read_sql()` — querying back out as a DataFrame</h3><div class="section-body"><div class="cell"><span class="cell-label">Code</span><pre class="code"><code>with sqlite3.connect("network.db") as conn:
+    result = pd.read_sql("SELECT * FROM tips WHERE tip &gt; 5", conn)
+print(result.head())</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Query your migrated table back with <code>pd.read_sql()</code> using a <code>WHERE</code> condition of your own.</p>
+</aside></div></section><section class="section" id="t4-3-migrating-week-9-s-flat-file-into-a-users-table"><h3 class="section-title">3. Migrating Week 9's flat file into a `users` table</h3><div class="section-body"><p>Week 7's parsing pattern, applied to a security-relevant file, landing in a
+real table.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>with sqlite3.connect("network.db") as conn:
+    conn.execute("""CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL
+    )""")
+    with open("users.txt") as f:
+        for line in f:
+            username, password_hash = line.strip().split(",", 1)
+            conn.execute(
+                "INSERT OR IGNORE INTO users (username, password_hash) VALUES (?, ?)",
+                (username, password_hash),
+            )</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Explain, in one sentence, what <code>INSERT OR IGNORE</code> does differently from a plain <code>INSERT</code> here, and why it matters if you run the migration twice.</p>
+</aside></div></section><section class="section" id="t4-4-login-still-works-exactly-the-same-way"><h3 class="section-title">4. Login still works exactly the same way</h3><div class="section-body"><p><code>checkpw()</code> does not care whether the hash came from a file or a database
+row — Week 9's logic did not need to change at all, only where it reads from.</p>
+
+<div class="cell"><span class="cell-label">Code</span><pre class="code"><code>import bcrypt
+
+with sqlite3.connect("network.db") as conn:
+    stored = conn.execute(
+        "SELECT password_hash FROM users WHERE username = ?", ("alice",)
+    ).fetchone()
+
+if stored:
+    print(bcrypt.checkpw(b"correct-horse-battery-staple", stored[0].encode("utf-8")))</code></pre></div>
+<aside class="practice"><span class="label">Your turn</span><p>Adapt your Week 9 <code>login_user</code> function so it queries the <code>users</code> table instead of reading a file.</p>
+</aside></div></section><section class="section" id="t4-topic-4-challenge"><h3 class="section-title">Topic 4 Challenge</h3><div class="section-body"><p>Migrate both your project's data and your users file into one database.
+Delete the old flat files once you have confirmed everything still works from
+the database alone.</p>
+</div></section><section class="section" id="t4-same-idea-three-fields"><h3 class="section-title">Same idea, three fields</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>a dataset that started as a CSV, now a queryable table</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>incidents that started as log lines, now searchable by severity</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>tickets that started as raw text, now filterable by status</td>
+</tr>
+</tbody>
+</table>
+</div></section><section class="section" id="t4-common-mistakes"><h3 class="section-title">Common mistakes</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>running the migration twice without <code>OR IGNORE</code>/a <code>UNIQUE</code> check</td>
+  <td><code>IntegrityError</code>, or silent duplicates</td>
+  <td>design for &quot;may run again&quot; from the start</td>
+</tr>
+<tr>
+  <td>forgetting <code>if_exists=&quot;replace&quot;</code> (or <code>&quot;append&quot;</code>) on <code>to_sql()</code></td>
+  <td><code>ValueError: Table already exists</code> on a second run</td>
+  <td>choose deliberately, do not just guess</td>
+</tr>
+<tr>
+  <td>deleting the old flat file before confirming the migration worked</td>
+  <td>data loss if the migration had a bug</td>
+  <td>verify from the database first, delete the source second</td>
+</tr>
+<tr>
+  <td>forgetting the <code>.db</code> file needs to go in <code>.gitignore</code></td>
+  <td>real hashed passwords committed to your repository</td>
+  <td>add it before the first commit that includes it</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_migrating_the_dataset.py</code> — to_sql, read_sql, a real dataset end to end
+<code>examples/02_migrating_the_users_file.py</code> — the flat file to a table, login unchanged</p>
+</div></section><section class="section" id="t4-recap"><h3 class="section-title">Recap</h3><div class="section-body"><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>migrate a DataFrame in</td>
+  <td><code>df.to_sql(table, conn, if_exists=...)</code></td>
+</tr>
+<tr>
+  <td>query it back as a DataFrame</td>
+  <td><code>pd.read_sql(sql, conn)</code></td>
+</tr>
+<tr>
+  <td>migrate a flat file in</td>
+  <td>parse each line, <code>INSERT</code></td>
+</tr>
+<tr>
+  <td>avoid re-migrating badly</td>
+  <td><code>INSERT OR IGNORE</code>, or a <code>UNIQUE</code> constraint</td>
+</tr>
+</tbody>
+</table>
+<p><strong>You now have all of Week 10's STORE.</strong> Open your project and migrate it for
+real — nothing about it resets.</p>
+</div></section></section>
+
+    <footer class="page-foot">Built from the walkthrough notebooks for this week.</footer>
   </article>
 </div>
+<script>
+const links = Array.from(document.querySelectorAll('#toc a[href^="#"]'));
+const sections = links
+  .map(link => document.querySelector(link.getAttribute('href')))
+  .filter(Boolean);
+
+function setCurrentLink() {
+  const offset = window.scrollY + 120;
+  let current = sections[0];
+  for (const section of sections) {
+    if (section.offsetTop <= offset) current = section;
+  }
+  links.forEach(link => {
+    link.classList.toggle('current', current && link.getAttribute('href') === '#' + current.id);
+  });
+}
+
+setCurrentLink();
+window.addEventListener('scroll', setCurrentLink, { passive: true });
+</script>
 </body>
 </html>
