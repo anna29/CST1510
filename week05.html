@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 5 — Classes and Objects</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+
+  :root {
+    --paper: #FAF9F6; --ink: #1C1B19; --ink-soft: #4A4844; --rule: #D8D4CC; --rule-strong: #8A867C;
+    --accent: #7A2E2E; --code-bg: #F1EFE9; --code-ink: #2A2823; --card: #FFFDF8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+      --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+      --card: #1D1F21;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #17181A; --ink: #E7E4DC; --ink-soft: #A8A399; --rule: #37372F;
+    --rule-strong: #5C594E; --accent: #D98C8C; --code-bg: #1F211F; --code-ink: #DDD8CC;
+    --card: #1D1F21;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-size: 17px; }
+  code, pre { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  a { color: var(--accent); }
+  .shell { max-width: 1040px; margin: 0 auto; padding: 56px 28px 120px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 38px; align-items: start; }
+  nav.toc { position: sticky; top: 28px; display: flex; flex-direction: column; gap: 8px; max-height: calc(100vh - 56px); overflow-y: auto; padding-top: 4px; }
+  nav.toc .label { font-variant: small-caps; letter-spacing: .04em; font-size: 13px; color: var(--ink-soft); margin-bottom: 4px; }
+  nav.toc a { color: var(--ink-soft); text-decoration: none; line-height: 1.45; font-size: 13.5px; }
+  nav.toc a.topic { color: var(--ink); font-weight: 700; margin-top: 8px; }
+  nav.toc a.topic:first-of-type { margin-top: 0; }
+  nav.toc a:hover { color: var(--accent); }
+  article { min-width: 0; }
+  .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
+  h1 { margin: 0 0 10px; font-size: 2.15rem; font-weight: 700; letter-spacing: -.01em; }
+  .lede { margin: 0 0 12px; max-width: 62ch; color: var(--ink-soft); font-size: 1.08rem; font-style: italic; line-height: 1.55; }
+  .box-note { margin: 14px 0 0; font-size: 14.5px; color: var(--ink-soft); }
+  .box-note b { color: var(--ink); font-weight: 600; }
+  .callout { max-width: 68ch; border-left: 2px solid var(--rule-strong); padding: 4px 0 4px 18px; margin: 24px 0; }
+  .callout p { margin: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 900px; margin: 26px 0 34px; }
+  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 18px; }
+  .card h2 { margin: 0 0 10px; font-size: 1.06rem; }
+  .card p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
+  section { margin: 0 0 44px; padding-top: 34px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
+  section:first-of-type { border-top: none; padding-top: 0; }
+  h2.section-title { margin: 0 0 18px; font-size: 1.45rem; letter-spacing: -.01em; }
+  p { line-height: 1.68; color: var(--ink); max-width: 68ch; margin: 0 0 16px; }
+  ul.tight, ol.tight { margin: 8px 0 0 20px; padding: 0; max-width: 68ch; }
+  ul.tight li, ol.tight li { line-height: 1.62; margin-bottom: 7px; }
+  table { border-collapse: collapse; margin: 18px 0; max-width: 860px; width: 100%; font-size: 14.5px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  th, td { text-align: left; padding: 8px 14px 8px 0; vertical-align: top; }
+  th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; border-bottom: 1px solid var(--ink-soft); }
+  td code, p code, li code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
+  .topic-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; max-width: 900px; }
+  .topic { border-top: 1px solid var(--rule); padding-top: 12px; }
+  .topic .n { font-variant: small-caps; color: var(--ink-soft); font-size: 13px; letter-spacing: .04em; display: block; margin-bottom: 5px; }
+  .topic .t { font-weight: 700; display: block; margin-bottom: 5px; }
+  .muted { color: var(--ink-soft); }
+  footer { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    nav.toc { position: static; max-height: none; display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 16px; }
+    nav.toc a { font-size: 13px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="toc">
+    <span class="label">Contents</span>
+    <a class="topic" href="#overview">Overview</a>
+    <a href="#outcomes">By The End</a>
+    <a href="#workshop">Workshop</a>
+    <a href="#lab">Lab</a>
+    <a href="#materials">Materials</a>
+    <a href="#threads">Threaded Skills</a>
+    <a href="#assessment">Assessment</a>
+  </nav>
+
+  <article>
+    <header>
+      <div class="breadcrumb">CST1510</div>
+      <h1>Week 5 — Classes and Objects</h1>
+      <p class="lede">Objects turn one-off values and behaviour into a named component students can build, inspect and extend.</p>
+      <p class="box-note">Box we build this week: <b>component</b>.</p>
+      <div class="callout">
+        <p>This is still part of the CW1 toolkit-building half of the module. Use the downloaded weekly folder for the actual notebook, code files and mini-project.</p>
+      </div>
+    </header>
+
+    <section id="overview">
+      <h2 class="section-title">Overview</h2>
+      <div class="topic-list">
+      <div class="topic">
+        <span class="n">Topic 1</span>
+        <span class="t">Classes and Objects</span>
+        <p>Define a class with __init__, create objects, and store related data together.</p>
+      </div>
+      <div class="topic">
+        <span class="n">Topic 2</span>
+        <span class="t">Methods</span>
+        <p>Move behaviour onto the object itself and use self to work with that object's state.</p>
+      </div>
+      <div class="topic">
+        <span class="n">Topic 3</span>
+        <span class="t">Many Objects Together</span>
+        <p>Build a list of objects and load them from a file rather than hard-coding each one.</p>
+      </div>
+      </div>
+    </section>
+
+    <section id="outcomes">
+      <h2 class="section-title">By The End Of This Week</h2>
+      <ol class="tight">
+      <li>Define a class with `__init__` and create objects from it.</li>
+      <li>Explain what `self` refers to and why it must be a method's first parameter.</li>
+      <li>Access and change an object's attributes with dot notation.</li>
+      <li>Define a method and explain how it differs from a plain function.</li>
+      <li>Explain why a method can change its own object's state.</li>
+      <li>Build and process a list of objects, including loading them from a file.</li>
+      </ol>
+    </section>
+
+    <section id="workshop">
+      <h2 class="section-title">Workshop — 2 hours</h2>
+      <p>The workshop still shows the finished idea first, then works through the week's topics in smaller parts.</p>
+      <table>
+        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
+      <tr><td>0:00</td><td>Run the demo</td><td>See the record-check program bundled into one component.</td></tr>
+      <tr><td>0:10</td><td>System diagram</td><td>Focus on this week's `component` box.</td></tr>
+      <tr><td>0:20</td><td>Topic 1</td><td>Classes and Objects</td></tr>
+      <tr><td>0:45</td><td>Topic 2</td><td>Methods</td></tr>
+      <tr><td>1:10</td><td>Break</td><td></td></tr>
+      <tr><td>1:20</td><td>Topic 3</td><td>Many Objects Together</td></tr>
+      <tr><td>1:45</td><td>Brief the mini-project</td><td>Preview the lab build.</td></tr>
+      </table>
+    </section>
+
+    <section id="lab">
+      <h2 class="section-title">Lab — 3 hours</h2>
+      <p>The lab notebook runs the session in order. Use the downloaded weekly folder for the actual code, files and notebook work.</p>
+      <table>
+        <tr><th>Time</th><th>Part</th><th>Focus</th></tr>
+      <tr><td>0:00</td><td>Warm-up</td><td>Fix 3 deliberately broken files in `LAB/warmup/`.</td></tr>
+      <tr><td>0:15</td><td>Drills</td><td>7 tasks across Threshold / Typical / Excellent.</td></tr>
+      <tr><td>1:15</td><td>Break</td><td></td></tr>
+      <tr><td>1:25</td><td>Mini-project</td><td>`LAB/template.py`, three lanes, three tiers.</td></tr>
+      <tr><td>2:40</td><td>Wrap</td><td>Demo to a neighbour, Box 5 of the Cheat Sheet, then commit and push.</td></tr>
+      </table>
+    </section>
+
+    <section id="materials">
+      <h2 class="section-title">Materials At A Glance</h2>
+      <table>
+        <tr><th>Material</th><th>What it is for</th></tr>
+      <tr><td>`DEMO/record_check.py` + `DEMO/records.txt`</td><td>The finished program shown in the workshop.</td></tr>
+      <tr><td>`01 - Classes and Objects/`</td><td>Walkthrough plus two runnable examples.</td></tr>
+      <tr><td>`02 - Methods/`</td><td>Walkthrough plus two runnable examples.</td></tr>
+      <tr><td>`03 - Many Objects Together/`</td><td>Walkthrough, examples and sample data.</td></tr>
+      <tr><td>`LAB/W05_Lab.ipynb`</td><td>Warm-up, drills, mini-project and wrap.</td></tr>
+      <tr><td>`LAB/template.py`</td><td>The mini-project scaffold.</td></tr>
+      </table>
+    </section>
+
+    <section id="threads">
+      <h2 class="section-title">Threaded Skills</h2>
+      <table>
+        <tr><th>Thread</th><th>This week</th></tr>
+      <tr><td>Git</td><td>Fifth commit and push.</td></tr>
+      <tr><td>Cheat Sheet</td><td>Box 5 photographed and submitted.</td></tr>
+      <tr><td>Debugging</td><td>`TypeError` (missing `self`), `AttributeError`, `NameError`.</td></tr>
+      </table>
+    </section>
+
+    <section id="assessment">
+      <h2 class="section-title">Assessment Note</h2>
+      <div class="grid">
+        <div class="card">
+          <h2>What to remember</h2>
+          <p>Nothing is marked this week. Keep the notebook and mini-project work as part of CW1.</p>
+        </div>
+        <div class="card">
+          <h2>Student workflow</h2>
+          <p>Open the week's folder in VS Code, start with <code>README.md</code>, complete the lab, then commit and push.</p>
+        </div>
+        <div class="card">
+          <h2>Where the real work happens</h2>
+          <p>This public page is a guide only. The coding, notebooks, files and project work happen in the downloaded weekly materials.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>CST1510 · Week 5 · Classes and Objects</footer>
+  </article>
+</div>
+</body>
+</html>
