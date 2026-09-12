@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Week 10 — SQL, Properly</title>
+<title>Week 10 — SQL and Databases</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
   :root {
@@ -94,66 +94,99 @@
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#prelude-top" class="toc-topic">Before Topic 1 — What SQL Is</a>
-<a href="#t1-top" class="toc-topic">Topic 1 — Connecting and Creating Tables</a>
-<div class="toc-group" data-group="t1">
-<a href="#t1-s1" class="toc-sub">1. Connecting opens the file, or creates it</a>
-<a href="#t1-s2" class="toc-sub">2. <code>CREATE TABLE</code> — defining the shape</a>
-<a href="#t1-s3" class="toc-sub">3. Five storage classes — that is genuinely all of them</a>
-<a href="#t1-s4" class="toc-sub">4. SQLite will not stop you being wrong</a>
-<a href="#t1-s5" class="toc-sub">Challenge</a>
-<a href="#t1-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t1-s7" class="toc-sub">Common mistakes</a>
-<a href="#t1-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t2-top" class="toc-topic">Topic 2 — Inserting and Querying</a>
-<div class="toc-group" data-group="t2">
-<a href="#t2-s1" class="toc-sub">1. <code>?</code> placeholders — never build SQL by joining strings</a>
-<a href="#t2-s2" class="toc-sub">2. <code>executemany()</code> — several rows at once</a>
-<a href="#t2-s3" class="toc-sub">3. <code>fetchall()</code>, <code>fetchone()</code>, and iterating the cursor directly</a>
-<a href="#t2-s4" class="toc-sub">4. SQL injection — seeing it actually work, and actually get blocked</a>
-<a href="#t2-s5" class="toc-sub">Challenge</a>
-<a href="#t2-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t2-s7" class="toc-sub">Common mistakes</a>
-<a href="#t2-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t3-top" class="toc-topic">Topic 3 — Updating, Deleting and the Safe Pattern</a>
-<div class="toc-group" data-group="t3">
-<a href="#t3-s1" class="toc-sub">1. <code>UPDATE</code> — changing existing rows</a>
-<a href="#t3-s2" class="toc-sub">2. <code>rowcount</code> — how many rows actually changed</a>
-<a href="#t3-s3" class="toc-sub">3. <code>DELETE</code>, and the mistake that affects every row</a>
-<a href="#t3-s4" class="toc-sub">4. The <code>with</code> pattern — commit and close, handled for you</a>
-<a href="#t3-s5" class="toc-sub">Challenge</a>
-<a href="#t3-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t3-s7" class="toc-sub">Common mistakes</a>
-<a href="#t3-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t4-top" class="toc-topic">Topic 4 — Migrating Real Data In</a>
-<div class="toc-group" data-group="t4">
-<a href="#t4-s1" class="toc-sub">1. <code>DataFrame.to_sql()</code> — the whole migration, one line</a>
-<a href="#t4-s2" class="toc-sub">2. <code>pd.read_sql()</code> — querying back out as a DataFrame</a>
-<a href="#t4-s3" class="toc-sub">3. Migrating Week 9's flat file into a <code>users</code> table</a>
-<a href="#t4-s4" class="toc-sub">4. Login still works exactly the same way</a>
-<a href="#t4-s5" class="toc-sub">Challenge</a>
-<a href="#t4-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t4-s7" class="toc-sub">Common mistakes</a>
-<a href="#t4-s8" class="toc-sub">Recap</a>
-</div>
+    <a href="#p1" class="toc-topic">1. What is a SQL database, and why are we using one?</a>
+<a href="#p2" class="toc-topic">2. Core SQL vocabulary: table, row, column, schema</a>
+<a href="#p3" class="toc-topic">3. Creating a table: defining structure before data</a>
+<a href="#p4" class="toc-topic">4. Connecting Python to SQLite with `sqlite3`</a>
+<a href="#p5" class="toc-topic">5. Adding and reading data: `INSERT`, `SELECT`, and placeholders</a>
+<a href="#p6" class="toc-topic">6. Why placeholders matter: safe SQL and SQL injection</a>
+<a href="#p7" class="toc-topic">7. Changing existing data: `UPDATE`, `DELETE`, and `WHERE`</a>
+<a href="#p8" class="toc-topic">8. Transactions, commit, and the `with` pattern</a>
+<a href="#p9" class="toc-topic">9. Notebook map and quick recap</a>
   </nav>
 
   <article>
     <header class="page-head">
       <div class="breadcrumb">CST1510</div>
-      <h1 class="page-title">Week 10 — SQL, Properly</h1>
-      <p class="lede">By the end of this week you can connect to a SQLite database and create a table with a real schema, insert and query rows safely, with <code>?</code> placeholders — and explain why, and explain SQL injection concretely, having seen it actually work and actually get blocked.</p>
-      <p class="box-note">Box we build this week: <b><code>STORE, for real</code> — see <code>../system_diagram.md</code></b>. Each <em>Practice</em> below sets a short task.</p>
-      <p class="muted">This page combines the week's walkthrough notebooks into one reading view, keeping the theory in teaching order.</p>
+      <h1 class="page-title">Week 10 — SQL and Databases</h1>
+      <p class="lede">A teaching page for Week 10: enough theory, examples, and safe patterns to teach from directly, while the notebooks remain the place where you run and adapt the code.</p>
+      
     </header>
 
-    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=10" title="System architecture — Week 10" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>STORE, for real</b>.</figcaption></figure><figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="The database lifecycle" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">STORE, for real</text><line x1="166.0" y1="164" x2="236.7" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Connecting and</tspan><tspan x="0.0" dy="19">Creating Tables</tspan></text><line x1="424.7" y1="164" x2="495.3" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="244.7" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="258.7" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="258.7" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="258.7" dy="0">Inserting and</tspan><tspan x="258.7" dy="19">Querying</tspan></text><line x1="683.3" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="503.3" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="517.3" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="517.3" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="517.3" dy="0">Updating, Deleting</tspan><tspan x="517.3" dy="19">and the Safe Pattern</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">Migrating Real Data</tspan><tspan x="776.0" dy="19">In</tspan></text></svg><figcaption><b>The database lifecycle</b>. Week 10 walks from schema creation to safe querying, updates, deletes, and importing real data.</figcaption></figure>
+    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=10" title="System architecture — Week 10" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>STORE, for real</b>.</figcaption></figure>
 
-    <div class="topic-divider" id="prelude-top"><span class="topic-divider-n">Primer</span><h2 class="topic-divider-title">Before Topic 1 — What SQL Is</h2></div><section class="topic" id="prelude-s1"><p class="topic-docs"><b>Official docs:</b> <a href="https://www.sqlite.org/lang.html">SQLite SQL language</a> · <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a></p><p>SQL is the language we use to talk to a relational database. Python is not replacing SQL this week; Python is simply the program that sends SQL commands to SQLite and receives the results back.</p>
-<p>Think of the database as a set of <strong>tables</strong>:</p>
+    <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">What is a SQL database, and why are we using one?</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a></p><section class="topic"><p>Before writing any Python, it helps to answer the basic &quot;what?&quot; questions first.</p>
+<h2>What is a database?</h2>
+<p>A <strong>database</strong> is a system for storing and organising data so that the data can
+be added, searched, updated, and deleted reliably.</p>
+<h2>What is SQL?</h2>
+<p><strong>SQL</strong> stands for <strong>Structured Query Language</strong>. It is the language used to
+describe what should happen to the data in a relational database. For example,
+SQL can create a table, insert a row, search for matching records, or update an
+existing value.</p>
+<h2>What is SQLite?</h2>
+<p><strong>SQLite</strong> is a lightweight relational database system that stores the whole
+database in a single file. That makes it a very good choice for first-year
+projects because it is easy to run locally and Python supports it directly
+through the built-in <code>sqlite3</code> module.</p>
+<h2>Why are we moving from files to a database?</h2>
+<p>Up to Week 9, the module has already used storage, but that storage was still
+quite fragile. A plain text file is easy to start with, but it does not protect
+structure for us. We have to remember the order of fields, split lines
+carefully, and hope every line follows the same pattern.</p>
+<p>A database solves a different problem from a normal file:</p>
+<table class="booktabs">
+<thead>
+<tr>
+  <th>Plain file</th>
+  <th>Database</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>stores raw text</td>
+  <td>stores structured records</td>
+</tr>
+<tr>
+  <td>we decide how to parse every line</td>
+  <td>the table shape is defined once in the schema</td>
+</tr>
+<tr>
+  <td>easy to break by hand</td>
+  <td>harder to corrupt by accident</td>
+</tr>
+<tr>
+  <td>awkward to search and filter</td>
+  <td>built for searching and filtering</td>
+</tr>
+<tr>
+  <td>good for starting</td>
+  <td>better for growing a real application</td>
+</tr>
+</tbody>
+</table>
+<p>For this module, the key idea is:</p>
+<blockquote>
+<p>Week 10 upgrades the <code>STORE</code> box from &quot;save some text&quot; to &quot;store structured records that Python can query safely&quot;.</p>
+</blockquote>
+<h2>How does this fit into your Python program?</h2>
+<p>Python runs the application logic, but SQL handles the data operations. In
+practice that means:</p>
+<ul>
+<li>Python decides <strong>when</strong> to connect and <strong>which values</strong> to send.</li>
+<li>SQL says <strong>what</strong> table to create, read, update, or delete.</li>
+<li>SQLite stores the data in a structured database file.</li>
+</ul>
+<p>This also prepares the module for the next steps:</p>
+<ul>
+<li>Week 11 needs data that a user interface can query cleanly.</li>
+<li>Week 12 benefits from having a proper place to keep app data and users.</li>
+</ul>
+<p>So the purpose of SQL this week is not to learn isolated commands. It is to
+make the project's storage layer behave like a real application.</p>
+</section>
+<div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">Core SQL vocabulary: table, row, column, schema</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://www.sqlite.org/lang.html">SQLite SQL language</a> · <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a></p><section class="topic"><p>Before looking at Python code, you need a clear picture of what a relational
+database is storing.</p>
 <table class="booktabs">
 <thead>
 <tr>
@@ -164,7 +197,7 @@
 <tbody>
 <tr>
   <td><strong>table</strong></td>
-  <td>a whole grid of related data</td>
+  <td>one organised set of related data</td>
 </tr>
 <tr>
   <td><strong>row</strong></td>
@@ -172,7 +205,11 @@
 </tr>
 <tr>
   <td><strong>column</strong></td>
-  <td>one field repeated for every row</td>
+  <td>one field repeated for every record</td>
+</tr>
+<tr>
+  <td><strong>schema</strong></td>
+  <td>the design of the table: column names, types, and rules</td>
 </tr>
 </tbody>
 </table>
@@ -182,542 +219,320 @@
 +----+----------+--------------+--------+
 | 1  | AP-Lobby | 10.0.0.10    | 1      |
 | 2  | Switch-1 | 10.0.0.11    | 0      |
-+----+----------+--------------+--------+
-   row 1         row 2
-
-columns: id, name, ip, active</code></pre></div>
-<p>The four SQL jobs students meet first are:</p>
-<table class="booktabs">
-<thead>
-<tr>
-  <th>SQL verb</th>
-  <th>What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td><code>CREATE TABLE</code></td>
-  <td>define the shape of the table</td>
-</tr>
-<tr>
-  <td><code>INSERT INTO</code></td>
-  <td>add rows</td>
-</tr>
-<tr>
-  <td><code>SELECT</code></td>
-  <td>read rows back out</td>
-</tr>
-<tr>
-  <td><code>UPDATE</code> / <code>DELETE</code></td>
-  <td>change or remove existing rows</td>
-</tr>
-</tbody>
-</table>
-<p>Read a query almost like an instruction sentence:</p>
++----+----------+--------------+--------+</code></pre></div>
+<p>In that picture:</p>
+<ul>
+<li><code>devices</code> is the <strong>table</strong></li>
+<li><code>id</code>, <code>name</code>, <code>ip</code>, and <code>active</code> are the <strong>columns</strong></li>
+<li>each horizontal entry is a <strong>row</strong></li>
+<li>the decision that <code>id</code> exists, that <code>name</code> is text, and that <code>active</code> is a
+number is part of the <strong>schema</strong></li>
+</ul>
+<p>SQL is the language used to talk to that table. Python is the program that sends
+SQL instructions to SQLite and receives the answers back.</p>
+<p>For first-year work, it helps to separate those two layers explicitly:</p>
+<ul>
+<li><strong>SQL layer</strong>: &quot;what do I want the database to do?&quot;</li>
+<li><strong>Python layer</strong>: &quot;when do I connect, send the query, and use the result?&quot;</li>
+</ul>
+<p>That is why a query like this should be read almost as an instruction sentence:</p>
 <div class="cell"><pre class="code"><code>SELECT name, ip
 FROM devices
 WHERE active = 1;</code></pre></div>
-<p>This means: &quot;from the <code>devices</code> table, give me the <code>name</code> and <code>ip</code> columns, but only for rows where <code>active</code> is <code>1</code>.&quot;</p>
-<p>A few beginner-friendly rules help here:</p>
+<p>It means: &quot;from the <code>devices</code> table, give me the <code>name</code> and <code>ip</code> columns, but
+only for rows where <code>active</code> is <code>1</code>.&quot;</p>
+</section>
+<figure class="anim-figure"><svg viewBox="0 0 920 280" role="img" aria-label="How Python talks to SQLite" style="width:100%;height:auto;display:block;"><defs><marker id="pilot-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">WEEK 10 FLOW</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">How Python talks to SQLite</text><rect x="34.0" y="104.0" width="170.0" height="116.0" fill="none" stroke="#8A867C"/><text x="48.0" y="126.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">PYTHON SCRIPT</text><text x="48.0" y="149" fill="#1C1B19" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="48.0" dy="0">your program</tspan></text><text x="48.0" y="170.5" fill="#4A4844" font-size="12.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48.0" dy="0">calls connect(),</tspan><tspan x="48.0" dy="16.0">execute(),</tspan><tspan x="48.0" dy="16.0">fetchall()</tspan></text><line x1="214.0" y1="162.0" x2="245.0" y2="162.0" stroke="#8A867C" stroke-width="2" marker-end="url(#pilot-arrow)"/><rect x="255.0" y="104.0" width="190.0" height="116.0" fill="none" stroke="#8A867C"/><text x="269.0" y="126.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">SQLITE3</text><text x="269.0" y="149" fill="#1C1B19" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="269.0" dy="0">Python library</tspan></text><text x="269.0" y="170.5" fill="#4A4844" font-size="12.5" font-family="Source Serif 4, Georgia, serif"><tspan x="269.0" dy="0">passes SQL between</tspan><tspan x="269.0" dy="16.0">Python and the</tspan><tspan x="269.0" dy="16.0">database</tspan></text><line x1="455.0" y1="162.0" x2="490.0" y2="162.0" stroke="#8A867C" stroke-width="2" marker-end="url(#pilot-arrow)"/><rect x="500.0" y="104.0" width="190.0" height="116.0" fill="none" stroke="#8A867C"/><text x="514.0" y="126.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">SQL QUERY</text><text x="514.0" y="149" fill="#1C1B19" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="514.0" dy="0">instruction text</tspan></text><text x="514.0" y="170.5" fill="#4A4844" font-size="12.5" font-family="Source Serif 4, Georgia, serif"><tspan x="514.0" dy="0">CREATE, INSERT,</tspan><tspan x="514.0" dy="16.0">SELECT, UPDATE, DELETE</tspan></text><line x1="700.0" y1="162.0" x2="735.0" y2="162.0" stroke="#8A867C" stroke-width="2" marker-end="url(#pilot-arrow)"/><rect x="745.0" y="104.0" width="128.0" height="116.0" fill="none" stroke="#8A867C"/><text x="759.0" y="126.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">DB</text><text x="759.0" y="149" fill="#1C1B19" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="759.0" dy="0">ops.db</tspan></text><text x="759.0" y="170.5" fill="#4A4844" font-size="12.5" font-family="Source Serif 4, Georgia, serif"><tspan x="759.0" dy="0">tables and rows</tspan></text><text x="36" y="254" fill="#7A2E2E" font-size="12" font-family="IBM Plex Mono, monospace">Result comes back into Python as values that your code can use again.</text></svg><figcaption><b>How Python talks to SQLite</b>. The important distinction is that SQL describes the database action, while Python decides when to connect, execute, fetch results, and use them in the program.</figcaption></figure>
+<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Creating a table: defining structure before data</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a> · <a href="https://www.sqlite.org/lang_createtable.html">SQLite CREATE TABLE</a></p><section class="topic"><p>The first SQL job is usually not reading data. It is defining the table itself.</p>
+<div class="cell"><pre class="code"><code>CREATE TABLE IF NOT EXISTS devices (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    ip TEXT NOT NULL,
+    active INTEGER NOT NULL
+);</code></pre></div>
+<p>This statement matters because it fixes the shape of the data before rows are
+added.</p>
+<p>Read it in pieces:</p>
+<ol>
+<li><code>CREATE TABLE</code> means &quot;make a new table&quot;.</li>
+<li><code>IF NOT EXISTS</code> prevents the program crashing if the table is already there.</li>
+<li><code>id INTEGER PRIMARY KEY</code> creates a unique identifier for each row.</li>
+<li><code>TEXT NOT NULL</code> means the column stores text and should not be empty.</li>
+<li>The schema acts like a contract for every row added later.</li>
+</ol>
+<p>The Python around it is straightforward:</p>
+<div class="cell"><pre class="code"><code>with sqlite3.connect("ops.db") as conn:
+    cursor = conn.cursor()
+    cursor.execute(
+        "CREATE TABLE IF NOT EXISTS devices ("
+        "id INTEGER PRIMARY KEY, "
+        "name TEXT NOT NULL, "
+        "ip TEXT NOT NULL, "
+        "active INTEGER NOT NULL)"
+    )</code></pre></div>
+<p>This is where <code>W10T01_walkthrough.ipynb</code> fits. The notebook gives the live
+coding context, but the teaching point is this:</p>
 <ul>
-<li>SQL keywords are often written in capitals for readability, but SQL itself is not demanding capitals.</li>
-<li>The semicolon marks the end of a statement. In Python strings, it is often optional for SQLite, but it is still a good habit when learning SQL.</li>
-<li><code>SELECT *</code> means &quot;all columns&quot;, but naming the columns you actually want is usually clearer.</li>
-<li>The <code>WHERE</code> part filters rows. If there is no <code>WHERE</code>, the command affects or returns <strong>all rows</strong>.</li>
+<li><strong>we create structure first</strong></li>
+<li><strong>we then trust that structure every time we insert or query</strong></li>
 </ul>
-<p>Once that picture is clear, the Python code in this week makes more sense: <code>sqlite3.connect(...)</code> opens the database file, <code>cursor.execute(...)</code> sends SQL to it, and methods like <code>fetchone()</code> or <code>fetchall()</code> bring the answers back into Python.</p>
+<p>That is a big step up from plain files, where structure is only implied.</p>
 </section>
-<div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Connecting and Creating Tables</h2></div><div class="topic-intro"><p>The whole database is one file. No server, nothing to install — <code>import sqlite3</code>
-is already in Python.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a> · <a href="https://www.sqlite.org/lang_createtable.html">SQLite CREATE TABLE</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Connecting opens the file, or creates it</h2><div class="cell"><pre class="code"><code>import sqlite3
+<div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">Connecting Python to SQLite with `sqlite3`</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a></p><section class="topic"><p>Python's built-in <code>sqlite3</code> module is the bridge between a Python script and the
+database file.</p>
+<div class="cell"><pre class="code"><code>import sqlite3
 
-conn = sqlite3.connect("network.db")
+conn = sqlite3.connect("ops.db")
 cursor = conn.cursor()
-print(type(conn))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Connect to a new database file of your own name and print its type.</p>
-</div></section><section class="topic" id="t1-s2"><h2><span class="num">2.</span><code>CREATE TABLE</code> — defining the shape</h2><p><code>IF NOT EXISTS</code> avoids an error if it is already there. <code>PRIMARY KEY</code> is a
-unique, auto-numbered row identifier.</p>
-<div class="cell"><pre class="code"><code>cursor.execute("""
-    CREATE TABLE IF NOT EXISTS devices (
-        id     INTEGER PRIMARY KEY,
-        name   TEXT NOT NULL,
-        ip     TEXT UNIQUE NOT NULL,
-        active INTEGER DEFAULT 1
-    )
-""")
-conn.commit()</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Create a table called <code>notes</code> with <code>id</code> (primary key) and <code>text</code> (not null).</p>
-</div></section><section class="topic" id="t1-s3"><h2><span class="num">3.</span>Five storage classes — that is genuinely all of them</h2><p><code>INTEGER</code>, <code>REAL</code>, <code>TEXT</code>, <code>BLOB</code>, <code>NULL</code>. No separate date type — store dates
-as <code>TEXT</code>, ISO format (<code>YYYY-MM-DD</code>), so they still sort correctly.</p>
-<div class="cell"><pre class="code"><code>cursor.execute("""
-    CREATE TABLE readings (
-        id       INTEGER PRIMARY KEY,
-        sensor   TEXT NOT NULL,
-        value    REAL NOT NULL,
-        recorded TEXT NOT NULL
-    )
-""")
-conn.commit()</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Design a <code>CREATE TABLE</code> statement for log entries: <code>id</code>, <code>timestamp</code> (TEXT), <code>level</code> (TEXT), <code>message</code> (TEXT).</p>
-</div></section><section class="topic" id="t1-s4"><h2><span class="num">4.</span>SQLite will not stop you being wrong</h2><p>It is flexible about types — a string can land in a <code>REAL</code> column with no
-error at all. Your own code has to enforce what the schema will not.</p>
-<div class="cell"><pre class="code"><code>cursor.execute("INSERT INTO readings (sensor, value, recorded) VALUES (?, ?, ?)",
-               ("temp-01", "not-a-number", "2026-09-08"))
-conn.commit()
-
-row = cursor.execute("SELECT value FROM readings").fetchone()
-print(row, type(row[0]))    # stored as-is - no error, no warning</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write a small function that converts a value to <code>float</code> <em>before</em> inserting it, so a bad value fails loudly instead of being stored silently.</p>
-</div></section><section class="topic" id="t1-s5"><h2>Challenge</h2><p>Create a table <code>servers</code> with <code>id</code>, <code>hostname</code> (unique, required), <code>used</code>
-(real) and <code>total</code> (real). Confirm it was created by inserting one row and
-selecting it back.</p>
-</section><section class="topic" id="t1-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+cursor.execute("SELECT name FROM devices")
+rows = cursor.fetchall()
+conn.close()</code></pre></div>
+<p>Each line has a job:</p>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+  <th>Python code</th>
+  <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>a <code>datasets</code> table, one row per dataset you have loaded</td>
+  <td><code>sqlite3.connect(&quot;ops.db&quot;)</code></td>
+  <td>open the database file, or create it if it does not exist</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>an <code>incidents</code> table, one row per event you have logged</td>
+  <td><code>conn.cursor()</code></td>
+  <td>create an object that sends SQL commands</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>a <code>devices</code> table, one row per server or service you track</td>
+  <td><code>cursor.execute(...)</code></td>
+  <td>run one SQL statement</td>
+</tr>
+<tr>
+  <td><code>fetchone()</code> / <code>fetchall()</code></td>
+  <td>get rows back into Python</td>
+</tr>
+<tr>
+  <td><code>conn.close()</code></td>
+  <td>close the connection</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t1-s7"><h2>Common mistakes</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>forgetting <code>conn.commit()</code></td>
-  <td>changes silently vanish</td>
-  <td>commit after every write, or use <code>with</code> (Topic 3)</td>
-</tr>
-<tr>
-  <td>assuming a type is enforced</td>
-  <td>a string lands in a <code>REAL</code> column with no error</td>
-  <td>validate/convert in Python before inserting</td>
-</tr>
-<tr>
-  <td>querying a table that does not exist yet</td>
-  <td><code>sqlite3.OperationalError: no such table</code></td>
-  <td>run <code>CREATE TABLE</code> first, check the name matches exactly</td>
-</tr>
-<tr>
-  <td>forgetting <code>NOT NULL</code>/<code>UNIQUE</code> where it matters</td>
-  <td>duplicate or missing data slips in silently</td>
-  <td>decide your constraints when you design the schema, not after</td>
-</tr>
-</tbody>
-</table>
-<h3>Go deeper</h3>
-<p><code>examples/01_connect_and_create.py</code> — connecting, cursors, CREATE TABLE, in-memory databases
-<code>examples/02_data_types_and_schema.py</code> — the five storage classes, and SQLite's loose typing
-Docs: <a href="https://docs.python.org/3/library/sqlite3.html">sqlite3 — Python docs</a></p>
-</section><section class="topic" id="t1-s8"><h2>Recap</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>You can now</th>
-  <th>Using</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>connect to a database</td>
-  <td><code>sqlite3.connect(path)</code></td>
-</tr>
-<tr>
-  <td>create a table</td>
-  <td><code>CREATE TABLE IF NOT EXISTS</code></td>
-</tr>
-<tr>
-  <td>choose a type</td>
-  <td><code>INTEGER</code>, <code>REAL</code>, <code>TEXT</code>, <code>BLOB</code>, <code>NULL</code></td>
-</tr>
-<tr>
-  <td>save your changes</td>
-  <td><code>conn.commit()</code></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Next:</strong> Topic 2 — putting real data in, and getting it back out.</p>
+<p>For teaching, it helps to stress that SQLite itself is not &quot;inside&quot; Python.
+Python is talking to another system through the <code>sqlite3</code> library.</p>
+<p>In practice, you should soon move to the safer pattern:</p>
+<div class="cell"><pre class="code"><code>with sqlite3.connect("ops.db") as conn:
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM devices")
+    rows = cursor.fetchall()</code></pre></div>
+<p>The <code>with</code> block helps because the connection is cleaned up automatically. It is
+also a gentler path toward good habits than asking first-years to remember every
+manual close and commit.</p>
 </section>
-<div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Inserting and Querying</h2></div><div class="topic-intro"><p>Adding rows, getting them back, and the one habit that keeps you safe from
-SQL injection.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a> · <a href="https://www.sqlite.org/lang_select.html">SQLite SELECT</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>?</code> placeholders — never build SQL by joining strings</h2><div class="cell"><pre class="code"><code>cursor.execute(
-    "INSERT INTO devices (name, ip, type) VALUES (?, ?, ?)",
-    ("Router-A", "10.0.0.1", "router"),
+<div class="topic-divider" id="p5"><span class="topic-divider-n">Part 5</span><h2 class="topic-divider-title">Adding and reading data: `INSERT`, `SELECT`, and placeholders</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a> · <a href="https://www.sqlite.org/lang_select.html">SQLite SELECT</a></p><section class="topic"><p>Once the table exists, there are two core moves:</p>
+<ul>
+<li>put rows in</li>
+<li>read rows back out</li>
+</ul>
+<h2>Adding a row</h2>
+<div class="cell"><pre class="code"><code>cursor.execute(
+    "INSERT INTO devices (name, ip, active) VALUES (?, ?, ?)",
+    ("AP-Lobby", "10.0.0.10", 1),
+)</code></pre></div>
+<p>The SQL text contains <code>?</code> placeholders. The second argument provides the real
+values.</p>
+<p>That separation is extremely important:</p>
+<ul>
+<li>the SQL statement describes the structure of the command</li>
+<li>the tuple supplies the data values</li>
+</ul>
+<h2>Reading rows back</h2>
+<div class="cell"><pre class="code"><code>cursor.execute(
+    "SELECT name, ip FROM devices WHERE active = ?",
+    (1,),
 )
-conn.commit()</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Insert a device of your own using a placeholder query.</p>
-</div></section><section class="topic" id="t2-s2"><h2><span class="num">2.</span><code>executemany()</code> — several rows at once</h2><div class="cell"><pre class="code"><code>rows = [("Switch-1", "10.0.0.2", "switch"), ("AP-Lobby", "10.0.0.3", "access point")]
-cursor.executemany("INSERT INTO devices (name, ip, type) VALUES (?, ?, ?)", rows)
-conn.commit()</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Use <code>executemany()</code> to insert 3 rows of your own choosing.</p>
-</div></section><section class="topic" id="t2-s3"><h2><span class="num">3.</span><code>fetchall()</code>, <code>fetchone()</code>, and iterating the cursor directly</h2><div class="cell"><pre class="code"><code>print(cursor.execute("SELECT * FROM devices").fetchall())
-print(cursor.execute("SELECT name FROM devices WHERE id = ?", (999,)).fetchone())   # None, no crash
-
-for name, ip in cursor.execute("SELECT name, ip FROM devices"):
-    print(name, "-&gt;", ip)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>SELECT a row you know does not exist and confirm <code>fetchone()</code> gives <code>None</code>, not an error.</p>
-</div></section><section class="topic" id="t2-s4"><h2><span class="num">4.</span>SQL injection — seeing it actually work, and actually get blocked</h2><p>Building SQL by joining a string in is not a style choice — it is a real
-vulnerability.</p>
-<div class="cell"><pre class="code"><code>name = "' OR '1'='1"
-unsafe = f"SELECT * FROM devices WHERE name = '{name}'"
-print(cursor.execute(unsafe).fetchall())    # returns EVERY row - the WHERE did nothing
-
-safe = cursor.execute("SELECT * FROM devices WHERE name = ?", (name,)).fetchall()
-print(safe)    # empty - treated as data, not code</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Try your own malicious-looking string against both the unsafe and safe versions and compare the results.</p>
-</div></section><section class="topic" id="t2-s5"><h2>Challenge</h2><p>Insert 4 devices of different types. Then write one query using <code>WHERE</code>,
-<code>ORDER BY</code> and <code>LIMIT</code> together to find the 2 most recently inserted routers.</p>
-</section><section class="topic" id="t2-s6"><h2>Same idea, three fields</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>Field</th>
-  <th>Looks like</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>inserting cleaned rows from a DataFrame, one at a time or via <code>to_sql()</code></td>
-</tr>
-<tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>querying incidents <code>WHERE severity = ?</code> safely, even with attacker-controlled input</td>
-</tr>
-<tr>
-  <td><strong>IT</strong></td>
-  <td>filtering devices <code>WHERE type = ? AND active = 1</code></td>
-</tr>
-</tbody>
-</table>
-</section><section class="topic" id="t2-s7"><h2>Common mistakes</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>building SQL with an f-string and a real value</td>
-  <td>SQL injection — a crafted value can return or destroy data it should not</td>
-  <td>always use <code>?</code> placeholders</td>
-</tr>
-<tr>
-  <td>forgetting the trailing comma on a single value</td>
-  <td><code>ProgrammingError: Incorrect number of bindings supplied</code></td>
-  <td><code>(value,)</code> is a tuple; <code>(value)</code> is not</td>
-</tr>
-<tr>
-  <td>expecting <code>fetchone()</code> to error when nothing matches</td>
-  <td>it returns <code>None</code> quietly</td>
-  <td>check for <code>None</code> before using the result</td>
-</tr>
-<tr>
-  <td>mixing up <code>fetchall()</code> and iterating the cursor</td>
-  <td>both work, but calling <code>fetchall()</code> twice returns nothing the second time</td>
-  <td>fetch once, store the result if you need it twice</td>
-</tr>
-</tbody>
-</table>
-<h3>Go deeper</h3>
-<p><code>examples/01_insert_and_select.py</code> — INSERT, executemany, fetchall, fetchone
-<code>examples/02_injection_filtering_sorting.py</code> — a real injection, WHERE, AND, ORDER BY, LIMIT
-Docs: <a href="https://docs.python.org/3/library/sqlite3.html">sqlite3 — Python docs</a></p>
-</section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>You can now</th>
-  <th>Using</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>insert a row safely</td>
-  <td><code>INSERT ... VALUES (?, ?, ?)</code></td>
-</tr>
-<tr>
-  <td>insert many at once</td>
-  <td><code>executemany()</code></td>
-</tr>
-<tr>
-  <td>get rows back</td>
-  <td><code>fetchall()</code>, <code>fetchone()</code></td>
-</tr>
-<tr>
-  <td>filter, sort, limit</td>
-  <td><code>WHERE</code>, <code>ORDER BY</code>, <code>LIMIT</code></td>
-</tr>
-<tr>
-  <td>stay safe from injection</td>
-  <td><code>?</code> placeholders, always</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Next:</strong> Topic 3 — changing and removing rows, safely.</p>
+rows = cursor.fetchall()</code></pre></div>
+<p>Two details matter here:</p>
+<ol>
+<li><code>(1,)</code> is a one-item tuple. The comma matters.</li>
+<li><code>fetchall()</code> returns the query result back into Python, usually as a list of tuples.</li>
+</ol>
+<p>The SQL itself is also worth reading line by line:</p>
+<div class="cell"><pre class="code"><code>SELECT name, ip
+FROM devices
+WHERE active = 1;</code></pre></div>
+<ul>
+<li><code>SELECT</code> chooses columns</li>
+<li><code>FROM</code> names the table</li>
+<li><code>WHERE</code> filters rows</li>
+</ul>
+<p>This part aligns closely with <code>W10T02_walkthrough.ipynb</code>. The notebook can show
+several variations, but the core teaching pattern should stay steady.</p>
 </section>
-<div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Updating, Deleting and the Safe Pattern</h2></div><div class="topic-intro"><p>The one mistake in this topic affects every row in a table at once — worth
-slowing down for.</p>
+<div class="topic-divider" id="p6"><span class="topic-divider-n">Part 6</span><h2 class="topic-divider-title">Why placeholders matter: safe SQL and SQL injection</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a></p><section class="topic"><p>By Week 10, you already know f-strings, which means it is tempting to build SQL
+with string formatting. This is the right point to see why that becomes a bad
+habit.</p>
+<p>Unsafe style:</p>
+<div class="cell"><pre class="code"><code>username = input("Username: ")
+query = f"SELECT * FROM users WHERE username = '{username}'"
+cursor.execute(query)</code></pre></div>
+<p>Safer style:</p>
+<div class="cell"><pre class="code"><code>username = input("Username: ")
+cursor.execute(
+    "SELECT * FROM users WHERE username = ?",
+    (username,),
+)</code></pre></div>
+<p>The second version is better because the data value is passed separately from
+the SQL command text. That makes the query safer and easier to reason about.</p>
+<p>For a first-year audience, the main lesson does not need to become a full
+security lecture. The important message is:</p>
 <blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
+<p>SQL text should stay SQL text. User data should stay data.</p>
 </blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a> · <a href="https://www.sqlite.org/lang_update.html">SQLite UPDATE</a> · <a href="https://www.sqlite.org/lang_delete.html">SQLite DELETE</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>UPDATE</code> — changing existing rows</h2><div class="cell"><pre class="code"><code>cursor.execute("UPDATE devices SET ip = ? WHERE id = ?", ("10.0.0.254", 1))
-conn.commit()
-print(cursor.execute("SELECT name, ip FROM devices WHERE id = 1").fetchone())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Update one device's name, then confirm the change with a SELECT.</p>
-</div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span><code>rowcount</code> — how many rows actually changed</h2><div class="cell"><pre class="code"><code>result = cursor.execute("UPDATE devices SET active = 0 WHERE name = ?", ("AP-Lobby",))
-conn.commit()
-print(result.rowcount)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Update a row and print how many rows <code>rowcount</code> says were affected.</p>
-</div></section><section class="topic" id="t3-s3"><h2><span class="num">3.</span><code>DELETE</code>, and the mistake that affects every row</h2><p>A missing <code>WHERE</code> on <code>UPDATE</code> or <code>DELETE</code> changes or removes <strong>everything</strong> in
-the table — no confirmation, no undo.</p>
-<div class="cell"><pre class="code"><code>cursor.execute("DELETE FROM devices WHERE active = 0")
-conn.commit()
-print(cursor.execute("SELECT name FROM devices").fetchall())
-
-# cursor.execute("DELETE FROM devices")
-# -&gt; wipes the WHOLE table. Always run the matching SELECT first.</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Run the matching <code>SELECT</code> for a <code>DELETE</code> you are about to write, and check the result looks right, before actually deleting.</p>
-</div></section><section class="topic" id="t3-s4"><h2><span class="num">4.</span>The <code>with</code> pattern — commit and close, handled for you</h2><p>Auto-commits on success. Auto-rolls-back if an error is raised inside the
-block — nothing half-finished gets saved.</p>
-<div class="cell"><pre class="code"><code>try:
-    with sqlite3.connect("network.db") as c:
-        c.execute("INSERT INTO devices (name, ip) VALUES (?, ?)", ("Duplicate", "10.0.0.254"))
-except sqlite3.IntegrityError as e:
-    print("Nothing was committed:", e)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Rewrite one of Topic 2's inserts to use the <code>with</code> pattern instead of a manual <code>commit()</code>.</p>
-</div></section><section class="topic" id="t3-s5"><h2>Challenge</h2><p>Using <code>with</code>, insert a device, then trigger a <code>UNIQUE</code> constraint violation
-on purpose inside a second <code>with</code> block, and confirm the first insert is
-still there afterwards but the second never landed.</p>
-</section><section class="topic" id="t3-s6"><h2>Same idea, three fields</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>Field</th>
-  <th>Looks like</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>correcting one bad value in a stored dataset</td>
-</tr>
-<tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>marking one incident resolved, without touching the others</td>
-</tr>
-<tr>
-  <td><strong>IT</strong></td>
-  <td>decommissioning one server record, by id, never by a blanket delete</td>
-</tr>
-</tbody>
-</table>
-</section><section class="topic" id="t3-s7"><h2>Common mistakes</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td><code>UPDATE</code>/<code>DELETE</code> with no <code>WHERE</code></td>
-  <td>every row changes or disappears</td>
-  <td>always include <code>WHERE</code>, run the matching <code>SELECT</code> first</td>
-</tr>
-<tr>
-  <td>forgetting <code>conn.commit()</code> outside a <code>with</code> block</td>
-  <td>the change silently does not persist</td>
-  <td>commit explicitly, or switch to <code>with</code></td>
-</tr>
-<tr>
-  <td>leaving a connection open</td>
-  <td>resources leak in a long-running program</td>
-  <td>close it, or use <code>with</code> so it happens automatically</td>
-</tr>
-<tr>
-  <td>assuming <code>rowcount</code> means something before <code>commit()</code></td>
-  <td>it is still accurate — the mistake is elsewhere, usually a missing commit after</td>
-  <td>check commit happened, not just rowcount</td>
-</tr>
-</tbody>
-</table>
-<h3>Go deeper</h3>
-<p><code>examples/01_update_and_delete.py</code> — UPDATE, DELETE, rowcount, the no-WHERE trap
-<code>examples/02_the_with_pattern.py</code> — with, automatic rollback, sqlite3.Row</p>
-</section><section class="topic" id="t3-s8"><h2>Recap</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>You can now</th>
-  <th>Using</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>change existing rows</td>
-  <td><code>UPDATE ... SET ... WHERE ...</code></td>
-</tr>
-<tr>
-  <td>remove rows</td>
-  <td><code>DELETE FROM ... WHERE ...</code></td>
-</tr>
-<tr>
-  <td>check what actually changed</td>
-  <td><code>.rowcount</code></td>
-</tr>
-<tr>
-  <td>commit and close safely</td>
-  <td><code>with sqlite3.connect(...) as conn:</code></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Next:</strong> Topic 4 — moving your real data and users into this.</p>
+<p>That sentence is short enough to teach, remember, and reuse later in web and AI
+contexts too.</p>
 </section>
-<div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Migrating Real Data In</h2></div><div class="topic-intro"><p>Three weeks of separate skills — Week 7's parsing, Week 8's pulled data,
-Week 9's flat-file users — converging into one real database.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html">DataFrame.to_sql</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_sql.html">pandas.read_sql</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span><code>DataFrame.to_sql()</code> — the whole migration, one line</h2><div class="cell"><pre class="code"><code>import pandas as pd, requests
-from io import StringIO
-
-url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/tips.csv"
-df = pd.read_csv(StringIO(requests.get(url, timeout=10).text))
-
-with sqlite3.connect("network.db") as conn:
-    df.to_sql("tips", conn, if_exists="replace", index=False)
-print("migrated", len(df), "rows")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Migrate a dataset of your own (or Week 8's fallback) into a new table with <code>to_sql()</code>.</p>
-</div></section><section class="topic" id="t4-s2"><h2><span class="num">2.</span><code>pd.read_sql()</code> — querying back out as a DataFrame</h2><div class="cell"><pre class="code"><code>with sqlite3.connect("network.db") as conn:
-    result = pd.read_sql("SELECT * FROM tips WHERE tip &gt; 5", conn)
-print(result.head())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Query your migrated table back with <code>pd.read_sql()</code> using a <code>WHERE</code> condition of your own.</p>
-</div></section><section class="topic" id="t4-s3"><h2><span class="num">3.</span>Migrating Week 9's flat file into a <code>users</code> table</h2><p>Week 7's parsing pattern, applied to a security-relevant file, landing in a
-real table.</p>
-<div class="cell"><pre class="code"><code>with sqlite3.connect("network.db") as conn:
-    conn.execute("""CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL UNIQUE,
-        password_hash TEXT NOT NULL
-    )""")
-    with open("users.txt") as f:
-        for line in f:
-            username, password_hash = line.strip().split(",", 1)
-            conn.execute(
-                "INSERT OR IGNORE INTO users (username, password_hash) VALUES (?, ?)",
-                (username, password_hash),
-            )</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Explain, in one sentence, what <code>INSERT OR IGNORE</code> does differently from a plain <code>INSERT</code> here, and why it matters if you run the migration twice.</p>
-</div></section><section class="topic" id="t4-s4"><h2><span class="num">4.</span>Login still works exactly the same way</h2><p><code>checkpw()</code> does not care whether the hash came from a file or a database
-row — Week 9's logic did not need to change at all, only where it reads from.</p>
-<div class="cell"><pre class="code"><code>import bcrypt
-
-with sqlite3.connect("network.db") as conn:
-    stored = conn.execute(
-        "SELECT password_hash FROM users WHERE username = ?", ("alice",)
-    ).fetchone()
-
-if stored:
-    print(bcrypt.checkpw(b"correct-horse-battery-staple", stored[0].encode("utf-8")))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Adapt your Week 9 <code>login_user</code> function so it queries the <code>users</code> table instead of reading a file.</p>
-</div></section><section class="topic" id="t4-s5"><h2>Challenge</h2><p>Migrate both your project's data and your users file into one database.
-Delete the old flat files once you have confirmed everything still works from
-the database alone.</p>
-</section><section class="topic" id="t4-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+<div class="topic-divider" id="p7"><span class="topic-divider-n">Part 7</span><h2 class="topic-divider-title">Changing existing data: `UPDATE`, `DELETE`, and `WHERE`</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://www.sqlite.org/lang_update.html">SQLite UPDATE</a> · <a href="https://www.sqlite.org/lang_delete.html">SQLite DELETE</a></p><section class="topic"><p>Creating and reading are only part of storage. A useful application must also
+change and remove records.</p>
+<p>Imagine the table currently contains:</p>
+<div class="cell"><pre class="code"><code>+----+-----------+--------------+--------+
+| id | name      | ip           | active |
++----+-----------+--------------+--------+
+| 1  | AP-Lobby  | 10.0.0.10    | 1      |
+| 2  | Switch-1  | 10.0.0.11    | 1      |
+| 3  | Old-Switch| 10.0.0.99    | 0      |
++----+-----------+--------------+--------+</code></pre></div>
+<h2><code>UPDATE</code></h2>
+<div class="cell"><pre class="code"><code>UPDATE devices
+SET active = 0
+WHERE name = 'AP-Lobby';</code></pre></div>
+<p>Question: after this query runs, which rows change?</p>
+<p>Answer: only the row where <code>name = 'AP-Lobby'</code> changes. Its <code>active</code> value
+becomes <code>0</code>. The other rows are untouched.</p>
+<p>After the query:</p>
+<div class="cell"><pre class="code"><code>+----+-----------+--------------+--------+
+| id | name      | ip           | active |
++----+-----------+--------------+--------+
+| 1  | AP-Lobby  | 10.0.0.10    | 0      |
+| 2  | Switch-1  | 10.0.0.11    | 1      |
+| 3  | Old-Switch| 10.0.0.99    | 0      |
++----+-----------+--------------+--------+</code></pre></div>
+<h2><code>DELETE</code></h2>
+<div class="cell"><pre class="code"><code>DELETE FROM devices
+WHERE name = 'Old-Switch';</code></pre></div>
+<p>Question: what is left in the table after this query runs?</p>
+<p>Answer: the row for <code>Old-Switch</code> is removed. The remaining rows stay exactly as
+they were.</p>
+<p>After the query:</p>
+<div class="cell"><pre class="code"><code>+----+----------+--------------+--------+
+| id | name     | ip           | active |
++----+----------+--------------+--------+
+| 1  | AP-Lobby | 10.0.0.10    | 0      |
+| 2  | Switch-1 | 10.0.0.11    | 1      |
++----+----------+--------------+--------+</code></pre></div>
+<p>The dangerous idea here is forgetting the <code>WHERE</code> clause.</p>
+<div class="cell"><pre class="code"><code>UPDATE devices
+SET active = 0;</code></pre></div>
+<p>Question: what happens now?</p>
+<p>Answer: every row in <code>devices</code> is updated, because there is no filter telling
+SQLite which rows to target.</p>
+<p>That is why <code>WHERE</code> matters so much:</p>
+<ul>
+<li>with <code>WHERE</code>, the change is targeted</li>
+<li>without <code>WHERE</code>, the change may affect the whole table</li>
+</ul>
+<p>The Python wrapper is the same pattern as before:</p>
+<div class="cell"><pre class="code"><code>cursor.execute(
+    "UPDATE devices SET active = ? WHERE name = ?",
+    (0, "AP-Lobby"),
+)</code></pre></div>
+<p>So although the SQL verbs change, the safe Python structure stays consistent.
+That consistency is what helps the week feel manageable.</p>
+</section>
+<div class="topic-divider" id="p8"><span class="topic-divider-n">Part 8</span><h2 class="topic-divider-title">Transactions, commit, and the `with` pattern</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/sqlite3.html">Python sqlite3 docs</a></p><section class="topic"><p>Many beginner database bugs are not SQL bugs at all. They come from forgetting
+that changes are part of a transaction.</p>
+<p>In a manual pattern:</p>
+<div class="cell"><pre class="code"><code>conn = sqlite3.connect("ops.db")
+cursor = conn.cursor()
+cursor.execute(
+    "INSERT INTO devices (name, ip, active) VALUES (?, ?, ?)",
+    ("FW-Edge", "10.0.0.1", 1),
+)
+conn.commit()
+conn.close()</code></pre></div>
+<p>If <code>commit()</code> is forgotten, the change may not be saved.</p>
+<p>That is why you should quickly move to this safer pattern:</p>
+<div class="cell"><pre class="code"><code>with sqlite3.connect("ops.db") as conn:
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO devices (name, ip, active) VALUES (?, ?, ?)",
+        ("FW-Edge", "10.0.0.1", 1),
+    )</code></pre></div>
+<p>The <code>with</code> pattern is worth teaching as a habit, not just a convenience:</p>
+<ul>
+<li>it reduces boilerplate</li>
+<li>it makes code easier to read</li>
+<li>it lowers the chance of forgetting a key step</li>
+<li>it fits nicely with the idea of safe resource handling</li>
+</ul>
+</section>
+<div class="topic-divider" id="p9"><span class="topic-divider-n">Part 9</span><h2 class="topic-divider-title">Notebook map and quick recap</h2></div><section class="topic"><p>By the end of Week 10, you should be able to recognise and use these core
+ideas:</p>
+<ul>
+<li>a database stores structured records in tables</li>
+<li>SQL tells the database what to do</li>
+<li>Python uses <code>sqlite3</code> to send SQL and receive results</li>
+<li>placeholders keep data separate from SQL text</li>
+<li><code>WHERE</code> controls which rows are affected</li>
+<li>the <code>with</code> pattern is the safer way to manage the connection</li>
+</ul>
+<p>One useful summary is:</p>
+<div class="cell"><pre class="code"><code>with sqlite3.connect("ops.db") as conn:
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT name, ip FROM devices WHERE active = ?",
+        (1,),
+    )
+    rows = cursor.fetchall()</code></pre></div>
+<p>That short example captures most of the week:</p>
+<ul>
+<li>open the database</li>
+<li>run SQL safely</li>
+<li>filter rows</li>
+<li>fetch the result back into Python</li>
+</ul>
+<h2>Notebook reference</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+  <th>Notebook</th>
+  <th>Main focus</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>a dataset that started as a CSV, now a queryable table</td>
+  <td><code>W10T01_walkthrough.ipynb</code></td>
+  <td>creating the database and defining schema</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>incidents that started as log lines, now searchable by severity</td>
+  <td><code>W10T02_walkthrough.ipynb</code></td>
+  <td>inserting and querying with placeholders</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>tickets that started as raw text, now filterable by status</td>
+  <td><code>W10T03_walkthrough.ipynb</code></td>
+  <td>updating, deleting, and using <code>with</code></td>
+</tr>
+<tr>
+  <td><code>W10T04_walkthrough.ipynb</code></td>
+  <td>migrating project data and user records</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t4-s7"><h2>Common mistakes</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>running the migration twice without <code>OR IGNORE</code>/a <code>UNIQUE</code> check</td>
-  <td><code>IntegrityError</code>, or silent duplicates</td>
-  <td>design for &quot;may run again&quot; from the start</td>
-</tr>
-<tr>
-  <td>forgetting <code>if_exists=&quot;replace&quot;</code> (or <code>&quot;append&quot;</code>) on <code>to_sql()</code></td>
-  <td><code>ValueError: Table already exists</code> on a second run</td>
-  <td>choose deliberately, do not just guess</td>
-</tr>
-<tr>
-  <td>deleting the old flat file before confirming the migration worked</td>
-  <td>data loss if the migration had a bug</td>
-  <td>verify from the database first, delete the source second</td>
-</tr>
-<tr>
-  <td>forgetting the <code>.db</code> file needs to go in <code>.gitignore</code></td>
-  <td>real hashed passwords committed to your repository</td>
-  <td>add it before the first commit that includes it</td>
-</tr>
-</tbody>
-</table>
-<h3>Go deeper</h3>
-<p><code>examples/01_migrating_the_dataset.py</code> — to_sql, read_sql, a real dataset end to end
-<code>examples/02_migrating_the_users_file.py</code> — the flat file to a table, login unchanged</p>
-</section><section class="topic" id="t4-s8"><h2>Recap</h2><table class="booktabs">
-<thead>
-<tr>
-  <th>You can now</th>
-  <th>Using</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td>migrate a DataFrame in</td>
-  <td><code>df.to_sql(table, conn, if_exists=...)</code></td>
-</tr>
-<tr>
-  <td>query it back as a DataFrame</td>
-  <td><code>pd.read_sql(sql, conn)</code></td>
-</tr>
-<tr>
-  <td>migrate a flat file in</td>
-  <td>parse each line, <code>INSERT</code></td>
-</tr>
-<tr>
-  <td>avoid re-migrating badly</td>
-  <td><code>INSERT OR IGNORE</code>, or a <code>UNIQUE</code> constraint</td>
-</tr>
-</tbody>
-</table>
-<p><strong>You now have all of Week 10's STORE.</strong> Open your project and migrate it for
-real — nothing about it resets.</p>
+<p>Use that map as a quick reminder of where each database idea appears before you
+step through the notebook details.</p>
 </section>
 
-    <footer class="page-foot">CST1510 · Week 10 · SQL, Properly</footer>
+    <footer class="page-foot">CST1510 · Week 10 · SQL and Databases</footer>
   </article>
 </div>
 

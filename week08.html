@@ -94,52 +94,40 @@
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#t1-top" class="toc-topic">Topic 1 — Calling a Web API</a>
-<div class="toc-group" data-group="t1">
-<a href="#t1-s1" class="toc-sub">1. A GET request asks a URL for something</a>
-<a href="#t1-s2" class="toc-sub">2. Status codes tell you what happened</a>
-<a href="#t1-s3" class="toc-sub">3. <code>.json()</code> turns the response into Python data</a>
-<a href="#t1-s4" class="toc-sub">4. Query parameters, and always set a timeout</a>
-<a href="#t1-s5" class="toc-sub">5. Handling a missing field safely</a>
-<a href="#t1-s6" class="toc-sub">Challenge</a>
-<a href="#t1-s7" class="toc-sub">Same idea, three fields</a>
-<a href="#t1-s8" class="toc-sub">Common mistakes</a>
-<a href="#t1-s9" class="toc-sub">Recap</a>
-</div>
-<a href="#t2-top" class="toc-topic">Topic 2 — Reading Files from the Web</a>
-<div class="toc-group" data-group="t2">
-<a href="#t2-s1" class="toc-sub">1. A "raw" GitHub URL serves the real file</a>
-<a href="#t2-s2" class="toc-sub">2. <code>requests</code> + <code>StringIO</code> — the reliable way into pandas</a>
-<a href="#t2-s3" class="toc-sub">3. <code>pd.read_csv(url)</code> directly — shorter, not always reliable</a>
-<a href="#t2-s4" class="toc-sub">4. Kaggle, and your own hosted data</a>
-<a href="#t2-s5" class="toc-sub">Challenge</a>
-<a href="#t2-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t2-s7" class="toc-sub">Common mistakes</a>
-<a href="#t2-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t3-top" class="toc-topic">Topic 3 — Light Regex</a>
-<div class="toc-group" data-group="t3">
-<a href="#t3-s1" class="toc-sub">1. Why Week 7's tools are not enough here</a>
-<a href="#t3-s2" class="toc-sub">2. <code>re.search()</code> returns <code>None</code> when nothing matches</a>
-<a href="#t3-s3" class="toc-sub">3. <code>re.findall()</code> — every match, as a list</a>
-<a href="#t3-s4" class="toc-sub">4. A second pattern, and using it on real pulled data</a>
-<a href="#t3-s5" class="toc-sub">5. Capture groups — pulling out the pieces, not just the whole match</a>
-<a href="#t3-s6" class="toc-sub">6. <code>re.sub()</code> — find and replace by shape</a>
-<a href="#t3-s7" class="toc-sub">Challenge</a>
-<a href="#t3-s8" class="toc-sub">Same idea, three fields</a>
-<a href="#t3-s9" class="toc-sub">Common mistakes</a>
-<a href="#t3-s10" class="toc-sub">Recap</a>
-</div>
-<a href="#t4-top" class="toc-topic">Topic 4 — From Functions to a Class</a>
-<div class="toc-group" data-group="t4">
-<a href="#t4-s1" class="toc-sub">1. Before: loose functions and a stray variable</a>
-<a href="#t4-s2" class="toc-sub">2. After: one class, bundling the same data and logic</a>
-<a href="#t4-s3" class="toc-sub">3. What actually changed</a>
-<a href="#t4-s4" class="toc-sub">Challenge</a>
-<a href="#t4-s5" class="toc-sub">Same idea, three fields</a>
-<a href="#t4-s6" class="toc-sub">Common mistakes</a>
-<a href="#t4-s7" class="toc-sub">Recap</a>
-</div>
+    <a href="#p1" class="toc-topic">Part 1. Calling a Web API</a>
+<a href="#p1-t1-1-a-get-request-asks-a-url-for-something" class="toc-sub">1. A GET request asks a URL for something</a>
+<a href="#p1-t1-2-status-codes-tell-you-what-happened" class="toc-sub">2. Status codes tell you what happened</a>
+<a href="#p1-t1-3-json-turns-the-response-into-python-data" class="toc-sub">3. <code>.json()</code> turns the response into Python data</a>
+<a href="#p1-t1-4-query-parameters-and-always-set-a-timeout" class="toc-sub">4. Query parameters, and always set a timeout</a>
+<a href="#p1-t1-5-handling-a-missing-field-safely" class="toc-sub">5. Handling a missing field safely</a>
+<a href="#p1-t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p1-t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p1-t1-recap" class="toc-sub">Recap</a>
+<a href="#p2" class="toc-topic">Part 2. Reading Files from the Web</a>
+<a href="#p2-t2-1-a-raw-github-url-serves-the-real-file" class="toc-sub">1. A "raw" GitHub URL serves the real file</a>
+<a href="#p2-t2-2-requests-stringio-the-reliable-way-into-pandas" class="toc-sub">2. <code>requests</code> + <code>StringIO</code> — the reliable way into pandas</a>
+<a href="#p2-t2-3-pd-read-csv-url-directly-shorter-not-always-reliable" class="toc-sub">3. <code>pd.read_csv(url)</code> directly — shorter, not always reliable</a>
+<a href="#p2-t2-4-kaggle-and-your-own-hosted-data" class="toc-sub">4. Kaggle, and your own hosted data</a>
+<a href="#p2-t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p2-t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p2-t2-recap" class="toc-sub">Recap</a>
+<a href="#p3" class="toc-topic">Part 3. Light Regex</a>
+<a href="#p3-t3-1-why-week-7-s-tools-are-not-enough-here" class="toc-sub">1. Why Week 7's tools are not enough here</a>
+<a href="#p3-t3-2-re-search-returns-none-when-nothing-matches" class="toc-sub">2. <code>re.search()</code> returns <code>None</code> when nothing matches</a>
+<a href="#p3-t3-3-re-findall-every-match-as-a-list" class="toc-sub">3. <code>re.findall()</code> — every match, as a list</a>
+<a href="#p3-t3-4-a-second-pattern-and-using-it-on-real-pulled-data" class="toc-sub">4. A second pattern, and using it on real pulled data</a>
+<a href="#p3-t3-5-capture-groups-pulling-out-the-pieces-not-just-the-whole-match" class="toc-sub">5. Capture groups — pulling out the pieces, not just the whole match</a>
+<a href="#p3-t3-6-re-sub-find-and-replace-by-shape" class="toc-sub">6. <code>re.sub()</code> — find and replace by shape</a>
+<a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p3-t3-recap" class="toc-sub">Recap</a>
+<a href="#p4" class="toc-topic">Part 4. From Functions to a Class</a>
+<a href="#p4-t4-1-before-loose-functions-and-a-stray-variable" class="toc-sub">1. Before: loose functions and a stray variable</a>
+<a href="#p4-t4-2-after-one-class-bundling-the-same-data-and-logic" class="toc-sub">2. After: one class, bundling the same data and logic</a>
+<a href="#p4-t4-3-what-actually-changed" class="toc-sub">3. What actually changed</a>
+<a href="#p4-t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p4-t4-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p4-t4-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
@@ -147,18 +135,13 @@
       <div class="breadcrumb">CST1510</div>
       <h1 class="page-title">Week 8 — Pulling Real Data</h1>
       <p class="lede">By the end of this week you can call a real web API with <code>requests</code>, read its status code, and parse its JSON, handle a failed or slow request without your program crashing, and download a real file from the web — a raw GitHub URL or a Kaggle dataset.</p>
-      <p class="box-note">Box we build this week: <b><code>INPUT, from outside</code> — see <code>../system_diagram.md</code></b>. Each <em>Practice</em> below sets a short task.</p>
-      <p class="muted">This page combines the week's walkthrough notebooks into one reading view, keeping the theory in teaching order.</p>
+      
     </header>
 
-    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=8" title="System architecture — Week 8" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>INPUT, from outside</b>.</figcaption></figure><figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="From the web into your program" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">INPUT, from outside</text><line x1="166.0" y1="164" x2="236.7" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Calling a Web API</tspan></text><line x1="424.7" y1="164" x2="495.3" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="244.7" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="258.7" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="258.7" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="258.7" dy="0">Reading Files from</tspan><tspan x="258.7" dy="19">the Web</tspan></text><line x1="683.3" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="503.3" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="517.3" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="517.3" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="517.3" dy="0">Light Regex</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">From Functions to a</tspan><tspan x="776.0" dy="19">Class</tspan></text></svg><figcaption><b>From the web into your program</b>. Week 8 shows the path from remote data to cleaned fields and then into a reusable class.</figcaption></figure>
+    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=8" title="System architecture — Week 8" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>INPUT, from outside</b>.</figcaption></figure>
 
-    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Calling a Web API</h2></div><div class="topic-intro"><p>Everything you have loaded so far has been a file you already had. This week
-it is a real service, somewhere else, that you ask for data.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a> · <a href="https://docs.python.org/3/library/json.html">json module</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A GET request asks a URL for something</h2><div class="cell"><pre class="code"><code>import requests
+    <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">Calling a Web API</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a> · <a href="https://docs.python.org/3/library/json.html">json module</a></p><section class="topic"><p>Everything you have loaded so far has been a file you already had. This week
+it is a real service, somewhere else, that you ask for data.</p><section class="topic" id="p1-t1-1-a-get-request-asks-a-url-for-something"><h2><span class="num">1.</span>A GET request asks a URL for something</h2><div class="cell"><pre class="code"><code>import requests
 
 response = requests.get("https://api.github.com/orgs/python")
 print(response.status_code)</code></pre></div><div class="diagram"><pre>your code                the API
@@ -167,16 +150,13 @@ print(response.status_code)</code></pre></div><div class="diagram"><pre>your cod
     │                        │  looks it up
     │◀─── response ──────────│
     │   (status code + JSON)</pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>GET <code>https://api.github.com/repos/python/cpython</code> and print its status code.</p>
-</div></section><section class="topic" id="t1-s2"><h2><span class="num">2.</span>Status codes tell you what happened</h2><p>200s = OK. 400s = you got something wrong. 500s = their fault, not yours.</p>
+</section><section class="topic" id="p1-t1-2-status-codes-tell-you-what-happened"><h2><span class="num">2.</span>Status codes tell you what happened</h2><p>200s = OK. 400s = you got something wrong. 500s = their fault, not yours.</p>
 <div class="cell"><pre class="code"><code>print(requests.get("https://api.github.com/orgs/python").status_code)              # 200
-print(requests.get("https://api.github.com/this-does-not-exist-xyz").status_code)     # 404</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>GET a URL you know does not exist and print its status code.</p>
-</div></section><section class="topic" id="t1-s3"><h2><span class="num">3.</span><code>.json()</code> turns the response into Python data</h2><p>Almost every API replies in JSON — which looks exactly like a dict, or a list
+print(requests.get("https://api.github.com/this-does-not-exist-xyz").status_code)     # 404</code></pre></div></section><section class="topic" id="p1-t1-3-json-turns-the-response-into-python-data"><h2><span class="num">3.</span><code>.json()</code> turns the response into Python data</h2><p>Almost every API replies in JSON — which looks exactly like a dict, or a list
 of dicts.</p>
 <div class="cell"><pre class="code"><code>response = requests.get("https://api.github.com/orgs/python")
 data = response.json()
-print(data["login"], data["public_repos"])</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>GET <code>https://api.github.com/repos/python/cpython</code> and print its <code>&quot;stargazers_count&quot;</code>.</p>
-</div></section><section class="topic" id="t1-s4"><h2><span class="num">4.</span>Query parameters, and always set a timeout</h2><p>The <code>params</code> dict becomes <code>?key=value</code> on the URL for you. A <code>timeout</code> stops a
+print(data["login"], data["public_repos"])</code></pre></div></section><section class="topic" id="p1-t1-4-query-parameters-and-always-set-a-timeout"><h2><span class="num">4.</span>Query parameters, and always set a timeout</h2><p>The <code>params</code> dict becomes <code>?key=value</code> on the URL for you. A <code>timeout</code> stops a
 dead server from hanging your program forever.</p>
 <div class="cell"><pre class="code"><code>response = requests.get(
     "https://api.github.com/orgs/python/repos",
@@ -184,8 +164,7 @@ dead server from hanging your program forever.</p>
     timeout=10,
 )
 for repo in response.json():
-    print(repo["name"], repo["open_issues_count"])</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Change <code>per_page</code> to 5 and print how many repos came back.</p>
-</div></section><section class="topic" id="t1-s5"><h2><span class="num">5.</span>Handling a missing field safely</h2><p>Not every response has the field you expect — an API can change shape, or you can mistype a key. <code>dict.get(key, default)</code> returns a fallback instead of raising <code>KeyError</code>; wrapping the lookup in <code>try</code>/<code>except KeyError</code> works too.</p>
+    print(repo["name"], repo["open_issues_count"])</code></pre></div></section><section class="topic" id="p1-t1-5-handling-a-missing-field-safely"><h2><span class="num">5.</span>Handling a missing field safely</h2><p>Not every response has the field you expect — an API can change shape, or you can mistype a key. <code>dict.get(key, default)</code> returns a fallback instead of raising <code>KeyError</code>; wrapping the lookup in <code>try</code>/<code>except KeyError</code> works too.</p>
 <div class="cell"><pre class="code"><code>data = requests.get("https://api.github.com/orgs/python").json()
 
 # data["repo_count"] would raise KeyError - that field does not exist.
@@ -194,10 +173,7 @@ repo_count = data.get("repo_count", "unknown")
 print(repo_count)
 
 # safe to use the same way even on a field that does exist:
-print(data.get("public_repos", "unknown"))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>GET <code>https://api.github.com/orgs/python</code> and print <code>data.get(&quot;stargazers_count&quot;, &quot;not provided&quot;)</code> — that key genuinely does not exist on an org, so you should see the fallback printed, not a crash.</p>
-</div></section><section class="topic" id="t1-s6"><h2>Challenge</h2><p>GET <code>https://api.github.com/orgs/python/repos</code> with <code>per_page=5</code>, and print
-each repo's name and star count, one per line, formatted with an f-string.</p>
-</section><section class="topic" id="t1-s7"><h2>Same idea, three fields</h2><table class="booktabs">
+print(data.get("public_repos", "unknown"))</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -219,7 +195,7 @@ each repo's name and star count, one per line, formatted with an f-string.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t1-s8"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -254,7 +230,7 @@ each repo's name and star count, one per line, formatted with an f-string.</p>
 <p><code>examples/01_get_requests.py</code> — GET, status codes, .json(), params, timeout
 <code>examples/02_handling_api_errors.py</code> — raise_for_status(), timeouts, checking status yourself, missing fields
 Docs: <a href="https://requests.readthedocs.io/en/latest/">requests documentation</a></p>
-</section><section class="topic" id="t1-s9"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -289,44 +265,34 @@ Docs: <a href="https://requests.readthedocs.io/en/latest/">requests documentatio
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — downloading a real file instead of calling an API.</p>
-</section>
-<div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Reading Files from the Web</h2></div><div class="topic-intro"><p>Not every dataset needs an API — sometimes it is a file sitting on the web,
-waiting to be downloaded.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html">pandas.read_csv</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>A "raw" GitHub URL serves the real file</h2><p><code>github.com/user/repo/blob/...</code> shows a formatted web page.
+</section></section>
+<div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">Reading Files from the Web</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html">pandas.read_csv</a></p><section class="topic"><p>Not every dataset needs an API — sometimes it is a file sitting on the web,
+waiting to be downloaded.</p><section class="topic" id="p2-t2-1-a-raw-github-url-serves-the-real-file"><h2><span class="num">1.</span>A "raw" GitHub URL serves the real file</h2><p><code>github.com/user/repo/blob/...</code> shows a formatted web page.
 <code>raw.githubusercontent.com/user/repo/branch/...</code> gives you the actual file.</p>
 <div class="cell"><pre class="code"><code>import requests
 
 url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
 response = requests.get(url, timeout=10)
 print(response.status_code)
-print(response.text[:100])</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Fetch that same URL and print how many characters <code>response.text</code> contains.</p>
-</div></section><section class="topic" id="t2-s2"><h2><span class="num">2.</span><code>requests</code> + <code>StringIO</code> — the reliable way into pandas</h2><p><code>StringIO</code> lets pandas treat downloaded text as if it were a local file. This
+print(response.text[:100])</code></pre></div></section><section class="topic" id="p2-t2-2-requests-stringio-the-reliable-way-into-pandas"><h2><span class="num">2.</span><code>requests</code> + <code>StringIO</code> — the reliable way into pandas</h2><p><code>StringIO</code> lets pandas treat downloaded text as if it were a local file. This
 is the method to reach for by default.</p>
 <div class="cell"><pre class="code"><code>import pandas as pd
 from io import StringIO
 
 df = pd.read_csv(StringIO(response.text))
 print(df.head())
-print(len(df), "rows")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Load the same URL into a DataFrame using <code>requests</code> + <code>StringIO</code>, and print its shape.</p>
-</div></section><section class="topic" id="t2-s3"><h2><span class="num">3.</span><code>pd.read_csv(url)</code> directly — shorter, not always reliable</h2><p>pandas can fetch a URL itself. It often works — but it uses your system's own
+print(len(df), "rows")</code></pre></div></section><section class="topic" id="p2-t2-3-pd-read-csv-url-directly-shorter-not-always-reliable"><h2><span class="num">3.</span><code>pd.read_csv(url)</code> directly — shorter, not always reliable</h2><p>pandas can fetch a URL itself. It often works — but it uses your system's own
 certificate setup, not <code>requests</code>' bundled one, and can fail with an SSL error
 on some machines even when <code>requests.get()</code> on the same URL is fine. Section 2's
 method always works instead.</p>
 <div class="cell"><pre class="code"><code># df = pd.read_csv(url)
 # SSL: CERTIFICATE_VERIFY_FAILED  &lt;- can happen here even though
-#                                    requests.get(url) worked above</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Try <code>pd.read_csv(url)</code> directly on your own machine. Does it work, or do you see the SSL error?</p>
-</div></section><section class="topic" id="t2-s4"><h2><span class="num">4.</span>Kaggle, and your own hosted data</h2><p>Kaggle needs an account and an API token (<code>pip install kaggle</code>, then
+#                                    requests.get(url) worked above</code></pre></div></section><section class="topic" id="p2-t2-4-kaggle-and-your-own-hosted-data"><h2><span class="num">4.</span>Kaggle, and your own hosted data</h2><p>Kaggle needs an account and an API token (<code>pip install kaggle</code>, then
 <code>kaggle datasets download -d owner/name</code>) — not a single <code>requests.get()</code>. But
 once it is a <code>.csv</code> on disk, everything from here works the same. A CSV you
 commit to your <strong>own</strong> GitHub repo works exactly like Topic 2's example — same
 mechanism, nothing special about who owns it.</p>
-<div class="callout"><span class="callout-label">Practice</span><p>Check the dataset you loaded in section 2 against the checklist: 50+ rows, 4+ columns, one genuinely messy text column.</p>
-</div></section><section class="topic" id="t2-s5"><h2>Challenge</h2><p>Download a real CSV of your choice (or reuse <code>iris.csv</code>) using <code>requests</code> +
-<code>StringIO</code>, and print its column names and row count.</p>
-</section><section class="topic" id="t2-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -348,7 +314,7 @@ mechanism, nothing special about who owns it.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t2-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -383,7 +349,7 @@ mechanism, nothing special about who owns it.</p>
 <p><code>examples/01_downloading_a_csv.py</code> — raw URLs, requests + StringIO, the SSL gotcha
 <code>examples/02_kaggle_and_your_own_data.py</code> — Kaggle's flow, your own hosted data, the checklist
 Docs: <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">requests documentation</a></p>
-</section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -410,21 +376,16 @@ Docs: <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">reque
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — finding a pattern in text that has no separator to split on.</p>
-</section>
-<div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Light Regex</h2></div><div class="topic-intro"><p>Week 7's string methods need to know the exact text. This week: finding
-something by its <em>shape</em> instead.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/re.html">re module</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>Why Week 7's tools are not enough here</h2><p>&quot;Does this contain an IP address&quot; is not &quot;does this contain one exact
+</section></section>
+<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Light Regex</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/re.html">re module</a></p><section class="topic"><p>Week 7's string methods need to know the exact text. This week: finding
+something by its <em>shape</em> instead.</p><section class="topic" id="p3-t3-1-why-week-7-s-tools-are-not-enough-here"><h2><span class="num">1.</span>Why Week 7's tools are not enough here</h2><p>&quot;Does this contain an IP address&quot; is not &quot;does this contain one exact
 substring&quot; — the IP is different every time.</p>
 <div class="cell"><pre class="code"><code>import re
 
 line = "2026-09-08 connection from 10.0.0.5 refused"
 
 match = re.search(r"\d+\.\d+\.\d+\.\d+", line)
-print(match.group())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given a line containing a different IP address, use the same pattern to find it.</p>
-</div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span><code>re.search()</code> returns <code>None</code> when nothing matches</h2><p>Same shape as Week 7's <code>.find()</code> returning <code>-1</code> — check before you use it.</p>
+print(match.group())</code></pre></div></section><section class="topic" id="p3-t3-2-re-search-returns-none-when-nothing-matches"><h2><span class="num">2.</span><code>re.search()</code> returns <code>None</code> when nothing matches</h2><p>Same shape as Week 7's <code>.find()</code> returning <code>-1</code> — check before you use it.</p>
 <div class="cell"><pre class="code"><code>no_ip = "no address in this line"
 match = re.search(r"\d+\.\d+\.\d+\.\d+", no_ip)
 print(match)
@@ -432,16 +393,13 @@ print(match)
 if match:
     print(match.group())
 else:
-    print("no IP found")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Run the search on a line you know has no match, and check <code>match</code> before calling <code>.group()</code>.</p>
-</div></section><section class="topic" id="t3-s3"><h2><span class="num">3.</span><code>re.findall()</code> — every match, as a list</h2><div class="cell"><pre class="code"><code>log = "attempts from 10.0.0.5 and 192.168.1.1 and 10.0.0.9"
+    print("no IP found")</code></pre></div></section><section class="topic" id="p3-t3-3-re-findall-every-match-as-a-list"><h2><span class="num">3.</span><code>re.findall()</code> — every match, as a list</h2><div class="cell"><pre class="code"><code>log = "attempts from 10.0.0.5 and 192.168.1.1 and 10.0.0.9"
 all_ips = re.findall(r"\d+\.\d+\.\d+\.\d+", log)
-print(all_ips)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Use <code>re.findall()</code> to pull every 4-digit year out of a string containing several dates.</p>
-</div></section><section class="topic" id="t3-s4"><h2><span class="num">4.</span>A second pattern, and using it on real pulled data</h2><div class="cell"><pre class="code"><code>date_match = re.search(r"\d{4}-\d{2}-\d{2}", line)
+print(all_ips)</code></pre></div></section><section class="topic" id="p3-t3-4-a-second-pattern-and-using-it-on-real-pulled-data"><h2><span class="num">4.</span>A second pattern, and using it on real pulled data</h2><div class="cell"><pre class="code"><code>date_match = re.search(r"\d{4}-\d{2}-\d{2}", line)
 print(date_match.group())
 
 sample = "Supports Python 3.12 and above, tested on 3.10 too"
-print(re.findall(r"\d+\.\d+", sample))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write a pattern that matches something shaped like <code>something@something.something</code> (it does not need to be perfect).</p>
-</div></section><section class="topic" id="t3-s5"><h2><span class="num">5.</span>Capture groups — pulling out the pieces, not just the whole match</h2><p>Parentheses <code>(...)</code> in a pattern mark a &quot;capture group&quot; — a part of the match
+print(re.findall(r"\d+\.\d+", sample))</code></pre></div></section><section class="topic" id="p3-t3-5-capture-groups-pulling-out-the-pieces-not-just-the-whole-match"><h2><span class="num">5.</span>Capture groups — pulling out the pieces, not just the whole match</h2><p>Parentheses <code>(...)</code> in a pattern mark a &quot;capture group&quot; — a part of the match
 you want separately, not just confirmed as present.</p>
 <div class="cell"><pre class="code"><code>log_line = "2026-09-08 ERROR connection from 10.0.0.5"
 
@@ -453,18 +411,12 @@ parentheses:</p>
 <div class="cell"><pre class="code"><code>match = re.search(r"(?P&lt;date&gt;\d{4}-\d{2}-\d{2}) (?P&lt;level&gt;\w+)", log_line)
 print(match.group("date"))     # 2026-09-08
 print(match.group("level"))    # ERROR</code></pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>Using <code>log_line</code>, write a named-group pattern that also captures the IP address
-(as <code>ip</code>), then print all three pieces by name.</p>
-</div></section><section class="topic" id="t3-s6"><h2><span class="num">6.</span><code>re.sub()</code> — find and replace by shape</h2><p>Same idea as Week 7's <code>.replace()</code>, but matching a <em>shape</em> instead of exact
+</section><section class="topic" id="p3-t3-6-re-sub-find-and-replace-by-shape"><h2><span class="num">6.</span><code>re.sub()</code> — find and replace by shape</h2><p>Same idea as Week 7's <code>.replace()</code>, but matching a <em>shape</em> instead of exact
 text — useful for redacting anything that looks like sensitive data.</p>
 <div class="cell"><pre class="code"><code>text = "Server IP: 192.168.0.10, DNS: 8.8.8.8, Gateway: 10.0.0.1"
 
 redacted = re.sub(r"\d+\.\d+\.\d+\.\d+", "[REDACTED]", text)
-print(redacted)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given <code>log_line</code> from section 5, use <code>re.sub()</code> to replace just the IP address
-with <code>&quot;***&quot;</code>, leaving the date and level untouched.</p>
-</div></section><section class="topic" id="t3-s7"><h2>Challenge</h2><p>Pull 5 repos from the GitHub API (Topic 1). For each one, check whether its
-description mentions a version number shaped like <code>3.12</code>, using <code>re.search()</code>.</p>
-</section><section class="topic" id="t3-s8"><h2>Same idea, three fields</h2><table class="booktabs">
+print(redacted)</code></pre></div></section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -486,7 +438,7 @@ description mentions a version number shaped like <code>3.12</code>, using <code
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t3-s9"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -527,7 +479,7 @@ description mentions a version number shaped like <code>3.12</code>, using <code
 <code>examples/02_regex_on_real_data.py</code> — applying a pattern to real pulled API data
 <code>examples/03_groups_and_sub.py</code> — capture groups, named groups, and <code>re.sub()</code>
 Docs: <a href="https://docs.python.org/3/library/re.html">re module</a></p>
-</section><section class="topic" id="t3-s10"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -562,13 +514,9 @@ Docs: <a href="https://docs.python.org/3/library/re.html">re module</a></p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — turning what you have built into one class.</p>
-</section>
-<div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">From Functions to a Class</h2></div><div class="topic-intro"><p>The same refactor Week 5's demo did to <code>record_check.py</code>. This time you do it
-to your own code.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>Before: loose functions and a stray variable</h2><div class="cell"><pre class="code"><code>def parse_line(raw_line):
+</section></section>
+<div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">From Functions to a Class</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a></p><section class="topic"><p>The same refactor Week 5's demo did to <code>record_check.py</code>. This time you do it
+to your own code.</p><section class="topic" id="p4-t4-1-before-loose-functions-and-a-stray-variable"><h2><span class="num">1.</span>Before: loose functions and a stray variable</h2><div class="cell"><pre class="code"><code>def parse_line(raw_line):
     """Turn one messy raw line into a dict."""
     label, value = raw_line.strip().split(",")
     return {"label": label.strip().lower(), "value": float(value)}
@@ -577,8 +525,7 @@ def status_of(value, limit=100):
     """Return OVER LIMIT or OK for a value against a limit."""
     return "OVER LIMIT" if value &gt;= limit else "OK"
 
-over_limit_count = 0   # &lt;- not attached to anything</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Call <code>parse_line</code> and <code>status_of</code> on <code>&quot;srv-01, 87&quot;</code> and print the result.</p>
-</div></section><section class="topic" id="t4-s2"><h2><span class="num">2.</span>After: one class, bundling the same data and logic</h2><p>Nothing here is new — every line is something Week 5 already taught. What
+over_limit_count = 0   # &lt;- not attached to anything</code></pre></div></section><section class="topic" id="p4-t4-2-after-one-class-bundling-the-same-data-and-logic"><h2><span class="num">2.</span>After: one class, bundling the same data and logic</h2><p>Nothing here is new — every line is something Week 5 already taught. What
 changed is where it lives.</p>
 <div class="cell"><pre class="code"><code>class RecordSource:
     """Loads raw lines, parses them, and tracks how many are over limit."""
@@ -603,18 +550,13 @@ over_limit_count  (stray)               self.over_limit_count
 
 same logic - now it travels together, and two RecordSource objects
 never interfere with each other</pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>Add a <code>load(self, raw_lines)</code> method that parses every line, prints its status, and updates <code>self.over_limit_count</code>.</p>
-</div></section><section class="topic" id="t4-s3"><h2><span class="num">3.</span>What actually changed</h2><p><code>over_limit_count</code> can no longer be forgotten or reset by accident — it
+</section><section class="topic" id="p4-t4-3-what-actually-changed"><h2><span class="num">3.</span>What actually changed</h2><p><code>over_limit_count</code> can no longer be forgotten or reset by accident — it
 belongs to the object. <code>parse_line</code> and <code>status_of</code> no longer need their
 inputs passed between calls — they share <code>self</code>. You can now make a <em>second</em>
 <code>RecordSource</code> with a different limit, and the two will not interfere.</p>
 <div class="cell"><pre class="code"><code>a = RecordSource(limit=100)
 b = RecordSource(limit=50)
-print(a.limit, b.limit)   # independent</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Create two <code>RecordSource</code> objects with different limits and prove they do not share state.</p>
-</div></section><section class="topic" id="t4-s4"><h2>Challenge</h2><p>Take your Week 7 <code>parse_line</code>/<code>status_of</code> functions (or the versions above)
-and refactor them into one class, exactly the way this topic did — this is
-literally this week's project task, rehearsed here first.</p>
-</section><section class="topic" id="t4-s5"><h2>Same idea, three fields</h2><table class="booktabs">
+print(a.limit, b.limit)   # independent</code></pre></div></section><section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -636,7 +578,7 @@ literally this week's project task, rehearsed here first.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t4-s6"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -670,7 +612,7 @@ literally this week's project task, rehearsed here first.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_before_and_after.py</code> — the exact refactor, side by side
 <code>examples/02_a_class_that_pulls_real_data.py</code> — the same shape as this week's DEMO</p>
-</section><section class="topic" id="t4-s7"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -694,7 +636,7 @@ literally this week's project task, rehearsed here first.</p>
 </table>
 <p><strong>You now have all of Week 8's tools.</strong> This is what starts your project in
 the lab — nothing about it resets.</p>
-</section>
+</section></section>
 
     <footer class="page-foot">CST1510 · Week 08 · Pulling Real Data</footer>
   </article>

@@ -94,50 +94,38 @@
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#t1-top" class="toc-topic">Topic 1 — API Keys, Reviewed</a>
-<div class="toc-group" data-group="t1">
-<a href="#t1-s1" class="toc-sub">Before you start — where <code>OPENAI_API_KEY</code> comes from</a>
-<a href="#t1-s2" class="toc-sub">1. Loading the key — the same habit as Week 9</a>
-<a href="#t1-s3" class="toc-sub">2. Two different responses to a missing key</a>
-<a href="#t1-s4" class="toc-sub">3. Making a feature optional, end to end</a>
-<a href="#t1-s5" class="toc-sub">Challenge</a>
-<a href="#t1-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t1-s7" class="toc-sub">Common mistakes</a>
-<a href="#t1-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t2-top" class="toc-topic">Topic 2 — Calling the ChatGPT API</a>
-<div class="toc-group" data-group="t2">
-<a href="#t2-s1" class="toc-sub">1. The client, and one call</a>
-<a href="#t2-s2" class="toc-sub">2. The reply's exact shape</a>
-<a href="#t2-s3" class="toc-sub">3. The API is stateless — history has to be resent every time</a>
-<a href="#t2-s4" class="toc-sub">4. Verifying the calling code without a real key — mocking, previewed</a>
-<a href="#t2-s5" class="toc-sub">Challenge</a>
-<a href="#t2-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t2-s7" class="toc-sub">Common mistakes</a>
-<a href="#t2-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t3-top" class="toc-topic">Topic 3 — Testing Your App</a>
-<div class="toc-group" data-group="t3">
-<a href="#t3-s1" class="toc-sub">1. A pytest test is a function starting with <code>test_</code></a>
-<a href="#t3-s2" class="toc-sub">2. Test the edges, not just the middle</a>
-<a href="#t3-s3" class="toc-sub">3. Testing code that calls something external — with a mock</a>
-<a href="#t3-s4" class="toc-sub">4. Running with the real <code>pytest</code> command</a>
-<a href="#t3-s5" class="toc-sub">Challenge</a>
-<a href="#t3-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t3-s7" class="toc-sub">Common mistakes</a>
-<a href="#t3-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t4-top" class="toc-topic">Topic 4 — Deploying</a>
-<div class="toc-group" data-group="t4">
-<a href="#t4-s1" class="toc-sub">1. <code>requirements.txt</code> — what the cloud needs to install</a>
-<a href="#t4-s2" class="toc-sub">2. <code>.gitignore</code> — the last check before every commit from here</a>
-<a href="#t4-s3" class="toc-sub">3. A pre-flight check script — catching mistakes before Streamlit Cloud does</a>
-<a href="#t4-s4" class="toc-sub">4. The real deployment steps</a>
-<a href="#t4-s5" class="toc-sub">Challenge</a>
-<a href="#t4-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t4-s7" class="toc-sub">Common mistakes</a>
-<a href="#t4-s8" class="toc-sub">Recap</a>
-</div>
+    <a href="#p1" class="toc-topic">Part 1. API Keys, Reviewed</a>
+<a href="#p1-t1-before-you-start-where-openai-api-key-comes-from" class="toc-sub">Before you start — where <code>OPENAI_API_KEY</code> comes from</a>
+<a href="#p1-t1-1-loading-the-key-the-same-habit-as-week-9" class="toc-sub">1. Loading the key — the same habit as Week 9</a>
+<a href="#p1-t1-2-two-different-responses-to-a-missing-key" class="toc-sub">2. Two different responses to a missing key</a>
+<a href="#p1-t1-3-making-a-feature-optional-end-to-end" class="toc-sub">3. Making a feature optional, end to end</a>
+<a href="#p1-t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p1-t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p1-t1-recap" class="toc-sub">Recap</a>
+<a href="#p2" class="toc-topic">Part 2. Calling the ChatGPT API</a>
+<a href="#p2-t2-1-the-client-and-one-call" class="toc-sub">1. The client, and one call</a>
+<a href="#p2-t2-2-the-reply-s-exact-shape" class="toc-sub">2. The reply's exact shape</a>
+<a href="#p2-t2-3-the-api-is-stateless-history-has-to-be-resent-every-time" class="toc-sub">3. The API is stateless — history has to be resent every time</a>
+<a href="#p2-t2-4-verifying-the-calling-code-without-a-real-key-mocking-previewed" class="toc-sub">4. Verifying the calling code without a real key — mocking, previewed</a>
+<a href="#p2-t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p2-t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p2-t2-recap" class="toc-sub">Recap</a>
+<a href="#p3" class="toc-topic">Part 3. Testing Your App</a>
+<a href="#p3-t3-1-a-pytest-test-is-a-function-starting-with-test" class="toc-sub">1. A pytest test is a function starting with <code>test_</code></a>
+<a href="#p3-t3-2-test-the-edges-not-just-the-middle" class="toc-sub">2. Test the edges, not just the middle</a>
+<a href="#p3-t3-3-testing-code-that-calls-something-external-with-a-mock" class="toc-sub">3. Testing code that calls something external — with a mock</a>
+<a href="#p3-t3-4-running-with-the-real-pytest-command" class="toc-sub">4. Running with the real <code>pytest</code> command</a>
+<a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p3-t3-recap" class="toc-sub">Recap</a>
+<a href="#p4" class="toc-topic">Part 4. Deploying</a>
+<a href="#p4-t4-1-requirements-txt-what-the-cloud-needs-to-install" class="toc-sub">1. <code>requirements.txt</code> — what the cloud needs to install</a>
+<a href="#p4-t4-2-gitignore-the-last-check-before-every-commit-from-here" class="toc-sub">2. <code>.gitignore</code> — the last check before every commit from here</a>
+<a href="#p4-t4-3-a-pre-flight-check-script-catching-mistakes-before-streamlit-cloud-does" class="toc-sub">3. A pre-flight check script — catching mistakes before Streamlit Cloud does</a>
+<a href="#p4-t4-4-the-real-deployment-steps" class="toc-sub">4. The real deployment steps</a>
+<a href="#p4-t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p4-t4-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p4-t4-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
@@ -145,18 +133,13 @@
       <div class="breadcrumb">CST1510</div>
       <h1 class="page-title">Week 12 — Intelligence (Optional) and Deployment</h1>
       <p class="lede">By the end of this week you can load an API key safely, and make a feature degrade gracefully without one, call the ChatGPT API — messages, roles, and why conversation history has to be resent, and write basic <code>pytest</code> tests for the pure-function parts of your project.</p>
-      <p class="box-note">Box we build this week: <b><code>PROCESS, intelligent (optional) — and shipped</code> — see <code>../system_diagram.md</code></b>. Each <em>Practice</em> below sets a short task.</p>
-      <p class="muted">This page combines the week's walkthrough notebooks into one reading view, keeping the theory in teaching order.</p>
+      
     </header>
 
-    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=12" title="System architecture — Week 12" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>PROCESS, intelligent (optional) — and shipped</b>.</figcaption></figure><figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="From local app to deployed AI app" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">PROCESS, intelligent (optional) — and shipped</text><line x1="166.0" y1="164" x2="236.7" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">API Keys, Reviewed</tspan></text><line x1="424.7" y1="164" x2="495.3" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="244.7" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="258.7" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="258.7" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="258.7" dy="0">Calling the ChatGPT</tspan><tspan x="258.7" dy="19">API</tspan></text><line x1="683.3" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="503.3" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="517.3" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="517.3" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="517.3" dy="0">Testing Your App</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">Deploying</tspan></text></svg><figcaption><b>From local app to deployed AI app</b>. Week 12 connects keys, model calls, testing, and deployment into one final production-minded picture.</figcaption></figure>
+    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=12" title="System architecture — Week 12" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>PROCESS, intelligent (optional) — and shipped</b>.</figcaption></figure>
 
-    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">API Keys, Reviewed</h2></div><div class="topic-intro"><p>Week 9's lesson, one more time, for the one secret this whole week revolves
-around — and the pattern that makes a feature genuinely optional.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a> · <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p></div><section class="topic" id="t1-s1"><h2>Before you start — where <code>OPENAI_API_KEY</code> comes from</h2><p>If you want to try the optional AI feature for real, you first need your own OpenAI API key.</p>
+    <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">API Keys, Reviewed</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a> · <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p><section class="topic"><p>Week 9's lesson, one more time, for the one secret this whole week revolves
+around — and the pattern that makes a feature genuinely optional.</p><section class="topic" id="p1-t1-before-you-start-where-openai-api-key-comes-from"><h2>Before you start — where <code>OPENAI_API_KEY</code> comes from</h2><p>If you want to try the optional AI feature for real, you first need your own OpenAI API key.</p>
 <ol>
 <li>Sign in to the OpenAI platform dashboard.</li>
 <li>Create an API key there.</li>
@@ -170,11 +153,10 @@ around — and the pattern that makes a feature genuinely optional.</p>
 <p>OpenAI's Python tools can read the key from the environment automatically.</p>
 <p>If you do <strong>not</strong> have a key, keep going anyway: the AI feature is optional this week, and the required part of the coursework must still work without it.</p>
 <p>Docs: <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p>
-</section><section class="topic" id="t1-s2"><h2><span class="num">1.</span>Loading the key — the same habit as Week 9</h2><div class="cell"><pre class="code"><code>import os
+</section><section class="topic" id="p1-t1-1-loading-the-key-the-same-habit-as-week-9"><h2><span class="num">1.</span>Loading the key — the same habit as Week 9</h2><div class="cell"><pre class="code"><code>import os
 
 api_key = os.environ.get("OPENAI_API_KEY")
-print("set" if api_key else "not set")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Check whether <code>OPENAI_API_KEY</code> is set in your own terminal, without printing the value itself.</p>
-</div></section><section class="topic" id="t1-s3"><h2><span class="num">2.</span>Two different responses to a missing key</h2><p>Sometimes you want a clear, loud error. Sometimes you want the feature to
+print("set" if api_key else "not set")</code></pre></div></section><section class="topic" id="p1-t1-2-two-different-responses-to-a-missing-key"><h2><span class="num">2.</span>Two different responses to a missing key</h2><p>Sometimes you want a clear, loud error. Sometimes you want the feature to
 just quietly not appear. Both are correct — depending on what the feature is.</p>
 <div class="cell"><pre class="code"><code>def require_key():
     """Raise a clear error if the key is missing - use when the feature MUST have it."""
@@ -185,8 +167,7 @@ just quietly not appear. Both are correct — depending on what the feature is.<
 
 def optional_key():
     """Return None if missing - use when the feature can just be skipped."""
-    return os.environ.get("OPENAI_API_KEY")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Explain, in your own words, when you would reach for <code>require_key()</code> versus <code>optional_key()</code>.</p>
-</div></section><section class="topic" id="t1-s4"><h2><span class="num">3.</span>Making a feature optional, end to end</h2><p>The required part of the app never depends on the optional part succeeding.</p>
+    return os.environ.get("OPENAI_API_KEY")</code></pre></div></section><section class="topic" id="p1-t1-3-making-a-feature-optional-end-to-end"><h2><span class="num">3.</span>Making a feature optional, end to end</h2><p>The required part of the app never depends on the optional part succeeding.</p>
 <div class="cell"><pre class="code"><code>def get_ai_summary(text):
     """Return a summary, or None if no key is set - never crashes."""
     api_key = os.environ.get("OPENAI_API_KEY")
@@ -199,11 +180,7 @@ def render_report(records):
     summary = get_ai_summary(str(records))
     print(summary if summary else "(AI summary skipped - no key set)")
 
-render_report(["srv-01: OK", "srv-02: OVER LIMIT"])</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Run this without <code>OPENAI_API_KEY</code> set and confirm it completes cleanly with the skip message.</p>
-</div></section><section class="topic" id="t1-s5"><h2>Challenge</h2><p>Write a function that requires a key and raises a clear <code>RuntimeError</code> if it
-is missing, and a second function that wraps it, catches that error, and
-returns <code>None</code> instead — showing both patterns from the same underlying check.</p>
-</section><section class="topic" id="t1-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+render_report(["srv-01: OK", "srv-02: OVER LIMIT"])</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -225,7 +202,7 @@ returns <code>None</code> instead — showing both patterns from the same underl
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t1-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -259,7 +236,7 @@ returns <code>None</code> instead — showing both patterns from the same underl
 <h3>Go deeper</h3>
 <p><code>examples/01_loading_the_key_safely.py</code> — os.environ, a clear required-key error
 <code>examples/02_making_a_feature_optional.py</code> — the full optional-feature pattern</p>
-</section><section class="topic" id="t1-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -282,13 +259,9 @@ returns <code>None</code> instead — showing both patterns from the same underl
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — what the key is actually for.</p>
-</section>
-<div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Calling the ChatGPT API</h2></div><div class="topic-intro"><p>Needs a real key to actually call OpenAI — the shape below is correct and
-current either way, and every cell here can be read and understood without one.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a> · <a href="https://platform.openai.com/docs/api-reference/responses">Responses API</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>The client, and one call</h2><p><code>messages</code> is a list of <code>{&quot;role&quot;: ..., &quot;content&quot;: ...}</code> dicts. <code>&quot;system&quot;</code>
+</section></section>
+<div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">Calling the ChatGPT API</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a> · <a href="https://platform.openai.com/docs/api-reference/responses">Responses API</a></p><section class="topic"><p>Needs a real key to actually call OpenAI — the shape below is correct and
+current either way, and every cell here can be read and understood without one.</p><section class="topic" id="p2-t2-1-the-client-and-one-call"><h2><span class="num">1.</span>The client, and one call</h2><p><code>messages</code> is a list of <code>{&quot;role&quot;: ..., &quot;content&quot;: ...}</code> dicts. <code>&quot;system&quot;</code>
 sets the assistant's behaviour, <code>&quot;user&quot;</code> is the actual question.</p>
 <div class="cell"><pre class="code"><code># from openai import OpenAI
 # client = OpenAI(api_key=api_key)
@@ -301,11 +274,9 @@ sets the assistant's behaviour, <code>&quot;user&quot;</code> is the actual ques
 #     ],
 # )
 # print(response.choices[0].message.content)
-print("the shape above is exactly what examples/01 runs, with a real key")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>If you have a key, run <code>examples/01_the_chat_completions_api.py</code> for real and read the reply.</p>
-</div></section><section class="topic" id="t2-s2"><h2><span class="num">2.</span>The reply's exact shape</h2><p><code>response.choices[0].message.content</code> — this path is the same every time,
+print("the shape above is exactly what examples/01 runs, with a real key")</code></pre></div></section><section class="topic" id="p2-t2-2-the-reply-s-exact-shape"><h2><span class="num">2.</span>The reply's exact shape</h2><p><code>response.choices[0].message.content</code> — this path is the same every time,
 worth knowing by heart rather than looking up each time.</p>
-<div class="callout"><span class="callout-label">Practice</span><p>Explain, in your own words, why the reply is nested inside <code>choices[0]</code> rather than being the response itself — hint: an API designed to sometimes return more than one candidate answer.</p>
-</div></section><section class="topic" id="t2-s3"><h2><span class="num">3.</span>The API is stateless — history has to be resent every time</h2><p>Nothing is remembered between calls unless YOU send the whole conversation
+</section><section class="topic" id="p2-t2-3-the-api-is-stateless-history-has-to-be-resent-every-time"><h2><span class="num">3.</span>The API is stateless — history has to be resent every time</h2><p>Nothing is remembered between calls unless YOU send the whole conversation
 back.</p>
 <div class="cell"><pre class="code"><code>messages = [{"role": "system", "content": "You are a concise ops assistant."}]
 
@@ -314,8 +285,7 @@ def ask(client, user_text):
     response = client.chat.completions.create(model="gpt-4o-mini", messages=messages)
     reply = response.choices[0].message.content
     messages.append({"role": "assistant", "content": reply})   # &lt;- this line IS the memory
-    return reply</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Explain, in one sentence, what a second call to <code>ask()</code> would be missing if the <code>messages.append()</code> for the assistant's reply were deleted.</p>
-</div></section><section class="topic" id="t2-s4"><h2><span class="num">4.</span>Verifying the calling code without a real key — mocking, previewed</h2><p>Topic 3 teaches this properly. Here is the idea: a fake client that behaves
+    return reply</code></pre></div></section><section class="topic" id="p2-t2-4-verifying-the-calling-code-without-a-real-key-mocking-previewed"><h2><span class="num">4.</span>Verifying the calling code without a real key — mocking, previewed</h2><p>Topic 3 teaches this properly. Here is the idea: a fake client that behaves
 like the real one, so you can check YOUR code is right without a network call.</p>
 <div class="cell"><pre class="code"><code>from unittest.mock import MagicMock
 
@@ -326,11 +296,7 @@ fake_client.chat.completions.create.return_value.choices = [
 
 reply = ask(fake_client, "what is 2+2?")
 print(reply)          # "4" - from the fake, not a real call
-print(messages)         # still updated correctly</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Change the fake reply to something else and confirm <code>ask()</code> still works correctly with it.</p>
-</div></section><section class="topic" id="t2-s5"><h2>Challenge</h2><p>Write a function that takes a list of repo statuses and returns a one-line
-prompt asking for a plain-English summary — then, if you have a key, call it
-for real.</p>
-</section><section class="topic" id="t2-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+print(messages)         # still updated correctly</code></pre></div></section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -352,7 +318,7 @@ for real.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t2-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -387,7 +353,7 @@ for real.</p>
 <p><code>examples/01_the_chat_completions_api.py</code> — the client, messages, roles, the reply's shape
 <code>examples/02_conversation_history.py</code> — why and how history is resent every call
 Docs: <a href="https://platform.openai.com/docs/quickstart">OpenAI Chat Completions API</a></p>
-</section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -414,13 +380,9 @@ Docs: <a href="https://platform.openai.com/docs/quickstart">OpenAI Chat Completi
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — testing this, and everything else, properly.</p>
-</section>
-<div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Testing Your App</h2></div><div class="topic-intro"><p>The pure-function parts of your project can be tested directly. The parts
-that touch a network can be tested too — without actually touching it.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.pytest.org/en/stable/getting-started.html">pytest getting started</a> · <a href="https://docs.python.org/3/library/unittest.mock.html">unittest.mock</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>A pytest test is a function starting with <code>test_</code></h2><p><code>assert</code> checks something is true — if not, the test fails and tells you
+</section></section>
+<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Testing Your App</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.pytest.org/en/stable/getting-started.html">pytest getting started</a> · <a href="https://docs.python.org/3/library/unittest.mock.html">unittest.mock</a></p><section class="topic"><p>The pure-function parts of your project can be tested directly. The parts
+that touch a network can be tested too — without actually touching it.</p><section class="topic" id="p3-t3-1-a-pytest-test-is-a-function-starting-with-test"><h2><span class="num">1.</span>A pytest test is a function starting with <code>test_</code></h2><p><code>assert</code> checks something is true — if not, the test fails and tells you
 exactly what happened.</p>
 <div class="cell"><pre class="code"><code>def status_of(open_issues, warning_at=50, limit=100):
     if open_issues &gt;= limit:
@@ -434,8 +396,7 @@ def test_status_over_limit():
     assert status_of(150) == "OVER LIMIT"
 
 test_status_over_limit()
-print("passed")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write <code>test_status_ok()</code> and <code>test_status_warning()</code> for the function above.</p>
-</div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span>Test the edges, not just the middle</h2><p>This is where real bugs hide — the exact boundary between two branches.</p>
+print("passed")</code></pre></div></section><section class="topic" id="p3-t3-2-test-the-edges-not-just-the-middle"><h2><span class="num">2.</span>Test the edges, not just the middle</h2><p>This is where real bugs hide — the exact boundary between two branches.</p>
 <div class="cell"><pre class="code"><code>def test_status_exactly_at_limit():
     assert status_of(100) == "OVER LIMIT"   # &gt;= , not &gt;
 
@@ -444,8 +405,7 @@ def test_status_just_below_warning():
 
 test_status_exactly_at_limit()
 test_status_just_below_warning()
-print("both passed")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write a test for <code>status_of</code> at exactly the warning boundary (50).</p>
-</div></section><section class="topic" id="t3-s3"><h2><span class="num">3.</span>Testing code that calls something external — with a mock</h2><p><code>MagicMock</code> stands in for a real client. You decide exactly what it
+print("both passed")</code></pre></div></section><section class="topic" id="p3-t3-3-testing-code-that-calls-something-external-with-a-mock"><h2><span class="num">3.</span>Testing code that calls something external — with a mock</h2><p><code>MagicMock</code> stands in for a real client. You decide exactly what it
 &quot;returns&quot; — no network, no key, no cost, no flakiness.</p>
 <div class="cell"><pre class="code"><code>from unittest.mock import MagicMock
 
@@ -462,13 +422,9 @@ def test_ask_returns_mocked_reply():
     assert ask(client, [], "2+2?") == "4"
 
 test_ask_returns_mocked_reply()
-print("passed, no real API call made")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write a test confirming <code>ask()</code> appends exactly 2 new items to <code>messages</code>, regardless of the reply's text.</p>
-</div></section><section class="topic" id="t3-s4"><h2><span class="num">4.</span>Running with the real <code>pytest</code> command</h2><p><code>pytest filename.py</code> finds every <code>test_</code> function automatically and reports
+print("passed, no real API call made")</code></pre></div></section><section class="topic" id="p3-t3-4-running-with-the-real-pytest-command"><h2><span class="num">4.</span>Running with the real <code>pytest</code> command</h2><p><code>pytest filename.py</code> finds every <code>test_</code> function automatically and reports
 pass/fail for each, with the exact line that failed.</p>
-<div class="callout"><span class="callout-label">Practice</span><p>Run <code>pytest examples/01_pytest_basics.py -v</code> in a terminal and read the output.</p>
-</div></section><section class="topic" id="t3-s5"><h2>Challenge</h2><p>Write at least 3 tests for a <code>parse_line</code>-style function from your own
-project (Week 7/8), including at least one edge case.</p>
-</section><section class="topic" id="t3-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -490,7 +446,7 @@ project (Week 7/8), including at least one edge case.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t3-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -525,7 +481,7 @@ project (Week 7/8), including at least one edge case.</p>
 <p><code>examples/01_pytest_basics.py</code> — test functions, edges, a tiny runner without pytest
 <code>examples/02_testing_without_the_real_network.py</code> — mocking an external call properly
 Docs: <a href="https://docs.pytest.org/en/stable/getting-started.html">pytest documentation</a></p>
-</section><section class="topic" id="t3-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -552,33 +508,23 @@ Docs: <a href="https://docs.pytest.org/en/stable/getting-started.html">pytest do
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — shipping it.</p>
-</section>
-<div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Deploying</h2></div><div class="topic-intro"><p>The last step. A working app on your machine is not the same thing as a
-working app someone else can open.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app">Deploy your app</a> · <a href="https://pip.pypa.io/en/stable/reference/requirements-file-format/">Requirements file format</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span><code>requirements.txt</code> — what the cloud needs to install</h2><p>Without this, the deployed app fails to even start.</p>
+</section></section>
+<div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">Deploying</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app">Deploy your app</a> · <a href="https://pip.pypa.io/en/stable/reference/requirements-file-format/">Requirements file format</a></p><section class="topic"><p>The last step. A working app on your machine is not the same thing as a
+working app someone else can open.</p><section class="topic" id="p4-t4-1-requirements-txt-what-the-cloud-needs-to-install"><h2><span class="num">1.</span><code>requirements.txt</code> — what the cloud needs to install</h2><p>Without this, the deployed app fails to even start.</p>
 <div class="cell"><pre class="code"><code>REQUIREMENTS = ["streamlit", "pandas", "requests", "bcrypt", "openai"]
 for lib in REQUIREMENTS:
-    print(lib)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write <code>requirements.txt</code> for your own project, listing every library you actually import.</p>
-</div></section><section class="topic" id="t4-s2"><h2><span class="num">2.</span><code>.gitignore</code> — the last check before every commit from here</h2><div class="cell"><pre class="code"><code>GITIGNORE = ["*.db", ".streamlit/secrets.toml", "__pycache__/", ".pytest_cache/"]
+    print(lib)</code></pre></div></section><section class="topic" id="p4-t4-2-gitignore-the-last-check-before-every-commit-from-here"><h2><span class="num">2.</span><code>.gitignore</code> — the last check before every commit from here</h2><div class="cell"><pre class="code"><code>GITIGNORE = ["*.db", ".streamlit/secrets.toml", "__pycache__/", ".pytest_cache/"]
 for pattern in GITIGNORE:
-    print(pattern)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Check your own project's <code>.gitignore</code> against this list.</p>
-</div></section><section class="topic" id="t4-s3"><h2><span class="num">3.</span>A pre-flight check script — catching mistakes before Streamlit Cloud does</h2><div class="cell"><pre class="code"><code>import os
+    print(pattern)</code></pre></div></section><section class="topic" id="p4-t4-3-a-pre-flight-check-script-catching-mistakes-before-streamlit-cloud-does"><h2><span class="num">3.</span>A pre-flight check script — catching mistakes before Streamlit Cloud does</h2><div class="cell"><pre class="code"><code>import os
 
 def check_requirements_txt(project_dir):
     path = os.path.join(project_dir, "requirements.txt")
     return os.path.exists(path) and os.path.getsize(path) &gt; 0
 
-print(check_requirements_txt("."))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Run <code>examples/02_a_preflight_check_script.py</code> against your own <code>project/</code> folder.</p>
-</div></section><section class="topic" id="t4-s4"><h2><span class="num">4.</span>The real deployment steps</h2><p>Push to GitHub → <code>requirements.txt</code> and <code>.gitignore</code> correct → connect the
+print(check_requirements_txt("."))</code></pre></div></section><section class="topic" id="p4-t4-4-the-real-deployment-steps"><h2><span class="num">4.</span>The real deployment steps</h2><p>Push to GitHub → <code>requirements.txt</code> and <code>.gitignore</code> correct → connect the
 repo on <code>share.streamlit.io</code> → paste secrets into the Cloud dashboard, never
 into a file → test the public URL in a browser you are not logged into.</p>
-<div class="callout"><span class="callout-label">Practice</span><p>Write your own final checklist: 3 things you will check on the deployed URL before calling it done.</p>
-</div></section><section class="topic" id="t4-s5"><h2>Challenge</h2><p>Run the pre-flight script against your real project. Fix every <code>FAIL</code> it
-reports. Then deploy, if you are ready to.</p>
-</section><section class="topic" id="t4-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -600,7 +546,7 @@ reports. Then deploy, if you are ready to.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t4-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -634,7 +580,7 @@ reports. Then deploy, if you are ready to.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_the_deployment_checklist.py</code> — requirements.txt, .gitignore, the real steps
 <code>examples/02_a_preflight_check_script.py</code> — a real, runnable readiness check</p>
-</section><section class="topic" id="t4-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -662,7 +608,7 @@ reports. Then deploy, if you are ready to.</p>
 </table>
 <p><strong>You now have all twelve weeks' toolkit.</strong> Test it, ship it, and — if you
 want to — make it a little smarter. Nothing about any of it resets.</p>
-</section>
+</section></section>
 
     <footer class="page-foot">CST1510 · Week 12 · Intelligence (Optional) and Deployment</footer>
   </article>

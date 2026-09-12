@@ -94,39 +94,30 @@
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#t1-top" class="toc-topic">Topic 1 — Classes and Objects</a>
-<div class="toc-group" data-group="t1">
-<a href="#t1-s1" class="toc-sub">1. A class defines the shape, <code>__init__</code> fills it in</a>
-<a href="#t1-s2" class="toc-sub">2. <code>__init__</code> runs automatically</a>
-<a href="#t1-s3" class="toc-sub">3. Dot notation, compared to Week 4's dict</a>
-<a href="#t1-s4" class="toc-sub">4. <code>self</code> — what it actually is</a>
-<a href="#t1-s5" class="toc-sub">Challenge</a>
-<a href="#t1-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t1-s7" class="toc-sub">Common mistakes</a>
-<a href="#t1-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t2-top" class="toc-topic">Topic 2 — Methods</a>
-<div class="toc-group" data-group="t2">
-<a href="#t2-s1" class="toc-sub">1. A method is a function that lives inside a class</a>
-<a href="#t2-s2" class="toc-sub">2. <code>self</code> is whichever object made the call</a>
-<a href="#t2-s3" class="toc-sub">3. One method can call another, through <code>self</code></a>
-<a href="#t2-s4" class="toc-sub">4. A method CAN change its own object's state</a>
-<a href="#t2-s5" class="toc-sub">Challenge</a>
-<a href="#t2-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t2-s7" class="toc-sub">Common mistakes</a>
-<a href="#t2-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t3-top" class="toc-topic">Topic 3 — Many Objects Together</a>
-<div class="toc-group" data-group="t3">
-<a href="#t3-s1" class="toc-sub">1. A list of objects</a>
-<a href="#t3-s2" class="toc-sub">2. Looping and calling a method on each</a>
-<a href="#t3-s3" class="toc-sub">3. Loading objects from a file</a>
-<a href="#t3-s4" class="toc-sub">4. Why this matters</a>
-<a href="#t3-s5" class="toc-sub">Challenge</a>
-<a href="#t3-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t3-s7" class="toc-sub">Common mistakes</a>
-<a href="#t3-s8" class="toc-sub">Recap</a>
-</div>
+    <a href="#p1" class="toc-topic">Part 1. Classes and Objects</a>
+<a href="#p1-t1-1-a-class-defines-the-shape-init-fills-it-in" class="toc-sub">1. A class defines the shape, <code>__init__</code> fills it in</a>
+<a href="#p1-t1-2-init-runs-automatically" class="toc-sub">2. <code>__init__</code> runs automatically</a>
+<a href="#p1-t1-3-dot-notation-compared-to-week-4-s-dict" class="toc-sub">3. Dot notation, compared to Week 4's dict</a>
+<a href="#p1-t1-4-self-what-it-actually-is" class="toc-sub">4. <code>self</code> — what it actually is</a>
+<a href="#p1-t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p1-t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p1-t1-recap" class="toc-sub">Recap</a>
+<a href="#p2" class="toc-topic">Part 2. Methods</a>
+<a href="#p2-t2-1-a-method-is-a-function-that-lives-inside-a-class" class="toc-sub">1. A method is a function that lives inside a class</a>
+<a href="#p2-t2-2-self-is-whichever-object-made-the-call" class="toc-sub">2. <code>self</code> is whichever object made the call</a>
+<a href="#p2-t2-3-one-method-can-call-another-through-self" class="toc-sub">3. One method can call another, through <code>self</code></a>
+<a href="#p2-t2-4-a-method-can-change-its-own-object-s-state" class="toc-sub">4. A method CAN change its own object's state</a>
+<a href="#p2-t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p2-t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p2-t2-recap" class="toc-sub">Recap</a>
+<a href="#p3" class="toc-topic">Part 3. Many Objects Together</a>
+<a href="#p3-t3-1-a-list-of-objects" class="toc-sub">1. A list of objects</a>
+<a href="#p3-t3-2-looping-and-calling-a-method-on-each" class="toc-sub">2. Looping and calling a method on each</a>
+<a href="#p3-t3-3-loading-objects-from-a-file" class="toc-sub">3. Loading objects from a file</a>
+<a href="#p3-t3-4-why-this-matters" class="toc-sub">4. Why this matters</a>
+<a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p3-t3-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
@@ -134,17 +125,12 @@
       <div class="breadcrumb">CST1510</div>
       <h1 class="page-title">Week 5 — Classes and Objects</h1>
       <p class="lede">By the end of this week you can define a class with <code>__init__</code> and create objects from it, explain what <code>self</code> actually refers to, and why it must be a method's first parameter, and access and change an object's attributes with dot notation.</p>
-      <p class="box-note">Box we build this week: <b><code>component</code> — see <code>../system_diagram.md</code></b>. Each <em>Practice</em> below sets a short task.</p>
-      <p class="muted">This page combines the week's walkthrough notebooks into one reading view, keeping the theory in teaching order.</p>
+      
     </header>
 
-    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=5" title="System architecture — Week 5" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>component</b>.</figcaption></figure><figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="From blueprint to many objects" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">component</text><line x1="166.0" y1="164" x2="366.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Classes and Objects</tspan></text><line x1="554.0" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="374.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="388.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="388.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="388.0" dy="0">Methods</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">Many Objects</tspan><tspan x="776.0" dy="19">Together</tspan></text></svg><figcaption><b>From blueprint to many objects</b>. Week 5 moves from defining the shape of one object to managing many separate objects together.</figcaption></figure>
+    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=5" title="System architecture — Week 5" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>component</b>.</figcaption></figure>
 
-    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Classes and Objects</h2></div><div class="topic-intro"><p>A class is a blueprint. An object is one particular thing built from it.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://docs.python.org/3/reference/datamodel.html">Data model</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A class defines the shape, <code>__init__</code> fills it in</h2><div class="cell"><pre class="code"><code>class Record:
+    <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">Classes and Objects</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://docs.python.org/3/reference/datamodel.html">Data model</a></p><section class="topic"><p>A class is a blueprint. An object is one particular thing built from it.</p><section class="topic" id="p1-t1-1-a-class-defines-the-shape-init-fills-it-in"><h2><span class="num">1.</span>A class defines the shape, <code>__init__</code> fills it in</h2><div class="cell"><pre class="code"><code>class Record:
     def __init__(self, label, value, limit):
         self.label = label
         self.value = value
@@ -163,20 +149,17 @@ Record("R-001", 87, 100)          Record("R-002", 120, 100)
    r1.limit = 100                      r2.limit = 100
 
    two separate objects, same shape, completely independent data</pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>Define a class <code>Server</code> with <code>__init__(self, hostname, used, total)</code>. Create one instance and print its <code>hostname</code>.</p>
-</div></section><section class="topic" id="t1-s2"><h2><span class="num">2.</span><code>__init__</code> runs automatically</h2><p>You never call it yourself. <code>Record(&quot;R-001&quot;, 87.0, 100.0)</code> calls it for you, the
+</section><section class="topic" id="p1-t1-2-init-runs-automatically"><h2><span class="num">2.</span><code>__init__</code> runs automatically</h2><p>You never call it yourself. <code>Record(&quot;R-001&quot;, 87.0, 100.0)</code> calls it for you, the
 moment the object is created.</p>
 <div class="cell"><pre class="code"><code>r2 = Record("R-002", 120.0, 100.0)
 
 print(r1.label, r1.value)   # unchanged
-print(r2.label, r2.value)    # completely separate</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Create two <code>Server</code> instances with different data. Change one's <code>used</code> value and prove the other is unaffected.</p>
-</div></section><section class="topic" id="t1-s3"><h2><span class="num">3.</span>Dot notation, compared to Week 4's dict</h2><p>Same data, a different way to reach it — no quotes, no square brackets.</p>
+print(r2.label, r2.value)    # completely separate</code></pre></div></section><section class="topic" id="p1-t1-3-dot-notation-compared-to-week-4-s-dict"><h2><span class="num">3.</span>Dot notation, compared to Week 4's dict</h2><p>Same data, a different way to reach it — no quotes, no square brackets.</p>
 <div class="cell"><pre class="code"><code>record_dict = {"label": "R-001", "value": 87.0}
 record_obj  = Record("R-001", 87.0, 100.0)
 
 print(record_dict["label"])   # square brackets, a string key
-print(record_obj.label)        # dot, a name</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Given a dict and an object holding the same data, write one line accessing each, side by side.</p>
-</div></section><section class="topic" id="t1-s4"><h2><span class="num">4.</span><code>self</code> — what it actually is</h2><p><code>self</code> is just <em>this particular object</em>. Python passes it in for you — you never
+print(record_obj.label)        # dot, a name</code></pre></div></section><section class="topic" id="p1-t1-4-self-what-it-actually-is"><h2><span class="num">4.</span><code>self</code> — what it actually is</h2><p><code>self</code> is just <em>this particular object</em>. Python passes it in for you — you never
 write it in the call. <code>Record(&quot;R-001&quot;, 87.0, 100.0)</code> is really doing something
 closer to <code>Record.__init__(new_object, &quot;R-001&quot;, 87.0, 100.0)</code>.</p>
 <div class="cell"><pre class="code"><code>class Broken:
@@ -184,11 +167,7 @@ closer to <code>Record.__init__(new_object, &quot;R-001&quot;, 87.0, 100.0)</cod
         pass
 
 # Broken(100)
-# TypeError: __init__() takes 1 positional argument but 2 were given</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Explain in one sentence why <code>self</code> has to be the first parameter, even though you never type it when calling.</p>
-</div></section><section class="topic" id="t1-s5"><h2>Challenge</h2><p>Define a class <code>Record</code> with <code>__init__(self, label, value, limit)</code>. Create two
-instances with different data, then print both labels to prove they are
-independent.</p>
-</section><section class="topic" id="t1-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+# TypeError: __init__() takes 1 positional argument but 2 were given</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -210,7 +189,7 @@ independent.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t1-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -244,7 +223,7 @@ independent.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_classes_and_init.py</code> — classes, <code>__init__</code>, independent objects
 <code>examples/02_self_explained.py</code> — what <code>self</code> is, and what goes wrong without it</p>
-</section><section class="topic" id="t1-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -275,13 +254,9 @@ independent.</p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — giving objects their own behaviour.</p>
-</section>
-<div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Methods</h2></div><div class="topic-intro"><p>A dict can only hold data. An object can hold data <em>and</em> the actions that belong
-to it.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://docs.python.org/3/reference/datamodel.html">Data model</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>A method is a function that lives inside a class</h2><p><code>self</code> gives it access to that object's own attributes — no need to pass them in
+</section></section>
+<div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">Methods</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://docs.python.org/3/reference/datamodel.html">Data model</a></p><section class="topic"><p>A dict can only hold data. An object can hold data <em>and</em> the actions that belong
+to it.</p><section class="topic" id="p2-t2-1-a-method-is-a-function-that-lives-inside-a-class"><h2><span class="num">1.</span>A method is a function that lives inside a class</h2><p><code>self</code> gives it access to that object's own attributes — no need to pass them in
 again.</p>
 <div class="cell"><pre class="code"><code>class Record:
     def __init__(self, label, value, limit):
@@ -294,8 +269,7 @@ again.</p>
         return f"{self.label}: {self.value}/{self.limit}"
 
 r = Record("R-001", 87.0, 100.0)
-print(r.summary())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Add a method <code>percent(self)</code> to a <code>Record</code>-like class that returns <code>(self.value / self.limit) * 100</code>.</p>
-</div></section><section class="topic" id="t2-s2"><h2><span class="num">2.</span><code>self</code> is whichever object made the call</h2><p>Same method, same code — <code>self</code> becomes a different object depending on who
+print(r.summary())</code></pre></div></section><section class="topic" id="p2-t2-2-self-is-whichever-object-made-the-call"><h2><span class="num">2.</span><code>self</code> is whichever object made the call</h2><p>Same method, same code — <code>self</code> becomes a different object depending on who
 called it.</p>
 <div class="cell"><pre class="code"><code>r_a = Record("R-001", 87.0, 100.0)
 r_b = Record("R-002", 120.0, 100.0)
@@ -311,8 +285,7 @@ def summary(self):                 def summary(self):
      │                                  │
      ▼                                  ▼
  "R-001: 87.0/100.0"               "R-002: 120.0/100.0"</pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>Call the same method on two different objects and print both results side by side.</p>
-</div></section><section class="topic" id="t2-s3"><h2><span class="num">3.</span>One method can call another, through <code>self</code></h2><div class="cell"><pre class="code"><code>class Record2:
+</section><section class="topic" id="p2-t2-3-one-method-can-call-another-through-self"><h2><span class="num">3.</span>One method can call another, through <code>self</code></h2><div class="cell"><pre class="code"><code>class Record2:
     def __init__(self, label, value, limit):
         self.label = label
         self.value = value
@@ -333,8 +306,7 @@ def summary(self):                 def summary(self):
             return "OK"
 
 r2 = Record2("R-002", 95.0, 100.0)
-print(r2.status())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Add a <code>status()</code> method to your own class from Topic 1, using <code>self.percent()</code> inside it.</p>
-</div></section><section class="topic" id="t2-s4"><h2><span class="num">4.</span>A method CAN change its own object's state</h2><p>Week 3 taught you a function cannot reach outside itself and change your
+print(r2.status())</code></pre></div></section><section class="topic" id="p2-t2-4-a-method-can-change-its-own-object-s-state"><h2><span class="num">4.</span>A method CAN change its own object's state</h2><p>Week 3 taught you a function cannot reach outside itself and change your
 variable. A method is the exception — because <code>self</code> <strong>is</strong> the object, not a
 copy of it. This is a genuine difference, not a contradiction: the wall from
 Week 3 is still there, a method just has a key to its own room.</p>
@@ -350,11 +322,7 @@ Week 3 is still there, a method just has a key to its own room.</p>
 c = Checker()
 c.check(120, 100)
 c.check(87, 100)
-print(c.over_limit_count)   # 1 - it actually changed, no return needed</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Add a <code>reset(self)</code> method to <code>Checker</code> that sets <code>over_limit_count</code> back to <code>0</code>.</p>
-</div></section><section class="topic" id="t2-s5"><h2>Challenge</h2><p>Add <code>percent(self)</code> and <code>status(self)</code> to your <code>Record</code> class from Topic 1.
-<code>status()</code> should call <code>self.percent()</code>, not recalculate it. Test it on two
-different instances.</p>
-</section><section class="topic" id="t2-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+print(c.over_limit_count)   # 1 - it actually changed, no return needed</code></pre></div></section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -376,7 +344,7 @@ different instances.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t2-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -410,7 +378,7 @@ different instances.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_defining_methods.py</code> — methods, calling other methods through self
 <code>examples/02_methods_that_change_state.py</code> — the one thing methods can do that Week 3's functions could not</p>
-</section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -437,13 +405,9 @@ different instances.</p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — many objects, working together.</p>
-</section>
-<div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Many Objects Together</h2></div><div class="topic-intro"><p>Week 4: a list of dicts. This week: a list of objects — same shape, and now each
-item can also <em>do</em> something.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">Lists</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>A list of objects</h2><div class="cell"><pre class="code"><code>class Record:
+</section></section>
+<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Many Objects Together</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">Lists</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p><section class="topic"><p>Week 4: a list of dicts. This week: a list of objects — same shape, and now each
+item can also <em>do</em> something.</p><section class="topic" id="p3-t3-1-a-list-of-objects"><h2><span class="num">1.</span>A list of objects</h2><div class="cell"><pre class="code"><code>class Record:
     def __init__(self, label, value, limit):
         self.label = label
         self.value = value
@@ -466,10 +430,8 @@ print(type(records[0]))     # Record - each ITEM is an object</code></pre></div>
               a list                each item an OBJECT, not a dict
                                       records[0].label
                                       records[0].status()</pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>Build a list of 3 <code>Record</code> objects by hand. Loop over it and print only the labels of the ones that are <code>OK</code>.</p>
-</div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span>Looping and calling a method on each</h2><div class="cell"><pre class="code"><code>for record in records:
-    print(record.label, record.status())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Count how many records in your list are <code>OVER LIMIT</code>, using a running total updated inside the loop.</p>
-</div><h4>Stretch: keeping the count <em>on</em> the class</h4>
+</section><section class="topic" id="p3-t3-2-looping-and-calling-a-method-on-each"><h2><span class="num">2.</span>Looping and calling a method on each</h2><div class="cell"><pre class="code"><code>for record in records:
+    print(record.label, record.status())</code></pre></div><h4>Stretch: keeping the count <em>on</em> the class</h4>
 <p>A running total outside the loop (above) works fine and is enough. If you want the count to live with the <code>Record</code> class itself instead of a separate variable, a <strong>class attribute</strong> — assigned once, indented under the class but outside any method — is shared by every instance rather than copied per object:</p>
 <div class="cell"><pre class="code"><code>class Record:
     over_limit_count = 0     # one shared counter, not one per instance
@@ -485,7 +447,7 @@ print(type(records[0]))     # Record - each ITEM is an object</code></pre></div>
         if result == "OVER LIMIT":
             Record.over_limit_count += 1
         return result</code></pre></div><p>Every <code>Record</code> shares the same <code>over_limit_count</code> — read and update it as <code>Record.over_limit_count</code>, not <code>self.over_limit_count</code> (assigning through <code>self.</code> would silently create a separate, per-instance attribute instead of changing the shared one).</p>
-</section><section class="topic" id="t3-s3"><h2><span class="num">3.</span>Loading objects from a file</h2><p>Week 4's <code>load_records</code> built a list of dicts. The only real change: build a
+</section><section class="topic" id="p3-t3-3-loading-objects-from-a-file"><h2><span class="num">3.</span>Loading objects from a file</h2><p>Week 4's <code>load_records</code> built a list of dicts. The only real change: build a
 <code>Record</code> inside the loop instead of a dict.</p>
 <div class="cell"><pre class="code"><code>def load_records(path):
     """Read label,value,limit lines from a file and return a list of Records."""
@@ -494,15 +456,11 @@ print(type(records[0]))     # Record - each ITEM is an object</code></pre></div>
         for line in f:
             label, value, limit = line.strip().split(",")
             records.append(Record(label, float(value), float(limit)))
-    return records</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Save 3 <code>label,value,limit</code> lines to a file, then load them with <code>load_records</code> and print each one's <code>.status()</code>.</p>
-</div></section><section class="topic" id="t3-s4"><h2><span class="num">4.</span>Why this matters</h2><p>This is what <em>component</em> meant in this week's system diagram box: the record and
+    return records</code></pre></div></section><section class="topic" id="p3-t3-4-why-this-matters"><h2><span class="num">4.</span>Why this matters</h2><p>This is what <em>component</em> meant in this week's system diagram box: the record and
 the logic that checks it are no longer separate — they are one reusable thing.
 Next week's <code>pandas</code> DataFrame works the same way underneath: rows of data, with
 methods that already know how to work on them.</p>
-</section><section class="topic" id="t3-s5"><h2>Challenge</h2><p>Write <code>load_records(path)</code>, load records from a file of your own, and print a
-summary line: <code>&quot;N of M were over limit&quot;</code> — using a list of <code>Record</code> objects, not
-dicts.</p>
-</section><section class="topic" id="t3-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -524,7 +482,7 @@ dicts.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t3-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -558,7 +516,7 @@ dicts.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_a_list_of_objects.py</code> — building the list by hand
 <code>examples/02_loading_objects_from_a_file.py</code> — the full pipeline, load then process</p>
-</section><section class="topic" id="t3-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -589,7 +547,7 @@ dicts.</p>
 </tbody>
 </table>
 <p><strong>You now have all of Week 5's component.</strong> Go and build your own in the lab.</p>
-</section>
+</section></section>
 
     <footer class="page-foot">CST1510 · Week 05 · Classes and Objects</footer>
   </article>

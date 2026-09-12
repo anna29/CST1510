@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -33,7 +34,7 @@
   nav.toc a.toc-topic:first-of-type { margin-top: 0; }
   nav.toc a.toc-sub { padding-left: 12px; font-size: 12.5px; }
   nav.toc .toc-group { display: flex; flex-direction: column; max-height: 0; overflow: hidden; transition: max-height .25s ease; }
-  nav.toc .toc-group.open { max-height: 320px; }
+  nav.toc .toc-group.open { max-height: 520px; }
   article { min-width: 0; }
   header.page-head { margin-bottom: 44px; }
   .breadcrumb { font-variant: small-caps; letter-spacing: .03em; color: var(--ink-soft); font-size: 15px; margin-bottom: 6px; }
@@ -43,39 +44,40 @@
   .lede code { font-style: normal; color: var(--ink); }
   .box-note { margin-top: 14px; font-size: 14.5px; color: var(--ink-soft); }
   .box-note b { color: var(--ink); font-weight: 600; }
+  p, li { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
+  p.muted { color: var(--ink-soft); }
+  p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
   section.topic { margin-bottom: 44px; scroll-margin-top: 24px; }
-  .topic-divider { margin: 8px 0 40px; padding-top: 36px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
+  .topic-divider { margin: 8px 0 18px; padding-top: 36px; border-top: 3px double var(--rule-strong); scroll-margin-top: 24px; }
   #t1-top { margin-top: 0; padding-top: 0; border-top: none; }
   .topic-divider-n { font-variant: small-caps; letter-spacing: .06em; color: var(--ink-soft); font-size: 15.5px; }
   .topic-divider-title { margin: 4px 0 0; font-size: 1.7rem; font-weight: 700; letter-spacing: -.01em; }
-  h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
-  h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
-  h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
-  p { line-height: 1.68; color: var(--ink); max-width: 66ch; margin: 0 0 16px; text-wrap: pretty; }
-  p.muted { color: var(--ink-soft); }
-  p code, li code, td code { background: var(--code-bg); border-radius: 2px; padding: 0.5px 5px; font-size: .89em; color: var(--code-ink); }
-  p.topic-docs { margin: 10px 0 22px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
+  .topic-intro { margin-bottom: 10px; }
+  .topic-intro p, .topic-intro blockquote { max-width: 66ch; }
+  p.topic-docs { margin: 10px 0 18px; max-width: 66ch; font-size: 14.5px; color: var(--ink-soft); }
   p.topic-docs b { color: var(--ink); }
   p.topic-docs a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
   p.topic-docs a:hover { color: var(--accent); }
+  h2 { font-size: 1.32rem; font-weight: 700; letter-spacing: -.005em; margin: 0 0 18px; }
+  h2 .num { color: var(--ink-soft); font-weight: 400; margin-right: 4px; }
+  h3 { font-size: 1.05rem; font-weight: 600; font-style: italic; margin: 26px 0 10px; }
+  blockquote { margin: 18px 0; padding: 2px 0 2px 18px; border-left: 2px solid var(--rule-strong); color: var(--ink-soft); }
   .callout { max-width: 66ch; border-left: 2px solid var(--rule-strong); padding: 2px 0 2px 18px; margin: 22px 0; }
   .callout .callout-label { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); display: block; margin-bottom: 4px; letter-spacing: .02em; }
   .callout p { margin: 0; font-size: .98rem; }
   .callout p + p { margin-top: 8px; }
   .cell { margin: 20px 0; max-width: 74ch; }
   .cell pre.code { margin: 0; background: var(--code-bg); color: var(--code-ink); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 14px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.62; }
-  .cell pre.code .kw { font-weight: 600; }
-  .cell pre.code .fn { font-weight: 600; }
-  .cell pre.code .str { color: var(--accent); }
-  .cell pre.code .cm { color: var(--ink-soft); font-style: italic; }
   .cell .output { padding: 8px 18px 4px; font-size: 13px; color: var(--ink-soft); }
   .cell .output .out-label { font-variant: small-caps; margin-right: 10px; }
   .cell .output .val { color: var(--ink); }
-  .cell .output pre.out-block { margin: 4px 0 0; font-size: 13px; color: var(--ink); white-space: pre; }
+  .cell .output pre.out-block { margin: 4px 0 0; font-size: 13px; color: var(--ink); white-space: pre-wrap; }
   .diagram { margin: 16px 0; max-width: 74ch; border: 1px solid var(--rule); background: var(--code-bg); padding: 14px 18px; overflow-x: auto; }
-  .diagram pre { margin: 0; font-size: 13px; line-height: 1.6; color: var(--code-ink); }
+  .diagram pre { margin: 0; font-size: 13px; line-height: 1.6; color: var(--code-ink); white-space: pre; }
   figure.anim-figure { margin: 30px 0 8px; max-width: 900px; }
   figure.anim-figure iframe { display: block; width: 100%; border: none; background: transparent; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  figure.anim-figure svg { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: transparent; }
+  figure.anim-figure img { display: block; width: 100%; height: auto; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: #fff; }
   figure.anim-figure figcaption { font-size: 14px; font-style: italic; color: var(--ink-soft); text-align: center; padding-top: 10px; max-width: 60ch; margin: 0 auto; line-height: 1.5; }
   figure.anim-figure figcaption b { font-style: normal; color: var(--ink); }
   table { border-collapse: collapse; margin: 18px 0; max-width: 74ch; width: 100%; font-size: 14.5px; }
@@ -84,8 +86,6 @@
   th, td { text-align: left; padding: 7px 14px 7px 0; vertical-align: top; }
   th { font-variant: small-caps; font-weight: 600; color: var(--ink-soft); font-size: 14px; }
   td code { white-space: nowrap; }
-  ul.tight { margin: 8px 0 16px; padding-left: 20px; }
-  ul.tight li { line-height: 1.6; margin-bottom: 4px; }
   footer.page-foot { font-variant: small-caps; font-size: 14px; color: var(--ink-soft); padding-top: 28px; margin-top: 20px; border-top: 1px solid var(--rule); }
   @media (max-width: 860px) { .shell { grid-template-columns: 1fr; } nav.toc { position: static; max-height: none; flex-direction: row; flex-wrap: wrap; column-gap: 16px; row-gap: 4px; } nav.toc a.toc-sub { display: none; } }
 </style>
@@ -94,578 +94,414 @@
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#t1-top" class="toc-topic">Topic 1 — Lists</a>
-    <div class="toc-group" data-group="t1">
-    <a href="#t1-s1" class="toc-sub">1. Creating a list, and indexing</a>
-    <a href="#t1-s2" class="toc-sub">2. Negative indexing</a>
-    <a href="#t1-s3" class="toc-sub">3. Slicing</a>
-    <a href="#t1-s4" class="toc-sub">4. Changing, adding and removing</a>
-    <a href="#t1-s5" class="toc-sub">5. Membership — in and not in</a>
-    <a href="#t1-s6" class="toc-sub">6. Aliasing — two names, one list</a>
-    <a href="#t1-s7" class="toc-sub">7. Tuples — locked lists</a>
-    <a href="#t1-s8" class="toc-sub">8. Strings slice the same way</a>
-    <a href="#t1-s9" class="toc-sub">Challenge</a>
-    <a href="#t1-s10" class="toc-sub">Common mistakes</a>
-    <a href="#t1-s11" class="toc-sub">Recap</a>
-        </div>
-    <a href="#t2-top" class="toc-topic">Topic 2 — Dictionaries</a>
-    <div class="toc-group" data-group="t2">
-    <a href="#t2-s1" class="toc-sub">1. Creating and accessing</a>
-    <a href="#t2-s2" class="toc-sub">2. Adding and updating</a>
-    <a href="#t2-s3" class="toc-sub">3. Missing keys, and .get()</a>
-    <a href="#t2-s4" class="toc-sub">4. Iterating</a>
-    <a href="#t2-s5" class="toc-sub">5. Sets — unique values</a>
-    <a href="#t2-s6" class="toc-sub">Challenge</a>
-    <a href="#t2-s7" class="toc-sub">Common mistakes</a>
-    <a href="#t2-s8" class="toc-sub">Recap</a>
-        </div>
-    <a href="#t3-top" class="toc-topic">Topic 3 — Files</a>
-    <div class="toc-group" data-group="t3">
-    <a href="#t3-s1" class="toc-sub">1. Writing, with with</a>
-    <a href="#t3-s2" class="toc-sub">2. Reading</a>
-    <a href="#t3-s3" class="toc-sub">3. Reading line by line</a>
-    <a href="#t3-s4" class="toc-sub">4. Splitting a line into fields</a>
-    <a href="#t3-s5" class="toc-sub">Challenge</a>
-    <a href="#t3-s6" class="toc-sub">Common mistakes</a>
-    <a href="#t3-s7" class="toc-sub">Recap</a>
-        </div>
-    <a href="#t4-top" class="toc-topic">Topic 4 — Putting It Together</a>
-    <div class="toc-group" data-group="t4">
-    <a href="#t4-s1" class="toc-sub">1. The shape</a>
-    <a href="#t4-s2" class="toc-sub">2. Loading it from a file</a>
-    <a href="#t4-s3" class="toc-sub">3. Processing each record</a>
-    <a href="#t4-s4" class="toc-sub">4. Why this shape</a>
-    <a href="#t4-s5" class="toc-sub">Challenge</a>
-    <a href="#t4-s6" class="toc-sub">Common mistakes</a>
-    <a href="#t4-s7" class="toc-sub">Recap</a>
-    </div>
+    <a href="#p1" class="toc-topic">Part 1. Lists</a>
+<a href="#p1-t1-1-creating-a-list-and-indexing" class="toc-sub">1. Creating a list, and indexing</a>
+<a href="#p1-t1-2-negative-indexing" class="toc-sub">2. Negative indexing</a>
+<a href="#p1-t1-3-slicing" class="toc-sub">3. Slicing</a>
+<a href="#p1-t1-4-mutating-and-looping" class="toc-sub">4. Mutating and looping</a>
+<a href="#p1-t1-5-tuples-like-a-list-but-locked" class="toc-sub">5. Tuples — like a list, but locked</a>
+<a href="#p1-t1-6-strings-slice-the-same-way-too" class="toc-sub">6. Strings slice the same way too</a>
+<a href="#p1-t1-7-building-a-list-in-one-line-list-comprehensions" class="toc-sub">7. Building a list in one line — list comprehensions</a>
+<a href="#p1-t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p1-t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p1-t1-recap" class="toc-sub">Recap</a>
+<a href="#p2" class="toc-topic">Part 2. Dictionaries</a>
+<a href="#p2-t2-1-creating-and-accessing" class="toc-sub">1. Creating and accessing</a>
+<a href="#p2-t2-2-adding-and-updating" class="toc-sub">2. Adding and updating</a>
+<a href="#p2-t2-3-missing-keys-and-get" class="toc-sub">3. Missing keys, and <code>.get()</code></a>
+<a href="#p2-t2-4-iterating" class="toc-sub">4. Iterating</a>
+<a href="#p2-t2-5-zip-building-a-dict-from-two-lists" class="toc-sub">5. <code>zip()</code> — building a dict from two lists</a>
+<a href="#p2-t2-5-sets-only-unique-values-in-curly-braces-too" class="toc-sub">5. Sets — only unique values, in curly braces too</a>
+<a href="#p2-t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p2-t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p2-t2-recap" class="toc-sub">Recap</a>
+<a href="#p3" class="toc-topic">Part 3. Files</a>
+<a href="#p3-t3-1-writing-with-with" class="toc-sub">1. Writing, with <code>with</code></a>
+<a href="#p3-t3-2-reading" class="toc-sub">2. Reading</a>
+<a href="#p3-t3-3-reading-line-by-line" class="toc-sub">3. Reading line by line</a>
+<a href="#p3-t3-4-splitting-a-line-into-fields" class="toc-sub">4. Splitting a line into fields</a>
+<a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p3-t3-recap" class="toc-sub">Recap</a>
+<a href="#p4" class="toc-topic">Part 4. Handling Errors</a>
+<a href="#p4-t4-1-two-failures-you-already-know" class="toc-sub">1. Two failures you already know</a>
+<a href="#p4-t4-2-try-except-catch-it-decide-what-happens-next" class="toc-sub">2. <code>try</code> / <code>except</code> — catch it, decide what happens next</a>
+<a href="#p4-t4-3-name-the-exception-you-expect" class="toc-sub">3. Name the exception you expect</a>
+<a href="#p4-t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p4-t4-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p4-t4-recap" class="toc-sub">Recap</a>
+<a href="#p5" class="toc-topic">Part 5. Putting It Together</a>
+<a href="#p5-t5-1-the-shape" class="toc-sub">1. The shape</a>
+<a href="#p5-t5-2-loading-it-from-a-file" class="toc-sub">2. Loading it from a file</a>
+<a href="#p5-t5-3-processing-each-record" class="toc-sub">3. Processing each record</a>
+<a href="#p5-t5-4-why-this-shape" class="toc-sub">4. Why this shape</a>
+<a href="#p5-t5-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p5-t5-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p5-t5-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
     <header class="page-head">
       <div class="breadcrumb">CST1510</div>
       <h1 class="page-title">Week 4 — Lists, Dictionaries and Files</h1>
-      <p class="lede">By the end of this week you can hold many values in order in a <code>list</code>, find
-        values by name instead of position in a <code>dict</code>, keep storage that outlives the
-        program in a <code>file</code>, and combine all three into the shape almost every real
-        dataset already comes in.</p>
-      <p class="box-note">Box we build this week: <b>STORE</b>. Each <em>Practice</em> below sets a short
-        task — work it through in your own notebook.</p>
+      <p class="lede">By the end of this week you can create a list, index into it, slice it, and change it in place, loop over a list directly, without counting, and build a new list from an old one in one line, with a list comprehension.</p>
+      
     </header>
 
-    <figure class="anim-figure" style="margin: 26px 0 0;">
-      <iframe src="architecture_map.html?embed=1&amp;week=4" title="System architecture — Week 4" loading="lazy" style="height:340px;"></iframe>
-      <figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>STORE</b>.</figcaption>
-    </figure>
+    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=4" title="System architecture — Week 4" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>STORE</b>.</figcaption></figure>
 
-    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Lists</h2></div>
-    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/introduction.html#lists">Lists</a> · <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">More on lists</a></p>
+    <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">Lists</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists">More on lists</a></p><section class="topic"><p>One variable holds one value. A list holds many, in order.</p><p><strong>Resources</strong></p>
+<p>Python documentation — <a href="https://docs.python.org/3/tutorial/datastructures.html">Data Structures: Lists, Tuples</a> — the official reference, if you want more than this walkthrough covers.</p>
+<section class="topic" id="p1-t1-1-creating-a-list-and-indexing"><h2><span class="num">1.</span>Creating a list, and indexing</h2><p>Indexing counts from 0 — the same rule as <code>range()</code>.</p>
+<div class="cell"><pre class="code"><code>labels = ["R-001", "R-002", "R-003"]
 
-    <section class="topic" id="t1-s1">
-      <h2><span class="num">1.</span>Creating a list, and indexing</h2>
-      <p>Every value you have stored so far has gone into one variable holding one value. A
-        <b>list</b> holds many values in a single variable, <b>in order</b>. Formally, a list is
-        Python's built-in <b>sequence type</b>: an <b>ordered</b>, <b>mutable</b> collection of
-        items, written between square brackets and separated by commas. It is also a
-        <b>compound data type</b> — a type whose whole purpose is to hold other values (including
-        other lists), as opposed to a <b>scalar type</b> like <code>int</code> or <code>float</code>,
-        which holds exactly one value.</p>
-      <p>"Ordered" has a precise meaning here: it is not that the items are sorted, but that each
-        one has a fixed <b>position</b>, counted from <code>0</code> — the same rule
-        <code>range()</code> already taught you. That position is what indexing reads.</p>
-
-      <figure class="anim-figure">
-        <iframe src="list_slicing.html?embed=1" title="Indices and slices animation" loading="lazy" style="height:620px;"></iframe>
-        <figcaption><b>Figure 1.1.</b> Every slot has two addresses — a positive index counting from
-          the front, and a negative one counting from the back. Section 3 below revisits this same
-          row for slicing.</figcaption>
-      </figure>
-
-      <div class="cell">
-        <pre class="code">labels = [<span class="str">"R-001"</span>, <span class="str">"R-002"</span>, <span class="str">"R-003"</span>]
-<span class="fn">print</span>(<span class="fn">type</span>(labels))   <span class="cm"># &lt;class 'list'&gt;</span>
-
-<span class="fn">print</span>(labels[0])
-<span class="fn">print</span>(labels[1])
-<span class="fn">print</span>(labels[2])</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">&lt;class 'list'&gt;<br>R-001<br>R-002<br>R-003</span></div>
-      </div>
-
-      <div class="diagram"><pre>index:     0        1        2
+print(labels[0])
+print(labels[1])
+print(labels[2])</code></pre></div><div class="cell"><pre class="code"><code>index:     0        1        2
 labels:  ["R-001", "R-002", "R-003"]
             ▲                  ▲
-        labels[0]          labels[-1]</pre></div>
-      <p class="muted">Indexing past the end is not silently ignored: <code>labels[3]</code> raises
-        <code>IndexError</code> immediately — the last valid index is always
-        <code>len(labels) - 1</code>. A list may also hold a mix of types
-        (<code>["R-001", 87.0, True]</code> is legal), but in practice you keep one list's items
-        the same type — the code that later loops over it stays predictable that way.</p>
+        labels[0]          labels[-1]</code></pre></div>
+<p>Animation — <a href="https://anna29.github.io/CST1510/list_slicing.html">Indices and Slices</a> — open this on the main screen to walk through indexing and slicing interactively.</p>
+</section><section class="topic" id="p1-t1-2-negative-indexing"><h2><span class="num">2.</span>Negative indexing</h2><p>Counts from the end. <code>labels[-1]</code> is the last item, whatever the length turns out
+to be — no need to know how many items there are.</p>
+<div class="cell"><pre class="code"><code>print(labels[-1])   # R-003
+print(labels[-2])   # R-002
+print(len(labels))   # 3</code></pre></div></section><section class="topic" id="p1-t1-3-slicing"><h2><span class="num">3.</span>Slicing</h2><p>Same rule as <code>range(start, stop)</code> — <code>stop</code> is never included.</p>
+<div class="cell"><pre class="code"><code>values = [10, 20, 30, 40, 50]
 
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Create a list called <code>tools</code> with 4 values of your choice. Print the first and
-          the last using indexing.</p>
-      </div>
-    </section>
+print(values[1:3])   # [20, 30]
+print(values[:2])     # [10, 20]
+print(values[2:])     # [30, 40, 50]</code></pre></div></section><section class="topic" id="p1-t1-4-mutating-and-looping"><h2><span class="num">4.</span>Mutating and looping</h2><p>Lists can be changed in place — strings cannot. <code>for</code> loops directly over the
+values, no counting needed.</p>
+<div class="cell"><pre class="code"><code>values[0] = 99
+values.append(60)
+values.remove(20)
+print(values)
 
-    <section class="topic" id="t1-s2">
-      <h2><span class="num">2.</span>Negative indexing</h2>
-      <p>Counts from the end. <code>labels[-1]</code> is the last item, whatever the length turns
-        out to be — no need to know how many items there are. For a list of length <code>n</code>,
-        valid indices run from <code>0</code> to <code>n - 1</code> counting forward, and from
-        <code>-1</code> to <code>-n</code> counting backward — <code>labels[0]</code> and
-        <code>labels[-n]</code> always name the same item.</p>
+for v in values:
+    print(v)</code></pre></div></section><section class="topic" id="p1-t1-5-tuples-like-a-list-but-locked"><h2><span class="num">5.</span>Tuples — like a list, but locked</h2><p>Same <code>()</code> instead of <code>[]</code>. Indexing and slicing work exactly the same way — but a
+tuple cannot be changed after it is created. No <code>.append()</code>, no changing an item.</p>
+<p>You have already used one. Week 3's <code>return difference, percent, status</code> sent back
+a tuple — three values as one — and <code>difference, percent, status = check_record(...)</code>
+unpacked it into three names.</p>
+<div class="cell"><pre class="code"><code>point = (3, 7)
+print(point[0])   # 3 - indexing works the same as a list
 
-      <div class="cell">
-        <pre class="code"><span class="fn">print</span>(labels[-1])   <span class="cm"># R-003</span>
-<span class="fn">print</span>(labels[-2])   <span class="cm"># R-002</span>
-<span class="fn">print</span>(<span class="fn">len</span>(labels))   <span class="cm"># 3</span></pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">R-003<br>R-002<br>3</span></div>
-      </div>
+# point[0] = 5     # TypeError: 'tuple' object does not support item assignment</code></pre></div></section><section class="topic" id="p1-t1-6-strings-slice-the-same-way-too"><h2><span class="num">6.</span>Strings slice the same way too</h2><p>You have been indexing and slicing without knowing it since Week 1. A string
+follows the exact same rules as a list — and like a tuple, it is locked.</p>
+<div class="cell"><pre class="code"><code>record_id = "R-001"
 
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Predict, then check: create a list called <code>queue</code> with exactly one item,
-          <code>"job-1"</code>. What does <code>queue[-1]</code> give you?</p>
-      </div>
-    </section>
+print(record_id[0])      # 'R' - same indexing rule
+print(record_id[-1])      # '1' - same negative indexing
+print(record_id[0:2])      # 'R-' - same slicing rule, stop excluded
+print(record_id[-3:])       # '001'</code></pre></div><div class="cell"><pre class="code"><code># record_id[0] = "X"
+# TypeError: 'str' object does not support item assignment</code></pre></div>
+<p>Same lock as a tuple — you can read a character, not change one in place. The
+full toolbox of string methods (<code>.upper()</code>, <code>.strip()</code>, <code>.replace()</code> and more) is
+coming properly in Week 7. For now: the shape you already know for lists and
+tuples works on text too.</p>
+</section><section class="topic" id="p1-t1-7-building-a-list-in-one-line-list-comprehensions"><h2><span class="num">7.</span>Building a list in one line — list comprehensions</h2><p>A <code>for</code> loop that builds a new list by appending is common enough that Python
+has a shorter way to write exactly that.</p>
+<div class="cell"><pre class="code"><code>doubled = []
+for v in values:
+    doubled.append(v * 2)
+print(doubled)
 
-    <section class="topic" id="t1-s3">
-      <h2><span class="num">3.</span>Slicing</h2>
-      <p>Same rule as <code>range(start, stop)</code> — <code>stop</code> is never included.</p>
-
-      <div class="cell">
-        <pre class="code">values = [10, 20, 30, 40, 50]
-
-<span class="fn">print</span>(values[1:3])   <span class="cm"># [20, 30]</span>
-<span class="fn">print</span>(values[:2])     <span class="cm"># [10, 20]</span>
-<span class="fn">print</span>(values[2:])     <span class="cm"># [30, 40, 50]</span></pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">[20, 30]<br>[10, 20]<br>[30, 40, 50]</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Given <code>readings = [5, 10, 15, 20, 25]</code>, slice out just the middle three.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t1-s4">
-      <h2><span class="num">4.</span>Changing, adding and removing</h2>
-      <p>Because a list is <b>mutable</b>, all three of these change the same list object in
-        place — no new list is created, and no reassignment is needed.</p>
-      <p><b>Changing</b> an item uses the same index syntax as reading one, on the left of
-        <code>=</code>. <b>Adding</b> one item to the end uses <code>.append()</code>.
-        <b>Removing</b> uses <code>.remove(value)</code>, which deletes the first match <em>by
-        value</em> and raises <code>ValueError</code> if that value is not present.</p>
-
-      <div class="cell">
-        <pre class="code">values[0] = 99          <span class="cm"># change, by index</span>
-values.append(60)      <span class="cm"># add, to the end</span>
-values.remove(20)      <span class="cm"># remove, by value - first match only</span>
-<span class="fn">print</span>(values)
-
-<span class="kw">for</span> v <span class="kw">in</span> values:   <span class="cm"># for loops directly over the values, no counting needed</span>
-    <span class="fn">print</span>(v)</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">[99, 30, 40, 50, 60]<br>99<br>30<br>40<br>50<br>60</span></div>
-      </div>
-      <p class="muted">Python also has <code>.pop()</code>, which removes <em>by position</em>
-        instead of by value: <code>values.pop(0)</code> removes and <b>returns</b> the first item,
-        and plain <code>values.pop()</code> removes the last one. Reach for <code>.remove()</code>
-        when you know the value; reach for <code>.pop()</code> when you know the position and want
-        it back.</p>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Given <code>hosts = ["srv-01", "srv-02", "srv-03"]</code>: append <code>"srv-04"</code>,
-          remove <code>"srv-02"</code>, then loop over what is left and print each value.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t1-s5">
-      <h2><span class="num">5.</span>Membership — <code>in</code> and <code>not in</code></h2>
-      <p>Before searching a list by hand with a loop, check whether Python already has an
-        operator for the job — for a yes/no question like "is this value present", it does.
-        <code>in</code> and <code>not in</code> are <b>membership operators</b>: they test whether a
-        value occurs in a sequence and return a <code>bool</code>, without you writing the search
-        yourself.</p>
-
-      <table class="booktabs">
-        <tr><th>Operator</th><th>Returns</th></tr>
-        <tr><td><code>value in sequence</code></td><td><code>True</code> if <code>value</code> is found</td></tr>
-        <tr><td><code>value not in sequence</code></td><td><code>True</code> if <code>value</code> is <b>not</b> found</td></tr>
-      </table>
-
-      <div class="cell">
-        <pre class="code">due_tonight = [<span class="str">"srv-01"</span>, <span class="str">"srv-02"</span>, <span class="str">"srv-03"</span>]
-
-<span class="fn">print</span>(<span class="str">"srv-02"</span> <span class="kw">in</span> due_tonight)        <span class="cm"># True</span>
-<span class="fn">print</span>(<span class="str">"srv-09"</span> <span class="kw">not in</span> due_tonight)    <span class="cm"># True</span>
-
-<span class="kw">if</span> <span class="str">"srv-09"</span> <span class="kw">in</span> due_tonight:
-    <span class="fn">print</span>(<span class="str">"already scheduled"</span>)
-<span class="kw">else</span>:
-    <span class="fn">print</span>(<span class="str">"srv-09 not scheduled yet"</span>)</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">True<br>True<br>srv-09 not scheduled yet</span></div>
-      </div>
-      <p class="muted">This is also the safe way to guard <code>.remove()</code>: check
-        <code>if value in a_list:</code> before removing it, and the <code>ValueError</code> from
-        section 4 never happens.</p>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Given <code>hosts = ["srv-01", "srv-02", "srv-03"]</code>, use <code>in</code> to check
-          whether <code>"srv-02"</code> is present, and <code>not in</code> to check whether
-          <code>"srv-09"</code> is absent. Print both results.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t1-s6">
-      <h2><span class="num">6.</span>Aliasing — two names, one list</h2>
-      <p>A list variable does not hold the list itself — it holds a <b>reference</b> to it,
-        wherever in memory it actually lives. Assigning one list variable to another
-        (<code>backup = hosts</code>) copies the <em>reference</em>, not the data: both names now
-        point at the exact same list object. This is called <b>aliasing</b>, and because lists are
-        mutable, it has a real consequence — a change made through either name is visible through
-        both.</p>
-
-      <div class="cell">
-        <pre class="code">hosts = [<span class="str">"srv-01"</span>, <span class="str">"srv-02"</span>]
-backup = hosts          <span class="cm"># backup is another name for the SAME list</span>
-
-backup.append(<span class="str">"srv-03"</span>)
-<span class="fn">print</span>(hosts)              <span class="cm"># ['srv-01', 'srv-02', 'srv-03'] - changed too!</span>
-<span class="fn">print</span>(hosts <span class="kw">is</span> backup)     <span class="cm"># True - literally the same object</span></pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">['srv-01', 'srv-02', 'srv-03']<br>True</span></div>
-      </div>
-
-      <div class="diagram"><pre>hosts  ──┐
-         ├──▶  ["srv-01", "srv-02", "srv-03"]   &lt;- one list object
-backup ──┘
-
-hosts = ["srv-01", "srv-02"]      <- reassigning hosts instead
-backup = hosts                    <-   makes a NEW list; backup still
-hosts = ["srv-09"]                <-   points at the old one - the link
-                                        breaks the moment you reassign,
-                                        not when you mutate</pre></div>
-      <p class="muted">Contrast this with <code>hosts = ["srv-09"]</code> (reassignment, not
-        mutation): that makes <code>hosts</code> point at a brand-new list, leaving
-        <code>backup</code> pointing at the old one — the alias only matters while both names keep
-        pointing at the same object. This is also exactly why a tuple or a string being
-        <b>immutable</b> is a genuine safety feature, not just a restriction: aliasing two names
-        to the same tuple can never surprise you, because neither name can change what it points
-        to. Topic 2 leans on this same idea from the other direction — it is precisely because
-        tuples and strings cannot change that Python is willing to use them as dictionary keys.</p>
-      <p class="muted">If you need an independent copy rather than another name for the same list,
-        use <code>backup = hosts.copy()</code> (or <code>hosts[:]</code>) instead of plain
-        <code>=</code>.</p>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Predict, then check: given <code>a = [1, 2, 3]</code> and <code>b = a</code>, what does
-          <code>a</code> print after running <code>b.append(4)</code>? Then try it again using
-          <code>b = a.copy()</code> instead, and compare.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t1-s7">
-      <h2><span class="num">7.</span>Tuples — like a list, but locked</h2>
-      <p>Same idea, <code>()</code> instead of <code>[]</code>. Indexing and slicing work exactly the
-        same way — but a tuple is <b>immutable</b>: it cannot be changed after it is created. No
-        <code>.append()</code>, no changing an item, and — as section 6 just showed — no risk of an
-        alias surprising you either.</p>
-      <p class="muted">You have already used one. Week 3's <code>return difference, percent, status</code>
-        sent back a tuple — three values as one — and <code>difference, percent, status =
-        check_record(...)</code> unpacked it into three names.</p>
-
-      <div class="cell">
-        <pre class="code">point = (3, 7)
-<span class="fn">print</span>(point[0])   <span class="cm"># 3 - indexing works the same as a list</span>
-
-<span class="cm"># point[0] = 5     # TypeError: 'tuple' object does not support item assignment</span></pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">3</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Create a tuple <code>(label, value, limit)</code> for one record of your own. Try to
-          change one item and read the error.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t1-s8">
-      <h2><span class="num">8.</span>Strings slice the same way too</h2>
-      <p>You have been indexing and slicing without knowing it since Week 1. A string follows the
-        exact same rules as a list — and like a tuple, it is locked.</p>
-
-      <div class="cell">
-        <pre class="code">record_id = <span class="str">"R-001"</span>
-
-<span class="fn">print</span>(record_id[0])       <span class="cm"># 'R' - same indexing rule</span>
-<span class="fn">print</span>(record_id[-1])      <span class="cm"># '1' - same negative indexing</span>
-<span class="fn">print</span>(record_id[0:2])     <span class="cm"># 'R-' - same slicing rule, stop excluded</span>
-<span class="fn">print</span>(record_id[-3:])     <span class="cm"># '001'</span></pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">R<br>1<br>R-<br>001</span></div>
-      </div>
-      <p class="muted">Same lock as a tuple — you can read a character, not change one in place. The
-        full toolbox of string methods (<code>.upper()</code>, <code>.strip()</code>,
-        <code>.replace()</code> and more) is coming properly in Week 7. For now: the shape you
-        already know for lists and tuples works on text too.</p>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Given <code>hostname = "srv-01"</code>, print the first 3 characters and the last 2,
-          using slicing.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t1-s9">
-      <h2>Topic 1 Challenge</h2>
-      <div class="callout">
-        <p>Given <code>readings = [87, 120, 45, 93, 101]</code> and a fixed <code>limit = 100</code>,
-          loop over the list and print <code>OVER LIMIT</code> or <code>OK</code> for each value.
-          Then, using <code>in</code>, print whether <code>101</code> is one of the readings.</p>
-      </div>
-
-      <h3>Same idea, three fields</h3>
-      <p>Many values, in order — the exact same shape whichever field it turns up in.</p>
-      <table class="booktabs">
-        <tr><th>Field</th><th>Looks like</th></tr>
-        <tr><td>AI / Data Science</td><td>a list of readings from one sensor over a day</td></tr>
-        <tr><td>Cyber Security</td><td>a list of failed-login IPs from one hour</td></tr>
-        <tr><td>IT</td><td>a list of hostnames due for a check tonight</td></tr>
-      </table>
-    </section>
-
-    <section class="topic" id="t1-s10">
-      <h2>Common mistakes</h2>
-      <table class="booktabs">
-        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
-        <tr><td><code>labels[3]</code> when there are only 3 items</td><td><code>IndexError: list index out of range</code></td><td>the last valid index is <code>len(labels) - 1</code></td></tr>
-        <tr><td><code>values[1:3]</code> expecting 3 items</td><td>gives 2</td><td><code>stop</code> is never included, same as <code>range()</code></td></tr>
-        <tr><td>trying <code>name[0] = "z"</code> on a string</td><td><code>TypeError</code></td><td>strings cannot be changed this way — lists can</td></tr>
-        <tr><td><code>.remove(x)</code> when <code>x</code> is not in the list</td><td><code>ValueError</code></td><td>check with <code>in</code> first, or catch the error</td></tr>
-        <tr><td><code>.pop()</code> on an empty list</td><td><code>IndexError: pop from empty list</code></td><td>check <code>if a_list:</code> (or <code>len(a_list) &gt; 0</code>) first</td></tr>
-        <tr><td>assuming <code>backup = hosts</code> makes an independent copy</td><td>changing one changes the other — they are the same list (aliasing)</td><td>use <code>hosts.copy()</code> or <code>hosts[:]</code> for a real copy</td></tr>
-        <tr><td><code>point[0] = 5</code> on a tuple</td><td><code>TypeError: 'tuple' object does not support item assignment</code></td><td>tuples cannot be changed — use a list if you need to</td></tr>
-      </table>
-
-      <h3>Go deeper</h3>
-      <ul class="tight">
-        <li><code>examples/01_lists_and_indexing.py</code> — indexing, negative indexing, len()</li>
-        <li><code>examples/02_slicing_and_mutating.py</code> — slicing, append, remove, in</li>
-        <li><code>examples/03_tuples.py</code> — creating, indexing, and why they cannot change</li>
-        <li><a href="https://docs.python.org/3/tutorial/datastructures.html#more-on-lists" target="_blank" rel="noopener">docs.python.org — More on Lists</a>, the official Python tutorial's full method reference (<code>.pop()</code>, <code>.insert()</code>, <code>.sort()</code> and more, beyond what this week covers)</li>
-      </ul>
-    </section>
-
-    <section class="topic" id="t1-s11">
-      <h2>Recap</h2>
-      <table class="booktabs">
-        <tr><th>You can now</th><th>Using</th></tr>
-        <tr><td>create a list, and name what kind of type it is</td><td><code>[a, b, c]</code> — an ordered, mutable, compound sequence type</td></tr>
-        <tr><td>access by position</td><td><code>labels[0]</code>, <code>labels[-1]</code></td></tr>
-        <tr><td>take a piece</td><td><code>labels[1:3]</code></td></tr>
-        <tr><td>change, add and remove in place</td><td><code>labels[0] = x</code>, <code>.append()</code>, <code>.remove()</code></td></tr>
-        <tr><td>test whether a value is present</td><td><code>in</code> / <code>not in</code></td></tr>
-        <tr><td>explain why two names can alias one list</td><td>a variable holds a reference, not the data itself</td></tr>
-        <tr><td>loop over it directly</td><td><code>for item in labels:</code></td></tr>
-        <tr><td>create a fixed, unchangeable collection</td><td><code>(a, b, c)</code></td></tr>
-        <tr><td>index/slice a string</td><td>same rules as a list, but locked like a tuple</td></tr>
-      </table>
-      <p class="muted">Next: <a href="#t2-s1" style="color:var(--accent); text-decoration:none;">Topic 2 — finding things by name instead of position.</a></p>
-    </section>
-
-    <div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Dictionaries</h2></div>
-    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Dictionaries</a> · <a href="https://docs.python.org/3/tutorial/datastructures.html#sets">Sets</a></p>
-
-    <section class="topic" id="t2-s1">
-      <h2><span class="num">1.</span>Creating and accessing</h2>
-      <p>A list finds things by position. A dictionary finds things by name.</p>
-
-      <figure class="anim-figure">
-        <iframe src="dict_lookup.html?embed=1" title="Dict lookup animation" loading="lazy" style="height:600px;"></iframe>
-        <figcaption><b>Figure 1.1.</b> A list has to check each slot in order until one matches. A
-          dict jumps straight to the key it was asked for — it does not care where that key sits.</figcaption>
-      </figure>
-
-      <div class="cell">
-        <pre class="code">record = {
-    <span class="str">"label"</span>: <span class="str">"R-001"</span>,
-    <span class="str">"value"</span>: 87.0,
-    <span class="str">"limit"</span>: 100.0,
+# the same thing, written as a list comprehension
+doubled = [v * 2 for v in values]
+print(doubled)</code></pre></div><div class="cell"><pre class="code"><code>[  v * 2   for v in values  ]
+     │            │
+what to keep   where each v comes from</code></pre></div>
+<p>Add <code>if condition</code> at the end to filter as you build.</p>
+<div class="cell"><pre class="code"><code>big_values = [v for v in values if v &gt;= 50]
+print(big_values)</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>a list of readings from one sensor over a day</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>a list of failed-login IPs from one hour</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>a list of hostnames due for a check tonight</td>
+</tr>
+</tbody>
+</table>
+<p><strong>AI / Data Science</strong></p>
+<div class="cell"><pre class="code"><code>sensor_readings = [21.4, 21.9, 22.0, 21.7]
+print(sensor_readings)
+print(sensor_readings[-1])</code></pre></div><p><strong>Cyber Security</strong></p>
+<div class="cell"><pre class="code"><code>failed_logins = ["10.0.0.5", "10.0.0.9", "10.0.0.5"]
+print(failed_logins)
+print(len(failed_logins))</code></pre></div><p><strong>IT</strong></p>
+<div class="cell"><pre class="code"><code>due_tonight = ["srv-01", "srv-03", "srv-07"]
+print(due_tonight)
+for host in due_tonight:
+    print(f"check {host}")</code></pre></div></section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>labels[3]</code> when there are only 3 items</td>
+  <td><code>IndexError: list index out of range</code></td>
+  <td>the last valid index is <code>len(labels) - 1</code></td>
+</tr>
+<tr>
+  <td><code>values[1:3]</code> expecting 3 items</td>
+  <td>gives 2</td>
+  <td><code>stop</code> is never included, same as <code>range()</code></td>
+</tr>
+<tr>
+  <td>trying <code>name[0] = &quot;z&quot;</code> on a string</td>
+  <td><code>TypeError</code></td>
+  <td>strings cannot be changed this way — lists can</td>
+</tr>
+<tr>
+  <td><code>.remove(x)</code> when <code>x</code> is not in the list</td>
+  <td><code>ValueError</code></td>
+  <td>check with <code>in</code> first, or catch the error</td>
+</tr>
+<tr>
+  <td><code>point[0] = 5</code> on a tuple</td>
+  <td><code>TypeError: 'tuple' object does not support item assignment</code></td>
+  <td>tuples cannot be changed — use a list if you need to</td>
+</tr>
+<tr>
+  <td>a comprehension with <code>if</code>/<code>else</code> logic <em>and</em> a filter, tangled together</td>
+  <td>hard to read, easy to get wrong</td>
+  <td>if it needs more than one clear idea, write the <code>for</code> loop instead</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_lists_and_indexing.py</code> — indexing, negative indexing, len(), and comprehensions
+<code>examples/02_slicing_and_mutating.py</code> — slicing, append, remove, in
+<code>examples/03_tuples.py</code> — creating, indexing, and why they cannot change</p>
+</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>create a list</td>
+  <td><code>[a, b, c]</code></td>
+</tr>
+<tr>
+  <td>access by position</td>
+  <td><code>labels[0]</code>, <code>labels[-1]</code></td>
+</tr>
+<tr>
+  <td>take a piece</td>
+  <td><code>labels[1:3]</code></td>
+</tr>
+<tr>
+  <td>change it in place</td>
+  <td><code>labels[0] = x</code>, <code>.append()</code>, <code>.remove()</code></td>
+</tr>
+<tr>
+  <td>loop over it directly</td>
+  <td><code>for item in labels:</code></td>
+</tr>
+<tr>
+  <td>build a new list from an old one, in one line</td>
+  <td><code>[expr for item in labels]</code></td>
+</tr>
+<tr>
+  <td>create a fixed, unchangeable collection</td>
+  <td><code>(a, b, c)</code></td>
+</tr>
+<tr>
+  <td>index/slice a string</td>
+  <td>same rules as a list, but locked like a tuple</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 2 — finding things by name instead of position.</p>
+</section></section>
+<div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">Dictionaries</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Dictionaries</a></p><section class="topic"><p>A list finds things by position. A dictionary finds things by name.</p><p><strong>Resources</strong></p>
+<p>Python documentation — <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Data Structures: Dictionaries</a> — the official reference, if you want more than this walkthrough covers.</p>
+<section class="topic" id="p2-t2-1-creating-and-accessing"><h2><span class="num">1.</span>Creating and accessing</h2><div class="cell"><pre class="code"><code>record = {
+    "label": "R-001",
+    "value": 87.0,
+    "limit": 100.0,
 }
 
-<span class="fn">print</span>(record[<span class="str">"label"</span>])
-<span class="fn">print</span>(record[<span class="str">"value"</span>])</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">R-001<br>87.0</span></div>
-      </div>
+print(record["label"])
+print(record["value"])</code></pre></div><div class="cell"><pre class="code"><code>record = { "label": "R-001",  "value": 87.0,  "limit": 100.0 }
 
-      <div class="diagram"><pre>record = { "label": "R-001",  "value": 87.0,  "limit": 100.0 }
+record["value"]  ──▶  87.0
+record["missing"]  ──▶  KeyError</code></pre></div>
+<p>Animation — <a href="https://anna29.github.io/CST1510/dict_lookup.html">Dict Lookup</a> — open this on the main screen to compare list lookup with dict lookup interactively.</p>
+</section><section class="topic" id="p2-t2-2-adding-and-updating"><h2><span class="num">2.</span>Adding and updating</h2><p>The same line does both — if the key exists, it updates; if not, it adds.</p>
+<div class="cell"><pre class="code"><code>record["status"] = "OK"     # new key
+record["value"] = 90.0       # existing key, updated
+print(record)</code></pre></div></section><section class="topic" id="p2-t2-3-missing-keys-and-get"><h2><span class="num">3.</span>Missing keys, and <code>.get()</code></h2><p><code>record[&quot;missing&quot;]</code> raises <code>KeyError</code>. <code>.get()</code> does not — it gives you <code>None</code>, or a
+default of your choosing.</p>
+<div class="cell"><pre class="code"><code>print(record.get("status"))          # OK
+print(record.get("missing"))          # None
+print(record.get("missing", "n/a"))    # n/a</code></pre></div></section><section class="topic" id="p2-t2-4-iterating"><h2><span class="num">4.</span>Iterating</h2><p><code>.items()</code> gives you both the key and the value together — the one you will use
+most.</p>
+<div class="cell"><pre class="code"><code>for key, value in record.items():
+    print(f"{key}: {value}")</code></pre></div></section><section class="topic" id="p2-t2-5-zip-building-a-dict-from-two-lists"><h2><span class="num">5.</span><code>zip()</code> — building a dict from two lists</h2><p>Sometimes your data starts as two separate lists — names in one, values in
+another — instead of already paired up. <code>zip()</code> pairs them together, one from
+each; <code>dict()</code> turns those pairs straight into a dictionary.</p>
+<div class="cell"><pre class="code"><code>hostnames = ["srv-01", "srv-02", "srv-03"]
+disk_used = [87, 45, 120]
 
-record["value"]    ──▶  87.0
-record["missing"]  ──▶  KeyError</pre></div>
+paired = list(zip(hostnames, disk_used))
+print(paired)     # [('srv-01', 87), ('srv-02', 45), ('srv-03', 120)]
 
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Create a dict called <code>host</code> for one server with <code>name</code>,
-          <code>used_gb</code> and <code>total_gb</code>. Print two of its values.</p>
-      </div>
-    </section>
+usage = dict(zip(hostnames, disk_used))
+print(usage)                  # {'srv-01': 87, 'srv-02': 45, 'srv-03': 120}
+print(usage["srv-02"])         # 45</code></pre></div><div class="cell"><pre class="code"><code>hostnames:   srv-01     srv-02     srv-03
+                │          │          │
+disk_used:     87         45        120
+                │          │          │
+zip pairs:  (srv-01,87) (srv-02,45) (srv-03,120)</code></pre></div>
+<p>If the two lists are different lengths, <code>zip()</code> stops at the shorter one —
+silently, with no error.</p>
+</section><section class="topic" id="p2-t2-5-sets-only-unique-values-in-curly-braces-too"><h2><span class="num">5.</span>Sets — only unique values, in curly braces too</h2><p>Created with <code>{a, b, c}</code> — or <code>set()</code> for an empty one. <strong>Not</strong> <code>{}</code>: that makes an
+empty <em>dict</em>, not an empty set. No order, no indexing, and duplicates are dropped
+automatically.</p>
+<div class="cell"><pre class="code"><code>labels = ["R-001", "R-002", "R-001", "R-003"]
+unique_labels = set(labels)
 
-    <section class="topic" id="t2-s2">
-      <h2><span class="num">2.</span>Adding and updating</h2>
-      <p>The same line does both — if the key exists, it updates; if not, it adds.</p>
+print(unique_labels)          # duplicates gone
+print(len(unique_labels))      # 3, not 4
+print("R-001" in unique_labels)   # True - fast membership check
 
-      <div class="cell">
-        <pre class="code">record[<span class="str">"status"</span>] = <span class="str">"OK"</span>     <span class="cm"># new key</span>
-record[<span class="str">"value"</span>] = 90.0        <span class="cm"># existing key, updated</span>
-<span class="fn">print</span>(record)</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">{'label': 'R-001', 'value': 90.0, 'limit': 100.0, 'status': 'OK'}</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Add a new key to your <code>host</code> dict, then update one of the original ones.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t2-s3">
-      <h2><span class="num">3.</span>Missing keys, and <code>.get()</code></h2>
-      <p><code>record["missing"]</code> raises <code>KeyError</code>. <code>.get()</code> does
-        not — it gives you <code>None</code>, or a default of your choosing.</p>
-
-      <div class="cell">
-        <pre class="code"><span class="fn">print</span>(record.get(<span class="str">"status"</span>))            <span class="cm"># OK</span>
-<span class="fn">print</span>(record.get(<span class="str">"missing"</span>))           <span class="cm"># None</span>
-<span class="fn">print</span>(record.get(<span class="str">"missing"</span>, <span class="str">"n/a"</span>))    <span class="cm"># n/a</span></pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">OK<br>None<br>n/a</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Use <code>.get()</code> on <code>host</code> to safely check for a key you know does not
-          exist, with a default of your choosing.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t2-s4">
-      <h2><span class="num">4.</span>Iterating</h2>
-      <p><code>.items()</code> gives you both the key and the value together — the one you will use
-        most.</p>
-
-      <div class="cell">
-        <pre class="code"><span class="kw">for</span> key, value <span class="kw">in</span> record.items():
-    <span class="fn">print</span>(f<span class="str">"{key}: {value}"</span>)</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">label: R-001<br>value: 90.0<br>limit: 100.0<br>status: OK</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Loop over <code>host</code> using <code>.items()</code> and print <code>key: value</code>
-          for each pair.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t2-s5">
-      <h2><span class="num">5.</span>Sets — only unique values, in curly braces too</h2>
-      <p>Created with <code>{"{a, b, c}"}</code> — or <code>set()</code> for an empty one.
-        <b>Not</b> <code>{"{}"}</code>: that makes an empty <em>dict</em>, not an empty set. No
-        order, no indexing, and duplicates are dropped automatically.</p>
-
-      <div class="cell">
-        <pre class="code">labels = [<span class="str">"R-001"</span>, <span class="str">"R-002"</span>, <span class="str">"R-001"</span>, <span class="str">"R-003"</span>]
-unique_labels = <span class="fn">set</span>(labels)
-
-<span class="fn">print</span>(unique_labels)             <span class="cm"># duplicates gone</span>
-<span class="fn">print</span>(<span class="fn">len</span>(unique_labels))       <span class="cm"># 3, not 4</span>
-<span class="fn">print</span>(<span class="str">"R-001"</span> <span class="kw">in</span> unique_labels)   <span class="cm"># True - fast membership check</span>
-
-empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is an empty dict</span></pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">{'R-001', 'R-002', 'R-003'}<br>3<br>True</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Given <code>visited_hosts = ["srv-01", "srv-02", "srv-01", "srv-03", "srv-02"]</code>, use
-          a set to find out how many unique values it contains.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t2-s6">
-      <h2>Topic 2 Challenge</h2>
-      <div class="callout">
-        <p>Given <code>disk = {"used": 87.0, "total": 120.0, "free": 33.0}</code>, print a
-          formatted report line for each key-value pair, right-aligning the values, using
-          <code>.items()</code>.</p>
-      </div>
-
-      <h3>Same idea, three fields</h3>
-      <p>One shape, three different pieces of information stored by name.</p>
-      <table class="booktabs">
-        <tr><th>Field</th><th>Looks like</th></tr>
-        <tr><td>AI / Data Science</td><td><code>{"rows": 1200, "missing": 13, "source": "survey_2026"}</code></td></tr>
-        <tr><td>Cyber Security</td><td><code>{"ip": "10.0.0.5", "failed": 12, "locked": True}</code></td></tr>
-        <tr><td>IT</td><td><code>{"hostname": "srv-01", "used_gb": 87, "total_gb": 120}</code></td></tr>
-      </table>
-    </section>
-
-    <section class="topic" id="t2-s7">
-      <h2>Common mistakes</h2>
-      <table class="booktabs">
-        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
-        <tr><td><code>record["missing"]</code></td><td><code>KeyError: 'missing'</code></td><td>check with <code>.get()</code> or <code>in</code> first</td></tr>
-        <tr><td><code>record[value]</code> when you meant <code>record["value"]</code></td><td><code>NameError</code> (or wrong result)</td><td>keys are strings — quote them</td></tr>
-        <tr><td>assuming key order matters for lookup</td><td>it doesn't — lookup is by name, not position</td><td>that is the entire point of a dict</td></tr>
-        <tr><td><code>for value in record:</code> expecting key AND value</td><td>only gives you the keys</td><td>use <code>.items()</code> for both</td></tr>
-        <tr><td><code>{"{}"}</code> expecting an empty set</td><td>it is an empty <b>dict</b></td><td>use <code>set()</code> for an empty set</td></tr>
-      </table>
-
-      <h3>Go deeper</h3>
-      <ul class="tight">
-        <li><code>examples/01_creating_and_accessing.py</code> — creating, accessing, updating, .get()</li>
-        <li><code>examples/02_iterating.py</code> — .keys(), .values(), .items()</li>
-        <li><code>examples/03_sets.py</code> — unique values, membership, the <code>{"{}"}</code> gotcha</li>
-      </ul>
-    </section>
-
-    <section class="topic" id="t2-s8">
-      <h2>Recap</h2>
-      <table class="booktabs">
-        <tr><th>You can now</th><th>Using</th></tr>
-        <tr><td>create a dict</td><td><code>{"key": value, ...}</code></td></tr>
-        <tr><td>access by name</td><td><code>record["key"]</code></td></tr>
-        <tr><td>add or update</td><td><code>record["key"] = value</code></td></tr>
-        <tr><td>avoid <code>KeyError</code></td><td><code>.get("key", default)</code></td></tr>
-        <tr><td>loop over both at once</td><td><code>.items()</code></td></tr>
-        <tr><td>keep only unique values</td><td><code>set(a_list)</code></td></tr>
-      </table>
-      <p class="muted">Next: <a href="#t3-s1" style="color:var(--accent); text-decoration:none;">Topic 3 — storage that outlives the program.</a></p>
-    </section>
-
-    <div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Files</h2></div>
-    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a> · <a href="https://docs.python.org/3/library/functions.html#open">open()</a></p>
-
-    <section class="topic" id="t3-s1">
-      <h2><span class="num">1.</span>Writing, with <code>with</code></h2>
-      <p>Everything so far disappears the moment the program ends. A file does not.
-        <code>with ... as f:</code> opens the file, hands you <code>f</code> to work with, and
-        closes it automatically when the indented block ends — even if something goes wrong
-        partway through.</p>
-
-      <figure class="anim-figure">
-        <iframe src="file_modes.html?embed=1" title="File modes animation" loading="lazy" style="height:560px;"></iframe>
-        <figcaption><b>Figure 1.1.</b> <code>"w"</code> truncates the file before writing —
-          <code>"a"</code> leaves what's already there untouched. Section 2 below covers the mode
-          argument itself.</figcaption>
-      </figure>
-
-      <div class="cell">
-        <pre class="code"><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
-    f.write(<span class="str">"R-001\n"</span>)
-    f.write(<span class="str">"R-002\n"</span>)</pre>
-      </div>
-
-      <div class="diagram"><pre>with open("output.txt", "w") as f:
+empty_set = set()    # NOT {} - that is an empty dict</code></pre></div></section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td><code>{&quot;rows&quot;: 1200, &quot;missing&quot;: 13, &quot;source&quot;: &quot;survey_2026&quot;}</code></td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td><code>{&quot;ip&quot;: &quot;10.0.0.5&quot;, &quot;failed&quot;: 12, &quot;locked&quot;: True}</code></td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td><code>{&quot;hostname&quot;: &quot;srv-01&quot;, &quot;used_gb&quot;: 87, &quot;total_gb&quot;: 120}</code></td>
+</tr>
+</tbody>
+</table>
+</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>record[&quot;missing&quot;]</code></td>
+  <td><code>KeyError: 'missing'</code></td>
+  <td>check with <code>.get()</code> or <code>in</code> first</td>
+</tr>
+<tr>
+  <td><code>record[value]</code> when you meant <code>record[&quot;value&quot;]</code></td>
+  <td><code>NameError</code> (or wrong result)</td>
+  <td>keys are strings — quote them</td>
+</tr>
+<tr>
+  <td>assuming key order matters for lookup</td>
+  <td>it doesn't — lookup is by name, not position</td>
+  <td>that is the entire point of a dict</td>
+</tr>
+<tr>
+  <td><code>for value in record:</code> expecting key AND value</td>
+  <td>only gives you the keys</td>
+  <td>use <code>.items()</code> for both</td>
+</tr>
+<tr>
+  <td><code>{}</code> expecting an empty set</td>
+  <td>it is an empty <strong>dict</strong></td>
+  <td>use <code>set()</code> for an empty set</td>
+</tr>
+<tr>
+  <td><code>zip()</code>-ing two lists of different lengths</td>
+  <td>silently stops at the shorter one, no error</td>
+  <td>check both lists are the same length first</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_creating_and_accessing.py</code> — creating, accessing, updating, .get()
+<code>examples/02_iterating.py</code> — .keys(), .values(), .items(), and zip()
+<code>examples/03_sets.py</code> — unique values, membership, the <code>{}</code> gotcha</p>
+</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>create a dict</td>
+  <td><code>{&quot;key&quot;: value, ...}</code></td>
+</tr>
+<tr>
+  <td>access by name</td>
+  <td><code>record[&quot;key&quot;]</code></td>
+</tr>
+<tr>
+  <td>add or update</td>
+  <td><code>record[&quot;key&quot;] = value</code></td>
+</tr>
+<tr>
+  <td>avoid <code>KeyError</code></td>
+  <td><code>.get(&quot;key&quot;, default)</code></td>
+</tr>
+<tr>
+  <td>loop over both at once</td>
+  <td><code>.items()</code></td>
+</tr>
+<tr>
+  <td>build a dict from two separate lists</td>
+  <td><code>dict(zip(keys, values))</code></td>
+</tr>
+<tr>
+  <td>keep only unique values</td>
+  <td><code>set(a_list)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 3 — storage that outlives the program.</p>
+</section></section>
+<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Files</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a> · <a href="https://docs.python.org/3/library/functions.html#open">open()</a></p><section class="topic"><p>Everything so far disappears the moment the program ends. A file does not.</p><p><strong>Resources</strong></p>
+<p>Python documentation — <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and Writing Files</a> — the official reference, if you want more than this walkthrough covers.</p>
+<section class="topic" id="p3-t3-1-writing-with-with"><h2><span class="num">1.</span>Writing, with <code>with</code></h2><p><code>with ... as f:</code> opens the file, hands you <code>f</code> to work with, and closes it
+automatically when the indented block ends — even if something goes wrong partway
+through.</p>
+<div class="cell"><pre class="code"><code>with open("output.txt", "w") as f:
+    f.write("R-001\n")
+    f.write("R-002\n")</code></pre></div><div class="diagram"><pre>with open("output.txt", "w") as f:
        │
        ▼
   file is open, f is your handle
@@ -675,255 +511,351 @@ empty_set = <span class="fn">set</span>()   <span class="cm"># NOT {} - that is 
        │
        ▼
   block ends  ──▶  file closes automatically, even if an error happened</pre></div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Write 3 lines of your own to a new file called <code>my_notes.txt</code>.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t3-s2">
-      <h2><span class="num">2.</span>Reading</h2>
-      <p>No mode given defaults to <code>"r"</code> (read). <code>"w"</code> overwrites the whole
-        file every time you open it that way — <code>"a"</code> appends instead.</p>
-
-      <div class="cell">
-        <pre class="code"><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>) <span class="kw">as</span> f:
+</section><section class="topic" id="p3-t3-2-reading"><h2><span class="num">2.</span>Reading</h2><p>No mode given defaults to <code>&quot;r&quot;</code> (read). <code>&quot;w&quot;</code> overwrites the whole file every time
+you open it that way — <code>&quot;a&quot;</code> appends instead.</p>
+<div class="cell"><pre class="code"><code>with open("output.txt") as f:
     text = f.read()
 
-<span class="fn">print</span>(text)</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">R-001<br>R-002</span></div>
-      </div>
+print(text)</code></pre></div><p>Animation — <a href="https://anna29.github.io/CST1510/file_modes.html">File Modes</a> — open this on the main screen to show why <code>&quot;w&quot;</code> truncates a file and <code>&quot;a&quot;</code> does not.</p>
+</section><section class="topic" id="p3-t3-3-reading-line-by-line"><h2><span class="num">3.</span>Reading line by line</h2><p>Looping over an open file gives you one line at a time — the natural way to
+process many records. Each line keeps its trailing <code>\n</code> — <code>.strip()</code> removes it.</p>
+<div class="cell"><pre class="code"><code>with open("output.txt") as f:
+    for line in f:
+        print(line.strip())</code></pre></div></section><section class="topic" id="p3-t3-4-splitting-a-line-into-fields"><h2><span class="num">4.</span>Splitting a line into fields</h2><p><code>.split(&quot;,&quot;)</code> turns one line of text into a list of values — still text, so
+convert what needs converting.</p>
+<div class="cell"><pre class="code"><code>line = "R-001,87,100"
+label, value, limit = line.split(",")
+value = float(value)
+limit = float(limit)
+print(label, value, limit)</code></pre></div></section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>loading a CSV of readings before doing anything with it</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>reading a log file line by line, checking each entry</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>reading a list of hostnames from a config file</td>
+</tr>
+</tbody>
+</table>
+</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>opening a file that does not exist</td>
+  <td><code>FileNotFoundError</code></td>
+  <td>check the path — is it relative to where you are running from? (or catch it — Topic 4)</td>
+</tr>
+<tr>
+  <td>forgetting <code>.strip()</code> before comparing or splitting a line</td>
+  <td>odd, hard-to-spot mismatches</td>
+  <td>every line from a file carries a trailing <code>\n</code></td>
+</tr>
+<tr>
+  <td>using <code>&quot;w&quot;</code> when you meant <code>&quot;a&quot;</code></td>
+  <td>your previous content is gone</td>
+  <td><code>&quot;w&quot;</code> overwrites, <code>&quot;a&quot;</code> appends — pick deliberately</td>
+</tr>
+<tr>
+  <td>forgetting to convert after <code>.split()</code></td>
+  <td><code>TypeError</code> when you try to calculate</td>
+  <td>everything from <code>.split()</code> is still text</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_writing_and_reading.py</code> — write, read, append, the with pattern
+<code>examples/02_line_by_line_and_split.py</code> — looping over a file, splitting each line</p>
+</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>write to a file safely</td>
+  <td><code>with open(path, &quot;w&quot;) as f:</code></td>
+</tr>
+<tr>
+  <td>read a whole file</td>
+  <td><code>f.read()</code></td>
+</tr>
+<tr>
+  <td>read it line by line</td>
+  <td><code>for line in f:</code></td>
+</tr>
+<tr>
+  <td>turn a line into values</td>
+  <td><code>line.strip().split(&quot;,&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 4 — what to do when the file you just tried to open isn't there.</p>
+</section></section>
+<div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">Handling Errors</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/errors.html">Errors and exceptions</a></p><section class="topic"><p>A file that should be there sometimes isn't. A value that should be a number
+sometimes isn't. Until now, both have crashed the whole program.</p><p><strong>Resources</strong></p>
+<p>Python documentation — <a href="https://docs.python.org/3/tutorial/errors.html">Errors and Exceptions</a> — the official reference, if you want more than this walkthrough covers.</p>
+<section class="topic" id="p4-t4-1-two-failures-you-already-know"><h2><span class="num">1.</span>Two failures you already know</h2><p>Both of these already exist in code you have written. Neither is a bug in
+Python — Python is doing exactly what it should when it does not know how to
+continue.</p>
+<div class="cell"><pre class="code"><code>value = int("abc")                 # ValueError — Week 1</code></pre></div>
+<div class="cell"><pre class="code"><code>with open("missing.txt") as f:     # FileNotFoundError — last topic
+    text = f.read()</code></pre></div>
+<p>A crash stops the <em>whole</em> program, right there. Often you already know what
+should happen instead — a crash never gives you the chance to say so.</p>
+<div class="cell"><pre class="code"><code># run this once, so section 2 has something real to catch
+try:
+    int("abc")
+except ValueError:
+    print("yes — this really does raise ValueError")</code></pre></div></section><section class="topic" id="p4-t4-2-try-except-catch-it-decide-what-happens-next"><h2><span class="num">2.</span><code>try</code> / <code>except</code> — catch it, decide what happens next</h2><p>Python runs the <code>try</code> block. If the named error happens inside it, execution
+jumps straight to the matching <code>except</code> — the rest of the <code>try</code> block is
+skipped, but the program does <strong>not</strong> crash.</p>
+<div class="cell"><pre class="code"><code>try:
+    with open("missing.txt") as f:
+        text = f.read()
+except FileNotFoundError:
+    print("missing.txt not found — using an empty report instead")
+    text = ""
 
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>This cell writes <code>my_notes.txt</code> for you. Read it back and print it.</p>
-      </div>
-    </section>
+print(repr(text))     # '' — the program kept going</code></pre></div></section><section class="topic" id="p4-t4-3-name-the-exception-you-expect"><h2><span class="num">3.</span>Name the exception you expect</h2><p><code>except:</code> on its own catches <strong>everything</strong> — including a typo in your own
+code, three lines away, that has nothing to do with the problem you were
+actually planning for. Name the exception. If more than one thing can go
+wrong, use more than one <code>except</code>.</p>
+<div class="cell"><pre class="code"><code>def safe_divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        print("can't divide by zero")
+        return None
+    except TypeError:
+        print("both values need to be numbers")
+        return None
 
-    <section class="topic" id="t3-s3">
-      <h2><span class="num">3.</span>Reading line by line</h2>
-      <p>Looping over an open file gives you one line at a time — the natural way to process many
-        records. Each line keeps its trailing <code>\n</code> — <code>.strip()</code> removes it.</p>
-
-      <div class="cell">
-        <pre class="code"><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>) <span class="kw">as</span> f:
-    <span class="kw">for</span> line <span class="kw">in</span> f:
-        <span class="fn">print</span>(line.strip())</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">R-001<br>R-002</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>This cell writes <code>my_notes.txt</code> for you again. Read it line by line and print
-          each line, stripped.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t3-s4">
-      <h2><span class="num">4.</span>Splitting a line into fields</h2>
-      <p><code>.split(",")</code> turns one line of text into a list of values — still text, so
-        convert what needs converting.</p>
-
-      <div class="cell">
-        <pre class="code">line = <span class="str">"R-001,87,100"</span>
-label, value, limit = line.split(<span class="str">","</span>)
-value = <span class="fn">float</span>(value)
-limit = <span class="fn">float</span>(limit)
-<span class="fn">print</span>(label, value, limit)</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">R-001 87.0 100.0</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Given the line <code>"R-004,93,100"</code>, split it and print the three parts, converted
-          where needed.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t3-s5">
-      <h2>Topic 3 Challenge</h2>
-      <div class="callout">
-        <p>Write a function <code>load_records(path)</code> that reads a file of
-          <code>label,value,limit</code> lines and returns a list of dicts — one dict per line,
-          shaped like <code>{"label": ..., "value": ..., "limit": ...}</code>. Write a small
-          file of your own to test it on.</p>
-      </div>
-
-      <h3>Same idea, three fields</h3>
-      <p>Storage that outlives the program, read back a line at a time.</p>
-      <table class="booktabs">
-        <tr><th>Field</th><th>Looks like</th></tr>
-        <tr><td>AI / Data Science</td><td>loading a CSV of readings before doing anything with it</td></tr>
-        <tr><td>Cyber Security</td><td>reading a log file line by line, checking each entry</td></tr>
-        <tr><td>IT</td><td>reading a list of hostnames from a config file</td></tr>
-      </table>
-    </section>
-
-    <section class="topic" id="t3-s6">
-      <h2>Common mistakes</h2>
-      <table class="booktabs">
-        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
-        <tr><td>opening a file that does not exist</td><td><code>FileNotFoundError</code></td><td>check the path — is it relative to where you are running from?</td></tr>
-        <tr><td>forgetting <code>.strip()</code> before comparing or splitting a line</td><td>odd, hard-to-spot mismatches</td><td>every line from a file carries a trailing <code>\n</code></td></tr>
-        <tr><td>using <code>"w"</code> when you meant <code>"a"</code></td><td>your previous content is gone</td><td><code>"w"</code> overwrites, <code>"a"</code> appends — pick deliberately</td></tr>
-        <tr><td>forgetting to convert after <code>.split()</code></td><td><code>TypeError</code> when you try to calculate</td><td>everything from <code>.split()</code> is still text</td></tr>
-      </table>
-
-      <h3>Go deeper</h3>
-      <ul class="tight">
-        <li><code>examples/01_writing_and_reading.py</code> — write, read, append, the with pattern</li>
-        <li><code>examples/02_line_by_line_and_split.py</code> — looping over a file, splitting each line</li>
-      </ul>
-    </section>
-
-    <section class="topic" id="t3-s7">
-      <h2>Recap</h2>
-      <table class="booktabs">
-        <tr><th>You can now</th><th>Using</th></tr>
-        <tr><td>write to a file safely</td><td><code>with open(path, "w") as f:</code></td></tr>
-        <tr><td>read a whole file</td><td><code>f.read()</code></td></tr>
-        <tr><td>read it line by line</td><td><code>for line in f:</code></td></tr>
-        <tr><td>turn a line into values</td><td><code>line.strip().split(",")</code></td></tr>
-      </table>
-      <p class="muted">Next: <a href="#t4-s1" style="color:var(--accent); text-decoration:none;">Topic 4 — combining lists, dicts and files into one shape.</a></p>
-    </section>
-
-    <div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Putting It Together</h2></div>
-    <p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/datastructures.html#dictionaries">Dictionaries</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p>
-
-    <section class="topic" id="t4-s1">
-      <h2><span class="num">1.</span>The shape</h2>
-      <p>This week's three tools combine into the shape almost every real program uses. Build one by
-        hand first, before loading anything from a file.</p>
-
-      <figure class="anim-figure">
-        <iframe src="list_of_dicts.html?embed=1" title="List of dicts animation" loading="lazy" style="height:620px;"></iframe>
-        <figcaption><b>Figure 1.1.</b> A raw line splits into raw pieces, which become one dict,
-          appended into a single growing list — the destination shape the rest of the program uses.</figcaption>
-      </figure>
-
-      <div class="diagram"><pre>file (records.txt)                    a list of dicts
+print(safe_divide(10, 2))      # 5.0
+print(safe_divide(10, 0))      # can't divide by zero -&gt; None
+print(safe_divide(10, "two"))  # both values need to be numbers -&gt; None</code></pre></div><div class="cell"><pre class="code"><code># WATCH OUT — a bare except hides real bugs, it does not fix them
+try:
+    result = 10 / 0
+except:                    # catches EVERYTHING — even a typo you made
+    print("something went wrong")   # ...and you will never know what</code></pre></div>
+<p><code>as e</code> gives you the actual error object, if you want to see the real message
+rather than writing your own:</p>
+<div class="cell"><pre class="code"><code>try:
+    int("abc")
+except ValueError as e:
+    print("caught it:", e)     # caught it: invalid literal for int() with base 10: 'abc'</code></pre></div>
+</section><section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2><p>A program that crashes on the first bad input is not &quot;correct&quot; — it is just early to quit.</p>
+<table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td><code>except FileNotFoundError:</code> — skip a dataset that hasn't been uploaded yet, keep processing the rest</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td><code>except ValueError:</code> — skip a malformed log line, keep scanning the rest of the file</td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td><code>except FileNotFoundError:</code> — fall back to default settings when a config file is missing</td>
+</tr>
+</tbody>
+</table>
+<p>Same shape, three domains: catch it, decide what &quot;carry on&quot; means, keep going.</p>
+</section><section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>a bare <code>except:</code></td>
+  <td>it catches EVERYTHING, including your own typos</td>
+  <td>always name the exception: <code>except ValueError:</code></td>
+</tr>
+<tr>
+  <td>catching the wrong exception</td>
+  <td>the error still crashes the program</td>
+  <td>read the traceback's <strong>last line</strong> — that word IS the exception name to catch</td>
+</tr>
+<tr>
+  <td>catching an error and doing nothing</td>
+  <td>the program looks like it worked, but the data is just quietly missing</td>
+  <td>at minimum, print what happened — a silent <code>except: pass</code> is the hardest bug to find</td>
+</tr>
+<tr>
+  <td>putting too much inside one <code>try</code></td>
+  <td>you can no longer tell which line actually failed</td>
+  <td>keep the <code>try</code> block to just the risky line or two</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_catching_errors.py</code> — try/except on casting and files, multiple except blocks
+<code>examples/02_a_safer_loader.py</code> — wrapping Topic 3's <code>load_records</code> so a missing or broken file no longer crashes it</p>
+</section><section class="topic" id="p4-t4-recap"><h2>Recap</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>stop a specific error from crashing your program</td>
+  <td><code>try: ... except ErrorType: ...</code></td>
+</tr>
+<tr>
+  <td>handle more than one kind of failure</td>
+  <td>multiple <code>except</code> blocks</td>
+</tr>
+<tr>
+  <td>avoid hiding bugs by accident</td>
+  <td>never a bare <code>except:</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next:</strong> Topic 5 — combining lists, dicts, files, and now safety, into one shape.</p>
+</section></section>
+<div class="topic-divider" id="p5"><span class="topic-divider-n">Part 5</span><h2 class="topic-divider-title">Putting It Together</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a> · <a href="https://docs.python.org/3/tutorial/errors.html">Errors and exceptions</a></p><section class="topic"><p>This week's tools combine into the shape almost every real program uses.</p><p><strong>Resources</strong></p>
+<p>Python documentation — <a href="https://docs.python.org/3/tutorial/datastructures.html">Data Structures</a> — the official reference, if you want more than this walkthrough covers.</p>
+<section class="topic" id="p5-t5-1-the-shape"><h2><span class="num">1.</span>The shape</h2><div class="diagram"><pre>file (records.txt)                    a list of dicts
   R-001,87,100                          [ {"label": "R-001", "value": 87,  "limit": 100},
   R-002,120,100      ── load_records() →  {"label": "R-002", "value": 120, "limit": 100} ]
                                             └──────────────────┬──────────────────┘
                                                         one dict per record</pre></div>
-
-      <div class="cell">
-        <pre class="code">records = [
-    {<span class="str">"label"</span>: <span class="str">"R-001"</span>, <span class="str">"value"</span>: 87.0, <span class="str">"limit"</span>: 100.0},
-    {<span class="str">"label"</span>: <span class="str">"R-002"</span>, <span class="str">"value"</span>: 120.0, <span class="str">"limit"</span>: 100.0},
+<p>Build one by hand first, before loading anything from a file.</p>
+<div class="cell"><pre class="code"><code>records = [
+    {"label": "R-001", "value": 87.0, "limit": 100.0},
+    {"label": "R-002", "value": 120.0, "limit": 100.0},
 ]
 
-<span class="fn">print</span>(records[0][<span class="str">"label"</span>])   <span class="cm"># index into the list, then key into the dict</span></pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">R-001</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Build a list of 2 dicts by hand called <code>hosts</code>, each with <code>label</code>,
-          <code>value</code> and <code>limit</code>. Loop over it and print just the label from
-          each.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t4-s2">
-      <h2><span class="num">2.</span>Loading it from a file</h2>
-      <p>Topic 3's <code>load_records</code> — the line-reading and splitting you already wrote, now
-        building the list up one dict at a time.</p>
-
-      <div class="cell">
-        <pre class="code"><span class="kw">def</span> <span class="fn">load_records</span>(path):
-    <span class="str">"""Read label,value,limit lines from a file and return a list of dicts."""</span>
+print(records[0]["label"])   # index into the list, then key into the dict</code></pre></div><p>Animation — <a href="https://anna29.github.io/CST1510/list_of_dicts.html">List of Dicts</a> — open this on the main screen to show a file's lines turning into a list of dicts.</p>
+</section><section class="topic" id="p5-t5-2-loading-it-from-a-file"><h2><span class="num">2.</span>Loading it from a file</h2><p>Topic 3's <code>load_records</code> — the line-reading and splitting you already wrote, now
+building the list up one dict at a time.</p>
+<div class="cell"><pre class="code"><code>def load_records(path):
+    """Read label,value,limit lines from a file and return a list of dicts."""
     records = []
-    <span class="kw">with</span> <span class="fn">open</span>(path) <span class="kw">as</span> f:
-        <span class="kw">for</span> line <span class="kw">in</span> f:
-            label, value, limit = line.strip().split(<span class="str">","</span>)
-            records.append({<span class="str">"label"</span>: label, <span class="str">"value"</span>: <span class="fn">float</span>(value), <span class="str">"limit"</span>: <span class="fn">float</span>(limit)})
-    <span class="kw">return</span> records</pre>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Save 3 <code>label,value,limit</code> lines of your own to a file, then load them with
-          <code>load_records</code>.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t4-s3">
-      <h2><span class="num">3.</span>Processing each record</h2>
-      <p>The loop looks the same whether the list came from Topic 1's by-hand version or Topic 3's
-        file — that consistency is the point.</p>
-
-      <div class="cell">
-        <pre class="code"><span class="kw">for</span> record <span class="kw">in</span> records:
-    percent = (record[<span class="str">"value"</span>] / record[<span class="str">"limit"</span>]) * 100
-    status = <span class="str">"OVER LIMIT"</span> <span class="kw">if</span> percent >= 100 <span class="kw">else</span> <span class="str">"OK"</span>
-    <span class="fn">print</span>(f<span class="str">"{record['label']}: {status}"</span>)</pre>
-        <div class="output"><span class="out-label">Output</span><span class="val">R-001: OK<br>R-002: OVER LIMIT</span></div>
-      </div>
-
-      <div class="callout">
-        <span class="callout-label">Practice</span>
-        <p>Given <code>entries = [{"label": "E-01", "value": 95.0, "limit": 90.0},
-          {"label": "E-02", "value": 40.0, "limit": 90.0}]</code>, loop through it and print
-          <code>OVER LIMIT</code> or <code>OK</code> for each.</p>
-      </div>
-    </section>
-
-    <section class="topic" id="t4-s4">
-      <h2><span class="num">4.</span>Why this shape</h2>
-      <p>This is the shape most real datasets already come in: rows, each with named fields. Week
-        6's <code>pandas</code> reads a whole file into exactly this shape in one line — what you
-        just built by hand, <code>pandas</code> will hand you ready-made. Knowing the shape first is
-        what makes that useful instead of magic.</p>
-    </section>
-
-    <section class="topic" id="t4-s5">
-      <h2>Topic 4 Challenge</h2>
-      <div class="callout">
-        <p>Write <code>load_records(path)</code>, load records from a file of your own, process each
-          one (<code>OVER LIMIT</code> / <code>WARNING</code> / <code>OK</code>), and print a summary
-          line: <code>"N of M were over limit"</code>.</p>
-      </div>
-
-      <h3>Same idea, three fields</h3>
-      <p>The same list-of-dicts shape, wherever the rows come from.</p>
-      <table class="booktabs">
-        <tr><th>Field</th><th>Looks like</th></tr>
-        <tr><td>AI / Data Science</td><td>a CSV of survey rows, each row a dict of answers</td></tr>
-        <tr><td>Cyber Security</td><td>a log file, each line a dict of <code>{ip, time, result}</code></td></tr>
-        <tr><td>IT</td><td>a server list, each line a dict of <code>{hostname, used, total}</code></td></tr>
-      </table>
-    </section>
-
-    <section class="topic" id="t4-s6">
-      <h2>Common mistakes</h2>
-      <table class="booktabs">
-        <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
-        <tr><td><code>records["label"]</code> instead of <code>records[0]["label"]</code></td><td><code>TypeError</code> — <code>records</code> is a list, not a dict</td><td>index into the list first, then key into the dict</td></tr>
-        <tr><td>building the dict with the wrong keys each time</td><td><code>KeyError</code> later, inconsistently</td><td>keep every record's dict the same shape</td></tr>
-        <tr><td>forgetting <code>load_records</code> needs to <code>return</code> the list</td><td><code>None</code> where you expected records</td><td>check every function actually returns what it builds</td></tr>
-      </table>
-
-      <h3>Go deeper</h3>
-      <ul class="tight">
-        <li><code>examples/01_list_of_dicts.py</code> — building the shape by hand</li>
-        <li><code>examples/02_load_and_process.py</code> — the full pipeline, load then process</li>
-      </ul>
-    </section>
-
-    <section class="topic" id="t4-s7">
-      <h2>Recap</h2>
-      <table class="booktabs">
-        <tr><th>You can now</th><th>Using</th></tr>
-        <tr><td>build the shape by hand</td><td>a list of dicts</td></tr>
-        <tr><td>load it from a file</td><td><code>load_records(path)</code></td></tr>
-        <tr><td>process it consistently</td><td><code>for record in records:</code></td></tr>
-        <tr><td>see why the shape matters</td><td>it is what real datasets already look like</td></tr>
-      </table>
-      <p class="muted">You now have all of Week 4's STORE. Go and build your own in the lab.</p>
-    </section>
+    with open(path) as f:
+        for line in f:
+            label, value, limit = line.strip().split(",")
+            records.append({"label": label, "value": float(value), "limit": float(limit)})
+    return records</code></pre></div></section><section class="topic" id="p5-t5-3-processing-each-record"><h2><span class="num">3.</span>Processing each record</h2><p>The loop looks the same whether the list came from Topic 1's by-hand version or
+Topic 3's file — that consistency is the point.</p>
+<div class="cell"><pre class="code"><code>for record in records:
+    percent = (record["value"] / record["limit"]) * 100
+    status = "OVER LIMIT" if percent &gt;= 100 else "OK"
+    print(f"{record['label']}: {status}")</code></pre></div></section><section class="topic" id="p5-t5-4-why-this-shape"><h2><span class="num">4.</span>Why this shape</h2><p>This is the shape most real datasets already come in: rows, each with named
+fields. Week 6's <code>pandas</code> reads a whole file into exactly this shape in one line —
+what you just built by hand, <code>pandas</code> will hand you ready-made. Knowing the shape
+first is what makes that useful instead of magic.</p>
+</section><section class="topic" id="p5-t5-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>AI / Data Science</strong></td>
+  <td>a CSV of survey rows, each row a dict of answers</td>
+</tr>
+<tr>
+  <td><strong>Cyber Security</strong></td>
+  <td>a log file, each line a dict of <code>{ip, time, result}</code></td>
+</tr>
+<tr>
+  <td><strong>IT</strong></td>
+  <td>a server list, each line a dict of <code>{hostname, used, total}</code></td>
+</tr>
+</tbody>
+</table>
+</section><section class="topic" id="p5-t5-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>Mistake</th>
+  <th>What you see</th>
+  <th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>records[&quot;label&quot;]</code> instead of <code>records[0][&quot;label&quot;]</code></td>
+  <td><code>TypeError</code> — <code>records</code> is a list, not a dict</td>
+  <td>index into the list first, then key into the dict</td>
+</tr>
+<tr>
+  <td>building the dict with the wrong keys each time</td>
+  <td><code>KeyError</code> later, inconsistently</td>
+  <td>keep every record's dict the same shape</td>
+</tr>
+<tr>
+  <td>forgetting <code>load_records</code> needs to <code>return</code> the list</td>
+  <td><code>None</code> where you expected records</td>
+  <td>check every function actually returns what it builds</td>
+</tr>
+</tbody>
+</table>
+<h3>Go deeper</h3>
+<p><code>examples/01_list_of_dicts.py</code> — building the shape by hand
+<code>examples/02_load_and_process.py</code> — the full pipeline, load then process</p>
+</section><section class="topic" id="p5-t5-recap"><h2>Recap</h2><table class="booktabs">
+<thead>
+<tr>
+  <th>You can now</th>
+  <th>Using</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>build the shape by hand</td>
+  <td>a list of dicts</td>
+</tr>
+<tr>
+  <td>load it from a file</td>
+  <td><code>load_records(path)</code></td>
+</tr>
+<tr>
+  <td>process it consistently</td>
+  <td><code>for record in records:</code></td>
+</tr>
+<tr>
+  <td>see why the shape matters</td>
+  <td>it is what real datasets already look like</td>
+</tr>
+</tbody>
+</table>
+<p><strong>You now have all of Week 4's STORE.</strong> Go and build your own in the lab.</p>
+</section></section>
 
     <footer class="page-foot">CST1510 · Week 04 · Lists, Dictionaries and Files</footer>
   </article>
@@ -949,5 +881,6 @@ limit = <span class="fn">float</span>(limit)
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 </script>
+
 </body>
 </html>

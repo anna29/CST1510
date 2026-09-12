@@ -94,50 +94,38 @@
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#t1-top" class="toc-topic">Topic 1 — Why Hash, Not Encrypt</a>
-<div class="toc-group" data-group="t1">
-<a href="#t1-s1" class="toc-sub">1. Hashing is one-way, deterministic, and a fixed size</a>
-<a href="#t1-s2" class="toc-sub">2. The avalanche effect</a>
-<a href="#t1-s3" class="toc-sub">3. Why not encryption?</a>
-<a href="#t1-s4" class="toc-sub">4. Rainbow tables, and why salting defeats them</a>
-<a href="#t1-s5" class="toc-sub">Challenge</a>
-<a href="#t1-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t1-s7" class="toc-sub">Common mistakes</a>
-<a href="#t1-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t2-top" class="toc-topic">Topic 2 — bcrypt in Python</a>
-<div class="toc-group" data-group="t2">
-<a href="#t2-s1" class="toc-sub">1. bcrypt works with bytes — encode first</a>
-<a href="#t2-s2" class="toc-sub">2. <code>gensalt()</code> + <code>hashpw()</code> — generating a hash</a>
-<a href="#t2-s3" class="toc-sub">3. <code>checkpw()</code> — verifying, without ever decrypting</a>
-<a href="#t2-s4" class="toc-sub">4. The cost factor — slow is the feature</a>
-<a href="#t2-s5" class="toc-sub">Challenge</a>
-<a href="#t2-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t2-s7" class="toc-sub">Common mistakes</a>
-<a href="#t2-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t3-top" class="toc-topic">Topic 3 — Register and Login</a>
-<div class="toc-group" data-group="t3">
-<a href="#t3-s1" class="toc-sub">1. Registering — hash, then append</a>
-<a href="#t3-s2" class="toc-sub">2. Logging in — find the line, then <code>checkpw()</code></a>
-<a href="#t3-s3" class="toc-sub">3. A missing file should not crash a login attempt</a>
-<a href="#t3-s4" class="toc-sub">4. Refusing a duplicate username</a>
-<a href="#t3-s5" class="toc-sub">Challenge</a>
-<a href="#t3-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t3-s7" class="toc-sub">Common mistakes</a>
-<a href="#t3-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t4-top" class="toc-topic">Topic 4 — Keeping Secrets Out of Code</a>
-<div class="toc-group" data-group="t4">
-<a href="#t4-s1" class="toc-sub">1. A hard-coded secret is a mistake, not a style issue</a>
-<a href="#t4-s2" class="toc-sub">2. Environment variables — the secret lives outside your code</a>
-<a href="#t4-s3" class="toc-sub">3. <code>.gitignore</code> — deciding what never gets tracked</a>
-<a href="#t4-s4" class="toc-sub">4. If a secret leaks anyway</a>
-<a href="#t4-s5" class="toc-sub">Challenge</a>
-<a href="#t4-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t4-s7" class="toc-sub">Common mistakes</a>
-<a href="#t4-s8" class="toc-sub">Recap</a>
-</div>
+    <a href="#p1" class="toc-topic">Part 1. Why Hash, Not Encrypt</a>
+<a href="#p1-t1-1-hashing-is-one-way-deterministic-and-a-fixed-size" class="toc-sub">1. Hashing is one-way, deterministic, and a fixed size</a>
+<a href="#p1-t1-2-the-avalanche-effect" class="toc-sub">2. The avalanche effect</a>
+<a href="#p1-t1-3-why-not-encryption" class="toc-sub">3. Why not encryption?</a>
+<a href="#p1-t1-4-rainbow-tables-and-why-salting-defeats-them" class="toc-sub">4. Rainbow tables, and why salting defeats them</a>
+<a href="#p1-t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p1-t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p1-t1-recap" class="toc-sub">Recap</a>
+<a href="#p2" class="toc-topic">Part 2. bcrypt in Python</a>
+<a href="#p2-t2-1-bcrypt-works-with-bytes-encode-first" class="toc-sub">1. bcrypt works with bytes — encode first</a>
+<a href="#p2-t2-2-gensalt-hashpw-generating-a-hash" class="toc-sub">2. <code>gensalt()</code> + <code>hashpw()</code> — generating a hash</a>
+<a href="#p2-t2-3-checkpw-verifying-without-ever-decrypting" class="toc-sub">3. <code>checkpw()</code> — verifying, without ever decrypting</a>
+<a href="#p2-t2-4-the-cost-factor-slow-is-the-feature" class="toc-sub">4. The cost factor — slow is the feature</a>
+<a href="#p2-t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p2-t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p2-t2-recap" class="toc-sub">Recap</a>
+<a href="#p3" class="toc-topic">Part 3. Register and Login</a>
+<a href="#p3-t3-1-registering-hash-then-append" class="toc-sub">1. Registering — hash, then append</a>
+<a href="#p3-t3-2-logging-in-find-the-line-then-checkpw" class="toc-sub">2. Logging in — find the line, then <code>checkpw()</code></a>
+<a href="#p3-t3-3-a-missing-file-should-not-crash-a-login-attempt" class="toc-sub">3. A missing file should not crash a login attempt</a>
+<a href="#p3-t3-4-refusing-a-duplicate-username" class="toc-sub">4. Refusing a duplicate username</a>
+<a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p3-t3-recap" class="toc-sub">Recap</a>
+<a href="#p4" class="toc-topic">Part 4. Keeping Secrets Out of Code</a>
+<a href="#p4-t4-1-a-hard-coded-secret-is-a-mistake-not-a-style-issue" class="toc-sub">1. A hard-coded secret is a mistake, not a style issue</a>
+<a href="#p4-t4-2-environment-variables-the-secret-lives-outside-your-code" class="toc-sub">2. Environment variables — the secret lives outside your code</a>
+<a href="#p4-t4-3-gitignore-deciding-what-never-gets-tracked" class="toc-sub">3. <code>.gitignore</code> — deciding what never gets tracked</a>
+<a href="#p4-t4-4-if-a-secret-leaks-anyway" class="toc-sub">4. If a secret leaks anyway</a>
+<a href="#p4-t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p4-t4-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p4-t4-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
@@ -145,35 +133,27 @@
       <div class="breadcrumb">CST1510</div>
       <h1 class="page-title">Week 9 — Hashing and Auth</h1>
       <p class="lede">By the end of this week you can explain why passwords are hashed, never encrypted, and why that distinction matters, explain what a rainbow table attack is, and why salting defeats it, and hash and verify a password with bcrypt — <code>hashpw()</code>, <code>gensalt()</code>, <code>checkpw()</code>.</p>
-      <p class="box-note">Box we build this week: <b><code>PROCESS, made safe</code> — see <code>../system_diagram.md</code></b>. Each <em>Practice</em> below sets a short task.</p>
-      <p class="muted">This page combines the week's walkthrough notebooks into one reading view, keeping the theory in teaching order.</p>
+      
     </header>
 
-    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=9" title="System architecture — Week 9" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>PROCESS, made safe</b>.</figcaption></figure><figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="How login should really work" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">PROCESS, made safe</text><line x1="166.0" y1="164" x2="236.7" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Why Hash, Not</tspan><tspan x="0.0" dy="19">Encrypt</tspan></text><line x1="424.7" y1="164" x2="495.3" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="244.7" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="258.7" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="258.7" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="258.7" dy="0">bcrypt in Python</tspan></text><line x1="683.3" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="503.3" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="517.3" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="517.3" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="517.3" dy="0">Register and Login</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">Keeping Secrets Out</tspan><tspan x="776.0" dy="19">of Code</tspan></text></svg><figcaption><b>How login should really work</b>. Week 9 separates plain passwords, hashes, login checks, and secret handling into a safe flow.</figcaption></figure>
+    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=9" title="System architecture — Week 9" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>PROCESS, made safe</b>.</figcaption></figure>
 
-    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Why Hash, Not Encrypt</h2></div><div class="topic-intro"><p>Before any bcrypt function, the concept: what hashing actually is, and why it
-is the right tool for a password.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/hashlib.html">hashlib</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>Hashing is one-way, deterministic, and a fixed size</h2><p>Same input, same output, always — and no function reverses it back.</p>
+    <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">Why Hash, Not Encrypt</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/hashlib.html">hashlib</a></p><section class="topic"><p>Before any bcrypt function, the concept: what hashing actually is, and why it
+is the right tool for a password.</p><section class="topic" id="p1-t1-1-hashing-is-one-way-deterministic-and-a-fixed-size"><h2><span class="num">1.</span>Hashing is one-way, deterministic, and a fixed size</h2><p>Same input, same output, always — and no function reverses it back.</p>
 <div class="cell"><pre class="code"><code>import hashlib
 
 print(hashlib.sha256(b"password123").hexdigest())
-print(hashlib.sha256(b"password123").hexdigest())   # identical, every time</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Hash your own name with <code>hashlib.sha256</code> and confirm hashing it twice gives the same result.</p>
-</div></section><section class="topic" id="t1-s2"><h2><span class="num">2.</span>The avalanche effect</h2><p>One character different in the input changes the entire output — there is no
+print(hashlib.sha256(b"password123").hexdigest())   # identical, every time</code></pre></div></section><section class="topic" id="p1-t1-2-the-avalanche-effect"><h2><span class="num">2.</span>The avalanche effect</h2><p>One character different in the input changes the entire output — there is no
 &quot;close&quot; match to look for.</p>
 <div class="cell"><pre class="code"><code>print(hashlib.sha256(b"password123").hexdigest())
-print(hashlib.sha256(b"password124").hexdigest())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Change one character in a string of your own and compare the two hashes.</p>
-</div></section><section class="topic" id="t1-s3"><h2><span class="num">3.</span>Why not encryption?</h2><p>Encryption is two-way — whoever holds the key can decrypt it back. A password
+print(hashlib.sha256(b"password124").hexdigest())</code></pre></div></section><section class="topic" id="p1-t1-3-why-not-encryption"><h2><span class="num">3.</span>Why not encryption?</h2><p>Encryption is two-way — whoever holds the key can decrypt it back. A password
 only ever needs <em>checking</em>, never recovering, so a one-way hash is the safer
 tool: there is no key to steal.</p>
 <div class="cell"><pre class="code"><code>typed = "password123"
 stored_hash = hashlib.sha256(b"password123").hexdigest()
 
 # verify by hashing AGAIN and comparing - never by decrypting
-print(hashlib.sha256(typed.encode()).hexdigest() == stored_hash)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Explain, in your own words, why &quot;hash again and compare&quot; replaces &quot;decrypt and compare&quot; for a password.</p>
-</div></section><section class="topic" id="t1-s4"><h2><span class="num">4.</span>Rainbow tables, and why salting defeats them</h2><p>An attacker can pre-compute hashes for millions of common passwords once,
+print(hashlib.sha256(typed.encode()).hexdigest() == stored_hash)</code></pre></div></section><section class="topic" id="p1-t1-4-rainbow-tables-and-why-salting-defeats-them"><h2><span class="num">4.</span>Rainbow tables, and why salting defeats them</h2><p>An attacker can pre-compute hashes for millions of common passwords once,
 then just look up a stolen hash in that table. A unique random salt per user
 makes every hash different, even for the same password — the table becomes
 useless.</p>
@@ -181,12 +161,7 @@ useless.</p>
 table = {hashlib.sha256(p.encode()).hexdigest(): p for p in common}
 
 stolen = hashlib.sha256(b"qwerty").hexdigest()
-print(stolen in table)     # True - instantly cracked, no salt</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Add <code>&quot;letmein&quot;</code> to <code>common</code> and check whether a stolen hash of it would be found in the table.</p>
-</div></section><section class="topic" id="t1-s5"><h2>Challenge</h2><p>Given a small rainbow table (5 common passwords) and a &quot;stolen&quot; hash of a
-genuinely random, unique password, show it is <em>not</em> found in the table — then
-explain in one sentence why length and randomness matter more than any
-particular character rule.</p>
-</section><section class="topic" id="t1-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+print(stolen in table)     # True - instantly cracked, no salt</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -208,7 +183,7 @@ particular character rule.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t1-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -243,7 +218,7 @@ particular character rule.</p>
 <p><code>examples/01_what_hashing_actually_does.py</code> — determinism, the avalanche effect, one-way
 <code>examples/02_why_plain_hashing_is_not_enough.py</code> — a real rainbow-table demonstration, and salting
 Docs: <a href="https://pypi.org/project/bcrypt/">Python hashlib</a></p>
-</section><section class="topic" id="t1-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -270,38 +245,27 @@ Docs: <a href="https://pypi.org/project/bcrypt/">Python hashlib</a></p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — doing this properly, with bcrypt.</p>
-</section>
-<div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">bcrypt in Python</h2></div><div class="topic-intro"><p>Two functions, and the one design choice worth understanding: bcrypt is slow
-on purpose.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span>bcrypt works with bytes — encode first</h2><div class="cell"><pre class="code"><code>import bcrypt
+</section></section>
+<div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">bcrypt in Python</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p><section class="topic"><p>Two functions, and the one design choice worth understanding: bcrypt is slow
+on purpose.</p><section class="topic" id="p2-t2-1-bcrypt-works-with-bytes-encode-first"><h2><span class="num">1.</span>bcrypt works with bytes — encode first</h2><div class="cell"><pre class="code"><code>import bcrypt
 
 password = "correct-horse-battery-staple"
-password_bytes = password.encode("utf-8")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Encode a password of your own choosing to bytes.</p>
-</div></section><section class="topic" id="t2-s2"><h2><span class="num">2.</span><code>gensalt()</code> + <code>hashpw()</code> — generating a hash</h2><p>The salt is generated fresh, at random, and embedded inside the hash itself —
+password_bytes = password.encode("utf-8")</code></pre></div></section><section class="topic" id="p2-t2-2-gensalt-hashpw-generating-a-hash"><h2><span class="num">2.</span><code>gensalt()</code> + <code>hashpw()</code> — generating a hash</h2><p>The salt is generated fresh, at random, and embedded inside the hash itself —
 you never store it separately.</p>
 <div class="cell"><pre class="code"><code>salt = bcrypt.gensalt()
 hashed = bcrypt.hashpw(password_bytes, salt)
 print(hashed.decode("utf-8"))
-print(len(hashed))    # always 60 characters</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Hash your own encoded password from section 1 and print the result.</p>
-</div></section><section class="topic" id="t2-s3"><h2><span class="num">3.</span><code>checkpw()</code> — verifying, without ever decrypting</h2><p>Re-derives the salt from the stored hash, re-hashes the candidate, and
+print(len(hashed))    # always 60 characters</code></pre></div></section><section class="topic" id="p2-t2-3-checkpw-verifying-without-ever-decrypting"><h2><span class="num">3.</span><code>checkpw()</code> — verifying, without ever decrypting</h2><p>Re-derives the salt from the stored hash, re-hashes the candidate, and
 compares.</p>
 <div class="cell"><pre class="code"><code>print(bcrypt.checkpw(b"correct-horse-battery-staple", hashed))    # True
-print(bcrypt.checkpw(b"wrong-password", hashed))                     # False</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Check your own hash from section 2 against the right password, then a wrong one.</p>
-</div></section><section class="topic" id="t2-s4"><h2><span class="num">4.</span>The cost factor — slow is the feature</h2><p>Each <code>+1</code> roughly doubles the work. A fraction of a second for a real login;
+print(bcrypt.checkpw(b"wrong-password", hashed))                     # False</code></pre></div></section><section class="topic" id="p2-t2-4-the-cost-factor-slow-is-the-feature"><h2><span class="num">4.</span>The cost factor — slow is the feature</h2><p>Each <code>+1</code> roughly doubles the work. A fraction of a second for a real login;
 days added up across a brute-force attempt.</p>
 <div class="cell"><pre class="code"><code>import time
 
 for rounds in (10, 12, 14):
     start = time.perf_counter()
     bcrypt.hashpw(password_bytes, bcrypt.gensalt(rounds=rounds))
-    print(rounds, f"{time.perf_counter() - start:.3f}s")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Time cost factor 8 alongside 10, 12 and 14. How much faster is it?</p>
-</div></section><section class="topic" id="t2-s5"><h2>Challenge</h2><p>Write <code>generate_hash(password)</code> and <code>is_valid_hash(password, hashed)</code> — the
-two functions this whole week's project rests on. Test both with a right and
-a wrong password.</p>
-</section><section class="topic" id="t2-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+    print(rounds, f"{time.perf_counter() - start:.3f}s")</code></pre></div></section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -323,7 +287,7 @@ a wrong password.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t2-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -358,7 +322,7 @@ a wrong password.</p>
 <p><code>examples/01_generate_and_check.py</code> — hashpw, checkpw, the salt embedded in the hash
 <code>examples/02_the_cost_factor.py</code> — real timings, and what they mean for an attacker
 Docs: <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p>
-</section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -381,12 +345,8 @@ Docs: <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — wiring this into a real register/login flow.</p>
-</section>
-<div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Register and Login</h2></div><div class="topic-intro"><p>Wiring bcrypt into a real, if simple, authentication flow against a file.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span>Registering — hash, then append</h2><div class="cell"><pre class="code"><code>import bcrypt
+</section></section>
+<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Register and Login</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p><section class="topic"><p>Wiring bcrypt into a real, if simple, authentication flow against a file.</p><section class="topic" id="p3-t3-1-registering-hash-then-append"><h2><span class="num">1.</span>Registering — hash, then append</h2><div class="cell"><pre class="code"><code>import bcrypt
 
 def register_user(username, password, path="users.txt"):
     """Hash password and append username,hash to the store."""
@@ -396,8 +356,7 @@ def register_user(username, password, path="users.txt"):
 
 register_user("alice", "correct-horse-battery-staple", "demo.txt")
 with open("demo.txt") as f:
-    print(f.read())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Register a second user into the same file and print the file's contents.</p>
-</div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span>Logging in — find the line, then <code>checkpw()</code></h2><p>Week 7's <code>.strip().split(&quot;,&quot;, 1)</code> pattern, applied to a security-relevant
+    print(f.read())</code></pre></div></section><section class="topic" id="p3-t3-2-logging-in-find-the-line-then-checkpw"><h2><span class="num">2.</span>Logging in — find the line, then <code>checkpw()</code></h2><p>Week 7's <code>.strip().split(&quot;,&quot;, 1)</code> pattern, applied to a security-relevant
 file.</p>
 <div class="cell"><pre class="code"><code>def login_user(username, password, path="users.txt"):
     """Return True if username/password match a stored, hashed record."""
@@ -409,8 +368,7 @@ file.</p>
     return False
 
 print(login_user("alice", "correct-horse-battery-staple", "demo.txt"))
-print(login_user("alice", "wrong-guess", "demo.txt"))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Log in with a username that was never registered, and confirm it returns <code>False</code> without crashing.</p>
-</div></section><section class="topic" id="t3-s3"><h2><span class="num">3.</span>A missing file should not crash a login attempt</h2><p>The first person to ever try logging in will hit a file that does not exist
+print(login_user("alice", "wrong-guess", "demo.txt"))</code></pre></div></section><section class="topic" id="p3-t3-3-a-missing-file-should-not-crash-a-login-attempt"><h2><span class="num">3.</span>A missing file should not crash a login attempt</h2><p>The first person to ever try logging in will hit a file that does not exist
 yet — handle it, do not let it crash.</p>
 <div class="cell"><pre class="code"><code>import os
 
@@ -420,8 +378,7 @@ def login_user_safe(username, password, path="users.txt"):
         return False
     return login_user(username, password, path)
 
-print(login_user_safe("nobody", "anything", "does_not_exist.txt"))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Call <code>login_user_safe</code> on a path you know does not exist and confirm it returns <code>False</code> cleanly.</p>
-</div></section><section class="topic" id="t3-s4"><h2><span class="num">4.</span>Refusing a duplicate username</h2><p>Registering the same username twice silently creates two records — the
+print(login_user_safe("nobody", "anything", "does_not_exist.txt"))</code></pre></div></section><section class="topic" id="p3-t3-4-refusing-a-duplicate-username"><h2><span class="num">4.</span>Refusing a duplicate username</h2><p>Registering the same username twice silently creates two records — the
 <code>login()</code> function only ever finds the first. Worth refusing outright.</p>
 <div class="cell"><pre class="code"><code>def username_exists(username, path="users.txt"):
     """Return True if username already has a record in the store."""
@@ -432,11 +389,7 @@ print(login_user_safe("nobody", "anything", "does_not_exist.txt"))</code></pre><
             stored_username, _ = line.strip().split(",", 1)
             if stored_username == username:
                 return True
-    return False</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Use <code>username_exists</code> inside <code>register_user</code> to refuse a duplicate registration, returning <code>False</code> instead of writing a second line.</p>
-</div></section><section class="topic" id="t3-s5"><h2>Challenge</h2><p>Build a complete register/login pair — hashing, duplicate-username refusal,
-and a missing-file-safe login — and test all three behaviours: a fresh
-registration, a duplicate attempt, and a login with the wrong password.</p>
-</section><section class="topic" id="t3-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+    return False</code></pre></div></section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -458,7 +411,7 @@ registration, a duplicate attempt, and a login with the wrong password.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t3-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -492,7 +445,7 @@ registration, a duplicate attempt, and a login with the wrong password.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_register_and_login.py</code> — the full flow, right and wrong password, unknown user
 <code>examples/02_a_menu_and_duplicate_usernames.py</code> — refusing duplicates, a real interactive menu</p>
-</section><section class="topic" id="t3-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -519,23 +472,17 @@ registration, a duplicate attempt, and a login with the wrong password.</p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — keeping the secrets this all depends on out of your code.</p>
-</section>
-<div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Keeping Secrets Out of Code</h2></div><div class="topic-intro"><p>Hashing protects passwords. This topic protects everything else — API keys,
-tokens, anything that must never sit in a file you might commit.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span>A hard-coded secret is a mistake, not a style issue</h2><p>The moment it is pushed to a public repository, it is compromised — deleting
+</section></section>
+<div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">Keeping Secrets Out of Code</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a></p><section class="topic"><p>Hashing protects passwords. This topic protects everything else — API keys,
+tokens, anything that must never sit in a file you might commit.</p><section class="topic" id="p4-t4-1-a-hard-coded-secret-is-a-mistake-not-a-style-issue"><h2><span class="num">1.</span>A hard-coded secret is a mistake, not a style issue</h2><p>The moment it is pushed to a public repository, it is compromised — deleting
 it later does not help, it is still in the commit history.</p>
 <div class="cell"><pre class="code"><code># BAD - never do this:
 # API_KEY = "sk-abc123realsecretvalue"
 
-print("see the comment above - nothing to run here")</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Explain in one sentence why deleting a leaked key from your latest commit does not fix the leak.</p>
-</div></section><section class="topic" id="t4-s2"><h2><span class="num">2.</span>Environment variables — the secret lives outside your code</h2><div class="cell"><pre class="code"><code>import os
+print("see the comment above - nothing to run here")</code></pre></div></section><section class="topic" id="p4-t4-2-environment-variables-the-secret-lives-outside-your-code"><h2><span class="num">2.</span>Environment variables — the secret lives outside your code</h2><div class="cell"><pre class="code"><code>import os
 
 api_key = os.environ.get("MY_API_KEY", "not set")
-print(api_key)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Set an environment variable in your terminal, then read it back with <code>os.environ.get()</code>.</p>
-</div><p>A default like <code>&quot;not set&quot;</code> is fine for something optional. When a variable is <em>required</em> — the program genuinely cannot continue without it — raise a clear error instead of letting it fail later with a confusing message.</p>
+print(api_key)</code></pre></div><p>A default like <code>&quot;not set&quot;</code> is fine for something optional. When a variable is <em>required</em> — the program genuinely cannot continue without it — raise a clear error instead of letting it fail later with a confusing message.</p>
 <div class="cell"><pre class="code"><code>def require_env(name):
     """Return the named environment variable, or raise a clear error if it is missing."""
     value = os.environ.get(name)
@@ -546,18 +493,13 @@ print(api_key)</code></pre></div><div class="callout"><span class="callout-label
 try:
     require_env("MY_API_KEY")
 except RuntimeError as e:
-    print("Caught it:", e)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write <code>require_env(&quot;HOME&quot;)</code> (or another variable you know is set on your machine) and check it returns the value instead of raising.</p>
-</div></section><section class="topic" id="t4-s3"><h2><span class="num">3.</span><code>.gitignore</code> — deciding what never gets tracked</h2><p>Once your project has real accounts and real keys, these need to be in it.</p>
+    print("Caught it:", e)</code></pre></div></section><section class="topic" id="p4-t4-3-gitignore-deciding-what-never-gets-tracked"><h2><span class="num">3.</span><code>.gitignore</code> — deciding what never gets tracked</h2><p>Once your project has real accounts and real keys, these need to be in it.</p>
 <div class="cell"><pre class="code"><code>gitignore_lines = ["*.db", "*.env", ".streamlit/secrets.toml", "__pycache__/", "users.txt"]
 for line in gitignore_lines:
-    print(line)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write a <code>.gitignore</code> file for your own <code>project/</code> folder, covering what applies so far.</p>
-</div></section><section class="topic" id="t4-s4"><h2><span class="num">4.</span>If a secret leaks anyway</h2><p>Removing it from the latest commit is not enough — it is still readable in
+    print(line)</code></pre></div></section><section class="topic" id="p4-t4-4-if-a-secret-leaks-anyway"><h2><span class="num">4.</span>If a secret leaks anyway</h2><p>Removing it from the latest commit is not enough — it is still readable in
 history. Revoke the key at its source first, generate a new one, worry about
 cleaning history second.</p>
-<div class="callout"><span class="callout-label">Practice</span><p>Name one place you would go to revoke a leaked API key for a service you use.</p>
-</div></section><section class="topic" id="t4-s5"><h2>Challenge</h2><p>Write a small script that reads a required environment variable and raises a
-clear error (not a crash with a confusing traceback) if it is missing.</p>
-</section><section class="topic" id="t4-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -579,7 +521,7 @@ clear error (not a crash with a confusing traceback) if it is missing.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t4-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -618,7 +560,7 @@ clear error (not a crash with a confusing traceback) if it is missing.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_environment_variables.py</code> — os.environ, sensible defaults, raising on a missing required variable
 <code>examples/02_gitignore_and_what_not_to_commit.py</code> — what belongs in .gitignore, and why</p>
-</section><section class="topic" id="t4-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -646,7 +588,7 @@ clear error (not a crash with a confusing traceback) if it is missing.</p>
 </table>
 <p><strong>You now have all of Week 9's tools.</strong> Open last week's project and add a
 login to it — nothing about it resets.</p>
-</section>
+</section></section>
 
     <footer class="page-foot">CST1510 · Week 09 · Hashing and Auth</footer>
   </article>

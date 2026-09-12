@@ -94,51 +94,39 @@
 <div class="shell">
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
-    <a href="#t1-top" class="toc-topic">Topic 1 — Series and DataFrame</a>
-<div class="toc-group" data-group="t1">
-<a href="#t1-s1" class="toc-sub">1. A Series - one column, with an index</a>
-<a href="#t1-s2" class="toc-sub">2. A DataFrame - built from a dict of lists, or read from a file</a>
-<a href="#t1-s3" class="toc-sub">3. Reading a whole file in one line</a>
-<a href="#t1-s4" class="toc-sub">4. Columns, types, and whole-column arithmetic</a>
-<a href="#t1-s5" class="toc-sub">5. When a column is numbers stored as text</a>
-<a href="#t1-s6" class="toc-sub">Challenge</a>
-<a href="#t1-s7" class="toc-sub">Same idea, three fields</a>
-<a href="#t1-s8" class="toc-sub">Common mistakes</a>
-<a href="#t1-s9" class="toc-sub">Recap</a>
-</div>
-<a href="#t2-top" class="toc-topic">Topic 2 — Selecting and Filtering</a>
-<div class="toc-group" data-group="t2">
-<a href="#t2-s1" class="toc-sub">1. <code>iloc</code> - by position, <code>loc</code> - by label</a>
-<a href="#t2-s2" class="toc-sub">2. Selecting columns</a>
-<a href="#t2-s3" class="toc-sub">3. Boolean filtering</a>
-<a href="#t2-s4" class="toc-sub">4. Combining conditions - <code>&amp;</code> and <code>|</code>, not <code>and</code>/<code>or</code></a>
-<a href="#t2-s5" class="toc-sub">Challenge</a>
-<a href="#t2-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t2-s7" class="toc-sub">Common mistakes</a>
-<a href="#t2-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t3-top" class="toc-topic">Topic 3 — Grouping, Sorting and Aggregating</a>
-<div class="toc-group" data-group="t3">
-<a href="#t3-s1" class="toc-sub">1. <code>groupby</code> splits the rows into groups</a>
-<a href="#t3-s2" class="toc-sub">2. <code>.agg()</code> - more than one summary at once</a>
-<a href="#t3-s3" class="toc-sub">3. <code>value_counts()</code> - counting a categorical column directly</a>
-<a href="#t3-s4" class="toc-sub">4. Sorting</a>
-<a href="#t3-s5" class="toc-sub">Challenge</a>
-<a href="#t3-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t3-s7" class="toc-sub">Common mistakes</a>
-<a href="#t3-s8" class="toc-sub">Recap</a>
-</div>
-<a href="#t4-top" class="toc-topic">Topic 4 — Apply, Lambda and Finishing Up</a>
-<div class="toc-group" data-group="t4">
-<a href="#t4-s1" class="toc-sub">1. <code>.apply()</code> runs a function on every value in a column</a>
-<a href="#t4-s2" class="toc-sub">2. <code>lambda</code> - the same idea, written inline</a>
-<a href="#t4-s3" class="toc-sub">3. <code>.apply()</code> with a lambda, and <code>sort_values(key=...)</code></a>
-<a href="#t4-s4" class="toc-sub">4. Summarising, saving, and a first chart</a>
-<a href="#t4-s5" class="toc-sub">Challenge</a>
-<a href="#t4-s6" class="toc-sub">Same idea, three fields</a>
-<a href="#t4-s7" class="toc-sub">Common mistakes</a>
-<a href="#t4-s8" class="toc-sub">Recap</a>
-</div>
+    <a href="#p1" class="toc-topic">Part 1. Series and DataFrame</a>
+<a href="#p1-t1-1-a-series-one-column-with-an-index" class="toc-sub">1. A Series - one column, with an index</a>
+<a href="#p1-t1-2-a-dataframe-built-from-a-dict-of-lists-or-read-from-a-file" class="toc-sub">2. A DataFrame - built from a dict of lists, or read from a file</a>
+<a href="#p1-t1-3-reading-a-whole-file-in-one-line" class="toc-sub">3. Reading a whole file in one line</a>
+<a href="#p1-t1-4-columns-types-and-whole-column-arithmetic" class="toc-sub">4. Columns, types, and whole-column arithmetic</a>
+<a href="#p1-t1-5-when-a-column-is-numbers-stored-as-text" class="toc-sub">5. When a column is numbers stored as text</a>
+<a href="#p1-t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p1-t1-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p1-t1-recap" class="toc-sub">Recap</a>
+<a href="#p2" class="toc-topic">Part 2. Selecting and Filtering</a>
+<a href="#p2-t2-1-iloc-by-position-loc-by-label" class="toc-sub">1. <code>iloc</code> - by position, <code>loc</code> - by label</a>
+<a href="#p2-t2-2-selecting-columns" class="toc-sub">2. Selecting columns</a>
+<a href="#p2-t2-3-boolean-filtering" class="toc-sub">3. Boolean filtering</a>
+<a href="#p2-t2-4-combining-conditions-and-not-and-or" class="toc-sub">4. Combining conditions - <code>&amp;</code> and <code>|</code>, not <code>and</code>/<code>or</code></a>
+<a href="#p2-t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p2-t2-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p2-t2-recap" class="toc-sub">Recap</a>
+<a href="#p3" class="toc-topic">Part 3. Grouping, Sorting and Aggregating</a>
+<a href="#p3-t3-1-groupby-splits-the-rows-into-groups" class="toc-sub">1. <code>groupby</code> splits the rows into groups</a>
+<a href="#p3-t3-2-agg-more-than-one-summary-at-once" class="toc-sub">2. <code>.agg()</code> - more than one summary at once</a>
+<a href="#p3-t3-3-value-counts-counting-a-categorical-column-directly" class="toc-sub">3. <code>value_counts()</code> - counting a categorical column directly</a>
+<a href="#p3-t3-4-sorting" class="toc-sub">4. Sorting</a>
+<a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p3-t3-recap" class="toc-sub">Recap</a>
+<a href="#p4" class="toc-topic">Part 4. Apply, Lambda and Finishing Up</a>
+<a href="#p4-t4-1-apply-runs-a-function-on-every-value-in-a-column" class="toc-sub">1. <code>.apply()</code> runs a function on every value in a column</a>
+<a href="#p4-t4-2-lambda-the-same-idea-written-inline" class="toc-sub">2. <code>lambda</code> - the same idea, written inline</a>
+<a href="#p4-t4-3-apply-with-a-lambda-and-sort-values-key" class="toc-sub">3. <code>.apply()</code> with a lambda, and <code>sort_values(key=...)</code></a>
+<a href="#p4-t4-4-summarising-saving-and-a-first-chart" class="toc-sub">4. Summarising, saving, and a first chart</a>
+<a href="#p4-t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
+<a href="#p4-t4-common-mistakes" class="toc-sub">Common mistakes</a>
+<a href="#p4-t4-recap" class="toc-sub">Recap</a>
   </nav>
 
   <article>
@@ -146,17 +134,12 @@
       <div class="breadcrumb">CST1510</div>
       <h1 class="page-title">Week 6 — Pandas</h1>
       <p class="lede">By the end of this week you can create a Series and a DataFrame, and read a whole file into one with <code>pd.read_csv()</code>, add a new column from existing ones, without writing a loop, and select rows and columns with <code>loc</code>/<code>iloc</code>, and filter rows with a boolean condition.</p>
-      <p class="box-note">Box we build this week: <b><code>STORE + PROCESS, upgraded</code> — see <code>../system_diagram.md</code></b>. Each <em>Practice</em> below sets a short task.</p>
-      <p class="muted">This page combines the week's walkthrough notebooks into one reading view, keeping the theory in teaching order.</p>
+      
     </header>
 
-    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=6" title="System architecture — Week 6" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>STORE + PROCESS, upgraded</b>.</figcaption></figure><figure class="anim-figure" style="margin: 26px 0 0;"><svg viewBox="0 0 920 250" role="img" aria-label="Thinking in tables" style="width:100%;height:auto;display:block;"><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7A2E2E"/></marker></defs><text x="22" y="28" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace" letter-spacing="1">BOX THIS WEEK</text><text x="22" y="52" fill="#1C1B19" font-size="23" font-family="Source Serif 4, Georgia, serif">STORE + PROCESS, upgraded</text><line x1="166.0" y1="164" x2="236.7" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="-14.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="0.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 1</text><text x="0.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="0.0" dy="0">Series and DataFrame</tspan></text><line x1="424.7" y1="164" x2="495.3" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="244.7" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="258.7" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 2</text><text x="258.7" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="258.7" dy="0">Selecting and</tspan><tspan x="258.7" dy="19">Filtering</tspan></text><line x1="683.3" y1="164" x2="754.0" y2="164" stroke="#8A867C" stroke-width="2" marker-end="url(#arrow)"/><rect x="503.3" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="517.3" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 3</text><text x="517.3" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="517.3" dy="0">Grouping, Sorting</tspan><tspan x="517.3" dy="19">and Aggregating</tspan></text><rect x="762.0" y="128.0" width="172" height="72" fill="none" stroke="#8A867C"/><text x="776.0" y="148.0" fill="#4A4844" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">TOPIC 4</text><text x="776.0" y="172.0" fill="#1b1a17" font-size="17" font-family="Source Serif 4, Georgia, serif"><tspan x="776.0" dy="0">Apply, Lambda and</tspan><tspan x="776.0" dy="19">Finishing Up</tspan></text></svg><figcaption><b>Thinking in tables</b>. Week 6 shifts the mental model from single values to full columns, rows, filters, and grouped summaries.</figcaption></figure>
+    <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=6" title="System architecture — Week 6" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>STORE + PROCESS, upgraded</b>.</figcaption></figure>
 
-    <div class="topic-divider" id="t1-top"><span class="topic-divider-n">Topic 1</span><h2 class="topic-divider-title">Series and DataFrame</h2></div><div class="topic-intro"><p>A Series is one column. A DataFrame is a table built from them.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 1 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html">Pandas intro tutorial</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html">pandas.read_csv</a></p></div><section class="topic" id="t1-s1"><h2><span class="num">1.</span>A Series - one column, with an index</h2><div class="cell"><pre class="code"><code>import pandas as pd
+    <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">Series and DataFrame</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html">Pandas intro tutorial</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html">pandas.read_csv</a></p><section class="topic"><p>A Series is one column. A DataFrame is a table built from them.</p><section class="topic" id="p1-t1-1-a-series-one-column-with-an-index"><h2><span class="num">1.</span>A Series - one column, with an index</h2><div class="cell"><pre class="code"><code>import pandas as pd
 
 values = pd.Series([87, 120, 45])
 print(values)</code></pre></div><div class="diagram"><pre>Series (one column):        DataFrame (a table of Series):
@@ -167,24 +150,20 @@ print(values)</code></pre></div><div class="diagram"><pre>Series (one column):  
                    │          R-003    45      100
                 each column
                 is a Series</pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>Create a Series from a list of 4 numbers of your own and print it.</p>
-</div></section><section class="topic" id="t1-s2"><h2><span class="num">2.</span>A DataFrame - built from a dict of lists, or read from a file</h2><p>You have already built this shape by hand: Week 4's list of dicts. This is the
+</section><section class="topic" id="p1-t1-2-a-dataframe-built-from-a-dict-of-lists-or-read-from-a-file"><h2><span class="num">2.</span>A DataFrame - built from a dict of lists, or read from a file</h2><p>You have already built this shape by hand: Week 4's list of dicts. This is the
 same shape, all at once.</p>
 <div class="cell"><pre class="code"><code>df = pd.DataFrame({
     "label": ["R-001", "R-002", "R-003"],
     "value": [87, 120, 45],
     "limit": [100, 100, 100],
 })
-print(df)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Build a DataFrame of your own with 2 columns and 3 rows.</p>
-</div></section><section class="topic" id="t1-s3"><h2><span class="num">3.</span>Reading a whole file in one line</h2><p>Compare this to Week 4's <code>load_records</code>: a <code>for</code> loop, a <code>.split(&quot;,&quot;)</code>, a dict
+print(df)</code></pre></div></section><section class="topic" id="p1-t1-3-reading-a-whole-file-in-one-line"><h2><span class="num">3.</span>Reading a whole file in one line</h2><p>Compare this to Week 4's <code>load_records</code>: a <code>for</code> loop, a <code>.split(&quot;,&quot;)</code>, a dict
 built by hand, one line at a time. This does all of that.</p>
 <div class="cell"><pre class="code"><code>servers = pd.read_csv("servers.csv")
-print(servers)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Load <code>servers.csv</code> and print just the first 4 rows using <code>.head()</code>.</p>
-</div></section><section class="topic" id="t1-s4"><h2><span class="num">4.</span>Columns, types, and whole-column arithmetic</h2><p>Arithmetic on a column applies to every row at once — no loop, no <code>for record in records:</code>.</p>
+print(servers)</code></pre></div></section><section class="topic" id="p1-t1-4-columns-types-and-whole-column-arithmetic"><h2><span class="num">4.</span>Columns, types, and whole-column arithmetic</h2><p>Arithmetic on a column applies to every row at once — no loop, no <code>for record in records:</code>.</p>
 <div class="cell"><pre class="code"><code>print(servers.dtypes)
 servers["percent"] = (servers["used"] / servers["total"]) * 100
-print(servers)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Add a column <code>free</code> to <code>servers</code>, as <code>total - used</code>.</p>
-</div></section><section class="topic" id="t1-s5"><h2><span class="num">5.</span>When a column is numbers stored as text</h2><p>A file can load a number-looking column as text — check <code>.dtypes</code> if arithmetic misbehaves. An <code>object</code> dtype where you expected numbers is the giveaway.</p>
+print(servers)</code></pre></div></section><section class="topic" id="p1-t1-5-when-a-column-is-numbers-stored-as-text"><h2><span class="num">5.</span>When a column is numbers stored as text</h2><p>A file can load a number-looking column as text — check <code>.dtypes</code> if arithmetic misbehaves. An <code>object</code> dtype where you expected numbers is the giveaway.</p>
 <div class="cell"><pre class="code"><code>readings = pd.DataFrame({"count": ["12", "45", "8"], "limit": [50, 50, 50]})
 print(readings.dtypes)          # count is object (text), limit is int64
 
@@ -193,10 +172,7 @@ readings["count"] = readings["count"].astype(float)
 
 print(readings.dtypes)          # count is now float64
 readings["percent"] = (readings["count"] / readings["limit"]) * 100
-print(readings)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Build a DataFrame with a <code>&quot;score&quot;</code> column holding the text values <code>&quot;70&quot;</code>, <code>&quot;88&quot;</code>, <code>&quot;95&quot;</code>. Check its dtype, convert it to a number with <code>.astype()</code>, then double every value.</p>
-</div></section><section class="topic" id="t1-s6"><h2>Challenge</h2><p>Load <code>servers.csv</code>, add a <code>percent</code> column, and print only the <code>hostname</code> and
-<code>percent</code> columns, rounded to 1 decimal place.</p>
-</section><section class="topic" id="t1-s7"><h2>Same idea, three fields</h2><table class="booktabs">
+print(readings)</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -218,7 +194,7 @@ print(readings)</code></pre></div><div class="callout"><span class="callout-labe
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t1-s8"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -257,7 +233,7 @@ print(readings)</code></pre></div><div class="callout"><span class="callout-labe
 <h3>Go deeper</h3>
 <p><code>examples/01_series_and_dataframe.py</code> — Series, DataFrame, reading a file, head/tail
 <code>examples/02_columns_and_new_columns.py</code> — whole-column arithmetic, adding columns</p>
-</section><section class="topic" id="t1-s9"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -292,13 +268,9 @@ print(readings)</code></pre></div><div class="callout"><span class="callout-labe
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — selecting and filtering rows without a loop.</p>
-</section>
-<div class="topic-divider" id="t2-top"><span class="topic-divider-n">Topic 2</span><h2 class="topic-divider-title">Selecting and Filtering</h2></div><div class="topic-intro"><p>This replaces every <code>if</code> inside a loop you have written since Week 2 — one line,
-no loop.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 2 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html">Subsetting data</a> · <a href="https://pandas.pydata.org/docs/user_guide/indexing.html">Indexing user guide</a></p></div><section class="topic" id="t2-s1"><h2><span class="num">1.</span><code>iloc</code> - by position, <code>loc</code> - by label</h2><p>With the default index they look the same, but they are asking different
+</section></section>
+<div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">Selecting and Filtering</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html">Subsetting data</a> · <a href="https://pandas.pydata.org/docs/user_guide/indexing.html">Indexing user guide</a></p><section class="topic"><p>This replaces every <code>if</code> inside a loop you have written since Week 2 — one line,
+no loop.</p><section class="topic" id="p2-t2-1-iloc-by-position-loc-by-label"><h2><span class="num">1.</span><code>iloc</code> - by position, <code>loc</code> - by label</h2><p>With the default index they look the same, but they are asking different
 questions.</p>
 <div class="cell"><pre class="code"><code>import pandas as pd
 
@@ -306,10 +278,8 @@ servers = pd.read_csv("servers.csv")
 
 print(servers.iloc[0])         # the row in position 0
 print(servers.loc[0])           # the row labelled 0
-print(servers.loc[0, "hostname"])</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Print rows 2 to 4 (inclusive) using <code>iloc</code>.</p>
-</div></section><section class="topic" id="t2-s2"><h2><span class="num">2.</span>Selecting columns</h2><div class="cell"><pre class="code"><code>print(servers["hostname"])                  # one column - a Series
-print(servers[["hostname", "region"]])        # more than one - a DataFrame</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Print just the <code>region</code> and <code>used</code> columns, for every row.</p>
-</div></section><section class="topic" id="t2-s3"><h2><span class="num">3.</span>Boolean filtering</h2><p>A comparison on a column gives back a Series of <code>True</code>/<code>False</code>. Putting that in
+print(servers.loc[0, "hostname"])</code></pre></div></section><section class="topic" id="p2-t2-2-selecting-columns"><h2><span class="num">2.</span>Selecting columns</h2><div class="cell"><pre class="code"><code>print(servers["hostname"])                  # one column - a Series
+print(servers[["hostname", "region"]])        # more than one - a DataFrame</code></pre></div></section><section class="topic" id="p2-t2-3-boolean-filtering"><h2><span class="num">3.</span>Boolean filtering</h2><p>A comparison on a column gives back a Series of <code>True</code>/<code>False</code>. Putting that in
 <code>[]</code> keeps only the <code>True</code> rows.</p>
 <div class="cell"><pre class="code"><code>servers["percent"] = (servers["used"] / servers["total"]) * 100
 
@@ -320,17 +290,13 @@ print(over_limit)</code></pre></div><div class="cell"><pre class="code"><code>pe
   srv-05: 101   True       yes
 
 servers[servers["percent"] &gt;= 100]   ──▶   just the True rows</code></pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>Filter <code>servers</code> to just the rows where <code>region</code> is <code>&quot;west&quot;</code>.</p>
-</div></section><section class="topic" id="t2-s4"><h2><span class="num">4.</span>Combining conditions - <code>&amp;</code> and <code>|</code>, not <code>and</code>/<code>or</code></h2><p>Each comparison needs its own brackets. <code>and</code>/<code>or</code> do not work row-by-row on a
+</section><section class="topic" id="p2-t2-4-combining-conditions-and-not-and-or"><h2><span class="num">4.</span>Combining conditions - <code>&amp;</code> and <code>|</code>, not <code>and</code>/<code>or</code></h2><p>Each comparison needs its own brackets. <code>and</code>/<code>or</code> do not work row-by-row on a
 Series.</p>
 <div class="cell"><pre class="code"><code>east_over = servers[(servers["region"] == "east") &amp; (servers["percent"] &gt;= 90)]
 print(east_over)
 
 # servers[servers["region"] == "east" and servers["percent"] &gt;= 90]
-# ValueError: The truth value of a Series is ambiguous. Use &amp;.</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Filter to rows where <code>percent</code> is between 90 and 100, using <code>&amp;</code> and brackets around each comparison.</p>
-</div></section><section class="topic" id="t2-s5"><h2>Challenge</h2><p>Load <code>servers.csv</code>, add a <code>percent</code> column, and print only the rows that are both
-in the <code>&quot;north&quot;</code> region <strong>and</strong> over 90%.</p>
-</section><section class="topic" id="t2-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+# ValueError: The truth value of a Series is ambiguous. Use &amp;.</code></pre></div></section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -352,7 +318,7 @@ in the <code>&quot;north&quot;</code> region <strong>and</strong> over 90%.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t2-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -386,7 +352,7 @@ in the <code>&quot;north&quot;</code> region <strong>and</strong> over 90%.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_loc_and_iloc.py</code> — position vs label, custom indexes
 <code>examples/02_boolean_filtering.py</code> — filtering, combining conditions, isin()</p>
-</section><section class="topic" id="t2-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -417,12 +383,8 @@ in the <code>&quot;north&quot;</code> region <strong>and</strong> over 90%.</p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — one number per group, and sorting.</p>
-</section>
-<div class="topic-divider" id="t3-top"><span class="topic-divider-n">Topic 3</span><h2 class="topic-divider-title">Grouping, Sorting and Aggregating</h2></div><div class="topic-intro"><p>Answering &quot;one number per group&quot; questions without writing the loop yourself.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 3 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/06_calculate_statistics.html">Calculate statistics</a> · <a href="https://pandas.pydata.org/docs/reference/groupby.html">GroupBy reference</a></p></div><section class="topic" id="t3-s1"><h2><span class="num">1.</span><code>groupby</code> splits the rows into groups</h2><div class="cell"><pre class="code"><code>import pandas as pd
+</section></section>
+<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Grouping, Sorting and Aggregating</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/getting_started/intro_tutorials/06_calculate_statistics.html">Calculate statistics</a> · <a href="https://pandas.pydata.org/docs/reference/groupby.html">GroupBy reference</a></p><section class="topic"><p>Answering &quot;one number per group&quot; questions without writing the loop yourself.</p><section class="topic" id="p3-t3-1-groupby-splits-the-rows-into-groups"><h2><span class="num">1.</span><code>groupby</code> splits the rows into groups</h2><div class="cell"><pre class="code"><code>import pandas as pd
 
 servers = pd.read_csv("servers.csv")
 servers["percent"] = (servers["used"] / servers["total"]) * 100
@@ -433,17 +395,11 @@ print(grouped["percent"].mean())</code></pre></div><div class="cell"><pre class=
   east:  srv-01, srv-02, srv-06, srv-09   ──▶  .mean()  ──▶  one number for east
   west:  srv-03, srv-04, srv-07            ──▶  .mean()  ──▶  one number for west
   north: srv-05, srv-08, srv-10            ──▶  .mean()  ──▶  one number for north</code></pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>Group by <code>region</code> and print the maximum <code>percent</code> per region.</p>
-</div></section><section class="topic" id="t3-s2"><h2><span class="num">2.</span><code>.agg()</code> - more than one summary at once</h2><div class="cell"><pre class="code"><code>print(grouped["percent"].agg(["mean", "max", "min"]))
-print(grouped.size())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Use <code>.agg()</code> to get both the mean and the count of <code>percent</code> per region, in one call.</p>
-</div></section><section class="topic" id="t3-s3"><h2><span class="num">3.</span><code>value_counts()</code> - counting a categorical column directly</h2><p>A shortcut for <code>groupby(...).size()</code> on a single column.</p>
-<div class="cell"><pre class="code"><code>print(servers["region"].value_counts())</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Use <code>value_counts()</code> on a column of your choice from <code>servers</code>.</p>
-</div></section><section class="topic" id="t3-s4"><h2><span class="num">4.</span>Sorting</h2><p><code>sort_values</code> orders rows by one or more columns — smallest first by default.</p>
+</section><section class="topic" id="p3-t3-2-agg-more-than-one-summary-at-once"><h2><span class="num">2.</span><code>.agg()</code> - more than one summary at once</h2><div class="cell"><pre class="code"><code>print(grouped["percent"].agg(["mean", "max", "min"]))
+print(grouped.size())</code></pre></div></section><section class="topic" id="p3-t3-3-value-counts-counting-a-categorical-column-directly"><h2><span class="num">3.</span><code>value_counts()</code> - counting a categorical column directly</h2><p>A shortcut for <code>groupby(...).size()</code> on a single column.</p>
+<div class="cell"><pre class="code"><code>print(servers["region"].value_counts())</code></pre></div></section><section class="topic" id="p3-t3-4-sorting"><h2><span class="num">4.</span>Sorting</h2><p><code>sort_values</code> orders rows by one or more columns — smallest first by default.</p>
 <div class="cell"><pre class="code"><code>print(servers.sort_values("percent", ascending=False))
-print(servers.sort_values(["region", "percent"]))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Sort <code>servers</code> by <code>region</code>, then by <code>used</code> within each region.</p>
-</div></section><section class="topic" id="t3-s5"><h2>Challenge</h2><p>Group <code>servers</code> by <code>region</code>, find the average <code>percent</code> per region, then sort the
-result so the highest-average region comes first.</p>
-</section><section class="topic" id="t3-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+print(servers.sort_values(["region", "percent"]))</code></pre></div></section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -465,7 +421,7 @@ result so the highest-average region comes first.</p>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t3-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -499,7 +455,7 @@ result so the highest-average region comes first.</p>
 <h3>Go deeper</h3>
 <p><code>examples/01_groupby_and_agg.py</code> — groupby, agg, value_counts
 <code>examples/02_sorting.py</code> — sort_values, multiple columns, reset_index</p>
-</section><section class="topic" id="t3-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -526,13 +482,9 @@ result so the highest-average region comes first.</p>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — building a column with <code>.apply()</code> and a lambda, then finishing up.</p>
-</section>
-<div class="topic-divider" id="t4-top"><span class="topic-divider-n">Topic 4</span><h2 class="topic-divider-title">Apply, Lambda and Finishing Up</h2></div><div class="topic-intro"><p>A <code>lambda</code> is a <code>def</code> you don't bother naming, for a one-line function you are
-only going to use once — usually right inside <code>.apply()</code>.</p>
-<blockquote>
-<p><strong>Already know this?</strong> Skip to the <em>Topic 4 Challenge</em>.</p>
-</blockquote>
-<p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/user_guide/basics.html#row-or-column-wise-function-application">Function application</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html">Series.apply</a></p></div><section class="topic" id="t4-s1"><h2><span class="num">1.</span><code>.apply()</code> runs a function on every value in a column</h2><p>Start with a normal function, the way Week 3 taught it.</p>
+</section></section>
+<div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">Apply, Lambda and Finishing Up</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pandas.pydata.org/docs/user_guide/basics.html#row-or-column-wise-function-application">Function application</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html">Series.apply</a></p><section class="topic"><p>A <code>lambda</code> is a <code>def</code> you don't bother naming, for a one-line function you are
+only going to use once — usually right inside <code>.apply()</code>.</p><section class="topic" id="p4-t4-1-apply-runs-a-function-on-every-value-in-a-column"><h2><span class="num">1.</span><code>.apply()</code> runs a function on every value in a column</h2><p>Start with a normal function, the way Week 3 taught it.</p>
 <div class="cell"><pre class="code"><code>import pandas as pd
 
 servers = pd.read_csv("servers.csv")
@@ -547,8 +499,7 @@ def classify(percent):
         return "OK"
 
 servers["status"] = servers["percent"].apply(classify)
-print(servers)</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Write your own single-argument function and <code>.apply()</code> it to the <code>used</code> column.</p>
-</div></section><section class="topic" id="t4-s2"><h2><span class="num">2.</span><code>lambda</code> - the same idea, written inline</h2><p><code>lambda parameters: expression</code> — that IS the whole function. Only one
+print(servers)</code></pre></div></section><section class="topic" id="p4-t4-2-lambda-the-same-idea-written-inline"><h2><span class="num">2.</span><code>lambda</code> - the same idea, written inline</h2><p><code>lambda parameters: expression</code> — that IS the whole function. Only one
 expression allowed — no <code>if</code>/<code>elif</code>/<code>else</code> statements, no loops.</p>
 <div class="cell"><pre class="code"><code>double = lambda x: x * 2
 print(double(21))     # 42 - same as def double(x): return x * 2</code></pre></div><div class="cell"><pre class="code"><code>def classify(p):                    lambda p: (
@@ -560,14 +511,12 @@ print(double(21))     # 42 - same as def double(x): return x * 2</code></pre></d
         return "OK"
 
 same logic, same result - a block of statements vs one expression</code></pre></div>
-<div class="callout"><span class="callout-label">Practice</span><p>Write <code>classify</code> as a lambda with a chained conditional, and check it gives the same result as the <code>def</code> version for every row.</p>
-</div></section><section class="topic" id="t4-s3"><h2><span class="num">3.</span><code>.apply()</code> with a lambda, and <code>sort_values(key=...)</code></h2><p>lambda earns its place exactly here — a function small enough to write inline,
+</section><section class="topic" id="p4-t4-3-apply-with-a-lambda-and-sort-values-key"><h2><span class="num">3.</span><code>.apply()</code> with a lambda, and <code>sort_values(key=...)</code></h2><p>lambda earns its place exactly here — a function small enough to write inline,
 used exactly once, right where it is needed.</p>
 <div class="cell"><pre class="code"><code>servers["status"] = servers["percent"].apply(
     lambda p: "OVER LIMIT" if p &gt;= 100 else "WARNING" if p &gt;= 90 else "OK"
 )
-print(servers.sort_values("hostname", key=lambda col: col.str.lower()))</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Use <code>.apply()</code> with a lambda to add a column <code>region_upper</code> — the <code>region</code> column, in capitals.</p>
-</div></section><section class="topic" id="t4-s4"><h2><span class="num">4.</span>Summarising, saving, and a first chart</h2><p><code>describe()</code> for a quick overview, <code>.to_csv()</code> to save, and one chart — straight
+print(servers.sort_values("hostname", key=lambda col: col.str.lower()))</code></pre></div></section><section class="topic" id="p4-t4-4-summarising-saving-and-a-first-chart"><h2><span class="num">4.</span>Summarising, saving, and a first chart</h2><p><code>describe()</code> for a quick overview, <code>.to_csv()</code> to save, and one chart — straight
 off a DataFrame. In a notebook, calling <code>.plot()</code> shows the chart inline.</p>
 <div class="cell"><pre class="code"><code>import matplotlib.pyplot as plt
 
@@ -577,10 +526,7 @@ servers.to_csv("servers_report.csv", index=False)
 
 servers["status"].value_counts().plot(kind="bar", title="Servers by status")
 plt.tight_layout()
-plt.show()</code></pre></div><div class="callout"><span class="callout-label">Practice</span><p>Make a bar chart of servers per region instead of per status.</p>
-</div></section><section class="topic" id="t4-s5"><h2>Challenge</h2><p>Load <code>servers.csv</code>, add <code>percent</code> and <code>status</code> (via <code>.apply()</code> with a lambda),
-save the result to a new CSV, and produce one bar chart of the status counts.</p>
-</section><section class="topic" id="t4-s6"><h2>Same idea, three fields</h2><table class="booktabs">
+plt.show()</code></pre></div></section><section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Field</th>
@@ -602,7 +548,7 @@ save the result to a new CSV, and produce one bar chart of the status counts.</p
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="t4-s7"><h2>Common mistakes</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
 <thead>
 <tr>
   <th>Mistake</th>
@@ -636,7 +582,7 @@ save the result to a new CSV, and produce one bar chart of the status counts.</p
 <h3>Go deeper</h3>
 <p><code>examples/01_apply_and_lambda.py</code> — apply, lambda syntax, chained conditionals, sort key
 <code>examples/02_summarizing_saving_and_charting.py</code> — describe, to_csv, a first chart</p>
-</section><section class="topic" id="t4-s8"><h2>Recap</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-recap"><h2>Recap</h2><table class="booktabs">
 <thead>
 <tr>
   <th>You can now</th>
@@ -671,7 +617,7 @@ save the result to a new CSV, and produce one bar chart of the status counts.</p
 </tbody>
 </table>
 <p><strong>You now have all of CW1's toolkit.</strong> Your mini-project this week closes it out.</p>
-</section>
+</section></section>
 
     <footer class="page-foot">CST1510 · Week 06 · Pandas</footer>
   </article>
