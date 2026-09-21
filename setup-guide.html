@@ -52,144 +52,157 @@
       --accent: #d98c8c; --code-bg: #1f211f; --code-ink: #ddd8cc; --card: #1d1f21;
     }
   }
+  span.os.active { display: inline; }
+  .tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .note { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 16px; margin: 10px 0 14px; max-width: 70ch; }
+  .note p { margin: 0; }
 </style>
 </head>
 <body>
 <div class="page">
   <div class="breadcrumb">CST1510</div>
   <h1>Setup Guide</h1>
-  <p class="lede">Install Python, VS Code, Git and this module's packages in a clear order.
-    Use the Windows / macOS switch below to see the commands written the way your machine expects them.</p>
+  <p class="lede">Everything you need before Week 1: Python, VS Code, Git, your own GitHub repository,
+    and this module's packages. Choose your computer below and the commands will match it.</p>
 
   <div class="callout">
-    <p>Do the steps in order. Python first, then VS Code, then Git/GitHub, then the module packages,
-      then the final verification check.</p>
+    <p>Do the steps in order, once. Each step ends with a check so you know it worked before you move on.
+      After setup, the <a href="git-and-github-guide.html">Git and GitHub Guide</a> is the routine you use every week.</p>
   </div>
 
-  <div class="tabs" aria-label="Operating system">
-    <button class="active" data-os="windows">Windows</button>
-    <button data-os="mac">macOS</button>
+  <div class="tabs" role="group" aria-label="Operating system">
+    <button class="active" data-os="windows" aria-pressed="true">Windows</button>
+    <button data-os="mac" aria-pressed="false">macOS</button>
   </div>
 
   <section>
     <h2>1. Python</h2>
     <span class="check">Check it worked</span>
-    <div class="os active" data-os-panel="windows">
-      <p>Open PowerShell and check whether Python is already available:</p>
-      <pre>python --version</pre>
-      <p>If that shows Python 3.10 or higher, move on. If it says the command is not found, install Python from
-        <a href="https://www.python.org/downloads/">python.org/downloads</a> and tick <b>Add python.exe to PATH</b>.</p>
-      <pre>python --version</pre>
-    </div>
-    <div class="os" data-os-panel="mac">
-      <p>Open Terminal and check whether Python is already available:</p>
-      <pre>python3 --version</pre>
-      <p>If that shows Python 3.10 or higher, move on. If not, install Python from
-        <a href="https://www.python.org/downloads/">python.org/downloads</a>, then reopen Terminal and check again.</p>
-      <pre>python3 --version</pre>
-    </div>
+    <div class="os active" data-os-panel="windows"><p>Open <b>PowerShell</b> (Start menu &rarr; type <code>PowerShell</code>) and run:</p></div>
+    <div class="os" data-os-panel="mac"><p>Open <b>Terminal</b> (<code>Cmd + Space</code> &rarr; type <code>Terminal</code>) and run:</p></div>
+    <div class="os active" data-os-panel="windows"><pre>python --version</pre></div>
+    <div class="os" data-os-panel="mac"><pre>python3 --version</pre></div>
+    <p>If it shows <b>Python 3.10 or higher</b>, go to step 2. Otherwise install Python from
+      <a href="https://www.python.org/downloads/">python.org/downloads</a>, close and reopen the terminal, and check again.</p>
+    <div class="os active" data-os-panel="windows"><div class="note"><p>On the first install screen, tick <b>Add python.exe to PATH</b>. If you miss it, nothing later works and you will need to reinstall.</p></div></div>
+    <div class="os" data-os-panel="mac"><div class="note"><p>Use the installer from python.org, not Homebrew. It avoids an <code>externally-managed-environment</code> error in step 7.</p></div></div>
   </section>
 
   <section>
     <h2>2. VS Code</h2>
     <span class="check">Check it worked</span>
     <p>Install VS Code from <a href="https://code.visualstudio.com/">code.visualstudio.com</a>.
-      Then open VS Code and install these two extensions:</p>
+      Then open Extensions (<span class="os active" data-os-panel="windows"><code>Ctrl + Shift + X</code></span>
+    <span class="os" data-os-panel="mac"><code>Cmd + Shift + X</code></span>) and install:</p>
     <ul>
       <li><b>Python</b> by Microsoft</li>
       <li><b>Jupyter</b> by Microsoft</li>
     </ul>
-    <p>These are needed because the walkthrough material uses both plain Python files and Jupyter notebooks.</p>
+    <p>You need both: the labs use Python files and Jupyter notebooks (<code>.ipynb</code>).</p>
   </section>
 
   <section>
     <h2>3. Git and GitHub</h2>
     <span class="check">Check it worked</span>
-    <p>Install Git from <a href="https://git-scm.com/downloads">git-scm.com/downloads</a>. Create a GitHub account if you do not already have one.</p>
-    <div class="os active" data-os-panel="windows">
-      <pre>git --version
+    <div class="os active" data-os-panel="windows"><p>Install Git from <a href="https://git-scm.com/downloads">git-scm.com/downloads</a>, accepting the defaults. Then close and reopen PowerShell.</p></div>
+    <div class="os" data-os-panel="mac"><p>Run <code>git --version</code>. If Git is missing, your Mac offers to install it (the Command Line Tools): accept. You can also install it from <a href="https://git-scm.com/downloads">git-scm.com/downloads</a>.</p></div>
+    <p>Create a free account at <a href="https://github.com/">github.com</a> if you don't have one. Then tell Git who you are,
+      using the same email as your GitHub account:</p>
+    <pre>git --version
 git config --global user.name "Your Name"
 git config --global user.email "you@example.com"</pre>
-    </div>
-    <div class="os" data-os-panel="mac">
-      <pre>git --version
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"</pre>
-    </div>
-    <p>Use the same email here as the one on your GitHub account.</p>
+    <p><b>Check:</b> <code>git --version</code> prints a version number.</p>
   </section>
 
   <section>
-    <h2>4. Create your CST1510 repository</h2>
-    <p>This happens once, not every week. On GitHub, create a new repository named something like
-      <code>cst1510-yourname</code> and tick <b>Add a README file</b>.</p>
-    <p>Then copy the repository's HTTPS URL and clone it into a folder called <code>CST1510</code> inside your Documents folder.</p>
-    <div class="os active" data-os-panel="windows">
-      <pre>cd Documents
-mkdir CST1510
-cd CST1510
-git clone https://github.com/&lt;you&gt;/&lt;repo-name&gt;.git
-cd &lt;repo-name&gt;</pre>
-    </div>
-    <div class="os" data-os-panel="mac">
-      <pre>cd ~/Documents
-mkdir CST1510
-cd CST1510
-git clone https://github.com/&lt;you&gt;/&lt;repo-name&gt;.git
-cd &lt;repo-name&gt;</pre>
-    </div>
-  </section>
-
-  <section>
-    <h2>5. Install this module's packages</h2>
+    <h2>4. Create and clone your repository</h2>
     <span class="check">Check it worked</span>
-    <p>Inside your cloned repository, open the <code>Week 00 - Orientation and Setup</code> folder and install the packages listed in <code>requirements.txt</code>.</p>
-    <div class="grid">
-      <div class="card os active" data-os-panel="windows">
-        <h3>Windows</h3>
-        <pre>python -m pip install -r requirements.txt</pre>
-      </div>
-      <div class="card os active" data-os-panel="windows">
-        <h3>Optional virtual environment</h3>
-        <pre>python -m venv .venv
-.venv\Scripts\activate
-python -m pip install -r requirements.txt</pre>
-      </div>
-      <div class="card os" data-os-panel="mac">
-        <h3>macOS</h3>
-        <pre>pip3 install -r requirements.txt</pre>
-      </div>
-      <div class="card os" data-os-panel="mac">
-        <h3>Optional virtual environment</h3>
-        <pre>python3 -m venv .venv
-source .venv/bin/activate
-pip3 install -r requirements.txt</pre>
-      </div>
-    </div>
+    <p>Your repository holds all your work for the whole module, Week 0 to Week 12. You create it once.</p>
+    <ol>
+      <li>On GitHub, click <b>+</b> (top right) &rarr; <b>New repository</b>.</li>
+      <li>Name it <code>CST1510</code>, choose <b>Private</b>, and tick <b>Add a README file</b>.</li>
+      <li>Click <b>Create repository</b>, then click the green <b>Code</b> button and copy the HTTPS URL.</li>
+      <li>In the terminal, go to Documents and clone it:</li>
+    </ol>
+    <div class="os active" data-os-panel="windows"><pre>cd Documents
+git clone https://github.com/YOUR-USERNAME/CST1510.git</pre></div>
+    <div class="os" data-os-panel="mac"><pre>cd ~/Documents
+git clone https://github.com/YOUR-USERNAME/CST1510.git</pre></div>
+    <p>This creates the folder <code>Documents/CST1510</code>, already linked to GitHub. Don't create the folder yourself first.</p>
+    <div class="os active" data-os-panel="windows"><div class="note"><p>Because the repository is private, a browser window opens asking you to sign in to GitHub. If <code>cd Documents</code> fails, your Documents folder may be in OneDrive: try <code>cd ~\OneDrive\Documents</code>.</p></div></div>
+    <div class="os" data-os-panel="mac"><div class="note"><p>Because the repository is private, Git asks you to sign in. Enter your GitHub username, and when it asks for a password paste a <b>personal access token</b> (see Common problems). Your Mac remembers it afterwards.</p></div></div>
+    <p><b>Check:</b> <code>Documents/CST1510</code> exists and contains <code>README.md</code>.</p>
   </section>
 
   <section>
-    <h2>6. Run the final check</h2>
+    <h2>5. Put the Week 00 folder inside your repository</h2>
+    <p>Download the <code>Week 00 - Orientation and Setup</code> folder from Moodle and move it into <code>Documents/CST1510</code>.
+      Every week from now on, the new week's folder goes in there too.</p>
+    <p>Then open the repository in VS Code: <b>File &rarr; Open Folder</b> &rarr; <code>CST1510</code>, and open a terminal
+      with <b>Terminal &rarr; New Terminal</b>. It starts in the right folder, so use this terminal from now on.</p>
+  </section>
+
+  <section>
+    <h2>6. Add a <code>.gitignore</code> file</h2>
+    <p>This tells Git which files never to upload. In VS Code, create a new file in the <code>CST1510</code> folder itself
+      (not inside a week folder), name it <code>.gitignore</code> (starting with a dot), paste this in and save:</p>
+    <pre>__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+.env</pre>
+    <p>The <a href="git-and-github-guide.html">Git and GitHub Guide</a> explains what each line is.</p>
+  </section>
+
+  <section>
+    <h2>7. Install this module's packages</h2>
     <span class="check">Check it worked</span>
-    <p>Run the verification script from inside <code>Week 00 - Orientation and Setup</code>. Every line should say <code>OK</code>.</p>
-    <div class="os active" data-os-panel="windows">
-      <pre>python verify_setup.py</pre>
-    </div>
-    <div class="os" data-os-panel="mac">
-      <pre>python3 verify_setup.py</pre>
-    </div>
-    <p>If anything says <code>MISSING</code>, fix that one thing and run the script again.</p>
+    <p>In the VS Code terminal:</p>
+    <div class="os active" data-os-panel="windows"><pre>cd "Week 00 - Orientation and Setup"
+python -m pip install -r requirements.txt</pre></div>
+    <div class="os" data-os-panel="mac"><pre>cd "Week 00 - Orientation and Setup"
+python3 -m pip install -r requirements.txt</pre></div>
+    <p>This installs everything used across all 12 weeks, so you won't need to install anything most weeks.</p>
+  </section>
+
+  <section>
+    <h2>8. Run the final check</h2>
+    <span class="check">Check it worked</span>
+    <p>Still inside the Week 00 folder:</p>
+    <div class="os active" data-os-panel="windows"><pre>python verify_setup.py</pre></div>
+    <div class="os" data-os-panel="mac"><pre>python3 verify_setup.py</pre></div>
+    <p>Every line should say <code>OK</code>. If anything says <code>MISSING</code>, the line under it tells you the fix.
+      Do that one thing and run the script again. It also checks that the Week 00 folder is inside your repository and that
+      <code>.gitignore</code> is in the right place.</p>
+  </section>
+
+  <section>
+    <h2>9. Make your first push</h2>
+    <span class="check">Check it worked</span>
+    <p>Go back up to the repository folder and save everything to GitHub:</p>
+    <pre>cd ..
+git add .
+git commit -m "Week 0 setup"
+git push</pre>
+    <p>Open your repository on GitHub and check you can see the Week 00 folder and <code>.gitignore</code>.
+      Then go to <b>Settings &rarr; Collaborators &rarr; Add people</b> and add your lecturer (<code>anna29</code>),
+      so the repository link you submit can be opened.</p>
+    <p>You're ready for Week 1. From now on, follow the <a href="git-and-github-guide.html">Git and GitHub Guide</a>
+      at the end of every lab.</p>
   </section>
 
   <section>
     <h2>Common problems</h2>
     <table>
       <tr><th>Problem</th><th>Likely fix</th></tr>
-      <tr><td>Python command not found</td><td>Reinstall Python and make sure it is added to PATH, then reopen the terminal.</td></tr>
-      <tr><td>pip command not found</td><td>Use <code>python -m pip</code> on Windows or <code>python3 -m pip</code> on macOS.</td></tr>
-      <tr><td>No Python kernel in VS Code</td><td>Install the Jupyter extension, reopen the notebook, then choose a kernel.</td></tr>
-      <tr><td>git command not found</td><td>Restart the terminal after installing Git. On Windows, try Git Bash if PowerShell still cannot see Git.</td></tr>
-      <tr><td>Permission error installing packages on macOS</td><td>Use a virtual environment or add <code>--user</code> to the pip command.</td></tr>
+      <tr><td>Python command not found</td><td>Reinstall Python (Windows: tick <b>Add python.exe to PATH</b>), then reopen the terminal.</td></tr>
+      <tr><td>Typing <code>python3</code> on Windows opens the Microsoft Store</td><td>On Windows, use <code>python</code>, not <code>python3</code>.</td></tr>
+      <tr><td>pip errors or <code>pip: command not found</code></td><td>Use the exact command from step 7: <span class="os active" data-os-panel="windows"><code>python</code></span><span class="os" data-os-panel="mac"><code>python3</code></span> <code>-m pip install -r requirements.txt</code>.</td></tr>
+      <tr><td><code>externally-managed-environment</code> (macOS)</td><td>You're using a different Python, such as Homebrew's. Install Python from python.org and run step 7 again.</td></tr>
+      <tr><td><code>git</code>: command not found</td><td>Close and reopen the terminal (and VS Code) after installing Git.</td></tr>
+      <tr><td>Git asks for a password and rejects it</td><td>GitHub needs a <b>personal access token</b>, not your password. On GitHub: Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; Tokens (classic) &rarr; Generate new token, tick <b>repo</b>, copy it and paste it as the password.</td></tr>
+      <tr><td><code>fatal: not a git repository</code></td><td>You're not inside the <code>CST1510</code> folder. Open it in VS Code and use its terminal.</td></tr>
+      <tr><td><code>verify_setup.py</code> says the folder is not inside your repository</td><td>Move the Week 00 folder into <code>Documents/CST1510</code> (step 5).</td></tr>
+      <tr><td>No Python kernel for a <code>.ipynb</code> notebook</td><td>Install the Jupyter extension (step 2), reopen the notebook and click <b>Select Kernel</b> (top right).</td></tr>
     </table>
   </section>
 
@@ -201,18 +214,19 @@ pip3 install -r requirements.txt</pre>
     var panels = document.querySelectorAll("[data-os-panel]");
     function setOS(name) {
       buttons.forEach(function (button) {
-        button.classList.toggle("active", button.dataset.os === name);
+        var on = button.dataset.os === name;
+        button.classList.toggle("active", on);
+        button.setAttribute("aria-pressed", on ? "true" : "false");
       });
       panels.forEach(function (panel) {
         panel.classList.toggle("active", panel.dataset.osPanel === name);
       });
     }
     buttons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        setOS(button.dataset.os);
-      });
+      button.addEventListener("click", function () { setOS(button.dataset.os); });
     });
-    setOS("windows");
+    var ua = navigator.userAgent || "";
+    setOS(/Mac/i.test(ua) && !/Windows/i.test(ua) ? "mac" : "windows");
   }());
 </script>
 </body>
