@@ -51,12 +51,13 @@
 <div class="page">
   <div class="breadcrumb">CST1510</div>
   <h1>Git and GitHub Guide</h1>
-  <p class="lede">This is the weekly routine for saving your work properly: check what changed,
+  <p class="lede">The weekly routine for saving your work: check what changed,
     stage it, commit it, push it, then confirm it is really on GitHub.</p>
 
   <div class="callout">
     <p>Your GitHub repository is not just backup. It is part of the evidence that your work was
-      completed week by week across the term.</p>
+      completed week by week across the term. Haven't set it up yet? Do <code>INSTALL.md</code>
+      in the Week 00 folder first.</p>
   </div>
 
   <div class="quick">
@@ -71,11 +72,12 @@ git push</pre>
   <section>
     <h2>Step 0. Open a terminal in the right folder</h2>
     <span class="step-label">Start here</span>
-    <p>You need to be inside your own CST1510 repository folder, not just somewhere in Documents.</p>
-    <p>The easiest way is to open your repository in VS Code, then open the built-in terminal.</p>
+    <p>You need to be inside your <code>CST1510</code> repository folder, not just somewhere in Documents.</p>
+    <p>The easiest way: in VS Code, <b>File &rarr; Open Folder</b> and choose <code>CST1510</code>,
+      then <b>Terminal &rarr; New Terminal</b>. The terminal opens in the right place.</p>
+    <p>Not sure where you are? Run:</p>
     <pre>pwd</pre>
-    <p>If the path does not end in your repository folder name, move there first:</p>
-    <pre>cd path/to/your/repository</pre>
+    <p>The path should end in <code>CST1510</code>. If it doesn't, open the folder in VS Code as above.</p>
   </section>
 
   <section>
@@ -98,7 +100,8 @@ Untracked files:
     <h2>Step 2. Stage everything for the snapshot</h2>
     <span class="step-label">Prepare it</span>
     <pre>git add .</pre>
-    <p>This usually prints nothing. That is normal. The dot means everything in this repository folder.</p>
+    <p>This usually prints nothing. That is normal. The dot means everything in this repository folder,
+      except anything listed in your <code>.gitignore</code>.</p>
     <p>Check again:</p>
     <pre>git status</pre>
     <p>Files should now appear under <code>Changes to be committed</code>.</p>
@@ -108,14 +111,15 @@ Untracked files:
     <h2>Step 3. Save a local snapshot</h2>
     <span class="step-label">Commit it</span>
     <pre>git commit -m "Week 4 lab and mini-project"</pre>
-    <p>Change the week number to the week you are on. This saves the snapshot on your machine only.</p>
+    <p>Change the week number to the week you are on. This saves the snapshot on your computer only.</p>
   </section>
 
   <section>
     <h2>Step 4. Send it to GitHub</h2>
     <span class="step-label">Push it</span>
     <pre>git push</pre>
-    <p>The first time, GitHub may ask you to sign in. Follow the prompts.</p>
+    <p>If Git asks for a password, your normal GitHub password won't work. Paste a
+      <b>personal access token</b> instead (see Common mistakes below).</p>
   </section>
 
   <section>
@@ -126,23 +130,42 @@ Untracked files:
   </section>
 
   <section>
-    <h2>What actually matters each week</h2>
+    <h2>What goes in the repository</h2>
+    <p>Everything for the module lives inside the <code>CST1510</code> folder: each week's folder,
+      with your lab notebook, mini-project and anything else that week asks you to keep.
+      <code>git add .</code> picks it all up, so you never need to add files one by one.</p>
+    <p><b>If it's not inside <code>CST1510</code>, it won't go to GitHub.</b></p>
+  </section>
+
+  <section>
+    <h2>The <code>.gitignore</code> file</h2>
+    <p>You made this once during setup. It sits in the <code>CST1510</code> folder and lists files Git should
+      never upload. It should contain:</p>
+    <pre>__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+.env</pre>
     <table>
-      <tr><th>Weeks</th><th>Main files</th></tr>
-      <tr><td>1-7</td><td>Your lab notebook and that week's <code>LAB/template.py</code>. Some weeks also include a real data file for the mini-project.</td></tr>
-      <tr><td>8-12</td><td>Your continuing <code>project/</code> folder, updated and pushed every week.</td></tr>
+      <tr><th>Line</th><th>What it is</th></tr>
+      <tr><td><code>__pycache__/</code></td><td>Files Python creates automatically when it runs your code.</td></tr>
+      <tr><td><code>.ipynb_checkpoints/</code></td><td>Autosave copies of Jupyter notebooks.</td></tr>
+      <tr><td><code>.DS_Store</code></td><td>A hidden file macOS puts in folders. Nothing to do with your code.</td></tr>
+      <tr><td><code>.env</code></td><td>Where passwords and API keys go in later weeks. These must never be uploaded.</td></tr>
     </table>
+    <p>If <code>git status</code> ever lists a file you don't recognise, stop and check before you commit.</p>
   </section>
 
   <section>
     <h2>Common mistakes</h2>
     <table>
       <tr><th>Mistake</th><th>What you see</th><th>Fix</th></tr>
-      <tr><td>Wrong folder</td><td><code>fatal: not a git repository</code></td><td>Run <code>pwd</code>, then <code>cd</code> into your repository root.</td></tr>
-      <tr><td>Forgot <code>git add .</code></td><td><code>nothing to commit</code></td><td>Stage first, then commit.</td></tr>
+      <tr><td>Wrong folder</td><td><code>fatal: not a git repository</code></td><td>Open <code>CST1510</code> in VS Code and use its terminal.</td></tr>
+      <tr><td>Forgot <code>git add .</code></td><td><code>no changes added to commit</code> or <code>nothing added to commit but untracked files present</code></td><td>Run <code>git add .</code>, then commit again.</td></tr>
       <tr><td>Committed but did not push</td><td>GitHub still shows last week's work</td><td>Run <code>git push</code>.</td></tr>
+      <tr><td>Password rejected</td><td><code>Authentication failed</code></td><td>Use a personal access token: GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; Tokens (classic) &rarr; Generate new token, tick <b>repo</b>. Paste it as the password.</td></tr>
+      <tr><td>Changed something on the GitHub website</td><td><code>rejected</code> &hellip; <code>fetch first</code></td><td>Run <code>git pull</code>, then <code>git push</code>.</td></tr>
+      <tr><td>Typo in a command</td><td><code>'confir' is not a git command</code></td><td>Check the spelling and run it again.</td></tr>
       <tr><td>Vague message like <code>update</code></td><td>History becomes hard to read</td><td>Use <code>Week N lab and mini-project</code>.</td></tr>
-      <tr><td>Added a secret or database file by mistake</td><td>Private data ends up in the repo</td><td>Check <code>git status</code> before you commit. Use a <code>.gitignore</code> where needed.</td></tr>
     </table>
   </section>
 
