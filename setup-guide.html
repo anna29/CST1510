@@ -182,9 +182,8 @@ python3 -m pip install -r requirements.txt</pre></div>
 git add .
 git commit -m "Week 0 setup"
 git push</pre>
-    <p>The first time you push, Git asks you to sign in to GitHub:</p>
-    <div class="os active" data-os-panel="windows"><div class="note"><p>A browser window opens. Sign in and click <b>Authorize</b>. Windows remembers it afterwards.</p></div></div>
-    <div class="os" data-os-panel="mac"><div class="note"><p>Enter your GitHub username. When it asks for a password, paste a <b>personal access token</b>, not your normal password (see Common problems). Your Mac remembers it afterwards.</p></div></div>
+    <div class="note"><p>The first time you push, VS Code asks you to sign in to GitHub. Click <b>Allow</b>, sign in
+      in the browser window that opens, and click <b>Authorize</b>. Your computer remembers it afterwards.</p></div>
     <p>Open your repository on GitHub and check you can see the Week 00 folder and <code>.gitignore</code>.</p>
     <p>You're ready for Week 1. From now on, follow the <a href="git-and-github-guide.html">Git and GitHub Guide</a>
       at the end of every lab.</p>
@@ -199,7 +198,7 @@ git push</pre>
       <tr><td>pip errors or <code>pip: command not found</code></td><td>Use the exact command from step 7: <span class="os active" data-os-panel="windows"><code>python</code></span><span class="os" data-os-panel="mac"><code>python3</code></span> <code>-m pip install -r requirements.txt</code>.</td></tr>
       <tr><td><code>externally-managed-environment</code> (macOS)</td><td>You're using a different Python, such as Homebrew's. Install Python from python.org and run step 7 again.</td></tr>
       <tr><td><code>git</code>: command not found</td><td>Close and reopen the terminal (and VS Code) after installing Git.</td></tr>
-      <tr><td>Git asks for a password and rejects it</td><td>GitHub needs a <b>personal access token</b>, not your password. On GitHub: Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; Tokens (classic) &rarr; Generate new token, tick <b>repo</b>, copy it and paste it as the password.</td></tr>
+      <tr><td>No sign-in pop-up, and Git asks for a password and rejects it</td><td>GitHub needs a <b>personal access token</b>, not your password. On GitHub: Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; Tokens (classic) &rarr; Generate new token, tick <b>repo</b>, copy it and paste it as the password.</td></tr>
       <tr><td><code>fatal: not a git repository</code></td><td>You're not inside the <code>CST1510</code> folder. Open it in VS Code and use its terminal.</td></tr>
       <tr><td><code>verify_setup.py</code> says the folder is not inside your repository</td><td>Move the Week 00 folder into <code>Documents/CST1510</code> (step 5).</td></tr>
       <tr><td>No Python kernel for a <code>.ipynb</code> notebook</td><td>Install the Jupyter extension (step 2), reopen the notebook and click <b>Select Kernel</b> (top right).</td></tr>
