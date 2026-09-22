@@ -56,8 +56,7 @@
 
   <div class="callout">
     <p>Your GitHub repository is not just backup. It is part of the evidence that your work was
-      completed week by week across the term. Haven't set it up yet? Do <code>INSTALL.md</code>
-      in the Week 00 folder first.</p>
+      completed week by week across the term. Haven't set it up yet? Do the <a href="setup-guide.html">Setup Guide</a> first.</p>
   </div>
 
   <div class="quick">
@@ -118,8 +117,7 @@ Untracked files:
     <h2>Step 4. Send it to GitHub</h2>
     <span class="step-label">Push it</span>
     <pre>git push</pre>
-    <p>If Git asks for a password, your normal GitHub password won't work. Paste a
-      <b>personal access token</b> instead (see Common mistakes below).</p>
+    <p>The first time, VS Code asks you to sign in to GitHub: click <b>Allow</b> and follow the browser window.</p>
   </section>
 
   <section>
@@ -131,24 +129,34 @@ Untracked files:
 
   <section>
     <h2>What goes in the repository</h2>
-    <p>Everything for the module lives inside the <code>CST1510</code> folder: each week's folder,
-      with your lab notebook, mini-project and anything else that week asks you to keep.
-      <code>git add .</code> picks it all up, so you never need to add files one by one.</p>
-    <p><b>If it's not inside <code>CST1510</code>, it won't go to GitHub.</b></p>
+    <p>Put each week's folder from Moodle inside <code>CST1510</code>, but only its <b>LAB</b> folder is uploaded:
+      your lab notebook, your mini-project and the warm-up fixes. The walkthroughs, examples and demo stay on your
+      computer. Your <code>.gitignore</code> does this for you, so <code>git add .</code> is still all you type.</p>
+    <p><b>Do your lab work inside the week's <code>LAB</code> folder.</b> Anything saved elsewhere in a week folder won't go to GitHub.</p>
   </section>
 
   <section>
     <h2>The <code>.gitignore</code> file</h2>
     <p>You made this once during setup. It sits in the <code>CST1510</code> folder and lists files Git should
       never upload. It should contain:</p>
-    <pre>__pycache__/
+    <pre># Learning material: only each week's LAB folder is uploaded
+Week */*
+!Week */LAB/
+
+# Files that should never be uploaded
+.venv/
+__pycache__/
 .ipynb_checkpoints/
+__MACOSX/
 .DS_Store
 .env</pre>
     <table>
       <tr><th>Line</th><th>What it is</th></tr>
+      <tr><td><code>Week */*</code> and <code>!Week */LAB/</code></td><td>Skip everything inside each week's folder, except the <code>LAB</code> folder. The walkthroughs, examples and demo are learning material, not your work.</td></tr>
+      <tr><td><code>.venv/</code></td><td>Your virtual environment. It's large and only works on your computer.</td></tr>
       <tr><td><code>__pycache__/</code></td><td>Files Python creates automatically when it runs your code.</td></tr>
       <tr><td><code>.ipynb_checkpoints/</code></td><td>Autosave copies of Jupyter notebooks.</td></tr>
+      <tr><td><code>__MACOSX/</code></td><td>A junk folder that appears when a zip made on a Mac is unzipped on Windows.</td></tr>
       <tr><td><code>.DS_Store</code></td><td>A hidden file macOS puts in folders. Nothing to do with your code.</td></tr>
       <tr><td><code>.env</code></td><td>Where passwords and API keys go in later weeks. These must never be uploaded.</td></tr>
     </table>

@@ -115,11 +115,18 @@ git clone https://github.com/YOUR-USERNAME/CST1510.git</pre>
     <h2>5. Add a <code>.gitignore</code> file</h2>
     <p>This tells Git which files never to upload. In VS Code, create a new file in the <code>CST1510</code> folder,
       name it <code>.gitignore</code> (starting with a dot), paste this in and save:</p>
-    <pre>.venv/
+    <pre># Learning material: only each week's LAB folder is uploaded
+Week */*
+!Week */LAB/
+
+# Files that should never be uploaded
+.venv/
 __pycache__/
 .ipynb_checkpoints/
+__MACOSX/
 .DS_Store
 .env</pre>
+    <p>The first three lines mean only your <b>LAB</b> folders are uploaded each week. The rest of each week's folder is learning material and stays on your computer.</p>
   </section>
 
   <section>
