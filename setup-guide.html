@@ -120,7 +120,7 @@ git config --global user.email "you@example.com"</pre>
     <p>Your repository holds all your work for the whole module, Week 0 to Week 12. You create it once.</p>
     <ol>
       <li>On GitHub, click <b>+</b> (top right) &rarr; <b>New repository</b>.</li>
-      <li>Name it <code>CST1510</code>, choose <b>Private</b>, and tick <b>Add a README file</b>.</li>
+      <li>Name it <code>CST1510</code>, choose <b>Public</b>, and tick <b>Add a README file</b>.</li>
       <li>Click <b>Create repository</b>, then click the green <b>Code</b> button and copy the HTTPS URL.</li>
       <li>In the terminal, go to Documents and clone it:</li>
     </ol>
@@ -129,8 +129,7 @@ git clone https://github.com/YOUR-USERNAME/CST1510.git</pre></div>
     <div class="os" data-os-panel="mac"><pre>cd ~/Documents
 git clone https://github.com/YOUR-USERNAME/CST1510.git</pre></div>
     <p>This creates the folder <code>Documents/CST1510</code>, already linked to GitHub. Don't create the folder yourself first.</p>
-    <div class="os active" data-os-panel="windows"><div class="note"><p>Because the repository is private, a browser window opens asking you to sign in to GitHub. If <code>cd Documents</code> fails, your Documents folder may be in OneDrive: try <code>cd ~\OneDrive\Documents</code>.</p></div></div>
-    <div class="os" data-os-panel="mac"><div class="note"><p>Because the repository is private, Git asks you to sign in. Enter your GitHub username, and when it asks for a password paste a <b>personal access token</b> (see Common problems). Your Mac remembers it afterwards.</p></div></div>
+    <div class="os active" data-os-panel="windows"><div class="note"><p>If <code>cd Documents</code> fails, your Documents folder may be in OneDrive: try <code>cd ~\OneDrive\Documents</code>.</p></div></div>
     <p><b>Check:</b> <code>Documents/CST1510</code> exists and contains <code>README.md</code>.</p>
   </section>
 
@@ -183,9 +182,10 @@ python3 -m pip install -r requirements.txt</pre></div>
 git add .
 git commit -m "Week 0 setup"
 git push</pre>
-    <p>Open your repository on GitHub and check you can see the Week 00 folder and <code>.gitignore</code>.
-      Then go to <b>Settings &rarr; Collaborators &rarr; Add people</b> and add your lecturer (<code>anna29</code>),
-      so the repository link you submit can be opened.</p>
+    <p>The first time you push, Git asks you to sign in to GitHub:</p>
+    <div class="os active" data-os-panel="windows"><div class="note"><p>A browser window opens. Sign in and click <b>Authorize</b>. Windows remembers it afterwards.</p></div></div>
+    <div class="os" data-os-panel="mac"><div class="note"><p>Enter your GitHub username. When it asks for a password, paste a <b>personal access token</b>, not your normal password (see Common problems). Your Mac remembers it afterwards.</p></div></div>
+    <p>Open your repository on GitHub and check you can see the Week 00 folder and <code>.gitignore</code>.</p>
     <p>You're ready for Week 1. From now on, follow the <a href="git-and-github-guide.html">Git and GitHub Guide</a>
       at the end of every lab.</p>
   </section>
