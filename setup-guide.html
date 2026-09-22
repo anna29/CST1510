@@ -62,15 +62,17 @@
 <div class="page">
   <div class="breadcrumb">CST1510</div>
   <h1>Setup Guide</h1>
-  <p class="lede">Seven steps, once, before Week 1. Choose your computer below and the commands will match it.</p>
+  <p class="lede">Seven steps, once, before Week 1. Choose Windows, macOS or Linux below and the commands will match your computer.</p>
 
   <div class="tabs" role="group" aria-label="Operating system">
     <button class="active" data-os="windows" aria-pressed="true">Windows</button>
     <button data-os="mac" aria-pressed="false">macOS</button>
+    <button data-os="linux" aria-pressed="false">Linux</button>
   </div>
 
   <section>
     <h2>1. Install three things</h2>
+    <div class="os active" data-os-panel="windows mac">
     <ul>
       <li><b>Python</b> from <a href="https://www.python.org/downloads/">python.org/downloads</a>.<span class="os active" data-os-panel="windows"> On the first screen, tick <b>Add python.exe to PATH</b>.</span></li>
       <li><b>VS Code</b> from <a href="https://code.visualstudio.com/">code.visualstudio.com</a>. Then open Extensions
@@ -78,6 +80,15 @@
         and install <b>Python</b> and <b>Jupyter</b>, both by Microsoft.</li>
       <li><b>Git</b> from <a href="https://git-scm.com/downloads">git-scm.com/downloads</a>, accepting the defaults.</li>
     </ul>
+    </div>
+    <div class="os" data-os-panel="linux">
+      <p>On Ubuntu or Debian, install Python, Git and the notebook kernel in one go:</p>
+      <pre>sudo apt update
+sudo apt install python3 python3-venv python3-ipykernel git</pre>
+      <p>(On other distributions, install the same packages with your package manager, e.g. <code>dnf</code>.)</p>
+      <p>Then install <b>VS Code</b> from <a href="https://code.visualstudio.com/">code.visualstudio.com</a> (the <code>.deb</code> file on Ubuntu or Debian).
+        Open Extensions (<code>Ctrl + Shift + X</code>) and install <b>Python</b> and <b>Jupyter</b>, both by Microsoft.</p>
+    </div>
   </section>
 
   <section>
@@ -88,7 +99,7 @@
 
   <section>
     <h2>3. Clone it into Documents</h2>
-    <p>Open <span class="os active" data-os-panel="windows"><b>PowerShell</b></span><span class="os" data-os-panel="mac"><b>Terminal</b></span> and run:</p>
+    <p>Open <span class="os active" data-os-panel="windows"><b>PowerShell</b></span><span class="os" data-os-panel="mac"><b>Terminal</b></span><span class="os" data-os-panel="linux"><b>Terminal</b> (<code>Ctrl + Alt + T</code>)</span> and run:</p>
     <pre>git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 cd Documents
@@ -135,7 +146,7 @@ __MACOSX/
     <pre>print("Hello from CST1510!")</pre>
     <p>Run it:</p>
     <div class="os active" data-os-panel="windows"><pre>python hello.py</pre></div>
-    <div class="os" data-os-panel="mac"><pre>python3 hello.py</pre></div>
+    <div class="os" data-os-panel="mac linux"><pre>python3 hello.py</pre></div>
   </section>
 
   <section>
@@ -156,6 +167,7 @@ git push</pre>
       <tr><td><code>python</code> not found (Windows)</td><td>Reinstall Python and tick <b>Add python.exe to PATH</b>.</td></tr>
       <tr><td><code>python3</code> opens the Microsoft Store (Windows)</td><td>Use <code>python</code> on Windows.</td></tr>
       <tr><td><code>fatal: not a git repository</code></td><td>Open the <code>CST1510</code> folder in VS Code and use its terminal.</td></tr>
+      <tr><td><code>externally-managed-environment</code> when installing ipykernel (Linux)</td><td>Install it with apt instead: <code>sudo apt install python3-ipykernel</code> (step 1).</td></tr>
       <tr><td>A notebook won't run</td><td>Click <b>Select Kernel</b> (top right) and click <b>Install</b> if asked about ipykernel.</td></tr>
     </table>
   </section>
@@ -167,10 +179,10 @@ git push</pre>
     <div class="os active" data-os-panel="windows"><pre>python -m venv .venv
 .venv\Scripts\activate
 python -m pip install -r "Week 00 - Orientation and Setup/requirements.txt"</pre></div>
-    <div class="os" data-os-panel="mac"><pre>python3 -m venv .venv
+    <div class="os" data-os-panel="mac linux"><pre>python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r "Week 00 - Orientation and Setup/requirements.txt"</pre></div>
-    <p><b>2. Tell VS Code to use it:</b> <span class="os active" data-os-panel="windows"><code>Ctrl + Shift + P</code></span><span class="os" data-os-panel="mac"><code>Cmd + Shift + P</code></span>
+    <p><b>2. Tell VS Code to use it:</b> <span class="os active" data-os-panel="windows linux"><code>Ctrl + Shift + P</code></span><span class="os" data-os-panel="mac"><code>Cmd + Shift + P</code></span>
       &rarr; <b>Python: Select Interpreter</b> &rarr; pick <code>.venv</code>. In notebooks, <b>Select Kernel</b> &rarr; <code>.venv</code>.</p>
     <p><b>3. Check it:</b></p>
     <pre>python "Week 00 - Orientation and Setup/verify_setup.py"</pre>
@@ -192,14 +204,17 @@ python -m pip install -r "Week 00 - Orientation and Setup/requirements.txt"</pre
         button.setAttribute("aria-pressed", on ? "true" : "false");
       });
       panels.forEach(function (panel) {
-        panel.classList.toggle("active", panel.dataset.osPanel === name);
+        panel.classList.toggle("active", panel.dataset.osPanel.split(" ").indexOf(name) !== -1);
       });
     }
     buttons.forEach(function (button) {
       button.addEventListener("click", function () { setOS(button.dataset.os); });
     });
     var ua = navigator.userAgent || "";
-    setOS(/Mac/i.test(ua) && !/Windows/i.test(ua) ? "mac" : "windows");
+    if (/Windows/i.test(ua)) { setOS("windows"); }
+    else if (/Mac/i.test(ua) && !/iPhone|iPad/i.test(ua)) { setOS("mac"); }
+    else if (/Linux/i.test(ua) && !/Android/i.test(ua)) { setOS("linux"); }
+    else { setOS("windows"); }
   }());
 </script>
 </body>
