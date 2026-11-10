@@ -93,6 +93,7 @@ sudo apt install python3 python3-venv python3-ipykernel git</pre>
 
   <section>
     <h2>2. Create your GitHub repository</h2>
+    <p><i>This repository, <code>CST1510</code>, is for coursework 1 (Weeks 1 to 7). Coursework 2 gets its own repository in Week 8.</i></p>
     <p>Create a free account at <a href="https://github.com/">github.com</a>. Then click <b>+</b> (top right) &rarr;
       <b>New repository</b>, name it <code>CST1510</code>, tick <b>Add a README file</b>, and click <b>Create repository</b>.</p>
   </section>
@@ -189,6 +190,58 @@ python -m pip install -r "Week 00 - Orientation and Setup/requirements.txt"</pre
     <p>Every line should say <code>OK</code>. Then push as usual.</p>
     <div class="os active" data-os-panel="windows"><div class="note"><p>If Windows says <code>running scripts is disabled</code>, run
       <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>, answer <code>Y</code>, and try again.</p></div></div>
+  </section>
+
+  <section>
+    <h2>Week 8 (CW2): your project repository</h2>
+    <p><i>You don't need this until Week 8. Weeks 1 to 7 (coursework 1) live in your <code>CST1510</code> repository.
+      Coursework 2 is <b>one</b> application that you grow a little each week, and it gets its own repository,
+      <code>CST1510_CW2</code>. Only the project files go into it. The lab notebooks are step-by-step instructions: they stay
+      in your course folder and are never uploaded.</i></p>
+    <p><b>1. Create the repository.</b> On github.com click <b>+</b> (top right) &rarr; <b>New repository</b>, name it
+      <code>CST1510_CW2</code>, tick <b>Add a README file</b>, and click <b>Create repository</b>.</p>
+    <p><b>2. Clone it</b> next to <code>CST1510</code> (use your own GitHub username):</p>
+    <pre>cd Documents
+git clone https://github.com/YOUR-USERNAME/CST1510_CW2.git</pre>
+    <p><b>3. Open it in VS Code:</b> <b>File &rarr; Open Folder</b> &rarr; <code>CST1510_CW2</code>, then <b>Terminal &rarr; New Terminal</b>.
+      Use this terminal for all of coursework 2. Open each week's lab notebook from your course folder with
+      <b>File &rarr; Open File</b> (do not copy it into <code>CST1510_CW2</code>).</p>
+    <p><b>4. Create the environment and install the libraries</b> (once), in that terminal. It uses the same <code>requirements.txt</code> as before, from your <code>CST1510</code> folder (next to <code>CST1510_CW2</code> in Documents):</p>
+    <div class="os active" data-os-panel="windows"><pre>python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -r "../CST1510/Week 00 - Orientation and Setup/requirements.txt"</pre></div>
+    <div class="os" data-os-panel="mac linux"><pre>python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r "../CST1510/Week 00 - Orientation and Setup/requirements.txt"</pre></div>
+    <p>Then tell VS Code to use it: <span class="os active" data-os-panel="windows linux"><code>Ctrl + Shift + P</code></span><span class="os" data-os-panel="mac"><code>Cmd + Shift + P</code></span>
+      &rarr; <b>Python: Select Interpreter</b> &rarr; pick the <code>.venv</code> in <code>CST1510_CW2</code>. In each lab notebook:
+      <b>Select Kernel</b> &rarr; <b>Python Environments</b> &rarr; that same <code>.venv</code>.
+      Check it with <code>python "../CST1510/Week 00 - Orientation and Setup/verify_setup.py"</code>: every line should say <code>OK</code>.</p>
+    <p><b>5. Add a <code>.gitignore</code></b> to <code>CST1510_CW2</code>. Create a new file named <code>.gitignore</code>, paste this in and save.
+      It keeps your users, your database and your API key off GitHub:</p>
+    <pre>.venv/
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
+.DS_Store
+.env
+DATA/app.db
+DATA/users.txt
+.streamlit/secrets.toml
+practice/</pre>
+    <p><b>6. Keep the CW2 lab folders out of your <code>CST1510</code> repository.</b> If you store the Week 8 to 12 folders inside
+      <code>CST1510</code>, add these lines to the end of <b>that</b> repository's <code>.gitignore</code> (they come after the
+      rule that uploads <code>LAB</code> folders, so they win):</p>
+    <pre># CW2 weeks: the project is in CST1510_CW2, nothing from these folders is uploaded
+Week 08*/
+Week 09*/
+Week 10*/
+Week 11*/
+Week 12*/</pre>
+    <p><b>7. Check it.</b> At the end of each lab, in the <code>CST1510_CW2</code> terminal run <code>git add .</code>,
+      <code>git commit -m "Week N: ..."</code> and <code>git push</code> (the lab gives you the exact message). Run <code>git status</code> first:
+      you should see your <code>.py</code> files, but <b>never</b> a <code>.db</code> file, <code>users.txt</code>, <code>secrets.toml</code> or <code>.env</code>.
+      If one appears, check the lines above for typos before you commit.</p>
   </section>
 
   <footer>CST1510 - Setup Guide</footer>
