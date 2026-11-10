@@ -97,7 +97,7 @@
     <a href="#p1" class="toc-topic">Part 1. Calling a Web API</a>
 <a href="#p1-t1-1-a-get-request-asks-a-url-for-something" class="toc-sub">1. A GET request asks a URL for something</a>
 <a href="#p1-t1-2-status-codes-tell-you-what-happened" class="toc-sub">2. Status codes tell you what happened</a>
-<a href="#p1-t1-3-json-turns-the-response-into-python-data" class="toc-sub">3. <code>.json()</code> turns the response into Python data</a>
+<a href="#p1-t1-3-what-is-json-and-what-does-json-do" class="toc-sub">3. What is JSON, and what does <code>.json()</code> do?</a>
 <a href="#p1-t1-4-query-parameters-and-always-set-a-timeout" class="toc-sub">4. Query parameters, and always set a timeout</a>
 <a href="#p1-t1-5-handling-a-missing-field-safely" class="toc-sub">5. Handling a missing field safely</a>
 <a href="#p1-t1-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
@@ -108,10 +108,15 @@
 <a href="#p2-t2-2-requests-stringio-the-reliable-way-into-pandas" class="toc-sub">2. <code>requests</code> + <code>StringIO</code> — the reliable way into pandas</a>
 <a href="#p2-t2-3-pd-read-csv-url-directly-shorter-not-always-reliable" class="toc-sub">3. <code>pd.read_csv(url)</code> directly — shorter, not always reliable</a>
 <a href="#p2-t2-4-kaggle-and-your-own-hosted-data" class="toc-sub">4. Kaggle, and your own hosted data</a>
+<a href="#p2-t2-5-nested-json-pd-json-normalize" class="toc-sub">5. Nested JSON: <code>pd.json_normalize()</code></a>
+<a href="#p2-t2-5b-a-column-that-holds-a-list-apply" class="toc-sub">5b. A column that holds a list: <code>.apply()</code></a>
+<a href="#p2-t2-6-tidying-a-table-choose-and-rename-columns" class="toc-sub">6. Tidying a table: choose and rename columns</a>
+<a href="#p2-t2-7-tidying-a-table-missing-values-dates-and-ranges" class="toc-sub">7. Tidying a table: missing values, dates and ranges</a>
+<a href="#p2-t2-8-where-files-live-pathlib" class="toc-sub">8. Where files live: <code>pathlib</code></a>
 <a href="#p2-t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
 <a href="#p2-t2-common-mistakes" class="toc-sub">Common mistakes</a>
 <a href="#p2-t2-recap" class="toc-sub">Recap</a>
-<a href="#p3" class="toc-topic">Part 3. Light Regex</a>
+<a href="#p3" class="toc-topic">Part 3. Light Regex (optional extra)</a>
 <a href="#p3-t3-1-why-week-7-s-tools-are-not-enough-here" class="toc-sub">1. Why Week 7's tools are not enough here</a>
 <a href="#p3-t3-2-re-search-returns-none-when-nothing-matches" class="toc-sub">2. <code>re.search()</code> returns <code>None</code> when nothing matches</a>
 <a href="#p3-t3-3-re-findall-every-match-as-a-list" class="toc-sub">3. <code>re.findall()</code> — every match, as a list</a>
@@ -121,7 +126,7 @@
 <a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
 <a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
 <a href="#p3-t3-recap" class="toc-sub">Recap</a>
-<a href="#p4" class="toc-topic">Part 4. From Functions to a Class</a>
+<a href="#p4" class="toc-topic">Part 4. From Functions to a Class (optional extra)</a>
 <a href="#p4-t4-1-before-loose-functions-and-a-stray-variable" class="toc-sub">1. Before: loose functions and a stray variable</a>
 <a href="#p4-t4-2-after-one-class-bundling-the-same-data-and-logic" class="toc-sub">2. After: one class, bundling the same data and logic</a>
 <a href="#p4-t4-3-what-actually-changed" class="toc-sub">3. What actually changed</a>
@@ -152,11 +157,57 @@ print(response.status_code)</code></pre></div><div class="diagram"><pre>your cod
     │   (status code + JSON)</pre></div>
 </section><section class="topic" id="p1-t1-2-status-codes-tell-you-what-happened"><h2><span class="num">2.</span>Status codes tell you what happened</h2><p>200s = OK. 400s = you got something wrong. 500s = their fault, not yours.</p>
 <div class="cell"><pre class="code"><code>print(requests.get("https://api.github.com/orgs/python").status_code)              # 200
-print(requests.get("https://api.github.com/this-does-not-exist-xyz").status_code)     # 404</code></pre></div></section><section class="topic" id="p1-t1-3-json-turns-the-response-into-python-data"><h2><span class="num">3.</span><code>.json()</code> turns the response into Python data</h2><p>Almost every API replies in JSON — which looks exactly like a dict, or a list
-of dicts.</p>
+print(requests.get("https://api.github.com/this-does-not-exist-xyz").status_code)     # 404</code></pre></div></section><section class="topic" id="p1-t1-3-what-is-json-and-what-does-json-do"><h2><span class="num">3.</span>What is JSON, and what does <code>.json()</code> do?</h2>
+<p><strong>JSON</strong> (JavaScript Object Notation) is the plain-text format that almost every API uses to send data. It is only text, but it is written so that it looks like Python dictionaries and lists:</p>
+<table class="booktabs">
+<thead>
+<tr>
+<th>JSON text</th>
+<th>Python, after <code>.json()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{"name": "Rex", "age": 4}</code> (an <em>object</em>)</td>
+<td>a dictionary</td>
+</tr>
+<tr>
+<td><code>["dog", "cat"]</code> (an <em>array</em>)</td>
+<td>a list</td>
+</tr>
+<tr>
+<td><code>"Rex"</code></td>
+<td>a string</td>
+</tr>
+<tr>
+<td><code>4</code> or <code>4.5</code></td>
+<td>an int or a float</td>
+</tr>
+<tr>
+<td><code>true</code> / <code>false</code></td>
+<td><code>True</code> / <code>False</code></td>
+</tr>
+<tr>
+<td><code>null</code></td>
+<td><code>None</code></td>
+</tr>
+</tbody>
+</table>
+<p>A few rules: text is always in <strong>double</strong> quotes, keys are always text, and there are no trailing commas. Values can be nested: an object inside an object, or a list of objects. A list of objects is exactly what a table of records looks like.</p>
+<p>The reply from <code>requests</code> is one long piece of <strong>text</strong>. <code>response.json()</code> turns that text into real Python dictionaries and lists, so you can use <code>data["login"]</code> or loop over the records.</p>
+<div class="cell"><pre class="code"><code>import json
+
+text = '{"name": "Rex", "age": 4, "vaccinated": true, "owner": null, "tags": ["dog", "friendly"]}'
+print(type(text))                    # just text
+
+pet = json.loads(text)               # this is what response.json() does for you
+print(type(pet))                     # a dictionary
+print(pet["name"], pet["vaccinated"], pet["owner"], pet["tags"][0])</code></pre></div>
+<p>The same thing with a real API:</p>
 <div class="cell"><pre class="code"><code>response = requests.get("https://api.github.com/orgs/python")
 data = response.json()
-print(data["login"], data["public_repos"])</code></pre></div></section><section class="topic" id="p1-t1-4-query-parameters-and-always-set-a-timeout"><h2><span class="num">4.</span>Query parameters, and always set a timeout</h2><p>The <code>params</code> dict becomes <code>?key=value</code> on the URL for you. A <code>timeout</code> stops a
+print(data["login"], data["public_repos"])</code></pre></div>
+</section><section class="topic" id="p1-t1-4-query-parameters-and-always-set-a-timeout"><h2><span class="num">4.</span>Query parameters, and always set a timeout</h2><p>The <code>params</code> dict becomes <code>?key=value</code> on the URL for you. A <code>timeout</code> stops a
 dead server from hanging your program forever.</p>
 <div class="cell"><pre class="code"><code>response = requests.get(
     "https://api.github.com/orgs/python/repos",
@@ -173,99 +224,106 @@ repo_count = data.get("repo_count", "unknown")
 print(repo_count)
 
 # safe to use the same way even on a field that does exist:
-print(data.get("public_repos", "unknown"))</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+print(data.get("public_repos", "unknown"))</code></pre></div></section>
+<section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>pulling a public dataset's metadata from an API before downloading it</td>
+<td><strong>AI / Data Science</strong></td>
+<td>pulling a public dataset's metadata from an API before downloading it</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>pulling a threat-feed or breach-notification API</td>
+<td><strong>Cyber Security</strong></td>
+<td>pulling a threat-feed or breach-notification API</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>pulling live status from a monitoring or ticketing API</td>
+<td><strong>IT</strong></td>
+<td>pulling live status from a monitoring or ticketing API</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>indexing <code>response</code> directly, e.g. <code>response[&quot;login&quot;]</code></td>
-  <td><code>TypeError: 'Response' object is not subscriptable</code></td>
-  <td>call <code>.json()</code> first</td>
+<td>indexing <code>response</code> directly, e.g. <code>response["login"]</code></td>
+<td><code>TypeError: 'Response' object is not subscriptable</code></td>
+<td>call <code>.json()</code> first</td>
 </tr>
 <tr>
-  <td>a key that does not exist in the JSON</td>
-  <td><code>KeyError</code></td>
-  <td>print the whole dict first and check the real field names; use <code>.get(key, default)</code> if the field is genuinely optional</td>
+<td>a key that does not exist in the JSON</td>
+<td><code>KeyError</code></td>
+<td>print the whole dict first and check the real field names; use <code>.get(key, default)</code> if the field is genuinely optional</td>
 </tr>
 <tr>
-  <td>no <code>timeout=</code></td>
-  <td>the program can hang indefinitely on a dead server</td>
-  <td>always set one</td>
+<td>no <code>timeout=</code></td>
+<td>the program can hang indefinitely on a dead server</td>
+<td>always set one</td>
 </tr>
 <tr>
-  <td>forgetting <code>params=</code> and hand-building the URL string</td>
-  <td>works, but fragile and easy to get wrong</td>
-  <td>let <code>requests</code> build the query string</td>
+<td>forgetting <code>params=</code> and hand-building the URL string</td>
+<td>works, but fragile and easy to get wrong</td>
+<td>let <code>requests</code> build the query string</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_get_requests.py</code> — GET, status codes, .json(), params, timeout
 <code>examples/02_handling_api_errors.py</code> — raise_for_status(), timeouts, checking status yourself, missing fields
 Docs: <a href="https://requests.readthedocs.io/en/latest/">requests documentation</a></p>
-</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p1-t1-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>ask a service for data</td>
-  <td><code>requests.get(url)</code></td>
+<td>ask a service for data</td>
+<td><code>requests.get(url)</code></td>
 </tr>
 <tr>
-  <td>check it worked</td>
-  <td><code>.status_code</code></td>
+<td>check it worked</td>
+<td><code>.status_code</code></td>
 </tr>
 <tr>
-  <td>get Python data back</td>
-  <td><code>.json()</code></td>
+<td>get Python data back</td>
+<td><code>.json()</code></td>
 </tr>
 <tr>
-  <td>ask a more specific question</td>
-  <td><code>params={{...}}</code></td>
+<td>ask a more specific question</td>
+<td><code>params={{...}}</code></td>
 </tr>
 <tr>
-  <td>avoid hanging forever</td>
-  <td><code>timeout=10</code></td>
+<td>avoid hanging forever</td>
+<td><code>timeout=10</code></td>
 </tr>
 <tr>
-  <td>survive a field that might not be there</td>
-  <td><code>data.get(key, default)</code></td>
+<td>survive a field that might not be there</td>
+<td><code>data.get(key, default)</code></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — downloading a real file instead of calling an API.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">Reading Files from the Web</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a> · <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html">pandas.read_csv</a></p><section class="topic"><p>Not every dataset needs an API — sometimes it is a file sitting on the web,
 waiting to be downloaded.</p><section class="topic" id="p2-t2-1-a-raw-github-url-serves-the-real-file"><h2><span class="num">1.</span>A "raw" GitHub URL serves the real file</h2><p><code>github.com/user/repo/blob/...</code> shows a formatted web page.
 <code>raw.githubusercontent.com/user/repo/branch/...</code> gives you the actual file.</p>
@@ -292,92 +350,278 @@ method always works instead.</p>
 once it is a <code>.csv</code> on disk, everything from here works the same. A CSV you
 commit to your <strong>own</strong> GitHub repo works exactly like Topic 2's example — same
 mechanism, nothing special about who owns it.</p>
-</section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+</section><section class="topic" id="p2-t2-5-nested-json-pd-json-normalize"><h2><span class="num">5.</span>Nested JSON: <code>pd.json_normalize()</code></h2>
+<p>Many APIs return records that contain other records. A plain <code>pd.DataFrame(records)</code> would leave a whole dictionary inside one
+cell. <code>pd.json_normalize()</code> flattens the nesting into separate columns, named with a dot: <code>properties.mag</code> means "the <code>mag</code> value
+inside <code>properties</code>".</p>
+<p>Your project's <code>make_table</code> function in <code>fetch_data.py</code> uses this for every JSON dataset.</p>
+<div class="cell"><pre class="code"><code>import pandas as pd
+
+records = [
+    {"id": "a1", "properties": {"mag": 4.5, "place": "Chile", "time": 1700000000000}},
+    {"id": "a2", "properties": {"mag": None, "place": "Japan", "time": 1700003600000}},
+    {"id": "a3", "properties": {"mag": 5.1, "place": "Peru", "time": 1700007200000}},
+]
+
+df = pd.json_normalize(records)
+print(df.columns.tolist())
+df</code></pre></div>
+<p>Dots in column names cause trouble later (SQL treats a dot as a separator). The simplest fix is to ask <code>json_normalize</code> for an underscore
+instead, with <code>sep="_"</code>:</p>
+<div class="cell"><pre class="code"><code>df = pd.json_normalize(records, sep="_")
+print(df.columns.tolist())          # properties_mag, properties_place ...</code></pre></div>
+</section>
+<section class="topic" id="p2-t2-5b-a-column-that-holds-a-list-apply"><h2><span class="num">5b.</span>A column that holds a list: <code>.apply()</code></h2>
+<p>Sometimes one cell holds a <strong>list</strong>. The earthquake API stores the position as <code>[longitude, latitude, depth]</code>. <code>.apply()</code> runs a small function on every
+value of a column, and <code>lambda</code> is a one-line function with no name:</p>
+<pre class="code"><code>df[&quot;depth_km&quot;] = df[&quot;coordinates&quot;].apply(lambda coords: coords[2])
+</code></pre>
+<p>Read it as: <em>for each <code>coords</code> in the column, give back item number 2.</em></p>
+<div class="cell"><pre class="code"><code>quakes = pd.DataFrame({"place": ["Chile", "Japan"], "coordinates": [[-70.1, -33.4, 12.0], [139.7, 35.7, 30.5]]})
+quakes["depth_km"] = quakes["coordinates"].apply(lambda coords: coords[2])
+quakes</code></pre></div>
+</section>
+<section class="topic" id="p2-t2-6-tidying-a-table-choose-and-rename-columns"><h2><span class="num">6.</span>Tidying a table: choose and rename columns</h2>
+<p>Fetched data usually has more columns than you need, with awkward names. Three tools do most of the work:</p>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Task</th>
+<th>Code</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>downloading a Kaggle dataset for analysis</td>
+<td>rename some columns</td>
+<td><code>df.rename(columns={"old": "new"})</code></td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>downloading a public breach or phishing-domain list</td>
+<td>keep only some columns, in an order you choose</td>
+<td><code>df[["place", "mag", "time"]]</code></td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>downloading a public device/config inventory file</td>
+<td>find the columns of one kind</td>
+<td><code>df.select_dtypes("number")</code>, and <code>df.select_dtypes(exclude="number")</code> for everything else</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+<p><code>select_dtypes</code> is how the lab checks that your data has at least one number column and one text column.</p>
+<div class="cell"><pre class="code"><code>df = df.rename(columns={"properties_mag": "mag", "properties_place": "place", "properties_time": "time"})
+df = df[["place", "mag", "time"]]
+
+print("number columns:", df.select_dtypes("number").columns.tolist())
+print("text columns:  ", df.select_dtypes("object").columns.tolist())
+df</code></pre></div>
+</section>
+<section class="topic" id="p2-t2-7-tidying-a-table-missing-values-dates-and-ranges"><h2><span class="num">7.</span>Tidying a table: missing values, dates and ranges</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Task</th>
+<th>Code</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>using the <code>blob</code> (web page) URL instead of <code>raw</code></td>
-  <td>HTML, not data</td>
-  <td>swap <code>blob</code> for <code>raw</code>, use <code>raw.githubusercontent.com</code></td>
+<td>count missing values in each column</td>
+<td><code>df.isna().sum()</code></td>
 </tr>
 <tr>
-  <td><code>pd.read_csv(url)</code> failing with an SSL error</td>
-  <td><code>SSL: CERTIFICATE_VERIFY_FAILED</code></td>
-  <td>use <code>requests</code> + <code>StringIO</code> instead</td>
+<td>drop rows where a column is missing</td>
+<td><code>df.dropna(subset=["mag"])</code></td>
 </tr>
 <tr>
-  <td>forgetting <code>StringIO</code> and passing <code>response.text</code> straight to <code>read_csv</code></td>
-  <td><code>TypeError</code></td>
-  <td>wrap it: <code>StringIO(response.text)</code></td>
+<td>turn milliseconds since 1970 into dates</td>
+<td><code>pd.to_datetime(df["time"], unit="ms")</code></td>
 </tr>
 <tr>
-  <td>assuming Kaggle is one line like a raw URL</td>
-  <td>stuck without an account/token</td>
-  <td>Kaggle needs <code>pip install kaggle</code> and a token first</td>
+<td>write a date as text in a format you choose</td>
+<td><code>df["time"].dt.strftime("%Y-%m-%d %H:%M:%S")</code></td>
+</tr>
+<tr>
+<td>keep rows whose value lies inside a range</td>
+<td><code>df[df["mag"].between(4, 5)]</code></td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<p><code>dropna(subset=...)</code> only looks at the columns you name. Plain <code>dropna()</code> removes any row with a gap anywhere, which can delete
+most of a wide table. Dates are saved as text (<code>strftime</code>) because a database stores dates as text.</p>
+<div class="cell"><pre class="code"><code>print(df.isna().sum())
+
+df = df.dropna(subset=["mag"])
+df["time"] = pd.to_datetime(df["time"], unit="ms").dt.strftime("%Y-%m-%d %H:%M:%S")
+print(df)
+
+print(df[df["mag"].between(4, 5)])</code></pre></div>
+</section>
+<section class="topic" id="p2-t2-8-where-files-live-pathlib"><h2><span class="num">8.</span>Where files live: <code>pathlib</code></h2>
+<p>A file location written as a string (<code>"data/raw.csv"</code>) depends on the folder the program was started from. A <code>Path</code> built from the
+location of the code itself does not. This is how your project's <code>fetch_data.py</code> finds its <code>DATA</code> folder, wherever you run it from.</p>
+<table class="booktabs">
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Path(__file__).parent</code></td>
+<td>the folder this <code>.py</code> file is in (in a script)</td>
+</tr>
+<tr>
+<td><code>folder / "raw.csv"</code></td>
+<td>join a folder and a file name, correctly on every operating system</td>
+</tr>
+<tr>
+<td><code>path.exists()</code></td>
+<td>does it exist?</td>
+</tr>
+<tr>
+<td><code>path.parent.mkdir(parents=True, exist_ok=True)</code></td>
+<td>create the folder if it is missing</td>
+</tr>
+</tbody>
+</table>
+<div class="cell"><pre class="code"><code>import tempfile
+from pathlib import Path
+
+folder = Path(tempfile.mkdtemp())          # in a script you would use Path(__file__).parent
+target = folder / "data" / "tidy.csv"
+
+print(target.exists())
+target.parent.mkdir(parents=True, exist_ok=True)
+df.to_csv(target, index=False)
+print(target.exists(), "|", target.name, "|", target.parent.name)</code></pre></div>
+<p><code>examples/03_nested_json_and_tidying.py</code> puts sections 5 to 8 together in one script. Your lab's <code>tidy()</code> method is this same sequence applied to your own data.</p>
+</section>
+
+<section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
+<thead>
+<tr>
+<th>Field</th>
+<th>Looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AI / Data Science</strong></td>
+<td>downloading a Kaggle dataset for analysis</td>
+</tr>
+<tr>
+<td><strong>Cyber Security</strong></td>
+<td>downloading a public breach or phishing-domain list</td>
+</tr>
+<tr>
+<td><strong>IT</strong></td>
+<td>downloading a public device/config inventory file</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
+<thead>
+<tr>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>using the <code>blob</code> (web page) URL instead of <code>raw</code></td>
+<td>HTML, not data</td>
+<td>swap <code>blob</code> for <code>raw</code>, use <code>raw.githubusercontent.com</code></td>
+</tr>
+<tr>
+<td><code>pd.read_csv(url)</code> failing with an SSL error</td>
+<td><code>SSL: CERTIFICATE_VERIFY_FAILED</code></td>
+<td>use <code>requests</code> + <code>StringIO</code> instead</td>
+</tr>
+<tr>
+<td>forgetting <code>StringIO</code> and passing <code>response.text</code> straight to <code>read_csv</code></td>
+<td><code>TypeError</code></td>
+<td>wrap it: <code>StringIO(response.text)</code></td>
+</tr>
+<tr>
+<td>assuming Kaggle is one line like a raw URL</td>
+<td>stuck without an account/token</td>
+<td>Kaggle needs <code>pip install kaggle</code> and a token first</td>
+</tr>
+<tr>
+<td><code>dropna()</code> with no <code>subset</code></td>
+<td>most rows disappear from a wide table</td>
+<td>name the columns that matter: <code>subset=[...]</code></td>
+</tr>
+<tr>
+<td>a column name with a dot</td>
+<td><code>KeyError</code> when you write <code>df["properties.mag"]</code> wrongly, or SQL errors later</td>
+<td>replace dots with <code>_</code> straight after <code>json_normalize</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Go deeper</h2>
 <p><code>examples/01_downloading_a_csv.py</code> — raw URLs, requests + StringIO, the SSL gotcha
 <code>examples/02_kaggle_and_your_own_data.py</code> — Kaggle's flow, your own hosted data, the checklist
-Docs: <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">requests documentation</a></p>
-</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
+Docs: <a href="https://requests.readthedocs.io/en/latest/">requests documentation</a></p>
+</section>
+<section class="topic" id="p2-t2-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>get the real file, not a web page</td>
-  <td>a <code>raw.githubusercontent.com</code> URL</td>
+<td>get the real file, not a web page</td>
+<td>a <code>raw.githubusercontent.com</code> URL</td>
 </tr>
 <tr>
-  <td>load it into pandas reliably</td>
-  <td><code>requests</code> + <code>StringIO</code></td>
+<td>load it into pandas reliably</td>
+<td><code>requests</code> + <code>StringIO</code></td>
 </tr>
 <tr>
-  <td>know the shortcut's risk</td>
-  <td><code>pd.read_csv(url)</code> can fail with an SSL error</td>
+<td>know the shortcut's risk</td>
+<td><code>pd.read_csv(url)</code> can fail with an SSL error</td>
 </tr>
 <tr>
-  <td>check a dataset is worth using</td>
-  <td>the checklist: rows, columns, a messy column</td>
+<td>check a dataset is worth using</td>
+<td>the checklist: rows, columns, a messy column</td>
+</tr>
+<tr>
+<td>flatten nested JSON</td>
+<td><code>pd.json_normalize(records, sep="_")</code></td>
+</tr>
+<tr>
+<td>run a function on a column</td>
+<td><code>df["x"].apply(lambda v: ...)</code></td>
+</tr>
+<tr>
+<td>rename and choose columns</td>
+<td><code>df.rename(columns={...})</code>, <code>df[[...]]</code></td>
+</tr>
+<tr>
+<td>find number or text columns</td>
+<td><code>df.select_dtypes("number")</code></td>
+</tr>
+<tr>
+<td>handle gaps, dates and ranges</td>
+<td><code>dropna(subset=...)</code>, <code>to_datetime</code>, <code>strftime</code>, <code>between</code></td>
+</tr>
+<tr>
+<td>build file locations</td>
+<td><code>Path(__file__).parent / "data"</code></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Next:</strong> Topic 3 — finding a pattern in text that has no separator to split on.</p>
-</section></section>
-<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Light Regex</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/re.html">re module</a></p><section class="topic"><p>Week 7's string methods need to know the exact text. This week: finding
+<p><strong>Next:</strong> Topic 3 is an optional extra (finding a pattern in text that has no separator to split on). Your lab comes next.</p>
+</section>
+</section>
+<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Light Regex (optional extra)</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/re.html">re module</a></p><section class="topic"><blockquote><p><b>Optional extra.</b> You do not need this part for the Week 8 lab. Come back to it when you meet messy text that has no separator to split on.</p></blockquote><p>Week 7's string methods need to know the exact text. This week: finding
 something by its <em>shape</em> instead.</p><section class="topic" id="p3-t3-1-why-week-7-s-tools-are-not-enough-here"><h2><span class="num">1.</span>Why Week 7's tools are not enough here</h2><p>&quot;Does this contain an IP address&quot; is not &quot;does this contain one exact
 substring&quot; — the IP is different every time.</p>
 <div class="cell"><pre class="code"><code>import re
@@ -416,106 +660,113 @@ text — useful for redacting anything that looks like sensitive data.</p>
 <div class="cell"><pre class="code"><code>text = "Server IP: 192.168.0.10, DNS: 8.8.8.8, Gateway: 10.0.0.1"
 
 redacted = re.sub(r"\d+\.\d+\.\d+\.\d+", "[REDACTED]", text)
-print(redacted)</code></pre></div></section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+print(redacted)</code></pre></div></section>
+<section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>pulling every number out of a free-text survey answer</td>
+<td><strong>AI / Data Science</strong></td>
+<td>pulling every number out of a free-text survey answer</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>pulling every IP address out of a raw log file</td>
+<td><strong>Cyber Security</strong></td>
+<td>pulling every IP address out of a raw log file</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>pulling a version number or hostname pattern out of free-text config</td>
+<td><strong>IT</strong></td>
+<td>pulling a version number or hostname pattern out of free-text config</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>calling <code>.group()</code> without checking for <code>None</code> first</td>
-  <td><code>AttributeError: 'NoneType' object has no attribute 'group'</code></td>
-  <td><code>if match:</code> before using it</td>
+<td>calling <code>.group()</code> without checking for <code>None</code> first</td>
+<td><code>AttributeError: 'NoneType' object has no attribute 'group'</code></td>
+<td><code>if match:</code> before using it</td>
 </tr>
 <tr>
-  <td>using <code>re.search()</code> when you want every match</td>
-  <td>only the first one comes back</td>
-  <td>use <code>re.findall()</code> instead</td>
+<td>using <code>re.search()</code> when you want every match</td>
+<td>only the first one comes back</td>
+<td>use <code>re.findall()</code> instead</td>
 </tr>
 <tr>
-  <td>forgetting the <code>r</code> before the pattern string</td>
-  <td>usually still works here, but backslashes can misbehave without it</td>
-  <td>always write <code>r&quot;...&quot;</code> for a regex pattern</td>
+<td>forgetting the <code>r</code> before the pattern string</td>
+<td>usually still works here, but backslashes can misbehave without it</td>
+<td>always write <code>r"..."</code> for a regex pattern</td>
 </tr>
 <tr>
-  <td>a pattern that is too loose or too strict</td>
-  <td>matches the wrong thing, or nothing at all</td>
-  <td>test it on a few real examples before trusting it</td>
+<td>a pattern that is too loose or too strict</td>
+<td>matches the wrong thing, or nothing at all</td>
+<td>test it on a few real examples before trusting it</td>
 </tr>
 <tr>
-  <td><code>match.group(1)</code> on a pattern with no <code>(...)</code></td>
-  <td><code>IndexError: no such group</code></td>
-  <td><code>group(1)</code> needs a capture group in the pattern first</td>
+<td><code>match.group(1)</code> on a pattern with no <code>(...)</code></td>
+<td><code>IndexError: no such group</code></td>
+<td><code>group(1)</code> needs a capture group in the pattern first</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_search_and_findall.py</code> — search, findall, the None case
 <code>examples/02_regex_on_real_data.py</code> — applying a pattern to real pulled API data
 <code>examples/03_groups_and_sub.py</code> — capture groups, named groups, and <code>re.sub()</code>
 Docs: <a href="https://docs.python.org/3/library/re.html">re module</a></p>
-</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p3-t3-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>find the first match of a shape</td>
-  <td><code>re.search(pattern, text)</code></td>
+<td>find the first match of a shape</td>
+<td><code>re.search(pattern, text)</code></td>
 </tr>
 <tr>
-  <td>find every match</td>
-  <td><code>re.findall(pattern, text)</code></td>
+<td>find every match</td>
+<td><code>re.findall(pattern, text)</code></td>
 </tr>
 <tr>
-  <td>check before using a result</td>
-  <td><code>if match:</code></td>
+<td>check before using a result</td>
+<td><code>if match:</code></td>
 </tr>
 <tr>
-  <td>match digits</td>
-  <td><code>\d+</code></td>
+<td>match digits</td>
+<td><code>\d+</code></td>
 </tr>
 <tr>
-  <td>pull out one piece of a match</td>
-  <td><code>(...)</code> and <code>match.group(1)</code>, or <code>(?P&lt;name&gt;...)</code></td>
+<td>pull out one piece of a match</td>
+<td><code>(...)</code> and <code>match.group(1)</code>, or <code>(?P&lt;name&gt;...)</code></td>
 </tr>
 <tr>
-  <td>find and replace by shape</td>
-  <td><code>re.sub(pattern, replacement, text)</code></td>
+<td>find and replace by shape</td>
+<td><code>re.sub(pattern, replacement, text)</code></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — turning what you have built into one class.</p>
-</section></section>
-<div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">From Functions to a Class</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a></p><section class="topic"><p>The same refactor Week 5's demo did to <code>record_check.py</code>. This time you do it
+</section>
+</section>
+<div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">From Functions to a Class (optional extra)</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/tutorial/classes.html">Python tutorial: classes</a> · <a href="https://requests.readthedocs.io/en/latest/user/quickstart/">Requests quickstart</a></p><section class="topic"><blockquote><p><b>Optional extra.</b> Your CW2 project uses plain functions, not classes, so you do not need this part for the lab. It shows how the same code looks when it is bundled into a class.</p></blockquote><p>The same refactor Week 5's demo did to <code>record_check.py</code>. This time you do it
 to your own code.</p><section class="topic" id="p4-t4-1-before-loose-functions-and-a-stray-variable"><h2><span class="num">1.</span>Before: loose functions and a stray variable</h2><div class="cell"><pre class="code"><code>def parse_line(raw_line):
     """Turn one messy raw line into a dict."""
     label, value = raw_line.strip().split(",")
@@ -556,87 +807,94 @@ inputs passed between calls — they share <code>self</code>. You can now make a
 <code>RecordSource</code> with a different limit, and the two will not interfere.</p>
 <div class="cell"><pre class="code"><code>a = RecordSource(limit=100)
 b = RecordSource(limit=50)
-print(a.limit, b.limit)   # independent</code></pre></div></section><section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+print(a.limit, b.limit)   # independent</code></pre></div></section>
+<section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>a <code>Dataset</code> class bundling loading, cleaning and summarising</td>
+<td><strong>AI / Data Science</strong></td>
+<td>a <code>Dataset</code> class bundling loading, cleaning and summarising</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>an <code>IncidentLog</code> class bundling loading, parsing and flagging</td>
+<td><strong>Cyber Security</strong></td>
+<td>an <code>IncidentLog</code> class bundling loading, parsing and flagging</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>an <code>OpsConsole</code> class bundling fetching, checking and reporting</td>
+<td><strong>IT</strong></td>
+<td>an <code>OpsConsole</code> class bundling fetching, checking and reporting</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>forgetting to change <code>value</code> to <code>self.value</code> when moving a function in</td>
-  <td><code>NameError</code> or wrong result</td>
-  <td>every reference to shared data needs <code>self.</code></td>
+<td>forgetting to change <code>value</code> to <code>self.value</code> when moving a function in</td>
+<td><code>NameError</code> or wrong result</td>
+<td>every reference to shared data needs <code>self.</code></td>
 </tr>
 <tr>
-  <td>leaving <code>limit</code> as a function parameter instead of <code>self.limit</code></td>
-  <td>works, but defeats the point — nothing is bundled</td>
-  <td>store it in <code>__init__</code>, read it via <code>self</code></td>
+<td>leaving <code>limit</code> as a function parameter instead of <code>self.limit</code></td>
+<td>works, but defeats the point — nothing is bundled</td>
+<td>store it in <code>__init__</code>, read it via <code>self</code></td>
 </tr>
 <tr>
-  <td>one class doing everything with no clear responsibility</td>
-  <td>hard to test, hard to extend</td>
-  <td>keep it to the same &quot;one job&quot; rule as functions had</td>
+<td>one class doing everything with no clear responsibility</td>
+<td>hard to test, hard to extend</td>
+<td>keep it to the same "one job" rule as functions had</td>
 </tr>
 <tr>
-  <td>reaching for inheritance or a second class</td>
-  <td>more complexity than this project needs yet</td>
-  <td>one or two classes is the whole ask this week</td>
+<td>reaching for inheritance or a second class</td>
+<td>more complexity than this project needs yet</td>
+<td>one or two classes is the whole ask this week</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_before_and_after.py</code> — the exact refactor, side by side
-<code>examples/02_a_class_that_pulls_real_data.py</code> — the same shape as this week's DEMO</p>
-</section><section class="topic" id="p4-t4-recap"><h2>Recap</h2><table class="booktabs">
+<code>examples/02_a_class_that_pulls_real_data.py</code> — the same idea as functions that share settings (optional topic: the lab itself uses plain functions)</p>
+</section>
+<section class="topic" id="p4-t4-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>spot when functions should become a class</td>
-  <td>shared data, passed around too much</td>
+<td>spot when functions should become a class</td>
+<td>shared data, passed around too much</td>
 </tr>
 <tr>
-  <td>do the refactor</td>
-  <td>bundle data in <code>__init__</code>, methods use <code>self</code></td>
+<td>do the refactor</td>
+<td>bundle data in <code>__init__</code>, methods use <code>self</code></td>
 </tr>
 <tr>
-  <td>keep two instances independent</td>
-  <td>separate objects, separate state</td>
+<td>keep two instances independent</td>
+<td>separate objects, separate state</td>
 </tr>
 </tbody>
 </table>
 <p><strong>You now have all of Week 8's tools.</strong> This is what starts your project in
-the lab — nothing about it resets.</p>
-</section></section>
+the lab. The project you start there is the one you keep building until Week 12.</p>
+</section>
+</section>
 
     <footer class="page-foot">CST1510 · Week 08 · Pulling Real Data</footer>
   </article>

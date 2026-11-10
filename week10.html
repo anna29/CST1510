@@ -102,7 +102,9 @@
 <a href="#p6" class="toc-topic">6. Why placeholders matter: safe SQL and SQL injection</a>
 <a href="#p7" class="toc-topic">7. Changing existing data: `UPDATE`, `DELETE`, and `WHERE`</a>
 <a href="#p8" class="toc-topic">8. Transactions, commit, and the `with` pattern</a>
-<a href="#p9" class="toc-topic">9. Notebook map and quick recap</a>
+<a href="#p9" class="toc-topic">9. pandas and SQL</a>
+<a href="#p10" class="toc-topic">10. Splitting your code into a package</a>
+<a href="#p11" class="toc-topic">11. Notebook map and quick recap</a>
   </nav>
 
   <article>
@@ -476,7 +478,50 @@ conn.close()</code></pre></div>
 <li>it fits nicely with the idea of safe resource handling</li>
 </ul>
 </section>
-<div class="topic-divider" id="p9"><span class="topic-divider-n">Part 9</span><h2 class="topic-divider-title">Notebook map and quick recap</h2></div><section class="topic"><p>By the end of Week 10, you should be able to recognise and use these core
+<div class="topic-divider" id="p9"><span class="topic-divider-n">Part 9</span><h2 class="topic-divider-title">pandas and SQL</h2></div><section class="topic"><p>Your fetched data lives in <code>raw.csv</code>, and your project moves it into the database with pandas. Two functions do the work:</p>
+<table class="booktabs">
+<thead>
+<tr>
+<th>Job</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSV file to a table</td>
+<td><code>df = pd.read_csv("raw.csv")</code> then <code>df.to_sql("records", conn, if_exists="replace", index=False)</code></td>
+</tr>
+<tr>
+<td>table to a DataFrame</td>
+<td><code>pd.read_sql("SELECT * FROM records", conn)</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>pd.read_sql</code> accepts <code>?</code> placeholders too, with the values in <code>params</code>:</p><div class="cell"><pre class="code"><code>import sqlite3
+import pandas as pd
+
+conn = sqlite3.connect(":memory:")
+pd.DataFrame({"name": ["Router-A", "Switch-B", "AP-Lobby"], "active": [1, 0, 1]}).to_sql("devices", conn, index=False)
+pd.read_sql("SELECT * FROM devices WHERE active = ?", conn, params=(1,))</code></pre></div><p>Values always go in with <code>?</code>, never with an f-string. Your project's <code>load_csv</code> and <code>get_all_records</code> functions are exactly these two lines.</p></section>
+<div class="topic-divider" id="p10"><span class="topic-divider-n">Part 10</span><h2 class="topic-divider-title">Splitting your code into a package</h2></div><section class="topic"><p>One long file is fine for a first program. By Week 10 your project has users, data and a database, so each job gets its own file, and the files live in a
+<strong>package</strong>: a folder that contains an (empty) file called <code>__init__.py</code>.</p>
+<pre class="code"><code>CST1510_CW2/
+  load_data.py
+  app_model/
+    __init__.py     &lt;- empty, but it must be there
+    db.py           connect to the database
+    schema.py       create the tables
+    users.py        hashing, register, login, user SQL
+    records.py      read, search, add, edit, delete the data
+</code></pre>
+<p>You import a function with <code>from &lt;folder&gt;.&lt;file&gt; import &lt;function&gt;</code>:</p><div class="cell"><pre class="code"><code>from app_model.db import connect_database
+from app_model.users import register_user
+
+conn = connect_database()
+print(register_user(conn, "anna", "longenough1"))</code></pre></div><p>Every function in <code>app_model</code> takes the connection as its <strong>first parameter</strong>, so one connection is made in one place and handed to whichever function needs it.</p>
+<p>When you run <code>python load_data.py</code>, Python looks for <code>app_model</code> in the folder that holds <code>load_data.py</code>. So keep your scripts next to the package folder. If it cannot find it you get
+<code>ModuleNotFoundError: No module named 'app_model'</code>.</p></section>
+<div class="topic-divider" id="p11"><span class="topic-divider-n">Part 11</span><h2 class="topic-divider-title">Notebook map and quick recap</h2></div><section class="topic"><p>By the end of Week 10, you should be able to recognise and use these core
 ideas:</p>
 <ul>
 <li>a database stores structured records in tables</li>
@@ -485,6 +530,8 @@ ideas:</p>
 <li>placeholders keep data separate from SQL text</li>
 <li><code>WHERE</code> controls which rows are affected</li>
 <li>the <code>with</code> pattern is the safer way to manage the connection</li>
+<li>pandas moves whole tables in and out of a database (<code>to_sql</code>, <code>read_sql</code>)</li>
+<li>a package (a folder with <code>__init__.py</code>) keeps each job in its own file</li>
 </ul>
 <p>One useful summary is:</p>
 <div class="cell"><pre class="code"><code>with sqlite3.connect("ops.db") as conn:
@@ -524,7 +571,11 @@ ideas:</p>
 </tr>
 <tr>
   <td><code>W10T04_walkthrough.ipynb</code></td>
-  <td>migrating project data and user records</td>
+  <td>migrating project data and user records, <code>read_sql</code> with <code>params</code></td>
+</tr>
+<tr>
+  <td><code>W10T05_walkthrough.ipynb</code></td>
+  <td>modules, packages, <code>__init__.py</code> and imports</td>
 </tr>
 </tbody>
 </table>

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Week 12 — Intelligence (Optional) and Deployment</title>
+<title>Week 12 — Intelligence and Deployment</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
   :root {
@@ -95,7 +95,7 @@
   <nav class="toc" id="toc">
     <span class="toc-label">Contents</span>
     <a href="#p1" class="toc-topic">Part 1. API Keys, Reviewed</a>
-<a href="#p1-t1-before-you-start-where-openai-api-key-comes-from" class="toc-sub">Before you start — where <code>OPENAI_API_KEY</code> comes from</a>
+<a href="#p1-t1-before-you-start-where-openai-api-key-comes-from" class="toc-sub">Before you start — where <code>AI_API_KEY</code> comes from</a>
 <a href="#p1-t1-1-loading-the-key-the-same-habit-as-week-9" class="toc-sub">1. Loading the key — the same habit as Week 9</a>
 <a href="#p1-t1-2-two-different-responses-to-a-missing-key" class="toc-sub">2. Two different responses to a missing key</a>
 <a href="#p1-t1-3-making-a-feature-optional-end-to-end" class="toc-sub">3. Making a feature optional, end to end</a>
@@ -107,6 +107,8 @@
 <a href="#p2-t2-2-the-reply-s-exact-shape" class="toc-sub">2. The reply's exact shape</a>
 <a href="#p2-t2-3-the-api-is-stateless-history-has-to-be-resent-every-time" class="toc-sub">3. The API is stateless — history has to be resent every time</a>
 <a href="#p2-t2-4-verifying-the-calling-code-without-a-real-key-mocking-previewed" class="toc-sub">4. Verifying the calling code without a real key — mocking, previewed</a>
+<a href="#p2-t2-5-using-groq-instead-free-tier" class="toc-sub">5. Using Groq instead (free tier)</a>
+<a href="#p2-t2-6-a-chat-page-in-streamlit" class="toc-sub">6. A chat page in Streamlit</a>
 <a href="#p2-t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
 <a href="#p2-t2-common-mistakes" class="toc-sub">Common mistakes</a>
 <a href="#p2-t2-recap" class="toc-sub">Recap</a>
@@ -115,6 +117,7 @@
 <a href="#p3-t3-2-test-the-edges-not-just-the-middle" class="toc-sub">2. Test the edges, not just the middle</a>
 <a href="#p3-t3-3-testing-code-that-calls-something-external-with-a-mock" class="toc-sub">3. Testing code that calls something external — with a mock</a>
 <a href="#p3-t3-4-running-with-the-real-pytest-command" class="toc-sub">4. Running with the real <code>pytest</code> command</a>
+<a href="#p3-t3-5-tests-that-need-files-or-a-database-tmp-path" class="toc-sub">5. Tests that need files or a database: <code>tmp_path</code></a>
 <a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
 <a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
 <a href="#p3-t3-recap" class="toc-sub">Recap</a>
@@ -131,46 +134,61 @@
   <article>
     <header class="page-head">
       <div class="breadcrumb">CST1510</div>
-      <h1 class="page-title">Week 12 — Intelligence (Optional) and Deployment</h1>
+      <h1 class="page-title">Week 12 — Intelligence and Deployment</h1>
       <p class="lede">By the end of this week you can load an API key safely, and make a feature degrade gracefully without one, call the ChatGPT API — messages, roles, and why conversation history has to be resent, and write basic <code>pytest</code> tests for the pure-function parts of your project.</p>
       
     </header>
 
     <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=12" title="System architecture — Week 12" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>PROCESS, intelligent (optional) — and shipped</b>.</figcaption></figure>
 
-    <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">API Keys, Reviewed</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a> · <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p><section class="topic"><p>Week 9's lesson, one more time, for the one secret this whole week revolves
-around — and the pattern that makes a feature genuinely optional.</p><section class="topic" id="p1-t1-before-you-start-where-openai-api-key-comes-from"><h2>Before you start — where <code>OPENAI_API_KEY</code> comes from</h2><p>If you want to try the optional AI feature for real, you first need your own OpenAI API key.</p>
+    <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">API Keys, Reviewed</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a> · <a href="https://console.groq.com/docs/quickstart">Groq quickstart</a> · <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p><section class="topic"><p>Week 9's lesson, one more time, for the one secret this whole week revolves
+around — and the pattern that makes a feature genuinely optional.</p><section class="topic" id="p1-t1-before-you-start-getting-an-api-key"><h2>Before you start — getting an API key</h2><p>The Ask AI page in your project needs an <strong>API key</strong>: a password for the AI service. Anyone who has your key can use your account, so treat it like a password.</p>
 <ol>
-<li>Sign in to the OpenAI platform dashboard.</li>
-<li>Create an API key there.</li>
-<li>Copy it once and store it safely — treat it like a password.</li>
-<li>Set it as an environment variable in your terminal.</li>
+<li><strong>Groq (free, recommended):</strong> make an account at console.groq.com, open <em>API Keys</em> and create a key.</li>
+<li><strong>Or OpenAI:</strong> make a key at platform.openai.com (it needs billing set up). The code is the same; only two settings change.</li>
+<li>Copy the key once and keep it somewhere private.</li>
 </ol>
-<p><strong>macOS / Linux</strong></p>
-<div class="cell"><pre class="code"><code>export OPENAI_API_KEY="your_api_key_here"</code></pre></div>
-<p><strong>Windows PowerShell</strong></p>
-<div class="cell"><pre class="code"><code>$env:OPENAI_API_KEY="your_api_key_here"</code></pre></div>
-<p>OpenAI's Python tools can read the key from the environment automatically.</p>
-<p>If you do <strong>not</strong> have a key, keep going anyway: the AI feature is optional this week, and the required part of the coursework must still work without it.</p>
-<p>Docs: <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p>
+<p>The key goes in <strong>two private places</strong> and nowhere else. It never goes in your code, a <code>print()</code>, or GitHub:</p>
+<table class="booktabs">
+<thead>
+<tr>
+<th>Where</th>
+<th>Used for</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>an environment variable called <code>AI_API_KEY</code></td>
+<td>notebooks and terminal tests</td>
+<td><code>export AI_API_KEY="your_key"</code> (Mac / Linux) or <code>$env:AI_API_KEY="your_key"</code> (Windows PowerShell)</td>
+</tr>
+<tr>
+<td><code>.streamlit/secrets.toml</code></td>
+<td>the Streamlit app</td>
+<td>a line <code>AI_API_KEY = "your_key"</code></td>
+</tr>
+</tbody>
+</table>
+<p>If you do <strong>not</strong> have a key, keep going anyway. The rest of the project must still work without it; the Ask AI page just shows instructions instead of an answer.</p><p>Docs: <a href="https://console.groq.com/docs/quickstart">Groq quickstart</a> · <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a></p>
 </section><section class="topic" id="p1-t1-1-loading-the-key-the-same-habit-as-week-9"><h2><span class="num">1.</span>Loading the key — the same habit as Week 9</h2><div class="cell"><pre class="code"><code>import os
 
-api_key = os.environ.get("OPENAI_API_KEY")
+api_key = os.environ.get("AI_API_KEY")
 print("set" if api_key else "not set")</code></pre></div></section><section class="topic" id="p1-t1-2-two-different-responses-to-a-missing-key"><h2><span class="num">2.</span>Two different responses to a missing key</h2><p>Sometimes you want a clear, loud error. Sometimes you want the feature to
 just quietly not appear. Both are correct — depending on what the feature is.</p>
 <div class="cell"><pre class="code"><code>def require_key():
     """Raise a clear error if the key is missing - use when the feature MUST have it."""
-    key = os.environ.get("OPENAI_API_KEY")
+    key = os.environ.get("AI_API_KEY")
     if key is None:
-        raise RuntimeError("OPENAI_API_KEY is not set.")
+        raise RuntimeError("AI_API_KEY is not set.")
     return key
 
 def optional_key():
     """Return None if missing - use when the feature can just be skipped."""
-    return os.environ.get("OPENAI_API_KEY")</code></pre></div></section><section class="topic" id="p1-t1-3-making-a-feature-optional-end-to-end"><h2><span class="num">3.</span>Making a feature optional, end to end</h2><p>The required part of the app never depends on the optional part succeeding.</p>
+    return os.environ.get("AI_API_KEY")</code></pre></div></section><section class="topic" id="p1-t1-3-making-a-feature-optional-end-to-end"><h2><span class="num">3.</span>Making a feature optional, end to end</h2><p>The required part of the app never depends on the optional part succeeding.</p>
 <div class="cell"><pre class="code"><code>def get_ai_summary(text):
     """Return a summary, or None if no key is set - never crashes."""
-    api_key = os.environ.get("OPENAI_API_KEY")
+    api_key = os.environ.get("AI_API_KEY")
     if api_key is None:
         return None
     return f"(a real summary would go here for: {text[:20]}...)"
@@ -180,86 +198,93 @@ def render_report(records):
     summary = get_ai_summary(str(records))
     print(summary if summary else "(AI summary skipped - no key set)")
 
-render_report(["srv-01: OK", "srv-02: OVER LIMIT"])</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+render_report(["srv-01: OK", "srv-02: OVER LIMIT"])</code></pre></div></section>
+<section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>an optional AI-generated dataset summary, dashboard works without it</td>
+<td><strong>AI / Data Science</strong></td>
+<td>an optional AI-generated dataset summary, dashboard works without it</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>an optional AI incident triage note, alerts still work without it</td>
+<td><strong>Cyber Security</strong></td>
+<td>an optional AI incident triage note, alerts still work without it</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>an optional AI-suggested fix, the status page works without it</td>
+<td><strong>IT</strong></td>
+<td>an optional AI-suggested fix, the status page works without it</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>hard-coding a key &quot;just to test&quot;</td>
-  <td>it is one commit away from a public leak</td>
-  <td><code>os.environ.get()</code>, from the first line you write</td>
+<td>hard-coding a key "just to test"</td>
+<td>it is one commit away from a public leak</td>
+<td><code>os.environ.get()</code>, from the first line you write</td>
 </tr>
 <tr>
-  <td>letting a missing key crash the whole app</td>
-  <td>the required features become unavailable too</td>
-  <td>check for the key, degrade only the optional part</td>
+<td>letting a missing key crash the whole app</td>
+<td>the required features become unavailable too</td>
+<td>check for the key, degrade only the optional part</td>
 </tr>
 <tr>
-  <td>printing the key anywhere, even partially, to debug</td>
-  <td>it is now in your terminal history or logs</td>
-  <td>print &quot;set&quot;/&quot;not set&quot;, never the value</td>
+<td>printing the key anywhere, even partially, to debug</td>
+<td>it is now in your terminal history or logs</td>
+<td>print "set"/"not set", never the value</td>
 </tr>
 <tr>
-  <td>forgetting the difference between <code>require_key()</code> and <code>optional_key()</code></td>
-  <td>either an unwanted crash, or a silent missing feature nobody notices</td>
-  <td>choose deliberately per feature</td>
+<td>forgetting the difference between <code>require_key()</code> and <code>optional_key()</code></td>
+<td>either an unwanted crash, or a silent missing feature nobody notices</td>
+<td>choose deliberately per feature</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_loading_the_key_safely.py</code> — os.environ, a clear required-key error
 <code>examples/02_making_a_feature_optional.py</code> — the full optional-feature pattern</p>
-</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p1-t1-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>load a key safely</td>
-  <td><code>os.environ.get(&quot;OPENAI_API_KEY&quot;)</code></td>
+<td>load a key safely</td>
+<td><code>os.environ.get("AI_API_KEY")</code></td>
 </tr>
 <tr>
-  <td>fail loudly when a feature needs it</td>
-  <td><code>require_key()</code>-style, raising clearly</td>
+<td>fail loudly when a feature needs it</td>
+<td><code>require_key()</code>-style, raising clearly</td>
 </tr>
 <tr>
-  <td>degrade gracefully when it does not</td>
-  <td>return <code>None</code>, check before using it</td>
+<td>degrade gracefully when it does not</td>
+<td>return <code>None</code>, check before using it</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — what the key is actually for.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">Calling the ChatGPT API</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://platform.openai.com/docs/quickstart">OpenAI quickstart</a> · <a href="https://platform.openai.com/docs/api-reference/responses">Responses API</a></p><section class="topic"><p>Needs a real key to actually call OpenAI — the shape below is correct and
 current either way, and every cell here can be read and understood without one.</p><section class="topic" id="p2-t2-1-the-client-and-one-call"><h2><span class="num">1.</span>The client, and one call</h2><p><code>messages</code> is a list of <code>{&quot;role&quot;: ..., &quot;content&quot;: ...}</code> dicts. <code>&quot;system&quot;</code>
 sets the assistant's behaviour, <code>&quot;user&quot;</code> is the actual question.</p>
@@ -296,91 +321,172 @@ fake_client.chat.completions.create.return_value.choices = [
 
 reply = ask(fake_client, "what is 2+2?")
 print(reply)          # "4" - from the fake, not a real call
-print(messages)         # still updated correctly</code></pre></div></section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+print(messages)         # still updated correctly</code></pre></div></section><section class="topic" id="p2-t2-5-using-groq-instead-free-tier"><h2><span class="num">5.</span>Using Groq instead (free tier)</h2>
+<p>Groq accepts the same requests as OpenAI, so the same <code>openai</code> library works with it. Only two values change:
+<code>base_url</code> (where the request is sent) and <code>model</code> (which model answers). Your course project is set up this way:
+both values are in a settings block at the top of <code>app_model/ai.py</code>, so switching provider means editing two lines and nothing else.</p>
+<div class="cell"><pre class="code"><code># Groq:
+# client = OpenAI(api_key=api_key, base_url="https://api.groq.com/openai/v1")
+# model = "llama-3.3-70b-versatile"
+#
+# OpenAI:
+# client = OpenAI(api_key=api_key)
+# model = "gpt-4o-mini"
+#
+# The call itself is identical in both cases:
+# response = client.chat.completions.create(model=model, messages=messages)</code></pre></div>
+</section>
+<section class="topic" id="p2-t2-6-a-chat-page-in-streamlit"><h2><span class="num">6.</span>A chat page in Streamlit</h2>
+<p>The page keeps the conversation in <code>st.session_state["chat"]</code>, the same list of <code>{"role", "content"}</code> dictionaries you send to the API.</p>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Code</th>
+<th>Job</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>asking for a plain-English summary of a dataset's quality issues</td>
+<td><code>st.chat_input("Ask a question")</code></td>
+<td>the message box; returns the text once the user presses Enter, otherwise <code>None</code></td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>asking for a plain-English explanation of a suspicious log line</td>
+<td><code>with st.chat_message("user"):</code></td>
+<td>draws one message bubble ("user" or "assistant")</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>asking for a suggested next step given a service's current status</td>
+<td><code>with st.spinner("Thinking..."):</code></td>
+<td>shows a waiting message while a slow call runs</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+<p>On each rerun the page first redraws the saved messages, then handles the new question, then saves both the question and the answer.</p>
+<div class="cell"><pre class="code"><code># Streamlit code: it runs in a .py file with `streamlit run`, not in this notebook.
+# import streamlit as st
+#
+# if "chat" not in st.session_state:
+#     st.session_state["chat"] = []
+#
+# for message in st.session_state["chat"]:
+#     with st.chat_message(message["role"]):
+#         st.write(message["content"])
+#
+# question = st.chat_input("Ask a question")
+# if question:
+#     with st.chat_message("user"):
+#         st.write(question)
+#     with st.spinner("Thinking..."):
+#         reply = ask_ai(question, st.session_state["chat"])      # your function from app_model/ai.py
+#     with st.chat_message("assistant"):
+#         st.write(reply)
+#     st.session_state["chat"] += [
+#         {"role": "user", "content": question},
+#         {"role": "assistant", "content": reply},
+#     ]</code></pre></div>
+<p><code>examples/04_streamlit_chat_page.py</code> is a complete page whose answer function simply echoes, so it runs without a key. Replace it with a real call and you have the lab's Ask AI page.</p>
+<p>Where the key lives: in an environment variable, or in <code>.streamlit/secrets.toml</code>, read with <code>st.secrets["AI_API_KEY"]</code> (Topic 4 of Week 11). Never write it in the code.</p>
+</section>
+
+<section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>an invalid or fake key</td>
-  <td><code>openai.AuthenticationError</code></td>
-  <td>use a real key, or check <code>os.environ.get()</code> first</td>
+<td><strong>AI / Data Science</strong></td>
+<td>asking for a plain-English summary of a dataset's quality issues</td>
 </tr>
 <tr>
-  <td>no key set at all, and no check for it</td>
-  <td><code>openai.OpenAIError: Missing credentials</code></td>
-  <td>check for the key before constructing the client</td>
+<td><strong>Cyber Security</strong></td>
+<td>asking for a plain-English explanation of a suspicious log line</td>
 </tr>
 <tr>
-  <td>forgetting to append the assistant's reply to <code>messages</code></td>
-  <td>the next call has no memory of this one</td>
-  <td>always append both the user message and the reply</td>
-</tr>
-<tr>
-  <td>assuming every call is free</td>
-  <td>real cost per request, in production</td>
-  <td>use <code>gpt-4o-mini</code> while developing, set a spending limit</td>
+<td><strong>IT</strong></td>
+<td>asking for a suggested next step given a service's current status</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+</section>
+<section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
+<thead>
+<tr>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>an invalid or fake key</td>
+<td><code>openai.AuthenticationError</code></td>
+<td>use a real key, or check <code>os.environ.get()</code> first</td>
+</tr>
+<tr>
+<td>no key set at all, and no check for it</td>
+<td><code>openai.OpenAIError: Missing credentials</code></td>
+<td>check for the key before constructing the client</td>
+</tr>
+<tr>
+<td>forgetting to append the assistant's reply to <code>messages</code></td>
+<td>the next call has no memory of this one</td>
+<td>always append both the user message and the reply</td>
+</tr>
+<tr>
+<td>assuming every call is free</td>
+<td>real cost per request, in production</td>
+<td>use <code>gpt-4o-mini</code> while developing, set a spending limit</td>
+</tr>
+<tr>
+<td>the conversation disappears after each question</td>
+<td>the list is created again on every rerun</td>
+<td>create it only <code>if "chat" not in st.session_state</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Go deeper</h2>
 <p><code>examples/01_the_chat_completions_api.py</code> — the client, messages, roles, the reply's shape
 <code>examples/02_conversation_history.py</code> — why and how history is resent every call
-Docs: <a href="https://platform.openai.com/docs/quickstart">OpenAI Chat Completions API</a></p>
-</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
+Docs: <a href="https://platform.openai.com/docs/api-reference/chat">OpenAI Chat Completions API</a></p>
+</section>
+<section class="topic" id="p2-t2-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>call the API</td>
-  <td><code>client.chat.completions.create(model=..., messages=...)</code></td>
+<td>call the API</td>
+<td><code>client.chat.completions.create(model=..., messages=...)</code></td>
 </tr>
 <tr>
-  <td>read the reply</td>
-  <td><code>response.choices[0].message.content</code></td>
+<td>read the reply</td>
+<td><code>response.choices[0].message.content</code></td>
 </tr>
 <tr>
-  <td>keep a conversation going</td>
-  <td>append both sides to <code>messages</code>, every turn</td>
+<td>keep a conversation going</td>
+<td>append both sides to <code>messages</code>, every turn</td>
 </tr>
 <tr>
-  <td>verify your code without a key</td>
-  <td>mocking, <code>unittest.mock.MagicMock</code></td>
+<td>verify your code without a key</td>
+<td>mocking, <code>unittest.mock.MagicMock</code></td>
+</tr>
+<tr>
+<td>build a chat page</td>
+<td><code>st.chat_input</code>, <code>st.chat_message</code>, <code>st.session_state</code></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — testing this, and everything else, properly.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Testing Your App</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.pytest.org/en/stable/getting-started.html">pytest getting started</a> · <a href="https://docs.python.org/3/library/unittest.mock.html">unittest.mock</a></p><section class="topic"><p>The pure-function parts of your project can be tested directly. The parts
 that touch a network can be tested too — without actually touching it.</p><section class="topic" id="p3-t3-1-a-pytest-test-is-a-function-starting-with-test"><h2><span class="num">1.</span>A pytest test is a function starting with <code>test_</code></h2><p><code>assert</code> checks something is true — if not, the test fails and tells you
 exactly what happened.</p>
@@ -424,91 +530,143 @@ def test_ask_returns_mocked_reply():
 test_ask_returns_mocked_reply()
 print("passed, no real API call made")</code></pre></div></section><section class="topic" id="p3-t3-4-running-with-the-real-pytest-command"><h2><span class="num">4.</span>Running with the real <code>pytest</code> command</h2><p><code>pytest filename.py</code> finds every <code>test_</code> function automatically and reports
 pass/fail for each, with the exact line that failed.</p>
-</section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+</section><section class="topic" id="p3-t3-5-tests-that-need-files-or-a-database-tmp-path"><h2><span class="num">5.</span>Tests that need files or a database: <code>tmp_path</code></h2>
+<p>A test must not change your real data. pytest gives any test function a <code>tmp_path</code> argument: a brand-new empty folder that is deleted afterwards.
+pytest calls a ready-made helper like this a fixture: you name it as an argument and pytest supplies it. Use <code>tmp_path</code> for the files and the temporary database the test needs.</p>
+<pre class="code"><code>def test_notes_are_saved_and_loaded(tmp_path):
+    file = tmp_path / &quot;notes.json&quot;
+    save_notes(file, [&quot;buy milk&quot;])
+    assert load_notes(file) == [&quot;buy milk&quot;]
+</code></pre>
+<p>Your project's tests do exactly this: <code>connect_database(tmp_path / "test.db")</code> builds a fresh database for each test.</p>
+<h2>6. A hand-written fake instead of <code>MagicMock</code></h2>
+<p>Section 3 used <code>MagicMock</code>. A small class does the same job and is easier to read. It has the same attribute path as the real client
+(<code>client.chat.completions.create(...)</code>), returns a fixed reply, and remembers what it was sent so the test can check it.</p>
+<pre class="code"><code>class FakeClient:
+    def __init__(self):
+        self.sent = None
+        self.chat = self
+        self.completions = self
+
+    def create(self, **kwargs):
+        self.sent = kwargs[&quot;messages&quot;]
+        message = type(&quot;Message&quot;, (), {&quot;content&quot;: &quot;fake answer&quot;})()
+        return type(&quot;Response&quot;, (), {&quot;choices&quot;: [type(&quot;Choice&quot;, (), {&quot;message&quot;: message})()]})()
+</code></pre>
+<p><code>ask_ai(question, df, client=FakeClient())</code> can then be tested with no key and no internet. This is why <code>ask_ai</code> has a <code>client</code> parameter.</p>
+<h2>7. Where the tests live</h2>
+<p>The tests import your project files (<code>from app_model.users import register_user</code>). Python can only find <code>app_model</code> if the project folder is on its path.
+<code>python -m pytest</code> adds the folder you run it from, so run it from inside <code>CST1510_CW2</code> and the imports work. (Plain <code>pytest</code> without <code>python -m</code> may not.)</p>
+</section>
+
+<section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>testing a cleaning function against known messy input</td>
+<td><strong>AI / Data Science</strong></td>
+<td>testing a cleaning function against known messy input</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>testing a severity classifier against known edge-case incidents</td>
+<td><strong>Cyber Security</strong></td>
+<td>testing a severity classifier against known edge-case incidents</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>testing <code>status_of</code> against every documented threshold</td>
+<td><strong>IT</strong></td>
+<td>testing <code>status_of</code> against every documented threshold</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>only testing the &quot;happy path&quot;</td>
-  <td>bugs hide at the exact boundaries</td>
-  <td>test the edges: exactly at each threshold</td>
+<td>only testing the "happy path"</td>
+<td>bugs hide at the exact boundaries</td>
+<td>test the edges: exactly at each threshold</td>
 </tr>
 <tr>
-  <td>calling a real, paid API inside a test</td>
-  <td>slow, costs money, fails when the network is down</td>
-  <td>mock the client instead</td>
+<td>calling a real, paid API inside a test</td>
+<td>slow, costs money, fails when the network is down</td>
+<td>mock the client instead</td>
 </tr>
 <tr>
-  <td>a test with no <code>assert</code> at all</td>
-  <td>it &quot;passes&quot; without checking anything</td>
-  <td>every test needs at least one real assertion</td>
+<td>a test with no <code>assert</code> at all</td>
+<td>it "passes" without checking anything</td>
+<td>every test needs at least one real assertion</td>
 </tr>
 <tr>
-  <td>one giant test checking everything</td>
-  <td>a failure does not tell you which part broke</td>
-  <td>one focused thing per test function</td>
+<td>one giant test checking everything</td>
+<td>a failure does not tell you which part broke</td>
+<td>one focused thing per test function</td>
+</tr>
+<tr>
+<td><code>ModuleNotFoundError</code> when running pytest</td>
+<td>the project folder is not on the path</td>
+<td>run <code>python -m pytest</code> from inside <code>CST1510_CW2</code></td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_pytest_basics.py</code> — test functions, edges, a tiny runner without pytest
 <code>examples/02_testing_without_the_real_network.py</code> — mocking an external call properly
-Docs: <a href="https://docs.pytest.org/en/stable/getting-started.html">pytest documentation</a></p>
-</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
+Docs: <a href="https://docs.pytest.org/en/stable/">pytest documentation</a></p>
+</section>
+<section class="topic" id="p3-t3-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>write a test</td>
-  <td>a function named <code>test_...</code>, with <code>assert</code></td>
+<td>write a test</td>
+<td>a function named <code>test_...</code>, with <code>assert</code></td>
 </tr>
 <tr>
-  <td>test the boundaries, not just the middle</td>
-  <td>exact threshold values</td>
+<td>test the boundaries, not just the middle</td>
+<td>exact threshold values</td>
 </tr>
 <tr>
-  <td>test code that calls something external</td>
-  <td><code>unittest.mock.MagicMock</code></td>
+<td>test code that calls something external</td>
+<td><code>unittest.mock.MagicMock</code></td>
 </tr>
 <tr>
-  <td>run every test at once</td>
-  <td><code>pytest filename.py</code></td>
+<td>run every test at once</td>
+<td><code>pytest filename.py</code></td>
+</tr>
+<tr>
+<td>test without touching real files</td>
+<td>the <code>tmp_path</code> argument</td>
+</tr>
+<tr>
+<td>test code that calls the AI</td>
+<td>a fake client class that records what it was sent</td>
+</tr>
+<tr>
+<td>let pytest import project files</td>
+<td><code>python -m pytest</code>, run from the project folder</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — shipping it.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">Deploying</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app">Deploy your app</a> · <a href="https://pip.pypa.io/en/stable/reference/requirements-file-format/">Requirements file format</a></p><section class="topic"><p>The last step. A working app on your machine is not the same thing as a
 working app someone else can open.</p><section class="topic" id="p4-t4-1-requirements-txt-what-the-cloud-needs-to-install"><h2><span class="num">1.</span><code>requirements.txt</code> — what the cloud needs to install</h2><p>Without this, the deployed app fails to even start.</p>
 <div class="cell"><pre class="code"><code>REQUIREMENTS = ["streamlit", "pandas", "requests", "bcrypt", "openai"]
@@ -524,93 +682,100 @@ def check_requirements_txt(project_dir):
 print(check_requirements_txt("."))</code></pre></div></section><section class="topic" id="p4-t4-4-the-real-deployment-steps"><h2><span class="num">4.</span>The real deployment steps</h2><p>Push to GitHub → <code>requirements.txt</code> and <code>.gitignore</code> correct → connect the
 repo on <code>share.streamlit.io</code> → paste secrets into the Cloud dashboard, never
 into a file → test the public URL in a browser you are not logged into.</p>
-</section><section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+</section>
+<section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>a dataset console anyone on the team can open and use</td>
+<td><strong>AI / Data Science</strong></td>
+<td>a dataset console anyone on the team can open and use</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>an incident console reachable by whoever is on call</td>
+<td><strong>Cyber Security</strong></td>
+<td>an incident console reachable by whoever is on call</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>a status dashboard live for the whole team, not just your laptop</td>
+<td><strong>IT</strong></td>
+<td>a status dashboard live for the whole team, not just your laptop</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>deploying without testing on a fresh clone first</td>
-  <td>it worked locally, fails in the cloud</td>
-  <td>clone into a fresh folder, test from there before deploying</td>
+<td>deploying without testing on a fresh clone first</td>
+<td>it worked locally, fails in the cloud</td>
+<td>clone into a fresh folder, test from there before deploying</td>
 </tr>
 <tr>
-  <td>a <code>.db</code> file committed before <code>.gitignore</code> caught it</td>
-  <td>real hashed passwords are now in your public history</td>
-  <td>remove and revoke; <code>.gitignore</code> alone does not fix an already-committed file</td>
+<td>a <code>.db</code> file committed before <code>.gitignore</code> caught it</td>
+<td>real hashed passwords are now in your public history</td>
+<td>remove and revoke; <code>.gitignore</code> alone does not fix an already-committed file</td>
 </tr>
 <tr>
-  <td>secrets pasted into a file instead of the Cloud dashboard</td>
-  <td>leaked the moment the repo is public</td>
-  <td><code>st.secrets</code> locally, the Cloud Secrets panel once deployed</td>
+<td>secrets pasted into a file instead of the Cloud dashboard</td>
+<td>leaked the moment the repo is public</td>
+<td><code>st.secrets</code> locally, the Cloud Secrets panel once deployed</td>
 </tr>
 <tr>
-  <td>assuming &quot;it works on my machine&quot; is enough</td>
-  <td>a stranger's fresh clone fails</td>
-  <td>the pre-flight checklist exists exactly for this gap</td>
+<td>assuming "it works on my machine" is enough</td>
+<td>a stranger's fresh clone fails</td>
+<td>the pre-flight checklist exists exactly for this gap</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_the_deployment_checklist.py</code> — requirements.txt, .gitignore, the real steps
 <code>examples/02_a_preflight_check_script.py</code> — a real, runnable readiness check</p>
-</section><section class="topic" id="p4-t4-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p4-t4-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>tell the cloud what to install</td>
-  <td><code>requirements.txt</code></td>
+<td>tell the cloud what to install</td>
+<td><code>requirements.txt</code></td>
 </tr>
 <tr>
-  <td>keep secrets and data out of the repo</td>
-  <td><code>.gitignore</code>, checked before every commit</td>
+<td>keep secrets and data out of the repo</td>
+<td><code>.gitignore</code>, checked before every commit</td>
 </tr>
 <tr>
-  <td>catch mistakes before deploying</td>
-  <td>a pre-flight check script</td>
+<td>catch mistakes before deploying</td>
+<td>a pre-flight check script</td>
 </tr>
 <tr>
-  <td>ship it</td>
-  <td>GitHub + <code>share.streamlit.io</code></td>
+<td>ship it</td>
+<td>GitHub + <code>share.streamlit.io</code></td>
 </tr>
 </tbody>
 </table>
 <p><strong>You now have all twelve weeks' toolkit.</strong> Test it, ship it, and — if you
 want to — make it a little smarter. Nothing about any of it resets.</p>
-</section></section>
+</section>
+</section>
 
-    <footer class="page-foot">CST1510 · Week 12 · Intelligence (Optional) and Deployment</footer>
+    <footer class="page-foot">CST1510 · Week 12 · Intelligence and Deployment</footer>
   </article>
 </div>
 

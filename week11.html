@@ -107,6 +107,7 @@
 <a href="#p2-t2-2-status-messages-colour-coded-instantly-readable" class="toc-sub">2. Status messages — colour-coded, instantly readable</a>
 <a href="#p2-t2-3-a-widget-s-return-value-filters-the-dataframe" class="toc-sub">3. A widget's return value filters the DataFrame</a>
 <a href="#p2-t2-4-a-checkbox-toggling-what-s-shown" class="toc-sub">4. A checkbox toggling what's shown</a>
+<a href="#p2-t2-5-more-widgets-and-a-chart-multiselect-number-input-line-chart" class="toc-sub">5. More widgets and a chart: <code>multiselect</code>, <code>number_input</code>, <code>line_chart</code></a>
 <a href="#p2-t2-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
 <a href="#p2-t2-common-mistakes" class="toc-sub">Common mistakes</a>
 <a href="#p2-t2-recap" class="toc-sub">Recap</a>
@@ -115,6 +116,7 @@
 <a href="#p3-t3-2-wiring-in-real-bcrypt-week-9-inside-a-form-now" class="toc-sub">2. Wiring in real bcrypt — Week 9, inside a form now</a>
 <a href="#p3-t3-3-storing-the-login-result-in-session-state" class="toc-sub">3. Storing the login result in <code>session_state</code></a>
 <a href="#p3-t3-4-protecting-a-page-st-stop" class="toc-sub">4. Protecting a page — <code>st.stop()</code></a>
+<a href="#p3-t3-5-one-guard-function-for-every-page" class="toc-sub">5. One guard function for every page</a>
 <a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
 <a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
 <a href="#p3-t3-recap" class="toc-sub">Recap</a>
@@ -125,6 +127,7 @@
 <a href="#p4-t4-2-st-cache-data-slow-work-runs-once-not-on-every-rerun" class="toc-sub">2. <code>@st.cache_data</code> — slow work runs once, not on every rerun</a>
 <a href="#p4-t4-3-secrets-st-secrets-the-streamlit-flavoured-version-of-week-9-s-os-environ" class="toc-sub">3. Secrets — <code>st.secrets</code>, the Streamlit-flavoured version of Week 9's <code>os.environ</code></a>
 <a href="#p4-t4-4-deploying-the-real-steps" class="toc-sub">4. Deploying — the real steps</a>
+<a href="#p4-t4-5-several-pages-the-pages-folder" class="toc-sub">5. Several pages: the <code>pages/</code> folder</a>
 <a href="#p4-t4-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
 <a href="#p4-t4-common-mistakes" class="toc-sub">Common mistakes</a>
 <a href="#p4-t4-recap" class="toc-sub">Recap</a>
@@ -174,91 +177,98 @@ starts fresh, every time.</p>
 if st.button("Add one"):
     st.session_state.count += 1
 
-st.write("Total:", st.session_state.count)</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+st.write("Total:", st.session_state.count)</code></pre></div></section>
+<section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>a dashboard someone can open without running any Python themselves</td>
+<td><strong>AI / Data Science</strong></td>
+<td>a dashboard someone can open without running any Python themselves</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>an incident console a non-technical colleague can actually use</td>
+<td><strong>Cyber Security</strong></td>
+<td>an incident console a non-technical colleague can actually use</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>a status page anyone on the team can check, not just you</td>
+<td><strong>IT</strong></td>
+<td>a status page anyone on the team can check, not just you</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>running with <code>python file.py</code></td>
-  <td>nothing happens, or a bare warning — no page</td>
-  <td>use <code>streamlit run file.py</code></td>
+<td>running with <code>python file.py</code></td>
+<td>nothing happens, or a bare warning — no page</td>
+<td>use <code>streamlit run file.py</code></td>
 </tr>
 <tr>
-  <td>expecting a plain variable to remember a value across clicks</td>
-  <td>it resets to its initial value every rerun</td>
-  <td>use <code>st.session_state</code> instead</td>
+<td>expecting a plain variable to remember a value across clicks</td>
+<td>it resets to its initial value every rerun</td>
+<td>use <code>st.session_state</code> instead</td>
 </tr>
 <tr>
-  <td>assuming only the clicked widget's code re-runs</td>
-  <td>the WHOLE script runs again, every time</td>
-  <td>design around full reruns, not partial updates</td>
+<td>assuming only the clicked widget's code re-runs</td>
+<td>the WHOLE script runs again, every time</td>
+<td>design around full reruns, not partial updates</td>
 </tr>
 <tr>
-  <td>being surprised errors appear in the browser</td>
-  <td>looking at the terminal and seeing nothing new</td>
-  <td>Streamlit renders exceptions on the page itself</td>
+<td>being surprised errors appear in the browser</td>
+<td>looking at the terminal and seeing nothing new</td>
+<td>Streamlit renders exceptions on the page itself</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_your_first_app.py</code> — title, write, markdown, the basics
 <code>examples/02_widgets_and_reruns.py</code> — widgets, the rerun model, session_state
 Docs: <a href="https://docs.streamlit.io/">Streamlit documentation</a></p>
-</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p1-t1-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>show text and data</td>
-  <td><code>st.title()</code>, <code>st.write()</code></td>
+<td>show text and data</td>
+<td><code>st.title()</code>, <code>st.write()</code></td>
 </tr>
 <tr>
-  <td>run the page</td>
-  <td><code>streamlit run file.py</code></td>
+<td>run the page</td>
+<td><code>streamlit run file.py</code></td>
 </tr>
 <tr>
-  <td>explain the rerun model</td>
-  <td>the whole script runs again, every interaction</td>
+<td>explain the rerun model</td>
+<td>the whole script runs again, every interaction</td>
 </tr>
 <tr>
-  <td>remember something across reruns</td>
-  <td><code>st.session_state</code></td>
+<td>remember something across reruns</td>
+<td><code>st.session_state</code></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — showing real data, and letting someone filter it.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">Displaying Data and Widgets</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/develop/api-reference/data/st.dataframe">st.dataframe</a> · <a href="https://docs.streamlit.io/develop/api-reference/widgets">Widgets API</a></p><section class="topic"><p>Turning a DataFrame into something readable, and a widget's return value
 into a live filter.</p><blockquote>
 <p>These cells show Streamlit code for reading, the way every walkthrough</p>
@@ -283,90 +293,171 @@ chosen = st.selectbox("Type", options)
 
 filtered = df if chosen == "all" else df[df["type"] == chosen]
 st.dataframe(filtered)</code></pre></div></section><section class="topic" id="p2-t2-4-a-checkbox-toggling-what-s-shown"><h2><span class="num">4.</span>A checkbox toggling what's shown</h2><div class="cell"><pre class="code"><code>show_only_flagged = st.checkbox("Show only flagged")
-st.dataframe(df[df["open_issues"] &gt; 0] if show_only_flagged else df)</code></pre></div></section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+st.dataframe(df[df["open_issues"] &gt; 0] if show_only_flagged else df)</code></pre></div></section><section class="topic" id="p2-t2-5-more-widgets-and-a-chart-multiselect-number-input-line-chart"><h2><span class="num">5.</span>More widgets and a chart: <code>multiselect</code>, <code>number_input</code>, <code>line_chart</code></h2>
+<p>Three more widgets complete the toolbox you need for the lab's Data and Dashboard pages.</p>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Widget</th>
+<th>Returns</th>
+<th>Typical use</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>filtering a dataset by category before showing summary stats</td>
+<td><code>st.multiselect(label, options, default=options)</code></td>
+<td>a list of the chosen options</td>
+<td>choose several categories</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>filtering incidents by severity</td>
+<td><code>st.number_input(label, min_value=0, value=0, step=1)</code></td>
+<td>a number</td>
+<td>a threshold, or a value to add</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>filtering devices by type or status</td>
+<td><code>st.slider(label, low, high, (low, high))</code></td>
+<td>a pair when given a pair</td>
+<td>choose a range</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+<p>Two pandas filters turn those values into rows: <code>df["city"].isin(chosen)</code> keeps rows whose value is in a list, and
+<code>df["sales"].between(low, high)</code> keeps rows inside a range. Combine conditions with <code>&amp;</code>, each in brackets.</p>
+<p><code>st.line_chart(series)</code> draws one line per column. Give it a Series whose index is the horizontal axis, for example <code>df.set_index("day")["sales"]</code>.</p>
+<div class="cell"><pre class="code"><code>import pandas as pd
+import streamlit as st
+
+df = pd.DataFrame({
+    "day": pd.date_range("2026-01-01", periods=10),
+    "city": ["Leeds", "York"] * 5,
+    "sales": [12, 9, 15, 11, 18, 14, 20, 13, 22, 17],
+})
+
+cities = sorted(df["city"].unique())
+chosen = st.multiselect("Cities", cities, default=cities)
+minimum = st.number_input("Minimum sales", min_value=0, value=0, step=1)
+
+filtered = df[df["city"].isin(chosen) &amp; (df["sales"] &gt;= minimum)]
+st.metric("Rows shown", len(filtered))
+
+if filtered.empty:
+    st.warning("No rows match these filters.")
+else:
+    st.line_chart(filtered.set_index("day")["sales"])</code></pre></div>
+<p>Always handle the empty case (<code>if filtered.empty</code>). A chart or a <code>min()</code> of no rows raises an error, and a visitor can easily untick every option.</p>
+</section>
+<section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>hard-coding selectbox options that drift from the real data</td>
-  <td>options that no longer match what is actually there</td>
-  <td>build options from <code>df[&quot;col&quot;].unique()</code></td>
+<td><strong>AI / Data Science</strong></td>
+<td>filtering a dataset by category before showing summary stats</td>
 </tr>
 <tr>
-  <td>filtering with <code>and</code>/<code>or</code> on a Series (Week 6's lesson, still true here)</td>
-  <td><code>ValueError</code></td>
-  <td>use <code>&amp;</code>/<code>\|</code>, brackets round each side</td>
+<td><strong>Cyber Security</strong></td>
+<td>filtering incidents by severity</td>
 </tr>
 <tr>
-  <td>forgetting a checkbox/slider already IS the filter — no button needed</td>
-  <td>an unnecessary extra click</td>
-  <td>the rerun happens automatically on every widget change</td>
-</tr>
-<tr>
-  <td>calling <code>st.dataframe()</code> on an empty filtered result with no message</td>
-  <td>a blank-looking page, confusing</td>
-  <td>show a message when the filter matches nothing</td>
+<td><strong>IT</strong></td>
+<td>filtering devices by type or status</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+</section>
+<section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
+<thead>
+<tr>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hard-coding selectbox options that drift from the real data</td>
+<td>options that no longer match what is actually there</td>
+<td>build options from <code>df["col"].unique()</code></td>
+</tr>
+<tr>
+<td>filtering with <code>and</code>/<code>or</code> on a Series (Week 6's lesson, still true here)</td>
+<td><code>ValueError</code></td>
+<td>use <code>&amp;</code>/<code>\|</code>, brackets round each side</td>
+</tr>
+<tr>
+<td>forgetting a checkbox/slider already IS the filter — no button needed</td>
+<td>an unnecessary extra click</td>
+<td>the rerun happens automatically on every widget change</td>
+</tr>
+<tr>
+<td>calling <code>st.dataframe()</code> on an empty filtered result with no message</td>
+<td>a blank-looking page, confusing</td>
+<td>show a message when the filter matches nothing</td>
+</tr>
+<tr>
+<td><code>df[a &amp; b]</code> without brackets round each condition</td>
+<td><code>ValueError: truth value of a Series is ambiguous</code></td>
+<td><code>df[(a) &amp; (b)]</code></td>
+</tr>
+<tr>
+<td>no check for an empty result</td>
+<td>a chart or <code>max()</code> fails when everything is unticked</td>
+<td><code>if filtered.empty: st.warning(...); st.stop()</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Go deeper</h2>
 <p><code>examples/01_displaying_data.py</code> — dataframe, table, metric, status messages
 <code>examples/02_input_widgets_and_filtering.py</code> — selectbox, slider, checkbox, live filtering</p>
-</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p2-t2-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>show a DataFrame</td>
-  <td><code>st.dataframe()</code>, <code>st.table()</code></td>
+<td>show a DataFrame</td>
+<td><code>st.dataframe()</code>, <code>st.table()</code></td>
 </tr>
 <tr>
-  <td>show a headline number</td>
-  <td><code>st.metric()</code></td>
+<td>show a headline number</td>
+<td><code>st.metric()</code></td>
 </tr>
 <tr>
-  <td>filter live from a widget</td>
-  <td>the widget's return value, in an <code>if</code></td>
+<td>filter live from a widget</td>
+<td>the widget's return value, in an <code>if</code></td>
 </tr>
 <tr>
-  <td>build options from real data</td>
-  <td><code>df[&quot;col&quot;].unique()</code></td>
+<td>build options from real data</td>
+<td><code>df["col"].unique()</code></td>
+</tr>
+<tr>
+<td>choose several options</td>
+<td><code>st.multiselect(label, options, default=options)</code></td>
+</tr>
+<tr>
+<td>keep rows in a list or a range</td>
+<td><code>isin([...])</code>, <code>between(low, high)</code></td>
+</tr>
+<tr>
+<td>draw a line chart</td>
+<td><code>st.line_chart(df.set_index("day")["sales"])</code></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — putting your login behind a real form.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Wiring In Your Login</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/develop/api-reference/execution-flow/st.form">st.form</a> · <a href="https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state">st.session_state</a></p><section class="topic"><p>Week 9's <code>register_user</code>/<code>login_user</code>, as a real web form — and a page that
 will not show its contents to anyone who has not logged in.</p><blockquote>
 <p>These cells show Streamlit code for reading, the way every walkthrough</p>
@@ -410,90 +501,142 @@ if login_submitted and login(username, password, users):
         st.stop()
 
 require_login()
-st.title("Protected Dashboard")</code></pre></div></section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+st.title("Protected Dashboard")</code></pre></div></section><section class="topic" id="p3-t3-5-one-guard-function-for-every-page"><h2><span class="num">5.</span>One guard function for every page</h2>
+<p>A protected page starts by checking <code>st.session_state</code>. If every page repeats those lines, one change means editing every page. Instead, write the check
+once in its own file and call it first on each page:</p>
+<pre class="code"><code># app_model/session.py (in your project)
+import streamlit as st
+
+def require_login():
+    if not st.session_state.get(&quot;logged_in&quot;, False):
+        st.warning(&quot;Please log in first: go to the Home page and log in.&quot;)
+        st.stop()
+</code></pre>
+<pre class="code"><code># at the top of every protected page
+from app_model.session import require_login
+
+require_login()
+st.title(&quot;Data&quot;)          # only reached if the user is logged in
+</code></pre>
+<p><code>st.session_state.get("logged_in", False)</code> is used rather than <code>st.session_state["logged_in"]</code> because on a visitor's first page load the
+key does not exist yet, and the square-bracket form would raise <code>KeyError</code>. <code>st.stop()</code> ends the page there, so nothing below it is shown.</p>
+<h2>6. Messages from your own functions</h2>
+<p>In Weeks 9 and 10 your <code>register_user()</code> and <code>login_user()</code> return <code>(ok, message)</code>. A Streamlit page only has to show it:</p>
+<pre class="code"><code>ok, message = login_user(conn, username, password)
+if ok:
+    st.session_state[&quot;logged_in&quot;] = True
+    st.session_state[&quot;username&quot;] = username
+    st.rerun()
+else:
+    st.error(message)
+</code></pre>
+<p><code>st.rerun()</code> runs the page again straight away, so the user sees the logged-in view without pressing anything else. The page contains no password
+checking at all; that stays in <code>app_model/users.py</code>.</p>
+</section>
+
+<section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>gating a shared dataset behind sign-in</td>
+<td><strong>AI / Data Science</strong></td>
+<td>gating a shared dataset behind sign-in</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>the exact login your incident console's own users go through</td>
+<td><strong>Cyber Security</strong></td>
+<td>the exact login your incident console's own users go through</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>restricting a monitoring dashboard to authorised staff</td>
+<td><strong>IT</strong></td>
+<td>restricting a monitoring dashboard to authorised staff</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>a widget outside <code>st.form()</code> causing reruns on every keystroke</td>
-  <td>laggy, jumpy typing</td>
-  <td>move related inputs inside one <code>st.form()</code></td>
+<td>a widget outside <code>st.form()</code> causing reruns on every keystroke</td>
+<td>laggy, jumpy typing</td>
+<td>move related inputs inside one <code>st.form()</code></td>
 </tr>
 <tr>
-  <td>forgetting <code>st.rerun()</code> after setting <code>logged_in = True</code></td>
-  <td>the page does not update until the next unrelated interaction</td>
-  <td>call <code>st.rerun()</code> right after the state change</td>
+<td>forgetting <code>st.rerun()</code> after setting <code>logged_in = True</code></td>
+<td>the page does not update until the next unrelated interaction</td>
+<td>call <code>st.rerun()</code> right after the state change</td>
 </tr>
 <tr>
-  <td>checking login state after already showing protected content</td>
-  <td>a flash of content before the gate</td>
-  <td>check and <code>st.stop()</code> at the very top of the page</td>
+<td>checking login state after already showing protected content</td>
+<td>a flash of content before the gate</td>
+<td>check and <code>st.stop()</code> at the very top of the page</td>
 </tr>
 <tr>
-  <td><code>StreamlitAPIException: form_submit_button() must be used inside a form</code></td>
-  <td>exactly what it says</td>
-  <td>make sure the button is indented inside the <code>with st.form(...)</code> block</td>
+<td><code>StreamlitAPIException: form_submit_button() must be used inside a form</code></td>
+<td>exactly what it says</td>
+<td>make sure the button is indented inside the <code>with st.form(...)</code> block</td>
+</tr>
+<tr>
+<td><code>st.session_state["logged_in"]</code> on a first visit</td>
+<td><code>KeyError</code></td>
+<td>use <code>st.session_state.get("logged_in", False)</code></td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_forms_and_session_state.py</code> — the full register/login flow, as a form
 <code>examples/02_protecting_a_page.py</code> — st.stop(), gating content on session_state</p>
-</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p3-t3-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>batch form inputs</td>
-  <td><code>st.form()</code> / <code>st.form_submit_button()</code></td>
+<td>batch form inputs</td>
+<td><code>st.form()</code> / <code>st.form_submit_button()</code></td>
 </tr>
 <tr>
-  <td>wire in real auth</td>
-  <td>Week 9's functions, called from the form</td>
+<td>wire in real auth</td>
+<td>Week 9's functions, called from the form</td>
 </tr>
 <tr>
-  <td>remember login state</td>
-  <td><code>st.session_state.logged_in</code></td>
+<td>remember login state</td>
+<td><code>st.session_state.logged_in</code></td>
 </tr>
 <tr>
-  <td>hide content until logged in</td>
-  <td><code>st.stop()</code></td>
+<td>hide content until logged in</td>
+<td><code>st.stop()</code></td>
+</tr>
+<tr>
+<td>protect many pages with one function</td>
+<td><code>require_login()</code> that calls <code>st.stop()</code></td>
+</tr>
+<tr>
+<td>show a function's result in the page</td>
+<td><code>ok, message = ...</code>, then <code>st.success(message)</code> or <code>st.error(message)</code></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — organising the page, and shipping it.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">Layout, Caching and Deployment</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.streamlit.io/develop/api-reference/layout">Layout API</a> · <a href="https://docs.streamlit.io/develop/api-reference/caching-and-state/st.cache_data">st.cache_data</a> · <a href="https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app">Deploy your app</a></p><section class="topic"><p>A page with more than one thing on it needs structure. And once it works
 locally, someone else needs to be able to open it.</p><blockquote>
 <p>These cells show Streamlit code for reading, the way every walkthrough</p>
@@ -530,115 +673,148 @@ def slow_load(n):
     time.sleep(1)   # pretend this is a real, slow load
     return pd.DataFrame({"x": range(n)})
 
-df = slow_load(5)   # slow once, instant after, for this same n</code></pre></div></section><section class="topic" id="p4-t4-3-secrets-st-secrets-the-streamlit-flavoured-version-of-week-9-s-os-environ"><h2><span class="num">3.</span>Secrets — <code>st.secrets</code>, the Streamlit-flavoured version of Week 9's <code>os.environ</code></h2><figure class="anim-figure"><svg viewBox="0 0 920 430" role="img" aria-label="Secrets belong in Streamlit&#x27;s secrets store rather than hard-coded into the page itself." style="width:100%;height:auto;display:block;"><rect x="12" y="10" width="896" height="384" rx="10" fill="#FFFFFF" stroke="#D8D4CC"/><rect x="12" y="10" width="896" height="30" rx="10" fill="#F6F4EE" stroke="#D8D4CC"/><circle cx="30" cy="25" r="4" fill="#C46A6A"/><circle cx="44" cy="25" r="4" fill="#D4B15A"/><circle cx="58" cy="25" r="4" fill="#76A777"/><text x="78" y="29" fill="#4A4844" font-size="12.5" font-family="IBM Plex Mono, monospace">week11_secrets.py</text><text x="24" y="102" fill="#1C1B19" font-size="26" font-family="Source Serif 4, Georgia, serif"><tspan x="24" dy="0">Secrets setup</tspan></text><rect x="24" y="104" width="122" height="26" rx="13" fill="#F1EFE9" stroke="#D8D4CC"/><text x="36" y="121" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace">OPENAI_API_KEY</text><rect x="24" y="144" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 152 L30 155 L35 148" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="158.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Store the key in .streamlit/secrets.toml</tspan></text><rect x="24" y="172" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 180 L30 183 L35 176" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="186.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Never commit the file</tspan></text><rect x="24" y="200" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 208 L30 211 L35 204" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="214.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Read it with st.secrets[...]</tspan></text></svg><figcaption><b>Sample screen</b>. Secrets belong in Streamlit's secrets store rather than hard-coded into the page itself.</figcaption></figure><div class="cell"><pre class="code"><code># .streamlit/secrets.toml (never committed):
-#   OPENAI_API_KEY = "sk-..."
+df = slow_load(5)   # slow once, instant after, for this same n</code></pre></div></section><section class="topic" id="p4-t4-3-secrets-st-secrets-the-streamlit-flavoured-version-of-week-9-s-os-environ"><h2><span class="num">3.</span>Secrets — <code>st.secrets</code>, the Streamlit-flavoured version of Week 9's <code>os.environ</code></h2><figure class="anim-figure"><svg viewBox="0 0 920 430" role="img" aria-label="Secrets belong in Streamlit&#x27;s secrets store rather than hard-coded into the page itself." style="width:100%;height:auto;display:block;"><rect x="12" y="10" width="896" height="384" rx="10" fill="#FFFFFF" stroke="#D8D4CC"/><rect x="12" y="10" width="896" height="30" rx="10" fill="#F6F4EE" stroke="#D8D4CC"/><circle cx="30" cy="25" r="4" fill="#C46A6A"/><circle cx="44" cy="25" r="4" fill="#D4B15A"/><circle cx="58" cy="25" r="4" fill="#76A777"/><text x="78" y="29" fill="#4A4844" font-size="12.5" font-family="IBM Plex Mono, monospace">week11_secrets.py</text><text x="24" y="102" fill="#1C1B19" font-size="26" font-family="Source Serif 4, Georgia, serif"><tspan x="24" dy="0">Secrets setup</tspan></text><rect x="24" y="104" width="122" height="26" rx="13" fill="#F1EFE9" stroke="#D8D4CC"/><text x="36" y="121" fill="#4A4844" font-size="12" font-family="IBM Plex Mono, monospace">AI_API_KEY</text><rect x="24" y="144" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 152 L30 155 L35 148" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="158.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Store the key in .streamlit/secrets.toml</tspan></text><rect x="24" y="172" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 180 L30 183 L35 176" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="186.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Never commit the file</tspan></text><rect x="24" y="200" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 208 L30 211 L35 204" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="214.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Read it with st.secrets[...]</tspan></text></svg><figcaption><b>Sample screen</b>. Secrets belong in Streamlit's secrets store rather than hard-coded into the page itself.</figcaption></figure><div class="cell"><pre class="code"><code># .streamlit/secrets.toml (never committed):
+#   AI_API_KEY = "sk-..."
 #
-# api_key = st.secrets["OPENAI_API_KEY"]
+# api_key = st.secrets["AI_API_KEY"]
 print("see the comment - nothing to run here")</code></pre></div></section><section class="topic" id="p4-t4-4-deploying-the-real-steps"><h2><span class="num">4.</span>Deploying — the real steps</h2><figure class="anim-figure"><svg viewBox="0 0 920 430" role="img" aria-label="The deployed app needs the repo, requirements, ignore rules, and secrets all lined up together." style="width:100%;height:auto;display:block;"><rect x="12" y="10" width="896" height="384" rx="10" fill="#FFFFFF" stroke="#D8D4CC"/><rect x="12" y="10" width="896" height="30" rx="10" fill="#F6F4EE" stroke="#D8D4CC"/><circle cx="30" cy="25" r="4" fill="#C46A6A"/><circle cx="44" cy="25" r="4" fill="#D4B15A"/><circle cx="58" cy="25" r="4" fill="#76A777"/><text x="78" y="29" fill="#4A4844" font-size="12.5" font-family="IBM Plex Mono, monospace">week11_deploy.py</text><text x="24" y="102" fill="#1C1B19" font-size="26" font-family="Source Serif 4, Georgia, serif"><tspan x="24" dy="0">Deployment checklist</tspan></text><rect x="24" y="106" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 114 L30 117 L35 110" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="120.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Push the project to GitHub</tspan></text><rect x="24" y="134" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 142 L30 145 L35 138" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="148.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Add requirements.txt</tspan></text><rect x="24" y="162" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 170 L30 173 L35 166" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="176.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Keep secrets and .db files out of the repo</tspan></text><rect x="24" y="190" width="14" height="14" rx="3" fill="#FFFFFF" stroke="#8A867C"/><path d="M27 198 L30 201 L35 194" fill="none" stroke="#2E6A44" stroke-width="2"/><text x="48" y="204.5" fill="#1C1B19" font-size="13.5" font-family="Source Serif 4, Georgia, serif"><tspan x="48" dy="0">Connect the repo in Streamlit Community Cloud</tspan></text></svg><figcaption><b>Sample screen</b>. The deployed app needs the repo, requirements, ignore rules, and secrets all lined up together.</figcaption></figure><p>Push to GitHub, add <code>requirements.txt</code>, add secrets and <code>.db</code> files to
 <code>.gitignore</code>, connect the repo on <code>share.streamlit.io</code>.</p>
-</section><section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+</section><section class="topic" id="p4-t4-5-several-pages-the-pages-folder"><h2><span class="num">5.</span>Several pages: the <code>pages/</code> folder</h2>
+<p>A Streamlit app with several pages is a folder of ordinary files. Put a folder called <code>pages</code> <strong>next to</strong> your main file, and every <code>.py</code> file inside it
+becomes an entry in the menu on the left. A number at the start of the file name sets the order; the rest becomes the label.</p>
+<pre class="code"><code>CST1510_CW2/
+  main.py                 &lt;- home page, run with:  streamlit run main.py
+  app_model/              &lt;- your package (session.py holds require_login)
+  pages/
+    1_Data.py             &lt;- menu entry &quot;Data&quot;
+    2_Dashboard.py        &lt;- menu entry &quot;Dashboard&quot;
+    3_Manage.py           &lt;- menu entry &quot;Manage&quot;
+</code></pre>
+<p>Three facts to remember:
+- Run Streamlit from the folder that holds <code>main.py</code>. Then <code>from app_model.session import require_login</code> works from every page.
+- <code>st.session_state</code> is shared by all pages, so a login made on the home page is visible on the others.
+- Each page runs from the top on its own, so each protected page must call the guard itself.</p>
+<p><code>examples/03_multipage_app/</code> is a two-page app. Run <code>streamlit run main.py</code> from inside it.</p>
+</section>
+
+<section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>a sidebar of dataset filters, tabs per analysis view</td>
+<td><strong>AI / Data Science</strong></td>
+<td>a sidebar of dataset filters, tabs per analysis view</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>tabs separating incidents by severity, a cached feed refresh</td>
+<td><strong>Cyber Security</strong></td>
+<td>tabs separating incidents by severity, a cached feed refresh</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>a sidebar of environment filters, columns of key metrics</td>
+<td><strong>IT</strong></td>
+<td>a sidebar of environment filters, columns of key metrics</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>reloading the same slow data on every rerun</td>
-  <td>the page feels sluggish on every click</td>
-  <td><code>@st.cache_data</code></td>
+<td>reloading the same slow data on every rerun</td>
+<td>the page feels sluggish on every click</td>
+<td><code>@st.cache_data</code></td>
 </tr>
 <tr>
-  <td>running with <code>python app.py</code></td>
-  <td>no page appears</td>
-  <td><code>streamlit run app.py</code></td>
+<td>running with <code>python app.py</code></td>
+<td>no page appears</td>
+<td><code>streamlit run app.py</code></td>
 </tr>
 <tr>
-  <td>committing <code>.db</code> or <code>secrets.toml</code></td>
-  <td>real secrets or user data in a public repo</td>
-  <td><code>.gitignore</code>, before the first commit that includes them</td>
+<td>committing <code>.db</code> or <code>secrets.toml</code></td>
+<td>real secrets or user data in a public repo</td>
+<td><code>.gitignore</code>, before the first commit that includes them</td>
 </tr>
 <tr>
-  <td>forgetting <code>requirements.txt</code></td>
-  <td>the deployed cloud app fails to even start</td>
-  <td>list every library you import</td>
+<td>forgetting <code>requirements.txt</code></td>
+<td>the deployed cloud app fails to even start</td>
+<td>list every library you import</td>
 </tr>
 <tr>
-  <td>two widgets with the same type, label and position</td>
-  <td><code>StreamlitDuplicateElementId</code></td>
-  <td>give each one a unique <code>key=</code></td>
+<td>two widgets with the same type, label and position</td>
+<td><code>StreamlitDuplicateElementId</code></td>
+<td>give each one a unique <code>key=</code></td>
 </tr>
 <tr>
-  <td>calling <code>st.set_page_config()</code> after other Streamlit output</td>
-  <td><code>StreamlitAPIException</code></td>
-  <td>it must be the very first Streamlit command in the file</td>
+<td>calling <code>st.set_page_config()</code> after other Streamlit output</td>
+<td><code>StreamlitAPIException</code></td>
+<td>it must be the very first Streamlit command in the file</td>
+</tr>
+<tr>
+<td>the menu shows no pages</td>
+<td><code>pages</code> is misspelt or not next to the file you ran</td>
+<td>the folder must be named exactly <code>pages</code>, beside your main file (<code>main.py</code> in the project)</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_layout_and_caching.py</code> — columns, sidebar, tabs, expander, caching, page config, bar_chart, key=
 <code>examples/02_secrets_and_deployment.py</code> — st.secrets, requirements.txt, the real deploy steps</p>
-</section><section class="topic" id="p4-t4-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p4-t4-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>organise a page</td>
-  <td><code>st.columns()</code>, <code>st.sidebar</code>, <code>st.tabs()</code>, <code>st.expander()</code></td>
+<td>organise a page</td>
+<td><code>st.columns()</code>, <code>st.sidebar</code>, <code>st.tabs()</code>, <code>st.expander()</code></td>
 </tr>
 <tr>
-  <td>set the tab title, and chart a DataFrame</td>
-  <td><code>st.set_page_config()</code>, <code>st.bar_chart()</code></td>
+<td>set the tab title, and chart a DataFrame</td>
+<td><code>st.set_page_config()</code>, <code>st.bar_chart()</code></td>
 </tr>
 <tr>
-  <td>tell two identical widgets apart</td>
-  <td><code>key=&quot;...&quot;</code></td>
+<td>tell two identical widgets apart</td>
+<td><code>key="..."</code></td>
 </tr>
 <tr>
-  <td>avoid re-doing slow work</td>
-  <td><code>@st.cache_data</code></td>
+<td>avoid re-doing slow work</td>
+<td><code>@st.cache_data</code></td>
 </tr>
 <tr>
-  <td>keep a secret out of your code</td>
-  <td><code>st.secrets</code></td>
+<td>keep a secret out of your code</td>
+<td><code>st.secrets</code></td>
 </tr>
 <tr>
-  <td>deploy for real</td>
-  <td>GitHub + <code>requirements.txt</code> + <code>share.streamlit.io</code></td>
+<td>deploy for real</td>
+<td>GitHub + <code>requirements.txt</code> + <code>share.streamlit.io</code></td>
+</tr>
+<tr>
+<td>make a multipage app</td>
+<td>a <code>pages/</code> folder next to your main file (<code>main.py</code> in the project)</td>
 </tr>
 </tbody>
 </table>
 <p><strong>You now have all of Week 11's OUTPUT.</strong> Turn your project into a real page
-in the lab — nothing about it resets.</p>
-</section></section>
+in the lab. It carries on from the previous weeks and is not restarted.</p>
+</section>
+</section>
 
     <footer class="page-foot">CST1510 · Week 11 · Streamlit Dashboard</footer>
   </article>

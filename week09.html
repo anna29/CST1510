@@ -115,6 +115,7 @@
 <a href="#p3-t3-2-logging-in-find-the-line-then-checkpw" class="toc-sub">2. Logging in — find the line, then <code>checkpw()</code></a>
 <a href="#p3-t3-3-a-missing-file-should-not-crash-a-login-attempt" class="toc-sub">3. A missing file should not crash a login attempt</a>
 <a href="#p3-t3-4-refusing-a-duplicate-username" class="toc-sub">4. Refusing a duplicate username</a>
+<a href="#p3-t3-5-return-a-flag-and-a-message" class="toc-sub">5. Return a flag and a message</a>
 <a href="#p3-t3-same-idea-three-fields" class="toc-sub">Same idea, three fields</a>
 <a href="#p3-t3-common-mistakes" class="toc-sub">Common mistakes</a>
 <a href="#p3-t3-recap" class="toc-sub">Recap</a>
@@ -161,91 +162,98 @@ useless.</p>
 table = {hashlib.sha256(p.encode()).hexdigest(): p for p in common}
 
 stolen = hashlib.sha256(b"qwerty").hexdigest()
-print(stolen in table)     # True - instantly cracked, no salt</code></pre></div></section><section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+print(stolen in table)     # True - instantly cracked, no salt</code></pre></div></section>
+<section class="topic" id="p1-t1-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>hashing to check whether two data files are identical, without comparing every byte</td>
+<td><strong>AI / Data Science</strong></td>
+<td>hashing to check whether two data files are identical, without comparing every byte</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>recognising a rainbow-table attack against a leaked password database</td>
+<td><strong>Cyber Security</strong></td>
+<td>recognising a rainbow-table attack against a leaked password database</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>verifying a downloaded file has not been tampered with, via its published hash</td>
+<td><strong>IT</strong></td>
+<td>verifying a downloaded file has not been tampered with, via its published hash</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p1-t1-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>calling hashing &quot;encryption&quot;</td>
-  <td>technically wrong, and the wrong mental model</td>
-  <td>hashing has no key and cannot be reversed — encryption does and can</td>
+<td>calling hashing "encryption"</td>
+<td>technically wrong, and the wrong mental model</td>
+<td>hashing has no key and cannot be reversed — encryption does and can</td>
 </tr>
 <tr>
-  <td>assuming a hash can be &quot;decoded&quot; back to the password</td>
-  <td>there is no function for this</td>
-  <td>verification means hashing the guess again and comparing</td>
+<td>assuming a hash can be "decoded" back to the password</td>
+<td>there is no function for this</td>
+<td>verification means hashing the guess again and comparing</td>
 </tr>
 <tr>
-  <td>using an unsalted hash for passwords</td>
-  <td>vulnerable to a pre-computed rainbow table</td>
-  <td>always salt — bcrypt does this for you automatically (Topic 2)</td>
+<td>using an unsalted hash for passwords</td>
+<td>vulnerable to a pre-computed rainbow table</td>
+<td>always salt — bcrypt does this for you automatically (Topic 2)</td>
 </tr>
 <tr>
-  <td>picking a &quot;clever&quot; but common password</td>
-  <td>it is very likely already in an attacker's table</td>
-  <td>length and genuine randomness beat cleverness</td>
+<td>picking a "clever" but common password</td>
+<td>it is very likely already in an attacker's table</td>
+<td>length and genuine randomness beat cleverness</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_what_hashing_actually_does.py</code> — determinism, the avalanche effect, one-way
 <code>examples/02_why_plain_hashing_is_not_enough.py</code> — a real rainbow-table demonstration, and salting
 Docs: <a href="https://pypi.org/project/bcrypt/">Python hashlib</a></p>
-</section><section class="topic" id="p1-t1-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p1-t1-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>explain what a hash is</td>
-  <td>one-way, deterministic, fixed size</td>
+<td>explain what a hash is</td>
+<td>one-way, deterministic, fixed size</td>
 </tr>
 <tr>
-  <td>explain why not encryption</td>
-  <td>no key to steal, never needs reversing</td>
+<td>explain why not encryption</td>
+<td>no key to steal, never needs reversing</td>
 </tr>
 <tr>
-  <td>explain a rainbow table attack</td>
-  <td>pre-computed hashes of common passwords</td>
+<td>explain a rainbow table attack</td>
+<td>pre-computed hashes of common passwords</td>
 </tr>
 <tr>
-  <td>explain why salting defeats it</td>
-  <td>a unique salt makes every hash different</td>
+<td>explain why salting defeats it</td>
+<td>a unique salt makes every hash different</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 2 — doing this properly, with bcrypt.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">bcrypt in Python</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p><section class="topic"><p>Two functions, and the one design choice worth understanding: bcrypt is slow
 on purpose.</p><section class="topic" id="p2-t2-1-bcrypt-works-with-bytes-encode-first"><h2><span class="num">1.</span>bcrypt works with bytes — encode first</h2><div class="cell"><pre class="code"><code>import bcrypt
 
@@ -265,87 +273,94 @@ days added up across a brute-force attempt.</p>
 for rounds in (10, 12, 14):
     start = time.perf_counter()
     bcrypt.hashpw(password_bytes, bcrypt.gensalt(rounds=rounds))
-    print(rounds, f"{time.perf_counter() - start:.3f}s")</code></pre></div></section><section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+    print(rounds, f"{time.perf_counter() - start:.3f}s")</code></pre></div></section>
+<section class="topic" id="p2-t2-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>hashing an account password before storing dataset access credentials</td>
+<td><strong>AI / Data Science</strong></td>
+<td>hashing an account password before storing dataset access credentials</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>verifying a login attempt without ever holding the real password</td>
+<td><strong>Cyber Security</strong></td>
+<td>verifying a login attempt without ever holding the real password</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>hashing service-account credentials in a config management tool</td>
+<td><strong>IT</strong></td>
+<td>hashing service-account credentials in a config management tool</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p2-t2-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>passing a <code>str</code> instead of <code>bytes</code></td>
-  <td><code>TypeError: argument 'password': 'str' object cannot be converted to 'PyBytes'</code></td>
-  <td><code>.encode(&quot;utf-8&quot;)</code> first</td>
+<td>passing a <code>str</code> instead of <code>bytes</code></td>
+<td><code>TypeError: argument 'password': 'str' object cannot be converted to 'PyBytes'</code></td>
+<td><code>.encode("utf-8")</code> first</td>
 </tr>
 <tr>
-  <td>swapping the argument order in <code>checkpw()</code></td>
-  <td><code>ValueError: Invalid salt</code></td>
-  <td>password first, hash second — always</td>
+<td>swapping the argument order in <code>checkpw()</code></td>
+<td><code>ValueError: Invalid salt</code></td>
+<td>password first, hash second — always</td>
 </tr>
 <tr>
-  <td>storing the salt separately from the hash</td>
-  <td>unnecessary — and easy to lose track of which belongs to which</td>
-  <td>bcrypt already embeds it in the hash string</td>
+<td>storing the salt separately from the hash</td>
+<td>unnecessary — and easy to lose track of which belongs to which</td>
+<td>bcrypt already embeds it in the hash string</td>
 </tr>
 <tr>
-  <td>picking an unnecessarily high cost factor</td>
-  <td>logins become slow for everyone, including real users</td>
-  <td>the default is already a reasonable choice</td>
+<td>picking an unnecessarily high cost factor</td>
+<td>logins become slow for everyone, including real users</td>
+<td>the default is already a reasonable choice</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_generate_and_check.py</code> — hashpw, checkpw, the salt embedded in the hash
 <code>examples/02_the_cost_factor.py</code> — real timings, and what they mean for an attacker
 Docs: <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p>
-</section><section class="topic" id="p2-t2-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p2-t2-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>hash a password</td>
-  <td><code>bcrypt.hashpw(password_bytes, bcrypt.gensalt())</code></td>
+<td>hash a password</td>
+<td><code>bcrypt.hashpw(password_bytes, bcrypt.gensalt())</code></td>
 </tr>
 <tr>
-  <td>verify one</td>
-  <td><code>bcrypt.checkpw(candidate_bytes, hashed)</code></td>
+<td>verify one</td>
+<td><code>bcrypt.checkpw(candidate_bytes, hashed)</code></td>
 </tr>
 <tr>
-  <td>explain the cost factor</td>
-  <td>slower per attempt, on purpose</td>
+<td>explain the cost factor</td>
+<td>slower per attempt, on purpose</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 3 — wiring this into a real register/login flow.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Register and Login</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p><section class="topic"><p>Wiring bcrypt into a real, if simple, authentication flow against a file.</p><section class="topic" id="p3-t3-1-registering-hash-then-append"><h2><span class="num">1.</span>Registering — hash, then append</h2><div class="cell"><pre class="code"><code>import bcrypt
 
 def register_user(username, password, path="users.txt"):
@@ -389,90 +404,112 @@ print(login_user_safe("nobody", "anything", "does_not_exist.txt"))</code></pre><
             stored_username, _ = line.strip().split(",", 1)
             if stored_username == username:
                 return True
-    return False</code></pre></div></section><section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+    return False</code></pre></div></section><section class="topic" id="p3-t3-5-return-a-flag-and-a-message"><h2><span class="num">5.</span>Return a flag and a message</h2>
+<p>The lab's functions return two values, <code>(True, "Registered.")</code> or <code>(False, "That username is already taken.")</code>. The program that
+calls them can then both decide what to do (the flag) and show the user what happened (the message). In Week 11 the Streamlit page
+prints the message in green or red depending on the flag.</p>
+<pre class="code"><code>ok, message = register_user(&quot;anna&quot;, &quot;longenough1&quot;)
+if ok:
+    print(&quot;Success:&quot;, message)
+else:
+    print(&quot;Refused:&quot;, message)
+</code></pre>
+</section>
+
+<section class="topic" id="p3-t3-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>gating access to a shared dataset behind a login</td>
+<td><strong>AI / Data Science</strong></td>
+<td>gating access to a shared dataset behind a login</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>the exact flow an incident console's own users go through</td>
+<td><strong>Cyber Security</strong></td>
+<td>the exact flow an incident console's own users go through</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>gating a monitoring dashboard so only authorised staff see it</td>
+<td><strong>IT</strong></td>
+<td>gating a monitoring dashboard so only authorised staff see it</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p3-t3-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><code>.split(&quot;,&quot;)</code> without <code>maxsplit</code> on a line with an extra comma</td>
-  <td><code>ValueError: too many values to unpack</code></td>
-  <td><code>.split(&quot;,&quot;, 1)</code> — same lesson as Week 7</td>
+<td><code>.split(",")</code> without <code>maxsplit</code> on a line with an extra comma</td>
+<td><code>ValueError: too many values to unpack</code></td>
+<td><code>.split(",", 1)</code> — same lesson as Week 7</td>
 </tr>
 <tr>
-  <td>no check for the store file existing yet</td>
-  <td><code>FileNotFoundError</code> on the very first login attempt</td>
-  <td>check <code>os.path.exists()</code> first, or catch it</td>
+<td>no check for the store file existing yet</td>
+<td><code>FileNotFoundError</code> on the very first login attempt</td>
+<td>check <code>os.path.exists()</code> first, or catch it</td>
 </tr>
 <tr>
-  <td>allowing duplicate usernames</td>
-  <td>login always finds the first record, silently wrong later</td>
-  <td>check <code>username_exists()</code> before registering</td>
+<td>allowing duplicate usernames</td>
+<td>login always finds the first record, silently wrong later</td>
+<td>check <code>username_exists()</code> before registering</td>
 </tr>
 <tr>
-  <td>printing a password anywhere, even for debugging</td>
-  <td>it is now in your terminal history / logs</td>
-  <td>print confirmation messages only, never the value</td>
+<td>printing a password anywhere, even for debugging</td>
+<td>it is now in your terminal history / logs</td>
+<td>print confirmation messages only, never the value</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_register_and_login.py</code> — the full flow, right and wrong password, unknown user
 <code>examples/02_a_menu_and_duplicate_usernames.py</code> — refusing duplicates, a real interactive menu</p>
-</section><section class="topic" id="p3-t3-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p3-t3-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>register a user safely</td>
-  <td>hash, then append</td>
+<td>register a user safely</td>
+<td>hash, then append</td>
 </tr>
 <tr>
-  <td>log a user in</td>
-  <td>find the line, <code>checkpw()</code></td>
+<td>log a user in</td>
+<td>find the line, <code>checkpw()</code></td>
 </tr>
 <tr>
-  <td>handle a missing store</td>
-  <td>check before opening, or catch the error</td>
+<td>handle a missing store</td>
+<td>check before opening, or catch the error</td>
 </tr>
 <tr>
-  <td>refuse a duplicate username</td>
-  <td>check first, before writing</td>
+<td>refuse a duplicate username</td>
+<td>check first, before writing</td>
+</tr>
+<tr>
+<td>return a result and a message</td>
+<td><code>return True, "Registered."</code></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Next:</strong> Topic 4 — keeping the secrets this all depends on out of your code.</p>
-</section></section>
+</section>
+</section>
 <div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">Keeping Secrets Out of Code</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a></p><section class="topic"><p>Hashing protects passwords. This topic protects everything else — API keys,
 tokens, anything that must never sit in a file you might commit.</p><section class="topic" id="p4-t4-1-a-hard-coded-secret-is-a-mistake-not-a-style-issue"><h2><span class="num">1.</span>A hard-coded secret is a mistake, not a style issue</h2><p>The moment it is pushed to a public repository, it is compromised — deleting
 it later does not help, it is still in the commit history.</p>
@@ -499,96 +536,103 @@ for line in gitignore_lines:
     print(line)</code></pre></div></section><section class="topic" id="p4-t4-4-if-a-secret-leaks-anyway"><h2><span class="num">4.</span>If a secret leaks anyway</h2><p>Removing it from the latest commit is not enough — it is still readable in
 history. Revoke the key at its source first, generate a new one, worry about
 cleaning history second.</p>
-</section><section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2><table class="booktabs">
+</section>
+<section class="topic" id="p4-t4-same-idea-three-fields"><h2>Same idea, three fields</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Field</th>
-  <th>Looks like</th>
+<th>Field</th>
+<th>Looks like</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>AI / Data Science</strong></td>
-  <td>keeping a Kaggle API token out of a notebook you might share</td>
+<td><strong>AI / Data Science</strong></td>
+<td>keeping a Kaggle API token out of a notebook you might share</td>
 </tr>
 <tr>
-  <td><strong>Cyber Security</strong></td>
-  <td>keeping a threat-intel API key out of a public incident console repo</td>
+<td><strong>Cyber Security</strong></td>
+<td>keeping a threat-intel API key out of a public incident console repo</td>
 </tr>
 <tr>
-  <td><strong>IT</strong></td>
-  <td>keeping a monitoring service's token out of a committed config file</td>
+<td><strong>IT</strong></td>
+<td>keeping a monitoring service's token out of a committed config file</td>
 </tr>
 </tbody>
 </table>
-</section><section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2><table class="booktabs">
+</section>
+<section class="topic" id="p4-t4-common-mistakes"><h2>Common mistakes</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>Mistake</th>
-  <th>What you see</th>
-  <th>Fix</th>
+<th>Mistake</th>
+<th>What you see</th>
+<th>Fix</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>committing a <code>.db</code> or <code>.txt</code> file full of real hashed users</td>
-  <td>it is now in your repository's history</td>
-  <td>add it to <code>.gitignore</code> <em>before</em> the first commit that includes it</td>
+<td>committing a <code>.db</code> or <code>.txt</code> file full of real hashed users</td>
+<td>it is now in your repository's history</td>
+<td>add it to <code>.gitignore</code> <em>before</em> the first commit that includes it</td>
 </tr>
 <tr>
-  <td>assuming a private repo makes secrets safe</td>
-  <td>tutors, group members, and future public forks can still see it</td>
-  <td>treat every repo as if it could become public</td>
+<td>assuming a private repo makes secrets safe</td>
+<td>tutors, group members, and future public forks can still see it</td>
+<td>treat every repo as if it could become public</td>
 </tr>
 <tr>
-  <td>hard-coding &quot;just for testing&quot;</td>
-  <td>it is easy to forget to remove before committing</td>
-  <td>use an environment variable from the start, even in testing</td>
+<td>hard-coding "just for testing"</td>
+<td>it is easy to forget to remove before committing</td>
+<td>use an environment variable from the start, even in testing</td>
 </tr>
 <tr>
-  <td>checking <code>.gitignore</code> after committing the file once</td>
-  <td>too late — it is already tracked</td>
-  <td><code>git rm --cached &lt;file&gt;</code> is needed on top of <code>.gitignore</code> if this happens</td>
+<td>checking <code>.gitignore</code> after committing the file once</td>
+<td>too late — it is already tracked</td>
+<td><code>git rm --cached &lt;file&gt;</code> is needed on top of <code>.gitignore</code> if this happens</td>
 </tr>
 <tr>
-  <td>defaulting a <em>required</em> variable to <code>&quot;not set&quot;</code> and carrying on</td>
-  <td>it fails later, somewhere confusing, instead of here</td>
-  <td><code>raise</code> a clear error the moment you know it's missing</td>
+<td>defaulting a <em>required</em> variable to <code>"not set"</code> and carrying on</td>
+<td>it fails later, somewhere confusing, instead of here</td>
+<td><code>raise</code> a clear error the moment you know it's missing</td>
 </tr>
 </tbody>
 </table>
-<h3>Go deeper</h3>
+<h2>Go deeper</h2>
 <p><code>examples/01_environment_variables.py</code> — os.environ, sensible defaults, raising on a missing required variable
 <code>examples/02_gitignore_and_what_not_to_commit.py</code> — what belongs in .gitignore, and why</p>
-</section><section class="topic" id="p4-t4-recap"><h2>Recap</h2><table class="booktabs">
+</section>
+<section class="topic" id="p4-t4-recap"><h2>Recap</h2>
+<table class="booktabs">
 <thead>
 <tr>
-  <th>You can now</th>
-  <th>Using</th>
+<th>You can now</th>
+<th>Using</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td>keep a secret out of your code</td>
-  <td><code>os.environ.get(&quot;NAME&quot;)</code></td>
+<td>keep a secret out of your code</td>
+<td><code>os.environ.get("NAME")</code></td>
 </tr>
 <tr>
-  <td>refuse to continue without a required one</td>
-  <td><code>raise RuntimeError(...)</code></td>
+<td>refuse to continue without a required one</td>
+<td><code>raise RuntimeError(...)</code></td>
 </tr>
 <tr>
-  <td>keep it out of your repository</td>
-  <td><code>.gitignore</code></td>
+<td>keep it out of your repository</td>
+<td><code>.gitignore</code></td>
 </tr>
 <tr>
-  <td>respond correctly to a leak</td>
-  <td>revoke first, clean history second</td>
+<td>respond correctly to a leak</td>
+<td>revoke first, clean history second</td>
 </tr>
 </tbody>
 </table>
 <p><strong>You now have all of Week 9's tools.</strong> Open last week's project and add a
 login to it — nothing about it resets.</p>
-</section></section>
+</section>
+</section>
 
     <footer class="page-foot">CST1510 · Week 09 · Hashing and Auth</footer>
   </article>
