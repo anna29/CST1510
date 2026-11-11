@@ -218,17 +218,33 @@ python -m pip install -r "../CST1510/Week 00 - Orientation and Setup/requirement
       <b>Select Kernel</b> &rarr; <b>Python Environments</b> &rarr; that same <code>.venv</code>.
       Check it with <code>python "../CST1510/Week 00 - Orientation and Setup/verify_setup.py"</code>: every line should say <code>OK</code>.</p>
     <p><b>5. Add a <code>.gitignore</code></b> to <code>CST1510_CW2</code>. Create a new file named <code>.gitignore</code>, paste this in and save.
-      It keeps your users, your database and your API key off GitHub:</p>
-    <pre>.venv/
-__pycache__/
-.ipynb_checkpoints/
-.pytest_cache/
-.DS_Store
-.env
-DATA/app.db
-DATA/users.txt
-.streamlit/secrets.toml
-practice/</pre>
+      It works the other way round from a normal <code>.gitignore</code>: it ignores <b>everything</b> and lists the few project files that are allowed.
+      So lab notebooks, week folders, your database, your users and your API key can never reach GitHub:</p>
+    <pre># Upload ONLY the project files. Everything else is ignored.
+*
+
+!.gitignore
+!README.md
+!requirements.txt
+!main.py
+!fetch_data.py
+!load_data.py
+!auth.py
+
+!DATA/
+!DATA/raw.csv
+
+!app_model/
+!app_model/*.py
+
+!pages/
+!pages/*.py
+
+!tests/
+!tests/*.py
+
+!.streamlit/
+!.streamlit/secrets.toml.example</pre>
     <p><b>6. Keep the CW2 lab folders out of your <code>CST1510</code> repository.</b> If you store the Week 8 to 12 folders inside
       <code>CST1510</code>, add these lines to the end of <b>that</b> repository's <code>.gitignore</code> (they come after the
       rule that uploads <code>LAB</code> folders, so they win):</p>
@@ -240,7 +256,7 @@ Week 11*/
 Week 12*/</pre>
     <p><b>7. Check it.</b> At the end of each lab, in the <code>CST1510_CW2</code> terminal run <code>git add .</code>,
       <code>git commit -m "Week N: ..."</code> and <code>git push</code> (the lab gives you the exact message). Run <code>git status</code> first:
-      you should see your <code>.py</code> files, but <b>never</b> a <code>.db</code> file, <code>users.txt</code>, <code>secrets.toml</code> or <code>.env</code>.
+      you should see only your project files (<code>.py</code> files, <code>DATA/raw.csv</code>, <code>README.md</code>), <b>never</b> a Week folder, a notebook, a <code>.db</code> file, <code>users.txt</code>, <code>secrets.toml</code> or <code>.env</code>.
       If one appears, check the lines above for typos before you commit.</p>
   </section>
 
