@@ -255,16 +255,7 @@ __pycache__/
 </pre>
     <p>Keep the <code>*</code> as the <b>first</b> rule (it is what makes the <code>!</code> lines work) and leave a blank line at the end of the file,
       otherwise the last two lines can merge into one broken rule.</p>
-    <p><b>6. Keep the CW2 lab folders out of your <code>CST1510</code> repository.</b> If you store the Week 8 to 12 folders inside
-      <code>CST1510</code>, add these lines to the end of <b>that</b> repository's <code>.gitignore</code> (they come after the
-      rule that uploads <code>LAB</code> folders, so they win):</p>
-    <pre># CW2 weeks: the project is in CST1510_CW2, nothing from these folders is uploaded
-Week 08*/
-Week 09*/
-Week 10*/
-Week 11*/
-Week 12*/</pre>
-    <p><b>7. Check it.</b> At the end of each lab, in the <code>CST1510_CW2</code> terminal run <code>git add .</code>,
+    <p><b>6. Check it.</b> At the end of each lab, in the <code>CST1510_CW2</code> terminal run <code>git add .</code>,
       <code>git commit -m "Week N: ..."</code> and <code>git push</code> (the lab gives you the exact message). Run <code>git status</code> first:
       you should see only your project files (<code>.py</code> files, <code>DATA/raw.csv</code>, <code>README.md</code>), <b>never</b> a Week folder, a notebook, a <code>.db</code> file, <code>users.txt</code>, <code>secrets.toml</code> or <code>.env</code>.
       If one appears, check the lines above for typos before you commit.</p>
