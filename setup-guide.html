@@ -244,7 +244,17 @@ python -m pip install -r "../CST1510/Week 00 - Orientation and Setup/requirement
 !tests/*.py
 
 !.streamlit/
-!.streamlit/secrets.toml.example</pre>
+!.streamlit/secrets.toml.example
+
+# Never commit these
+__pycache__/
+*.pyc
+.venv/
+.streamlit/secrets.toml
+.DS_Store
+</pre>
+    <p>Keep the <code>*</code> as the <b>first</b> rule (it is what makes the <code>!</code> lines work) and leave a blank line at the end of the file,
+      otherwise the last two lines can merge into one broken rule.</p>
     <p><b>6. Keep the CW2 lab folders out of your <code>CST1510</code> repository.</b> If you store the Week 8 to 12 folders inside
       <code>CST1510</code>, add these lines to the end of <b>that</b> repository's <code>.gitignore</code> (they come after the
       rule that uploads <code>LAB</code> folders, so they win):</p>
