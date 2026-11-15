@@ -140,21 +140,25 @@
     <figure class="anim-figure" style="margin: 26px 0 0;"><iframe src="architecture_map.html?embed=1&amp;week=9" title="System architecture — Week 9" loading="lazy" style="height:340px;"></iframe><figcaption>The system we are building. Four boxes, one program, growing week by week — this week you build <b>PROCESS, made safe</b>.</figcaption></figure>
 
     <div class="topic-divider" id="p1"><span class="topic-divider-n">Part 1</span><h2 class="topic-divider-title">Why Hash, Not Encrypt</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/hashlib.html">hashlib</a></p><section class="topic"><p>Before any bcrypt function, the concept: what hashing actually is, and why it
-is the right tool for a password.</p><section class="topic" id="p1-t1-1-hashing-is-one-way-deterministic-and-a-fixed-size"><h2><span class="num">1.</span>Hashing is one-way, deterministic, and a fixed size</h2><p>Same input, same output, always — and no function reverses it back.</p>
+is the right tool for a password.</p><figure class="anim-figure"><img src="img/week09/t1-slide1.png" alt="Diagram: the word hello goes into SHA-256 and becomes a fixed 64-character hash; the way back is blocked" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p1-t1-1-hashing-is-one-way-deterministic-and-a-fixed-size"><h2><span class="num">1.</span>Hashing is one-way, deterministic, and a fixed size</h2><p>Same input, same output, always — and no function reverses it back.</p>
 <div class="cell"><pre class="code"><code>import hashlib
 
 print(hashlib.sha256(b"password123").hexdigest())
-print(hashlib.sha256(b"password123").hexdigest())   # identical, every time</code></pre></div></section><section class="topic" id="p1-t1-2-the-avalanche-effect"><h2><span class="num">2.</span>The avalanche effect</h2><p>One character different in the input changes the entire output — there is no
+print(hashlib.sha256(b"password123").hexdigest())   # identical, every time</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t1-slide2.png" alt="Diagram: password1 and password2 hash to completely different values; 60 of 64 characters differ" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p1-t1-2-the-avalanche-effect"><h2><span class="num">2.</span>The avalanche effect</h2><p>One character different in the input changes the entire output — there is no
 &quot;close&quot; match to look for.</p>
 <div class="cell"><pre class="code"><code>print(hashlib.sha256(b"password123").hexdigest())
-print(hashlib.sha256(b"password124").hexdigest())</code></pre></div></section><section class="topic" id="p1-t1-3-why-not-encryption"><h2><span class="num">3.</span>Why not encryption?</h2><p>Encryption is two-way — whoever holds the key can decrypt it back. A password
+print(hashlib.sha256(b"password124").hexdigest())</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t1-slide3.png" alt="Diagram: encryption is two-way and needs a key that can be stolen; hashing is one-way with no key" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p1-t1-3-why-not-encryption"><h2><span class="num">3.</span>Why not encryption?</h2><p>Encryption is two-way — whoever holds the key can decrypt it back. A password
 only ever needs <em>checking</em>, never recovering, so a one-way hash is the safer
 tool: there is no key to steal.</p>
 <div class="cell"><pre class="code"><code>typed = "password123"
 stored_hash = hashlib.sha256(b"password123").hexdigest()
 
 # verify by hashing AGAIN and comparing - never by decrypting
-print(hashlib.sha256(typed.encode()).hexdigest() == stored_hash)</code></pre></div></section><section class="topic" id="p1-t1-4-rainbow-tables-and-why-salting-defeats-them"><h2><span class="num">4.</span>Rainbow tables, and why salting defeats them</h2><p>An attacker can pre-compute hashes for millions of common passwords once,
+print(hashlib.sha256(typed.encode()).hexdigest() == stored_hash)</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t1-slide4.png" alt="Diagram: an unsalted hash is found in a rainbow table, while per-user salts give different hashes" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p1-t1-4-rainbow-tables-and-why-salting-defeats-them"><h2><span class="num">4.</span>Rainbow tables, and why salting defeats them</h2><p>An attacker can pre-compute hashes for millions of common passwords once,
 then just look up a stolen hash in that table. A unique random salt per user
 makes every hash different, even for the same password — the table becomes
 useless.</p>
@@ -255,18 +259,22 @@ Docs: <a href="https://pypi.org/project/bcrypt/">Python hashlib</a></p>
 </section>
 </section>
 <div class="topic-divider" id="p2"><span class="topic-divider-n">Part 2</span><h2 class="topic-divider-title">bcrypt in Python</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p><section class="topic"><p>Two functions, and the one design choice worth understanding: bcrypt is slow
-on purpose.</p><section class="topic" id="p2-t2-1-bcrypt-works-with-bytes-encode-first"><h2><span class="num">1.</span>bcrypt works with bytes — encode first</h2><div class="cell"><pre class="code"><code>import bcrypt
+on purpose.</p><figure class="anim-figure"><img src="img/week09/t2-slide1.png" alt="Diagram: a Python str is encoded with .encode to bytes before bcrypt will accept it" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p2-t2-1-bcrypt-works-with-bytes-encode-first"><h2><span class="num">1.</span>bcrypt works with bytes — encode first</h2><div class="cell"><pre class="code"><code>import bcrypt
 
 password = "correct-horse-battery-staple"
-password_bytes = password.encode("utf-8")</code></pre></div></section><section class="topic" id="p2-t2-2-gensalt-hashpw-generating-a-hash"><h2><span class="num">2.</span><code>gensalt()</code> + <code>hashpw()</code> — generating a hash</h2><p>The salt is generated fresh, at random, and embedded inside the hash itself —
+password_bytes = password.encode("utf-8")</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t2-slide2.png" alt="Diagram: anatomy of a bcrypt hash: algorithm, cost, 22-character salt, 31-character hash" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p2-t2-2-gensalt-hashpw-generating-a-hash"><h2><span class="num">2.</span><code>gensalt()</code> + <code>hashpw()</code> — generating a hash</h2><p>The salt is generated fresh, at random, and embedded inside the hash itself —
 you never store it separately.</p>
 <div class="cell"><pre class="code"><code>salt = bcrypt.gensalt()
 hashed = bcrypt.hashpw(password_bytes, salt)
 print(hashed.decode("utf-8"))
-print(len(hashed))    # always 60 characters</code></pre></div></section><section class="topic" id="p2-t2-3-checkpw-verifying-without-ever-decrypting"><h2><span class="num">3.</span><code>checkpw()</code> — verifying, without ever decrypting</h2><p>Re-derives the salt from the stored hash, re-hashes the candidate, and
+print(len(hashed))    # always 60 characters</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t2-slide3.png" alt="Diagram: checkpw reads the salt from the stored hash, re-hashes the attempt and compares" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p2-t2-3-checkpw-verifying-without-ever-decrypting"><h2><span class="num">3.</span><code>checkpw()</code> — verifying, without ever decrypting</h2><p>Re-derives the salt from the stored hash, re-hashes the candidate, and
 compares.</p>
 <div class="cell"><pre class="code"><code>print(bcrypt.checkpw(b"correct-horse-battery-staple", hashed))    # True
-print(bcrypt.checkpw(b"wrong-password", hashed))                     # False</code></pre></div></section><section class="topic" id="p2-t2-4-the-cost-factor-slow-is-the-feature"><h2><span class="num">4.</span>The cost factor — slow is the feature</h2><p>Each <code>+1</code> roughly doubles the work. A fraction of a second for a real login;
+print(bcrypt.checkpw(b"wrong-password", hashed))                     # False</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t2-slide4.png" alt="Chart: each +1 on the bcrypt cost factor roughly doubles the work per hash" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p2-t2-4-the-cost-factor-slow-is-the-feature"><h2><span class="num">4.</span>The cost factor — slow is the feature</h2><p>Each <code>+1</code> roughly doubles the work. A fraction of a second for a real login;
 days added up across a brute-force attempt.</p>
 <div class="cell"><pre class="code"><code>import time
 
@@ -361,7 +369,9 @@ Docs: <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a></p>
 <p><strong>Next:</strong> Topic 3 — wiring this into a real register/login flow.</p>
 </section>
 </section>
-<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Register and Login</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p><section class="topic"><p>Wiring bcrypt into a real, if simple, authentication flow against a file.</p><section class="topic" id="p3-t3-1-registering-hash-then-append"><h2><span class="num">1.</span>Registering — hash, then append</h2><div class="cell"><pre class="code"><code>import bcrypt
+<div class="topic-divider" id="p3"><span class="topic-divider-n">Part 3</span><h2 class="topic-divider-title">Register and Login</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://pypi.org/project/bcrypt/">bcrypt on PyPI</a> · <a href="https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files">Reading and writing files</a></p><section class="topic"><p>Wiring bcrypt into a real, if simple, authentication flow against a file.</p><figure class="anim-figure"><img src="img/week09/t3-slide1.png" alt="Diagram: register flow: check username, check password length, hash with bcrypt, append to users.txt" width="1440" height="810" loading="lazy"></figure>
+<figure class="anim-figure"><img src="img/week09/t3-slide2.png" alt="Diagram: users.txt stores one line per user, split once at the first comma into username and hash" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p3-t3-1-registering-hash-then-append"><h2><span class="num">1.</span>Registering — hash, then append</h2><div class="cell"><pre class="code"><code>import bcrypt
 
 def register_user(username, password, path="users.txt"):
     """Hash password and append username,hash to the store."""
@@ -371,7 +381,8 @@ def register_user(username, password, path="users.txt"):
 
 register_user("alice", "correct-horse-battery-staple", "demo.txt")
 with open("demo.txt") as f:
-    print(f.read())</code></pre></div></section><section class="topic" id="p3-t3-2-logging-in-find-the-line-then-checkpw"><h2><span class="num">2.</span>Logging in — find the line, then <code>checkpw()</code></h2><p>Week 7's <code>.strip().split(&quot;,&quot;, 1)</code> pattern, applied to a security-relevant
+    print(f.read())</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t3-slide3.png" alt="Diagram: login flow: file exists, find the user's line, bcrypt.checkpw; every failure returns False" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p3-t3-2-logging-in-find-the-line-then-checkpw"><h2><span class="num">2.</span>Logging in — find the line, then <code>checkpw()</code></h2><p>Week 7's <code>.strip().split(&quot;,&quot;, 1)</code> pattern, applied to a security-relevant
 file.</p>
 <div class="cell"><pre class="code"><code>def login_user(username, password, path="users.txt"):
     """Return True if username/password match a stored, hashed record."""
@@ -404,7 +415,8 @@ print(login_user_safe("nobody", "anything", "does_not_exist.txt"))</code></pre><
             stored_username, _ = line.strip().split(",", 1)
             if stored_username == username:
                 return True
-    return False</code></pre></div></section><section class="topic" id="p3-t3-5-return-a-flag-and-a-message"><h2><span class="num">5.</span>Return a flag and a message</h2>
+    return False</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t3-slide4.png" alt="Diagram: register_user returns a flag and a message the caller can branch on and display" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p3-t3-5-return-a-flag-and-a-message"><h2><span class="num">5.</span>Return a flag and a message</h2>
 <p>The lab's functions return two values, <code>(True, "Registered.")</code> or <code>(False, "That username is already taken.")</code>. The program that
 calls them can then both decide what to do (the flag) and show the user what happened (the message). In Week 11 the Streamlit page
 prints the message in green or red depending on the flag.</p>
@@ -511,12 +523,14 @@ else:
 </section>
 </section>
 <div class="topic-divider" id="p4"><span class="topic-divider-n">Part 4</span><h2 class="topic-divider-title">Keeping Secrets Out of Code</h2></div><p class="topic-docs"><b>Official docs:</b> <a href="https://docs.python.org/3/library/os.html#os.environ">os.environ</a></p><section class="topic"><p>Hashing protects passwords. This topic protects everything else — API keys,
-tokens, anything that must never sit in a file you might commit.</p><section class="topic" id="p4-t4-1-a-hard-coded-secret-is-a-mistake-not-a-style-issue"><h2><span class="num">1.</span>A hard-coded secret is a mistake, not a style issue</h2><p>The moment it is pushed to a public repository, it is compromised — deleting
+tokens, anything that must never sit in a file you might commit.</p><figure class="anim-figure"><img src="img/week09/t4-slide1.png" alt="Diagram: git history keeps a hard-coded key in an earlier commit even after it is deleted" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p4-t4-1-a-hard-coded-secret-is-a-mistake-not-a-style-issue"><h2><span class="num">1.</span>A hard-coded secret is a mistake, not a style issue</h2><p>The moment it is pushed to a public repository, it is compromised — deleting
 it later does not help, it is still in the commit history.</p>
 <div class="cell"><pre class="code"><code># BAD - never do this:
 # API_KEY = "sk-abc123realsecretvalue"
 
-print("see the comment above - nothing to run here")</code></pre></div></section><section class="topic" id="p4-t4-2-environment-variables-the-secret-lives-outside-your-code"><h2><span class="num">2.</span>Environment variables — the secret lives outside your code</h2><div class="cell"><pre class="code"><code>import os
+print("see the comment above - nothing to run here")</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t4-slide2.png" alt="Diagram: a secret hard-coded in the code is pushed publicly; an environment variable keeps it out of the repo" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p4-t4-2-environment-variables-the-secret-lives-outside-your-code"><h2><span class="num">2.</span>Environment variables — the secret lives outside your code</h2><div class="cell"><pre class="code"><code>import os
 
 api_key = os.environ.get("MY_API_KEY", "not set")
 print(api_key)</code></pre></div><p>A default like <code>&quot;not set&quot;</code> is fine for something optional. When a variable is <em>required</em> — the program genuinely cannot continue without it — raise a clear error instead of letting it fail later with a confusing message.</p>
@@ -530,10 +544,12 @@ print(api_key)</code></pre></div><p>A default like <code>&quot;not set&quot;</co
 try:
     require_env("MY_API_KEY")
 except RuntimeError as e:
-    print("Caught it:", e)</code></pre></div></section><section class="topic" id="p4-t4-3-gitignore-deciding-what-never-gets-tracked"><h2><span class="num">3.</span><code>.gitignore</code> — deciding what never gets tracked</h2><p>Once your project has real accounts and real keys, these need to be in it.</p>
+    print("Caught it:", e)</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t4-slide3.png" alt="Diagram: .gitignore keeps users.txt, .env and caches local while code and sample data are shared" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p4-t4-3-gitignore-deciding-what-never-gets-tracked"><h2><span class="num">3.</span><code>.gitignore</code> — deciding what never gets tracked</h2><p>Once your project has real accounts and real keys, these need to be in it.</p>
 <div class="cell"><pre class="code"><code>gitignore_lines = ["*.db", "*.env", ".streamlit/secrets.toml", "__pycache__/", "users.txt"]
 for line in gitignore_lines:
-    print(line)</code></pre></div></section><section class="topic" id="p4-t4-4-if-a-secret-leaks-anyway"><h2><span class="num">4.</span>If a secret leaks anyway</h2><p>Removing it from the latest commit is not enough — it is still readable in
+    print(line)</code></pre></div></section><figure class="anim-figure"><img src="img/week09/t4-slide4.png" alt="Diagram: if a secret leaks: revoke the key, replace it, then clean git history" width="1440" height="810" loading="lazy"></figure>
+<section class="topic" id="p4-t4-4-if-a-secret-leaks-anyway"><h2><span class="num">4.</span>If a secret leaks anyway</h2><p>Removing it from the latest commit is not enough — it is still readable in
 history. Revoke the key at its source first, generate a new one, worry about
 cleaning history second.</p>
 </section>
